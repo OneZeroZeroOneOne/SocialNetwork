@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using SocialNetwork.Dal.ValueGenerators;
 
 namespace SocialNetwork.WebApi.Models
 {
@@ -35,7 +36,7 @@ namespace SocialNetwork.WebApi.Models
 
             modelBuilder.Entity<Coments>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
 
                 entity.Property(e => e.Img).IsRequired();
             });
@@ -59,7 +60,7 @@ namespace SocialNetwork.WebApi.Models
 
             modelBuilder.Entity<Posts>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
 
                 entity.Property(e => e.Img).IsRequired();
 
@@ -89,7 +90,7 @@ namespace SocialNetwork.WebApi.Models
                     .HasName("Users_Name_key")
                     .IsUnique();
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
 
                 entity.Property(e => e.Name).IsRequired();
             });
