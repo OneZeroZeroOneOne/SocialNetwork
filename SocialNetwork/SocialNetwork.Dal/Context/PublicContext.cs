@@ -38,7 +38,7 @@ namespace SocialNetwork.Dal.Context
                 entity.Property(e => e.Text).IsRequired();
 
                 entity.HasOne(d => d.Post)
-                    .WithMany(p => p.Comment)
+                    .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Comment_fk1");

@@ -14,16 +14,6 @@ namespace SocialNetwork.Fake
             var userGenerator = new FakeUser();
             var listUsers = userGenerator.Generate(3);
 
-            foreach (var x in listUsers)
-            {
-                foreach (var objPost in x.Posts)
-                {
-                    foreach (var comment in objPost.Comment)
-                    {
-                        comment.UserId = x.Id;
-                    }
-                }
-            }
             var context = new PublicContext();
             context.AddRange(listUsers);
             context.SaveChanges();
@@ -46,7 +36,7 @@ namespace SocialNetwork.Fake
             var fakePost = new Faker<Post>()
                 .RuleFor(x => x.Text, x => x.Lorem.Text())
                 .RuleFor(x => x.Date, x => x.Date.Recent(12))
-                .RuleFor(x => x.Comment, x => fakeComment.Generate(x.Random.Number(10)).ToList());
+                .RuleFor(x => x.Comments, x => fakeComment.Generate(x.Random.Number(10)).ToList());
 
 
             _fakeUser = new Faker<User>()
