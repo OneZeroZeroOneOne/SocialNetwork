@@ -7,12 +7,14 @@ namespace SocialNetwork.Dal.Models
     {
         public User()
         {
-            UserPost = new HashSet<UserPost>();
+            Comments = new HashSet<Comment>();
+            Posts = new HashSet<Post>();
         }
 
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<UserPost> UserPost { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }
