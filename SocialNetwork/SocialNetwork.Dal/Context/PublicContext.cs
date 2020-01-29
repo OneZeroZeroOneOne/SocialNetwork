@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ValueGenerators;
 
-namespace SocialNetwork.WebApi.Models
+namespace SocialNetwork.Dal.Context
 {
     public partial class PublicContext : DbContext
     {
@@ -16,11 +15,11 @@ namespace SocialNetwork.WebApi.Models
         {
         }
 
-        public virtual DbSet<Coments> Coments { get; set; }
-        public virtual DbSet<PostComents> PostComents { get; set; }
-        public virtual DbSet<Posts> Posts { get; set; }
-        public virtual DbSet<UserPosts> UserPosts { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Comment> Comment { get; set; }
+        public virtual DbSet<Post> Post { get; set; }
+        public virtual DbSet<PostComment> PostComment { get; set; }
+        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserPost> UserPost { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,65 +33,69 @@ namespace SocialNetwork.WebApi.Models
         {
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
-            modelBuilder.Entity<Coments>(entity =>
+            modelBuilder.Entity<Comment>(entity =>
             {
                 entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
 
-                entity.Property(e => e.Img).IsRequired();
-            });
+                entity.Property(e => e.Date).HasColumnType("date");
 
-            modelBuilder.Entity<PostComents>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.HasOne(d => d.Coment)
-                    .WithMany(p => p.PostComents)
-                    .HasForeignKey(d => d.ComentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("PostComents_fk1");
-
-                entity.HasOne(d => d.Post)
-                    .WithMany(p => p.PostComents)
-                    .HasForeignKey(d => d.PostId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("PostComents_fk0");
-            });
-
-            modelBuilder.Entity<Posts>(entity =>
-            {
-                entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
-
-                entity.Property(e => e.Img).IsRequired();
+                entity.Property(e => e.ImgUrl).IsRequired();
 
                 entity.Property(e => e.Text).IsRequired();
             });
 
-            modelBuilder.Entity<UserPosts>(entity =>
+            modelBuilder.Entity<Post>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
 
-                entity.HasOne(d => d.Post)
-                    .WithMany(p => p.UserPosts)
-                    .HasForeignKey(d => d.PostId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("UserPosts_fk1");
+                entity.Property(e => e.Date).HasColumnType("date");
 
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserPosts)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("UserPosts_fk0");
+                entity.Property(e => e.ImgUrl).IsRequired();
+
+                entity.Property(e => e.Text).IsRequired();
             });
 
-            modelBuilder.Entity<Users>(entity =>
+            modelBuilder.Entity<PostComment>(entity =>
             {
-                entity.HasIndex(e => e.Name)
-                    .HasName("Users_Name_key")
-                    .IsUnique();
+                entity.HasKey(e => new { e.PostId, e.CommentId })
+                    .HasName("PostComment_pk");
 
+                entity.HasOne(d => d.Comment)
+                    .WithMany(p => p.PostComment)
+                    .HasForeignKey(d => d.CommentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PostComment_fk1");
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.PostComment)
+                    .HasForeignKey(d => d.PostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PostComment_fk0");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
                 entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
 
                 entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<UserPost>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.PostId })
+                    .HasName("UserPost_pk");
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.UserPost)
+                    .HasForeignKey(d => d.PostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("UserPost_fk1");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserPost)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("UserPost_fk0");
             });
 
             OnModelCreatingPartial(modelBuilder);
