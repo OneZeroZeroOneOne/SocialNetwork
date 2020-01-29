@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SocialNetwork.Faker
+namespace SocialNetwork.Fake
 {
     class Program
     {
