@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SocialNetwork.WebApi.Models
+namespace SocialNetwork.Dal.Models
 {
     public partial class Users
     {
