@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace SocialNetwork.Dal.Models
 {
-    class OnlineUser
+    public partial class OnlineUser 
     {
+        public Guid UserId { get; set; }
+
+        public string Token { get; set; }
+
+
     }
 }
