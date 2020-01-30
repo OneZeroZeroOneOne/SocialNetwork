@@ -11,25 +11,30 @@ namespace SocialNetwork.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WriteUserController : ControllerBase
+    public class RegisterUserController : ControllerBase
     {
         public PublicContext context;
-        private readonly ILogger<WriteUserController> _logger;
-        public WriteUserController(ILogger<WriteUserController> logger)
+        private readonly ILogger<RegisterUserController> _logger;
+        public RegisterUserController(ILogger<RegisterUserController> logger)
         {
             _logger = logger;
             context = new PublicContext();
         }
 
-        [HttpGet]
-        public User Get(string name)
+        [HttpPost]
+        public OkResult Post(string name, string password, string mail, string avatarurl)
         {
+            
             Guid id = new Guid();
-            User user = new User { Name = name, Id = id };
+            User user = new User { Name = name, Id = id, Mail = mail, AvatarUrl = avatarurl};
             Console.WriteLine(user.Name);
+            UserSecurity usersecurity = new UserSecurity { UserId = id, Password = password, Mail = mail};
             context.User.Add(user);
+            context.UserSecurity.Add(usersecurity);
             context.SaveChanges();
-            return user;
+            return new OkResult();
+
+            
         }
     }
 }

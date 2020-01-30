@@ -19,6 +19,7 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<User> User { get; set; }
 
+        public virtual DbSet<UserSecurity> UserSecurity { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

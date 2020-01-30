@@ -140,6 +140,7 @@
     <Compile Include="Models\Post.cs" />
     <Compile Include="Context\PublicContext.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserSecurity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueGenerators\GuidGenerator.cs" />
   </ItemGroup>
