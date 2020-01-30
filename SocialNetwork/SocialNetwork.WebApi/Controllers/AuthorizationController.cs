@@ -22,7 +22,7 @@ namespace SocialNetwork.WebApi.Controllers
             context = new PublicContext();
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public string GetToken(string name, string password)
         {
             User user = context.User.Where(x => x.Name == name).FirstOrDefault();
@@ -30,12 +30,8 @@ namespace SocialNetwork.WebApi.Controllers
             if (usersecurity.Password == password)
             {
                 string token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-                return token
+                return token;
             }
-            return new OkResult();
-            
-            
-
-        }
+        }*/
     }
 }

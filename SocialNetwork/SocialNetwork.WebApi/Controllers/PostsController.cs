@@ -11,25 +11,28 @@ namespace SocialNetwork.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WritePostController : ControllerBase
+    public class PostsController : ControllerBase
     {
         public PublicContext context;
-        private readonly ILogger<WritePostController> _logger;
-        public WritePostController(ILogger<WritePostController> logger)
+        private readonly ILogger<PostsController> _logger;
+        public PostsController(ILogger<PostsController> logger)
         {
             _logger = logger;
             context = new PublicContext();
         }
 
         [HttpGet]
-        public User Get(string token)
+        public Post Get([FromQuery]Guid postId)
         {
-            Guid id = new Guid();
-            User user = new User { Name = name, Id = id };
-            Console.WriteLine(user.Name);
-            context.User.Add(user);
+            return context.Post.Where(x => x.Id == postId).FirstOrDefault();
+        }
+
+        [HttpPost]
+        public OkResult Post([FromBody]Post post)
+        {
+            context.Post.Add(post);
             context.SaveChanges();
-            return user;
+            return Ok();
         }
     }
 }
