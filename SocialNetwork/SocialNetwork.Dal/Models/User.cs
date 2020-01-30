@@ -15,7 +15,7 @@ namespace SocialNetwork.Dal.Models
         public string Name { get; set; }
         public string Mail { get; set; }
         public string AvatarUrl { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Post> Posts { get; set; }

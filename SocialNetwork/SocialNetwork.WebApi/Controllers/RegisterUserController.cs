@@ -21,7 +21,7 @@ namespace SocialNetwork.WebApi.Controllers
             context = new PublicContext();
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public OkResult Post(string name, string password, string mail, string avatarurl)
         {
             
@@ -35,6 +35,6 @@ namespace SocialNetwork.WebApi.Controllers
             return new OkResult();
 
             
-        }
+        }*/
     }
 }

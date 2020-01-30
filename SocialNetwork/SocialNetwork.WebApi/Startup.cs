@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using SocialNetwork.Bll.Services;
+using SocialNetwork.Bll.Abstractions;
+using SocialNetwork.Dal;
+using SocialNetwork.Dal.Context;
 
 namespace SocialNetwork.WebApi
 {
@@ -27,6 +32,18 @@ namespace SocialNetwork.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            //services.AddAutoMapper(typeof(Startup));
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            services.AddTransient<IPostService, PostService>();
+            services.AddTransient<PublicContext>();
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddSwaggerGen(c =>
             {

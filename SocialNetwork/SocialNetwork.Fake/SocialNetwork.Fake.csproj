@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="28.4.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="4.7.0" />
   </ItemGroup>
 
