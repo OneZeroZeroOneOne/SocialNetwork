@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SocialNetwork.Bll;
 using SocialNetwork.Bll.Abstractions;
-using SocialNetwork.Bll.Services;
-using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
+using System;
 
 namespace SocialNetwork.WebApi.Controllers
 {
@@ -31,8 +25,8 @@ namespace SocialNetwork.WebApi.Controllers
             _postService = postService;
         }
 
-        [HttpGet]
-        public IActionResult Get([FromQuery]Guid postId)
+        [HttpGet, Route("{postId}", Name = "postId")]
+        public IActionResult Get([FromRoute]Guid postId)
         {
             var post = _postService.GetPost(postId);
             if (post == null)
