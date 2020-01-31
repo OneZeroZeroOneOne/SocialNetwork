@@ -7,7 +7,7 @@ namespace SocialNetwork.Bll.Abstractions
 {
     public interface IPostService
     {
-        Post CreateNewPost(Post postModel);
+        Post CreateNewPost(Post postModel, User authorUser);
 
         Post GetPost(Guid postId);
     }

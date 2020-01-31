@@ -11,6 +11,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using SocialNetwork.Bll.Services;
 using SocialNetwork.Bll.Abstractions;
+using SocialNetwork.Security;
+using SocialNetwork.Security.Abstractions;
 
 
 namespace SocialNetwork.WebApi.Controllers
@@ -19,47 +21,29 @@ namespace SocialNetwork.WebApi.Controllers
     [Route("[controller]")]
     public class AuthorizationController : ControllerBase
     {
-        private PublicContext _context;
         private readonly ILogger<AuthorizationController> _logger;
-        private IAuthentication _authService;
-        public AuthorizationController(ILogger<AuthorizationController> logger, IAuthentication authService)
+        private IAuthenticationService _authService;
+        public AuthorizationController(ILogger<AuthorizationController> logger, IAuthenticationService authService)
         {
             _logger = logger;
-            _context = new PublicContext();
             _authService = authService;
-
         }
 
         [HttpGet]
-        public IActionResult Get(string username, string password)
+        public IActionResult Get(string email, string password)
         {
+            var identity = _authService.GetIdentity(email, password);
 
-
-            var identity = GetIdentity(username, password);
-            if (identity == null)
-            {
-                return BadRequest(new { errorText = "Invalid username or password." });
-            }
-
-            var now = DateTime.UtcNow;
-            // создаем JWT-токен
-            var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    notBefore: now,
-                    claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            var encodedJwt = _authService.GenerateToken(identity);
 
             var response = new
             {
                 access_token = encodedJwt,
-                username = identity.Name
+                email,
             };
 
-            return Json(response);
+            return Ok(response);
         }
-        
+
     }
 }

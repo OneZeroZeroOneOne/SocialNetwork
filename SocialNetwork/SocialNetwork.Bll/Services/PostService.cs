@@ -16,12 +16,12 @@ namespace SocialNetwork.Bll.Services
             _context = publicContext;
         }
 
-        public Post CreateNewPost(Post postModel)
+        public Post CreateNewPost(Post postModel, User authorUser)
         {
-            //создаем пост, но проверяем существует ли юзер от которого хотят создать пост в базе, иначе будет ошибка
-            var user = _context.User.FirstOrDefault(x => x.Id == postModel.UserId);
-            if (user == null)
+            if (authorUser == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.UserNotFound, $"User {postModel.UserId} doesn't exist");
+
+            postModel.UserId = authorUser.Id;
 
             var insertedPost = _context.Post.Add(postModel);
             _context.SaveChanges();

@@ -13,7 +13,7 @@ namespace SocialNetwork.Dal.Models
 
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Mail { get; set; }
+        public string Email { get; set; }
         public string AvatarUrl { get; set; }
         public DateTime? DateOfBirth { get; set; }
 

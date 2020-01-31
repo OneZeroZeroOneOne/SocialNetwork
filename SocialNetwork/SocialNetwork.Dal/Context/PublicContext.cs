@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ValueGenerators;
 
@@ -68,17 +69,18 @@ namespace SocialNetwork.Dal.Context
             {
                 entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
 
-                entity.Property(e => e.Name).IsRequired();
+                entity.HasOne(x => x.UserSecurity)
+                    .WithOne(x => x.User);
             });
 
 
             modelBuilder.Entity<UserSecurity>(entity =>
             {
-                entity.Property(e => e.UserId).HasValueGenerator<GuidGenerator>();
+                entity.HasKey(x => x.UserId);
 
                 entity.HasOne(e => e.User)
-                .WithOne(e => e.UserSecurity)
-                .HasForeignKey<UserSecurity>(e => e.UserId);
+                    .WithOne(x => x.UserSecurity)
+                    .HasForeignKey<UserSecurity>(x => x.UserId);
             });
 
             OnModelCreatingPartial(modelBuilder);
