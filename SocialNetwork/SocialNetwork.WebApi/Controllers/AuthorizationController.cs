@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SocialNetwork.Dal.Context;
-using SocialNetwork.Dal.Models;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using SocialNetwork.Bll.Services;
-using SocialNetwork.Bll.Abstractions;
-using SocialNetwork.Security;
 using SocialNetwork.Security.Abstractions;
 
 

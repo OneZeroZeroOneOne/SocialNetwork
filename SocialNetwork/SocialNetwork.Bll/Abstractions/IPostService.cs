@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SocialNetwork.Dal.Models;
+﻿using SocialNetwork.Dal.Models;
+using System;
 
 namespace SocialNetwork.Bll.Abstractions
 {

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using SocialNetwork.Bll.Abstractions;
+﻿using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Dal.Models;
+using System;
+using System.Linq;
 
 namespace SocialNetwork.Bll.Services
 {

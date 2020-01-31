@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Models;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
 {

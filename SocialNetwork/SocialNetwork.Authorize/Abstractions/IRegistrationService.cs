@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SocialNetwork.Dal.Models;
 using System.Threading.Tasks;
-using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.Security.Abstractions
 {

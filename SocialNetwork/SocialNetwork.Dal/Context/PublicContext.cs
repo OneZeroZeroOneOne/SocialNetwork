@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ValueGenerators;
 

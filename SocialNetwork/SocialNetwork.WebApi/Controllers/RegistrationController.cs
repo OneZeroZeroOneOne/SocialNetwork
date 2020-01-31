@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using SocialNetwork.Security.Abstractions;
+using System.Threading.Tasks;
 
 
 namespace SocialNetwork.WebApi.Controllers

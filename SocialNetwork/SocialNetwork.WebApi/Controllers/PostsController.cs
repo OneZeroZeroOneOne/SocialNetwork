@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SocialNetwork.Bll.Abstractions;
@@ -6,7 +7,6 @@ using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
 namespace SocialNetwork.WebApi.Controllers
 {

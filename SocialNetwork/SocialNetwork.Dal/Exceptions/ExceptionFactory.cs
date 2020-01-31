@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SocialNetwork.Dal.Exceptions
+﻿namespace SocialNetwork.Dal.Exceptions
 {
     public class ExceptionFactory
     {
