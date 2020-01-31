@@ -2,6 +2,7 @@
 using System.Linq;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
+using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.Bll.Services
@@ -19,7 +20,7 @@ namespace SocialNetwork.Bll.Services
             //создаем пост, но проверяем существует ли юзер от которого хотят создать пост в базе, иначе будет ошибка
             var user = _context.User.FirstOrDefault(x => x.Id == postModel.UserId);
             if (user == null)
-                throw new Exception($"User {postModel.UserId} doesn't exist");
+                throw ExceptionFactory.SoftException(ExceptionEnum.UserNotFound, $"User {postModel.UserId} doesn't exist");
 
             var insertedPost = _context.Post.Add(postModel);
             _context.SaveChanges();

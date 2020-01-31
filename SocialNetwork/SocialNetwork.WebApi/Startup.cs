@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,6 +17,7 @@ using SocialNetwork.Bll.Services;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
+using SocialNetwork.WebApi.Middlewares;
 
 namespace SocialNetwork.WebApi
 {
@@ -58,6 +60,8 @@ namespace SocialNetwork.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.ConfigureCustomExceptionMiddleware();
 
             app.UseHttpsRedirection();
 
