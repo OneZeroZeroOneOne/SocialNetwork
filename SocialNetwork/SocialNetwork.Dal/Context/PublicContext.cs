@@ -18,7 +18,7 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<User> User { get; set; }
-        //public virtual DbSet<UserSecurity> UserSecurity { get; set; }
+        public virtual DbSet<UserSecurity> UserSecurity { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -69,6 +69,16 @@ namespace SocialNetwork.Dal.Context
                 entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
 
                 entity.Property(e => e.Name).IsRequired();
+            });
+
+
+            modelBuilder.Entity<UserSecurity>(entity =>
+            {
+                entity.Property(e => e.UserId).HasValueGenerator<GuidGenerator>();
+
+                entity.HasOne(e => e.User)
+                .WithOne(e => e.UserSecurity)
+                .HasForeignKey<UserSecurity>(e => e.UserId);
             });
 
             OnModelCreatingPartial(modelBuilder);

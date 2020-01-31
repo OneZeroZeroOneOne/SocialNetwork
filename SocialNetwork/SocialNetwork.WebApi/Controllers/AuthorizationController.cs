@@ -26,7 +26,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet]
-        public string Get(string username, string password)
+        public IActionResult Get(string username, string password)
         {
             var identity = GetIdentity(username, password);
             if (identity == null)
@@ -53,24 +53,6 @@ namespace SocialNetwork.WebApi.Controllers
 
             return Json(response);
         }
-        private ClaimsIdentity GetIdentity(string username, string password)
-        {
-            Person person = people.FirstOrDefault(x => x.Login == username && x.Password == password);
-            if (person != null)
-            {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, person.Role)
-                };
-                ClaimsIdentity claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
-            }
-
-            // если пользователя не найдено
-            return null;
-        }
+        
     }
 }
