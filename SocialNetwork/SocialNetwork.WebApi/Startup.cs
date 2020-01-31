@@ -14,8 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using SocialNetwork.Bll.Services;
 using SocialNetwork.Bll.Abstractions;
+using SocialNetwork.Bll.Services;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.WebApi.Middlewares;
@@ -43,6 +43,7 @@ namespace SocialNetwork.WebApi
             });
 
             services.AddTransient<IPostService, PostService>();
+            services.AddTransient<IAuthentication, AuthenticationService>();
             services.AddTransient<PublicContext>();
 
             IMapper mapper = mappingConfig.CreateMapper();

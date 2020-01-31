@@ -13,12 +13,12 @@ namespace SocialNetwork.WebApi.Controllers
     [Route("[controller]")]
     public class RegisterUserController : ControllerBase
     {
-        public PublicContext context;
+        private PublicContext _context;
         private readonly ILogger<RegisterUserController> _logger;
         public RegisterUserController(ILogger<RegisterUserController> logger)
         {
             _logger = logger;
-            context = new PublicContext();
+            _context = new PublicContext();
         }
 
         /*[HttpPost]

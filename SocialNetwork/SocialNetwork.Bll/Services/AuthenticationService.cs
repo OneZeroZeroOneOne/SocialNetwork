@@ -5,10 +5,16 @@ using System.Security.Claims;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Bll.Abstractions;
+using System.Linq;
+using System.Text.Json;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+
 
 namespace SocialNetwork.Bll.Services
 {
-    class AuthenticationService : IAuthentication
+
+    public class AuthenticationService : IAuthentication
     {
         private readonly PublicContext _context;
         public AuthenticationService(PublicContext publicContext) {
@@ -16,14 +22,18 @@ namespace SocialNetwork.Bll.Services
             _context = publicContext;
 
         }
-        private ClaimsIdentity GetIdentity(string username, string password)
+        public ClaimsIdentity GetIdentity(string username, string password)
         {
-            UserSecurity usersecurity = _context.User.
+            User user = _context.User.FirstOrDefault(x => x.Name == username);
+
+            UserSecurity usersecurity = _context.UserSecurity.FirstOrDefault(x => x.UserId == user.Id && x.Password == password);
+
+
             if (usersecurity != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login),
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
                 };
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
@@ -34,5 +44,8 @@ namespace SocialNetwork.Bll.Services
             // если пользователя не найдено
             return null;
         }
+        public Json GetAuthResponce()
+
+
     }
 }

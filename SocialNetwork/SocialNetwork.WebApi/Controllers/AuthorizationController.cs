@@ -9,6 +9,8 @@ using SocialNetwork.Dal.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using SocialNetwork.Bll.Services;
+using SocialNetwork.Bll.Abstractions;
 
 
 namespace SocialNetwork.WebApi.Controllers
@@ -17,17 +19,22 @@ namespace SocialNetwork.WebApi.Controllers
     [Route("[controller]")]
     public class AuthorizationController : ControllerBase
     {
-        public PublicContext context;
+        private PublicContext _context;
         private readonly ILogger<AuthorizationController> _logger;
-        public AuthorizationController(ILogger<AuthorizationController> logger)
+        private IAuthentication _authService;
+        public AuthorizationController(ILogger<AuthorizationController> logger, IAuthentication authService)
         {
             _logger = logger;
-            context = new PublicContext();
+            _context = new PublicContext();
+            _authService = authService;
+
         }
 
         [HttpGet]
         public IActionResult Get(string username, string password)
         {
+
+
             var identity = GetIdentity(username, password);
             if (identity == null)
             {

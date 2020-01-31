@@ -7,6 +7,7 @@ using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.Bll.Services
 {
+
     public class PostService : IPostService
     {
         private readonly PublicContext _context;
