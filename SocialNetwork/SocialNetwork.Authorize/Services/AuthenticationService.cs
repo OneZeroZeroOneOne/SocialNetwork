@@ -49,7 +49,7 @@ namespace SocialNetwork.Security.Services
                 expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
                 signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
-            return new JwtSecurityTokenHandler().WriteToken(jwt);
+            return "Bearer " + new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
     }
