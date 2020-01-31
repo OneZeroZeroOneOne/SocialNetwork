@@ -7,14 +7,15 @@ namespace SocialNetwork.Dal.Exceptions
 {
     public class BaseException : Exception
     {
-        public BaseException(int code, string message)
+        public BaseException(int code, string message) 
+            : base(message)
         {
             Code = code;
-            Message = message;
+            ExMessage = message;
         }
 
         public int Code { get; set; }
-        public string Message { get; set; }
+        public string ExMessage { get; set; }
 
         public override string ToString()
         {
