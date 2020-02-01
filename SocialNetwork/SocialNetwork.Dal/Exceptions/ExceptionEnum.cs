@@ -4,5 +4,7 @@
     {
         UserNotFound = 1,
         UserAlreadyExist = 2,
+        PostNotFound = 3,
+        CommentNotFound = 4,
     }
 }

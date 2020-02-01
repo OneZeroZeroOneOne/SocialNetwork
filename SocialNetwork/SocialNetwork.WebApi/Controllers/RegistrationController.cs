@@ -21,6 +21,7 @@ namespace SocialNetwork.WebApi.Controllers
         {
             _logger = logger;
             _mapper = mapper;
+
             _registrationService = registrationService;
         }
 

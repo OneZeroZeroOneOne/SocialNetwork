@@ -10,10 +10,11 @@ namespace SocialNetwork.WebApi.Controllers
     public class AuthorizationController : ControllerBase
     {
         private readonly ILogger<AuthorizationController> _logger;
-        private IAuthenticationService _authService;
+        private readonly IAuthenticationService _authService;
         public AuthorizationController(ILogger<AuthorizationController> logger, IAuthenticationService authService)
         {
             _logger = logger;
+
             _authService = authService;
         }
 

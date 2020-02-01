@@ -14,7 +14,7 @@ namespace SocialNetwork.WebApi.Controllers
     [Route("[controller]")]
     public class PostsController : SocialNetworkBaseApiController
     {
-        private IPostService _postService;
+        private readonly IPostService _postService;
         private readonly IMapper _mapper;
 
         private readonly ILogger<PostsController> _logger;
@@ -23,14 +23,13 @@ namespace SocialNetwork.WebApi.Controllers
             _logger = logger;
             _mapper = mapper;
 
-            //context = new PublicContext();
             _postService = postService;
         }
 
         [HttpGet, Route("{postId}", Name = "postId")]
-        public IActionResult Get([FromRoute]Guid postId)
+        public async Task<IActionResult> Get([FromRoute]Guid postId)
         {
-            var post = _postService.GetPost(postId);
+            var post = await _postService.GetPost(postId);
             if (post == null)
                 return NotFound();
 
@@ -45,7 +44,20 @@ namespace SocialNetwork.WebApi.Controllers
             var currentUser = await CurrentUser();
 
             var dataModel = _mapper.Map<PostViewModel, Post>(post);
-            var insertedPost = _postService.CreateNewPost(dataModel, currentUser);
+            var insertedPost = await _postService.CreateNewPost(dataModel, currentUser);
+
+            var returnModel = _mapper.Map<Post, OutPostViewModel>(insertedPost);
+            return Ok(returnModel);
+        }
+
+        [HttpPatch]
+        [Authorize(Roles = "Member")]
+        public async Task<IActionResult> Patch([FromBody]EditPostViewModel post)
+        {
+            var currentUser = await CurrentUser();
+
+            var dataModel = _mapper.Map<EditPostViewModel, Post>(post);
+            var insertedPost = await _postService.EditPost(dataModel, currentUser);
 
             var returnModel = _mapper.Map<Post, OutPostViewModel>(insertedPost);
             return Ok(returnModel);

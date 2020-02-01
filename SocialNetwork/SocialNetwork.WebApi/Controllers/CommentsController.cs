@@ -1,0 +1,67 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SocialNetwork.Bll.Abstractions;
+using SocialNetwork.Dal.Models;
+using SocialNetwork.Dal.ViewModels;
+using System;
+using System.Threading.Tasks;
+using SocialNetwork.Dal.ViewModels.In;
+
+namespace SocialNetwork.WebApi.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class CommentsController : SocialNetworkBaseApiController
+    {
+        private readonly ICommentService _commentService;
+        private readonly IMapper _mapper;
+
+        private readonly ILogger<PostsController> _logger;
+        public CommentsController(ILogger<PostsController> logger, IMapper mapper, ICommentService commentService)
+        {
+            _logger = logger;
+            _mapper = mapper;
+
+            _commentService = commentService;
+        }
+
+        [HttpGet, Route("{commentId}", Name = "commentId")]
+        public async Task<IActionResult> Get([FromRoute]Guid commentId)
+        {
+            var comment = await _commentService.GetComment(commentId);
+            if (comment == null)
+                return NotFound();
+
+            var returnModel = _mapper.Map<Comment, OutCommentViewModel>(comment);
+            return Ok(returnModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Member")]
+        public async Task<IActionResult> Post([FromBody]CommentViewModel comment)
+        {
+            var currentUser = await CurrentUser();
+
+            var dataModel = _mapper.Map<CommentViewModel, Comment>(comment);
+            var insertedComment = await _commentService.AddComment(dataModel, currentUser);
+
+            var returnModel = _mapper.Map<Comment, OutCommentViewModel>(insertedComment);
+            return Ok(returnModel);
+        }
+
+        [HttpPatch]
+        [Authorize(Roles = "Member")]
+        public async Task<IActionResult> Patch([FromBody]EditCommentViewModel comment)
+        {
+            var currentUser = await CurrentUser();
+
+            var dataModel = _mapper.Map<EditCommentViewModel, Comment>(comment);
+            var insertedComment = await _commentService.EditComment(dataModel, currentUser);
+
+            var returnModel = _mapper.Map<Comment, OutCommentViewModel>(insertedComment);
+            return Ok(returnModel);
+        }
+    }
+}

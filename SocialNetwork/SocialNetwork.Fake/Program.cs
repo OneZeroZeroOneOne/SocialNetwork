@@ -27,7 +27,7 @@ namespace SocialNetwork.Fake
         public User Generate()
         {
             var userId = Guid.NewGuid();
-            var fakeComment = new Faker<Comment>()
+            var fakeComment = new Faker<OutCommentViewModel>()
                 .RuleFor(x => x.Text, x => x.Lorem.Text())
                 .RuleFor(x => x.Date, x => x.Date.Recent(12))
                 .RuleFor(x => x.UserId, x => userId);

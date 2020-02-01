@@ -36,6 +36,8 @@ namespace SocialNetwork.Dal.Context
             {
                 entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
 
+                entity.Property(x => x.Date).HasValueGenerator<CurrentDateTimeGenerator>();
+
                 entity.Property(e => e.Text).IsRequired();
 
                 entity.HasOne(d => d.Post)
