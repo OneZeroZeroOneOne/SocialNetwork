@@ -18,10 +18,9 @@ namespace SocialNetwork.WebApi.Controllers
     [Route("[controller]")]
     public class AuthorizationController : ControllerBase
     {
-        private PublicContext _context;
         private readonly ILogger<AuthorizationController> _logger;
-        private IAuthentication _authService;
-        public AuthorizationController(ILogger<AuthorizationController> logger, IAuthentication authService)
+        private IAuthenticationService _authService;
+        public AuthorizationController(ILogger<AuthorizationController> logger, IAuthenticationService authService)
         {
             _logger = logger;
             _context = new PublicContext();
@@ -29,13 +28,21 @@ namespace SocialNetwork.WebApi.Controllers
 
         }
 
-        /*[HttpGet]
-        public IActionResult Get(string username, string password)
+        [HttpGet]
+        public IActionResult Get(string email, string password)
         {
+            var identity = _authService.GetIdentity(email, password);
 
+            var encodedJwt = _authService.GenerateToken(identity);
 
-            
+            var response = new
+            {
+                access_token = encodedJwt,
+                email,
+            };
+
+            return Ok(response);
         }
-        */
+        
     }
 }

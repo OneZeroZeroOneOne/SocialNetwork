@@ -38,10 +38,10 @@ namespace SocialNetwork.Fake
                 .RuleFor(x => x.Date, x => x.Date.Recent(12))
                 .RuleFor(x => x.Comments, x => fakeComment.Generate(x.Random.Number(10)).ToList());
 
-            var fakeUserSecurity = new Faker<UserSecurity>()
+            /*var fakeUserSecurity = new Faker<UserSecurity>()
                 .RuleFor(x => x.Password, x => x.Lorem.Word())
-                .RuleFor(x => x.Mail, x => x.Lorem.Word()+"@gmail.com")
-                .RuleFor(x => x.UserId, x => userId);
+                .RuleFor(x => x.Email, x => x.Lorem.Word()+"@gmail.com")
+                .RuleFor(x => x.UserId, x => userId);*/
 
             _fakeUser = new Faker<User>()
                 .RuleFor(x => x.Name, x => x.Name.FullName())

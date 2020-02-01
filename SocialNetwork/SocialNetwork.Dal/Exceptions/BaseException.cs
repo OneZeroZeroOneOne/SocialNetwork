@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SocialNetwork.Dal.Exceptions
 {
@@ -19,7 +17,7 @@ namespace SocialNetwork.Dal.Exceptions
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(new {Code, Message = ExMessage});
         }
     }
 }

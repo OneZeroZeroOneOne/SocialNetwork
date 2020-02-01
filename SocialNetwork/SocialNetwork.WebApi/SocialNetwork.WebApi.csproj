@@ -2,15 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.SelfHost" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -21,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SocialNetwork.Authorize\SocialNetwork.Security.csproj" />
     <ProjectReference Include="..\SocialNetwork.Bll\SocialNetwork.Bll.csproj" />
     <ProjectReference Include="..\SocialNetwork.Dal\SocialNetwork.Dal.csproj" />
   </ItemGroup>

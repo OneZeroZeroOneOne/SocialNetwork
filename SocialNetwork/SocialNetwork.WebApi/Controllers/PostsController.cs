@@ -1,16 +1,18 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using System;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PostsController : ControllerBase
+    public class PostsController : SocialNetworkBaseApiController
     {
         private IPostService _postService;
         private readonly IMapper _mapper;
@@ -37,10 +39,13 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]PostViewModel post)
+        [Authorize(Roles = "Member")]
+        public async Task<IActionResult> Post([FromBody]PostViewModel post)
         {
+            var currentUser = await CurrentUser();
+
             var dataModel = _mapper.Map<PostViewModel, Post>(post);
-            var insertedPost = _postService.CreateNewPost(dataModel);
+            var insertedPost = _postService.CreateNewPost(dataModel, currentUser);
 
             var returnModel = _mapper.Map<Post, OutPostViewModel>(insertedPost);
             return Ok(returnModel);
