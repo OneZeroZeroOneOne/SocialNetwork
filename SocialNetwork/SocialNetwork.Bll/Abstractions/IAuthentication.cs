@@ -9,5 +9,7 @@ namespace SocialNetwork.Bll.Abstractions
     {
 
         ClaimsIdentity GetIdentity(string username, string password);
+
+
     }
 }

@@ -21,7 +21,7 @@ namespace SocialNetwork.WebApi.Controllers
             _context = new PublicContext();
         }
 
-        /*[HttpPost]
+        [HttpPost]
         public OkResult Post(string name, string password, string mail, string avatarurl)
         {
             
@@ -29,12 +29,12 @@ namespace SocialNetwork.WebApi.Controllers
             User user = new User { Name = name, Id = id, Mail = mail, AvatarUrl = avatarurl};
             Console.WriteLine(user.Name);
             UserSecurity usersecurity = new UserSecurity { UserId = id, Password = password, Mail = mail};
-            context.User.Add(user);
-            context.UserSecurity.Add(usersecurity);
-            context.SaveChanges();
+            _context.User.Add(user);
+            _context.UserSecurity.Add(usersecurity);
+            _context.SaveChanges();
             return new OkResult();
 
             
-        }*/
+        }
     }
 }

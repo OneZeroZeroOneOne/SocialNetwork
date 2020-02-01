@@ -8,7 +8,6 @@ using SocialNetwork.Bll.Abstractions;
 using System.Linq;
 using System.Text.Json;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 
 
 namespace SocialNetwork.Bll.Services
@@ -44,8 +43,5 @@ namespace SocialNetwork.Bll.Services
             // если пользователя не найдено
             return null;
         }
-        public Json GetAuthResponce()
-
-
     }
 }
