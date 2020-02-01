@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SocialNetwork.Dal.Models;
@@ -17,6 +18,7 @@ namespace SocialNetwork.WebApi.Controllers
         private readonly IMapper _mapper;
 
         private readonly IRegistrationService _registrationService;
+
         public RegistrationController(ILogger<RegistrationController> logger,IMapper mapper, IRegistrationService registrationService)
         {
             _logger = logger;
@@ -26,13 +28,18 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(string email, string password)
+        public async Task<OutUserRegisterViewModel> Post(string email, string password)
         {
             var userModel = await _registrationService.Register(email, password);
 
-            var userOutViewModel = _mapper.Map<User, OutUserRegisterViewModel>(userModel);
-
-            return Ok(userOutViewModel);
+            return _mapper.Map<User, OutUserRegisterViewModel>(userModel);
+        }
+        
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet]
+        public async Task<bool> Get(Guid confirmationToken)
+        {
+            return await _registrationService.ConfirmEmail(confirmationToken);
         }
 
     }

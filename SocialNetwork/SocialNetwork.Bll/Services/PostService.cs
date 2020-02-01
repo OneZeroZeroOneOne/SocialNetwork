@@ -20,7 +20,10 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<Post> EditPost(Post postModel, User editorUser)
         {
-            var postInDb = await _context.Post.FirstOrDefaultAsync(x => x.Id == postModel.Id);//await GetPost(postModel.Id);
+            var postInDb = await _context.Post.FirstOrDefaultAsync(x => x.Id == postModel.Id);
+
+            if (postInDb == null)
+                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {postModel.Id} not found");
 
             postInDb.Text = postModel.Text;
 
@@ -48,6 +51,9 @@ namespace SocialNetwork.Bll.Services
             var post = await _context.Post.Where(x => x.Id == postId)
                 .Include(x => x.Comments)
                 .FirstOrDefaultAsync();
+
+            if (post == null)
+                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {postId} not found");
 
             return post;
         }

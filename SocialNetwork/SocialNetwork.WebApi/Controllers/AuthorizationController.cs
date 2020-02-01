@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SocialNetwork.Dal.ViewModels.Out;
 using SocialNetwork.Security.Abstractions;
 
 
@@ -19,20 +21,17 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(string email, string password)
+        public async Task<OutRegistrationViewModel> Get(string email, string password)
         {
-            var identity = _authService.GetIdentity(email, password);
+            var identity = await _authService.GetIdentity(email, password);
 
             var encodedJwt = _authService.GenerateToken(identity);
 
-            var response = new
+            return new OutRegistrationViewModel
             {
                 access_token = encodedJwt,
-                email,
+                email = email,
             };
-
-            return Ok(response);
         }
-        
     }
 }

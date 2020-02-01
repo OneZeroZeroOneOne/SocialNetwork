@@ -19,6 +19,7 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserSecurity> UserSecurity { get; set; }
+        public virtual DbSet<UserConfirmationToken> UserConfirmationToken { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -79,9 +80,29 @@ namespace SocialNetwork.Dal.Context
             {
                 entity.HasKey(x => x.UserId);
 
+                entity.Property(x => x.IsConfirmed)
+                    .HasDefaultValue(false);
+
+                entity.HasMany(x => x.UserConfirmationTokens)
+                    .WithOne(x => x.UserSecurity)
+                    .HasForeignKey(x => x.UserId);
+
                 entity.HasOne(e => e.User)
                     .WithOne(x => x.UserSecurity)
                     .HasForeignKey<UserSecurity>(x => x.UserId);
+            });
+
+            modelBuilder.Entity<UserConfirmationToken>(entity =>
+            {
+                entity.HasKey(x => x.ConfirmId);
+
+                entity.HasOne(x => x.UserSecurity)
+                    .WithMany(x => x.UserConfirmationTokens)
+                    .HasForeignKey(x => x.UserId);
+
+                entity.Property(x => x.ConfirmId).HasValueGenerator<GuidGenerator>();
+
+                entity.Property(x => x.CreateDateTime).HasValueGenerator<CurrentDateTimeGenerator>();
             });
 
             OnModelCreatingPartial(modelBuilder);

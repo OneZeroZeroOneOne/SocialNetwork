@@ -59,6 +59,9 @@ namespace SocialNetwork.Bll.Services
         {
             var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentId);
 
+            if (comment == null)
+                throw ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, $"Comment {commentId} doesn't exist");
+
             return comment;
         }
     }

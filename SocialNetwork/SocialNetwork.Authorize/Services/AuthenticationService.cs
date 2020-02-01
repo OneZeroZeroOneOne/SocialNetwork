@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.Security.Services
 {
@@ -20,13 +21,21 @@ namespace SocialNetwork.Security.Services
             _context = publicContext;
         }
 
-        public ClaimsIdentity GetIdentity(string email, string password)
+        public async Task<ClaimsIdentity> GetIdentity(string email, string password)
         {
-            var user = _context.User.Include(x => x.UserSecurity)
-                .FirstOrDefault(x => x.Email == email && x.UserSecurity.Password == password);
+            var user = await _context.User.Include(x => x.UserSecurity)
+                .FirstOrDefaultAsync(x => x.Email == email);
 
             if (user?.UserSecurity == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.UserNotFound, $"User with email {email} not found");
+
+            if (user.UserSecurity.Password != password)
+                throw ExceptionFactory.SoftException(ExceptionEnum.PasswordIncorrect, "Password is incorrect");
+
+            /*Ignore user not confirmed email because they have role preMember
+             if (user.UserSecurity.IsConfirmed == false)
+                throw ExceptionFactory.SoftException(ExceptionEnum.EmailNotConfirmed, $"Please confirm your email. Check spam folder!");*/
+
 
             var claims = new List<Claim>
             {

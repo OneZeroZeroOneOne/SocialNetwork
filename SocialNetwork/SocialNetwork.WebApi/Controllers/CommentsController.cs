@@ -28,40 +28,35 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet, Route("{commentId}", Name = "commentId")]
-        public async Task<IActionResult> Get([FromRoute]Guid commentId)
+        public async Task<OutCommentViewModel> Get([FromRoute]Guid commentId)
         {
             var comment = await _commentService.GetComment(commentId);
-            if (comment == null)
-                return NotFound();
 
-            var returnModel = _mapper.Map<Comment, OutCommentViewModel>(comment);
-            return Ok(returnModel);
+            return _mapper.Map<Comment, OutCommentViewModel>(comment);
         }
 
         [HttpPost]
         [Authorize(Roles = "Member")]
-        public async Task<IActionResult> Post([FromBody]CommentViewModel comment)
+        public async Task<OutCommentViewModel> Post([FromBody]CommentViewModel comment)
         {
             var currentUser = await CurrentUser();
 
             var dataModel = _mapper.Map<CommentViewModel, Comment>(comment);
             var insertedComment = await _commentService.AddComment(dataModel, currentUser);
 
-            var returnModel = _mapper.Map<Comment, OutCommentViewModel>(insertedComment);
-            return Ok(returnModel);
+            return _mapper.Map<Comment, OutCommentViewModel>(insertedComment);
         }
 
         [HttpPatch]
         [Authorize(Roles = "Member")]
-        public async Task<IActionResult> Patch([FromBody]EditCommentViewModel comment)
+        public async Task<OutCommentViewModel> Patch([FromBody]EditCommentViewModel comment)
         {
             var currentUser = await CurrentUser();
 
             var dataModel = _mapper.Map<EditCommentViewModel, Comment>(comment);
             var insertedComment = await _commentService.EditComment(dataModel, currentUser);
 
-            var returnModel = _mapper.Map<Comment, OutCommentViewModel>(insertedComment);
-            return Ok(returnModel);
+            return _mapper.Map<Comment, OutCommentViewModel>(insertedComment);
         }
     }
 }

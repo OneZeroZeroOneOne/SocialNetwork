@@ -19,6 +19,8 @@ using SocialNetwork.Security.Services;
 using SocialNetwork.WebApi.Middlewares;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace SocialNetwork.WebApi
 {
@@ -51,6 +53,8 @@ namespace SocialNetwork.WebApi
             services.AddTransient<IRegistrationService, RegistrationService>();
 
             services.AddTransient<PublicContext>();
+
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
