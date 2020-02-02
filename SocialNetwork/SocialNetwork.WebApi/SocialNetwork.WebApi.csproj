@@ -7,6 +7,15 @@
 
   <ItemGroup>
     <None Remove="log.log" />
+    <None Remove="SwaggerAuthorizations.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="StaticFiles\Swagger\UI.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="StaticFiles\Swagger\SwaggerAuthorization.js" />
   </ItemGroup>
 
   <ItemGroup>
