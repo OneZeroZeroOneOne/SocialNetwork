@@ -52,7 +52,7 @@ namespace SocialNetwork.WebApi
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();
 
-            services.AddTransient<Security.Abstractions.IAuthenticationService, Security.Services.AuthenticationService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IRegistrationService, RegistrationService>();
 
             services.AddTransient<IMailClient, MailJetClient>();
