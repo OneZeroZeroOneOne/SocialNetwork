@@ -1,4 +1,7 @@
+using System.Net;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace SocialNetwork.WebApi
@@ -13,7 +16,22 @@ namespace SocialNetwork.WebApi
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+                .ConfigureServices((context, services) =>
+                {
+                    services.Configure<KestrelServerOptions>(
+                        context.Configuration.GetSection("Kestrel"));
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        /*serverOptions.Listen(IPAddress.Any, 5000, listenOptions =>
+                        {
+                            listenOptions.UseConnectionLogging();
+                        });*/
+                        // Set properties and call methods on options
+                    }).UseStartup<Startup>();
+                });
 
         }
     }
