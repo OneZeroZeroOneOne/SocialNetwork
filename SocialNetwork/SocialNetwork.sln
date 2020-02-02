@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Dal", "Social
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Bll", "SocialNetwork.Bll\SocialNetwork.Bll.csproj", "{041199B6-7A50-469C-BD6A-07E8DC98C7CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Security", "SocialNetwork.Authorize\SocialNetwork.Security.csproj", "{B4E7690A-EC79-439E-86A3-23A652C7787B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Utilities", "SocialNetwork.Utilities\SocialNetwork.Utilities.csproj", "{9F3D74A6-4353-4B88-8041-C70CD64BD5A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.Utilities", "SocialNetwork.Utilities\SocialNetwork.Utilities.csproj", "{9F3D74A6-4353-4B88-8041-C70CD64BD5A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Security", "SocialNetwork.Security\SocialNetwork.Security.csproj", "{B8B861B3-F1CA-4DD7-A374-835A48B2909D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,14 +45,6 @@ Global
 		{041199B6-7A50-469C-BD6A-07E8DC98C7CC}.Release|Any CPU.Build.0 = Release|x86
 		{041199B6-7A50-469C-BD6A-07E8DC98C7CC}.Release|x86.ActiveCfg = Release|x86
 		{041199B6-7A50-469C-BD6A-07E8DC98C7CC}.Release|x86.Build.0 = Release|x86
-		{B4E7690A-EC79-439E-86A3-23A652C7787B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4E7690A-EC79-439E-86A3-23A652C7787B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4E7690A-EC79-439E-86A3-23A652C7787B}.Debug|x86.ActiveCfg = Debug|x86
-		{B4E7690A-EC79-439E-86A3-23A652C7787B}.Debug|x86.Build.0 = Debug|x86
-		{B4E7690A-EC79-439E-86A3-23A652C7787B}.Release|Any CPU.ActiveCfg = Release|x86
-		{B4E7690A-EC79-439E-86A3-23A652C7787B}.Release|Any CPU.Build.0 = Release|x86
-		{B4E7690A-EC79-439E-86A3-23A652C7787B}.Release|x86.ActiveCfg = Release|x86
-		{B4E7690A-EC79-439E-86A3-23A652C7787B}.Release|x86.Build.0 = Release|x86
 		{9F3D74A6-4353-4B88-8041-C70CD64BD5A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9F3D74A6-4353-4B88-8041-C70CD64BD5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F3D74A6-4353-4B88-8041-C70CD64BD5A7}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -61,6 +53,14 @@ Global
 		{9F3D74A6-4353-4B88-8041-C70CD64BD5A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9F3D74A6-4353-4B88-8041-C70CD64BD5A7}.Release|x86.ActiveCfg = Release|Any CPU
 		{9F3D74A6-4353-4B88-8041-C70CD64BD5A7}.Release|x86.Build.0 = Release|Any CPU
+		{B8B861B3-F1CA-4DD7-A374-835A48B2909D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B861B3-F1CA-4DD7-A374-835A48B2909D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B861B3-F1CA-4DD7-A374-835A48B2909D}.Debug|x86.ActiveCfg = Debug|x86
+		{B8B861B3-F1CA-4DD7-A374-835A48B2909D}.Debug|x86.Build.0 = Debug|x86
+		{B8B861B3-F1CA-4DD7-A374-835A48B2909D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B861B3-F1CA-4DD7-A374-835A48B2909D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8B861B3-F1CA-4DD7-A374-835A48B2909D}.Release|x86.ActiveCfg = Release|x86
+		{B8B861B3-F1CA-4DD7-A374-835A48B2909D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
