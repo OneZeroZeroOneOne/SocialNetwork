@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SocialNetwork.Dal.ViewModels
+namespace SocialNetwork.Dal.ViewModels.Out
 {
     public class OutUserRegisterViewModel
     {

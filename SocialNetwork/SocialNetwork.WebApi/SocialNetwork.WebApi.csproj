@@ -21,6 +21,7 @@
     <ProjectReference Include="..\SocialNetwork.Authorize\SocialNetwork.Security.csproj" />
     <ProjectReference Include="..\SocialNetwork.Bll\SocialNetwork.Bll.csproj" />
     <ProjectReference Include="..\SocialNetwork.Dal\SocialNetwork.Dal.csproj" />
+    <ProjectReference Include="..\SocialNetwork.Utilities\SocialNetwork.Utilities.csproj" />
   </ItemGroup>
 
 

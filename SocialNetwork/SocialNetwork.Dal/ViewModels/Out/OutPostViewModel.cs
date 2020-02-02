@@ -1,8 +1,7 @@
-﻿using SocialNetwork.Dal.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace SocialNetwork.Dal.ViewModels
+namespace SocialNetwork.Dal.ViewModels.Out
 {
     public class OutPostViewModel
     {

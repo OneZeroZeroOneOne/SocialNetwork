@@ -16,11 +16,15 @@ using SocialNetwork.Dal.Context;
 using SocialNetwork.Security;
 using SocialNetwork.Security.Abstractions;
 using SocialNetwork.Security.Services;
+using SocialNetwork.Utilities.ApiClients;
 using SocialNetwork.WebApi.Middlewares;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SocialNetwork.Utilities.Abstractions;
+using AuthOptions = SocialNetwork.Security.AuthOptions;
 
 namespace SocialNetwork.WebApi
 {
@@ -49,8 +53,10 @@ namespace SocialNetwork.WebApi
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();
 
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<Security.Abstractions.IAuthenticationService, Security.Services.AuthenticationService>();
             services.AddTransient<IRegistrationService, RegistrationService>();
+
+            services.AddTransient<IMailClient, MailJetClient>();
 
             services.AddTransient<PublicContext>();
 

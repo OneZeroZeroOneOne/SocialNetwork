@@ -7,6 +7,8 @@ using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using System;
 using System.Threading.Tasks;
+using SocialNetwork.Dal.ViewModels.In;
+using SocialNetwork.Dal.ViewModels.Out;
 
 namespace SocialNetwork.WebApi.Controllers
 {

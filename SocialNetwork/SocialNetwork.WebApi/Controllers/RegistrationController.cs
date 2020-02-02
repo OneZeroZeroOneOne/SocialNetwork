@@ -6,6 +6,7 @@ using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using SocialNetwork.Security.Abstractions;
 using System.Threading.Tasks;
+using SocialNetwork.Dal.ViewModels.Out;
 
 
 namespace SocialNetwork.WebApi.Controllers

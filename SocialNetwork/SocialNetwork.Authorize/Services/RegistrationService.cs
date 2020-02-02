@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Security.Abstractions;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Mailjet.Client;
 using User = SocialNetwork.Dal.Models.User;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using SocialNetwork.Utilities.Abstractions;
 
 namespace SocialNetwork.Security.Services
 {
@@ -21,7 +19,7 @@ namespace SocialNetwork.Security.Services
     {
         private readonly PublicContext _publicContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IConfiguration _config;
+        private readonly IMailClient _mailClient;
 
         private readonly Regex _emailRegex;
 
@@ -29,11 +27,11 @@ namespace SocialNetwork.Security.Services
         private readonly Regex _hasUpperChar;
         private readonly Regex _hasMinimum8Chars;
 
-        public RegistrationService(PublicContext publicContext, IHttpContextAccessor httpContextAccessor, IConfiguration config)
+        public RegistrationService(PublicContext publicContext, IHttpContextAccessor httpContextAccessor, IMailClient mailClient)
         {
             _publicContext = publicContext;
             _httpContextAccessor = httpContextAccessor;
-            _config = config;
+            _mailClient = mailClient;
 
             _hasNumber = new Regex(@"[0-9]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             _hasUpperChar = new Regex(@"[A-Z]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -115,59 +113,10 @@ namespace SocialNetwork.Security.Services
 
         public async Task<bool> SendConfirmEmail(string email, string confirmToken)
         {
+            var confirmUrl =
+                $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/Registration?confirmationToken={confirmToken}";
 
-            var apiSecret = _config.GetSection("MailJet").GetSection("ApiSecret").Value;
-            var apiKey = _config.GetSection("MailJet").GetSection("ApiKey").Value;
-
-            if (apiKey == null || apiSecret == null)
-                return false;
-
-            MailjetClient client = new MailjetClient(apiKey, apiSecret)
-            {
-                Version = ApiVersion.V3_1,
-            };
-
-            MailjetRequest request = new MailjetRequest
-            {
-                Resource = Send.Resource,
-            }
-            .Property(Send.Messages, new JArray 
-            {
-                new JObject 
-                {
-                    {
-                        "From",
-                        new JObject 
-                        {
-                            {"Email", "zebestforevka@gmail.com"},
-                            {"Name", "SocialNetwork"}
-                        }
-                    }, {
-                        "To",
-                        new JArray 
-                        {
-                            new JObject 
-                            {
-                                {
-                                    "Email", email
-                                }
-                            }
-                        }
-                    }, {
-                        "Subject",
-                        "Confirm your email"
-                    }, {
-                        "TextPart",
-                        "Confirm your email"
-                    }, {
-                        "HTMLPart",
-                        $"<h3>Hello, thank for registering in SocialNetwork!</h3></br><a href='{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/Registration?confirmationToken={confirmToken}'>Confirm</a> your email for using our service!"
-                    }
-                }
-            });
-
-            MailjetResponse response = await client.PostAsync(request);
-            return response.IsSuccessStatusCode;
+            return await _mailClient.SendConfirmationMail(email, confirmUrl);
         }
     }
 }

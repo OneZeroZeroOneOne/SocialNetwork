@@ -12,5 +12,6 @@
         CantSendEmail = 8,
         CantFindConfirmationToken = 9,
         PasswordIncorrect = 10,
+        CantLoadSecrets = 11,
     }
 }

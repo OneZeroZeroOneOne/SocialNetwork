@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SocialNetwork.Dal.ViewModels
+namespace SocialNetwork.Dal.ViewModels.In
 {
     public class PostViewModel
     {
