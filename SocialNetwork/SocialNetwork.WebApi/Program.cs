@@ -25,10 +25,16 @@ namespace SocialNetwork.WebApi
                 {
                     webBuilder.ConfigureKestrel(serverOptions =>
                     {
-                        /*serverOptions.Listen(IPAddress.Any, 5000, listenOptions =>
-                        {
-                            listenOptions.UseConnectionLogging();
-                        });*/
+                        serverOptions.Listen(IPAddress.Any, 8000, listenOptions =>
+                            {
+                                listenOptions.UseConnectionLogging();
+                            });
+                        /*serverOptions.Listen(IPAddress.Loopback, 5001,
+                            listenOptions =>
+                            {
+                                listenOptions.UseHttps("testCert.pfx",
+                                    "testPassword");
+                            });*/
                         // Set properties and call methods on options
                     }).UseStartup<Startup>();
                 });

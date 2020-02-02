@@ -131,7 +131,7 @@ namespace SocialNetwork.WebApi
 
             app.ConfigureCustomExceptionMiddleware();
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
             
