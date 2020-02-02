@@ -2,8 +2,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
@@ -16,15 +18,12 @@ using SocialNetwork.Dal.Context;
 using SocialNetwork.Security;
 using SocialNetwork.Security.Abstractions;
 using SocialNetwork.Security.Services;
+using SocialNetwork.Utilities.Abstractions;
 using SocialNetwork.Utilities.ApiClients;
 using SocialNetwork.WebApi.Middlewares;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using SocialNetwork.Utilities.Abstractions;
-using AuthOptions = SocialNetwork.Security.AuthOptions;
+
 
 namespace SocialNetwork.WebApi
 {
