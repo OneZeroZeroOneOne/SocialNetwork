@@ -1,4 +1,3 @@
-using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -24,8 +23,6 @@ using SocialNetwork.Utilities.ApiClients;
 using SocialNetwork.WebApi.Middlewares;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using Microsoft.Extensions.FileProviders;
 
 
 namespace SocialNetwork.WebApi
@@ -136,15 +133,6 @@ namespace SocialNetwork.WebApi
 
             //app.UseHttpsRedirection();
 
-            app.UseStaticFiles();
-
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles")),
-                RequestPath = "/StaticFiles"
-            });
-
             app.UseRouting();
             
             app.UseAuthentication();
@@ -157,12 +145,8 @@ namespace SocialNetwork.WebApi
 
             app.UseSwagger();
 
-            //Assembly containingAssembly = Assembly.GetAssembly(typeof(Startup));
-
             app.UseSwaggerUI(c =>
             {
-                c.IndexStream = () => new FileStream($"StaticFiles/Swagger/UI.html", FileMode.Open);
-                c.InjectJavascript("/StaticFiles/Swagger/SwaggerAuthorization.js");
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
         }
