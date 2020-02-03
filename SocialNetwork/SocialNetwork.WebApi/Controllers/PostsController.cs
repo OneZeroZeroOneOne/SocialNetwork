@@ -64,21 +64,21 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<OutPostViewModel>> GetPageComments([FromBody]PostViewModel post, int page, int quantity)
+        public async Task<List<OutCommentViewModel>> GetPageComments([FromBody]PostViewModel post, int page, int quantity)
         {
             var currentUser = await CurrentUser();
 
             var dataModel = _mapper.Map<PostViewModel, Post>(post);
 
-            List<Post> listPost =  _postService.GetPageComments(dataModel, page, quantity);
+            List<Comment> listComment = await _postService.GetPageComments(dataModel, page, quantity);
 
-            List<OutPostViewModel> = 
-            return 
+            List<OutCommentViewModel> listOutComment = new List<OutCommentViewModel>;
 
-
-
-
-
+            foreach (Comment i in listComment) 
+            {
+                listOutComment.Add(_mapper.Map<Comment, OutCommentViewModel>(i));
+            }
+            return listOutComment;
         }
     }
 }
