@@ -6,9 +6,11 @@ using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
+using System.Collections.Generic;
 
 namespace SocialNetwork.WebApi.Controllers
 {
@@ -40,6 +42,7 @@ namespace SocialNetwork.WebApi.Controllers
         [Authorize(Roles = "Member")]
         public async Task<OutPostViewModel> Post([FromBody]PostViewModel post)
         {
+
             var currentUser = await CurrentUser();
 
             var dataModel = _mapper.Map<PostViewModel, Post>(post);
@@ -58,6 +61,24 @@ namespace SocialNetwork.WebApi.Controllers
             var insertedPost = await _postService.EditPost(dataModel, currentUser);
 
             return _mapper.Map<Post, OutPostViewModel>(insertedPost);
+        }
+
+        [HttpGet]
+        public async Task<List<OutPostViewModel>> GetPageComments([FromBody]PostViewModel post, int page, int quantity)
+        {
+            var currentUser = await CurrentUser();
+
+            var dataModel = _mapper.Map<PostViewModel, Post>(post);
+
+            List<Post> listPost =  _postService.GetPageComments(dataModel, page, quantity);
+
+            List<OutPostViewModel> = 
+            return 
+
+
+
+
+
         }
     }
 }

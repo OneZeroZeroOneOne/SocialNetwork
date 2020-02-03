@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -56,6 +57,16 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {postId} not found");
 
             return post;
+        }
+
+        public async Task<List<Comment>> GetPageComments(Post post, int page, int quantity)
+        {
+            List<Comment> comments = await _context.Comment.Where(x => x.PostId == post.Id)
+                    .OrderBy(x => x.Date)
+                    .Skip(page * (quantity))
+                    .Take(quantity)
+                    .ToListAsync();
+            return comments;
         }
     }
 }

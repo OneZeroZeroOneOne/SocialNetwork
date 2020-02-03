@@ -13,5 +13,6 @@ namespace SocialNetwork.Bll.Abstractions
         Task<Comment> AddComment(Comment commentModel, User authorUser);
 
         Task<Comment> EditComment(Comment commentModel, User editorUser);
+
     }
 }

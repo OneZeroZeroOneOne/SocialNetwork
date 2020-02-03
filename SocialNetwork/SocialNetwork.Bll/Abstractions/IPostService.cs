@@ -1,6 +1,7 @@
 ﻿using SocialNetwork.Dal.Models;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SocialNetwork.Bll.Abstractions
 {
@@ -11,5 +12,7 @@ namespace SocialNetwork.Bll.Abstractions
         Task<Post> CreateNewPost(Post postModel, User authorUser);
 
         Task<Post> GetPost(Guid postId);
+
+        Task<List<Comment>> GetPageComments(Post commentId, int page, int quantity);
     }
 }

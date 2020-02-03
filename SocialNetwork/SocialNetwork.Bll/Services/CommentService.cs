@@ -4,7 +4,9 @@ using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Dal.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -64,5 +66,6 @@ namespace SocialNetwork.Bll.Services
 
             return comment;
         }
+
     }
 }
