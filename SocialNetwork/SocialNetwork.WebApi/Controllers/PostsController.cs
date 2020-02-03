@@ -62,23 +62,8 @@ namespace SocialNetwork.WebApi.Controllers
 
             return _mapper.Map<Post, OutPostViewModel>(insertedPost);
         }
-
-        [HttpGet]
-        public async Task<List<OutCommentViewModel>> GetPageComments([FromBody]PostViewModel post, [FromBody]int page, [FromBody]int quantity)
-        {
-            var currentUser = await CurrentUser();
-
-            var dataModel = _mapper.Map<PostViewModel, Post>(post);
-
-            List<Comment> listComment = await _postService.GetPageComments(dataModel, page, quantity);
-
-            List<OutCommentViewModel> listOutComment = new List<OutCommentViewModel>();
-
-            foreach (Comment i in listComment) 
-            {
-                listOutComment.Add(_mapper.Map<Comment, OutCommentViewModel>(i));
-            }
-            return listOutComment;
-        }
+        
+        
+        
     }
 }

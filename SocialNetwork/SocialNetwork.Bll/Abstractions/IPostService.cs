@@ -12,7 +12,5 @@ namespace SocialNetwork.Bll.Abstractions
         Task<Post> CreateNewPost(Post postModel, User authorUser);
 
         Task<Post> GetPost(Guid postId);
-
-        Task<List<Comment>> GetPageComments(Post commentId, int page, int quantity);
     }
 }

@@ -66,6 +66,15 @@ namespace SocialNetwork.Bll.Services
 
             return comment;
         }
+        public async Task<List<Comment>> GetPageComments(Guid postId, int page, int quantity)
+        {
+            List<Comment> comments = await _context.Comment.Where(x => x.PostId == postId)
+                    .OrderBy(x => x.Date)
+                    .Skip(page * (quantity))
+                    .Take(quantity)
+                    .ToListAsync();
+            return comments;
+        }
 
     }
 }
