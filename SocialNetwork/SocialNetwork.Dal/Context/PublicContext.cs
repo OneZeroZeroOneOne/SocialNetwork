@@ -108,6 +108,75 @@ namespace SocialNetwork.Dal.Context
                 entity.Property(x => x.CreateDateTime).HasValueGenerator<CurrentDateTimeGenerator>();
             });
 
+
+            modelBuilder.Entity<ReactionComment>(entity =>
+            {
+                entity.HasKey(e => new { e.ReactionId, e.UserId })
+                    .HasName("ReactionComment_pk");
+
+                entity.HasOne(d => d.Comment)
+                    .WithMany(p => p.ReactionComment)
+                    .HasForeignKey(d => d.CommentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ReactionToComment_fk0");
+
+                entity.HasOne(d => d.Reaction)
+                    .WithMany(p => p.ReactionComment)
+                    .HasForeignKey(d => d.ReactionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ReactionComment_fk0");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ReactionComments)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ReactionComment_fk1");
+            });
+
+            modelBuilder.Entity<ReactionPost>(entity =>
+            {
+                entity.HasKey(e => new { e.ReactionId, e.UserId })
+                    .HasName("ReactionPost_pk");
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.ReactionPost)
+                    .HasForeignKey(d => d.PostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ReactionToPost_fk0");
+
+                entity.HasOne(d => d.Reaction)
+                    .WithMany(p => p.ReactionPost)
+                    .HasForeignKey(d => d.ReactionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ReactionPost_fk0");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ReactionPosts)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ReactionPost_fk1");
+            });
+
+            modelBuilder.Entity<ReactionTypeComment>(entity =>
+            {
+                entity.HasKey(e => e.ReactionId)
+                    .HasName("ReactionTypeComment_pk");
+
+                entity.Property(e => e.ReactionId).ValueGeneratedNever();
+
+                entity.Property(e => e.Content).IsRequired();
+            });
+
+            modelBuilder.Entity<ReactionTypePost>(entity =>
+            {
+                entity.HasKey(e => e.ReactionId)
+                    .HasName("ReactionTypePost_pk");
+
+                entity.Property(e => e.ReactionId).ValueGeneratedNever();
+
+                entity.Property(e => e.Content).IsRequired();
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
