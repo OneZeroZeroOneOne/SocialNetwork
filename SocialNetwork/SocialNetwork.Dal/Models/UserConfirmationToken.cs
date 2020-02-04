@@ -15,5 +15,6 @@ namespace SocialNetwork.Dal.Models
         public bool IsActive { get; set; }
 
         public virtual UserSecurity UserSecurity { get; set; }
+        
     }
 }

@@ -13,5 +13,6 @@
         CantFindConfirmationToken = 9,
         PasswordIncorrect = 10,
         CantLoadSecrets = 11,
+        InappropriatParameters = 12,
     }
 }

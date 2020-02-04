@@ -69,8 +69,16 @@ namespace SocialNetwork.Bll.Services
         }
         public async Task<PagedQuery.PagedResult<Comment>> GetPageComments(Guid postId, int page, int quantity)
         {
-            var comments = await _context.Comment.AsQueryable().GetPaged(page, quantity);
-            return comments;
+            if (page > 0 && quantity > 1)
+            {
+                var comments = await _context.Comment.Where(x => x.PostId == postId).AsQueryable().GetPaged(postId, page, quantity);
+                return comments;
+            }
+            else
+            {
+                throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters, $"inappropriate parameters page or quantity");
+            }
+            
         }
 
     }

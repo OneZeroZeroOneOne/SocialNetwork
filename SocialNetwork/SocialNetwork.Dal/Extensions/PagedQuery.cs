@@ -38,7 +38,7 @@ namespace SocialNetwork.Dal.Extensions
             }
         }
         public static async Task<PagedResult<T>> GetPaged<T>(this IQueryable<T> query,
-                                         int page, int pageSize) where T : class
+                                         Guid pageId ,int page, int pageSize) where T : class
         {
             var result = new PagedResult<T>
             {
