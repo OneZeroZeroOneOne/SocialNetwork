@@ -69,7 +69,7 @@ namespace SocialNetwork.Bll.Services
         }
         public async Task<PagedQuery.PagedResult<Comment>> GetPageComments(Guid postId, int page, int quantity)
         {
-            var comments = _context.Comment.AsQueryable().GetPaged(1, 5);
+            var comments = await _context.Comment.AsQueryable().GetPaged(page, quantity);
             return comments;
         }
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace SocialNetwork.Dal.Extensions
 {
@@ -35,20 +37,21 @@ namespace SocialNetwork.Dal.Extensions
                 Results = new List<T>();
             }
         }
-        public static PagedResult<T> GetPaged<T>(this IQueryable<T> query,
+        public static async Task<PagedResult<T>> GetPaged<T>(this IQueryable<T> query,
                                          int page, int pageSize) where T : class
         {
-            var result = new PagedResult<T>();
-            result.CurrentPage = page;
-            result.PageSize = pageSize;
-            result.RowCount = query.Count();
-
+            var result = new PagedResult<T>
+            {
+                CurrentPage = page,
+                PageSize = pageSize,
+                RowCount = await query.CountAsync()
+            };
 
             var pageCount = (double)result.RowCount / pageSize;
             result.PageCount = (int)Math.Ceiling(pageCount);
 
             var skip = (page - 1) * pageSize;
-            result.Results = query.Skip(skip).Take(pageSize).ToList();
+            result.Results = await query.Skip(skip).Take(pageSize).ToListAsync();
 
             return result;
         }
