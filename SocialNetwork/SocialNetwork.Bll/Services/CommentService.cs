@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using SocialNetwork.Dal.Extensions;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -66,13 +67,9 @@ namespace SocialNetwork.Bll.Services
 
             return comment;
         }
-        public async Task<List<Comment>> GetPageComments(Guid postId, int page, int quantity)
+        public async Task<PagedQuery.PagedResult<Comment>> GetPageComments(Guid postId, int page, int quantity)
         {
-            List<Comment> comments = await _context.Comment.Where(x => x.PostId == postId)
-                    .OrderBy(x => x.Date)
-                    .Skip(page * (quantity))
-                    .Take(quantity)
-                    .ToListAsync();
+            var comments = _context.Comment.AsQueryable().GetPaged(1, 5);
             return comments;
         }
 
