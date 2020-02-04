@@ -38,7 +38,7 @@ CREATE TABLE "ReactionPost" (
   OIDS=FALSE
 );
 
-ALTER TABLE "ReactionComment" ADD CONSTRAINT "ReactionToComment_fk0" FOREIGN KEY ("ReactionId") REFERENCES "Comment"("Id");
+ALTER TABLE "ReactionComment" ADD CONSTRAINT "ReactionToComment_fk0" FOREIGN KEY ("CommentId") REFERENCES "Comment"("Id");
 ALTER TABLE "ReactionPost" ADD CONSTRAINT "ReactionToPost_fk0" FOREIGN KEY ("PostId") REFERENCES "Post"("Id");
 
 
