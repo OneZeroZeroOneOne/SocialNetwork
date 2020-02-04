@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using SocialNetwork.Dal.Extensions;
 
 namespace SocialNetwork.Bll.Abstractions
 {
@@ -12,5 +13,7 @@ namespace SocialNetwork.Bll.Abstractions
         Task<Post> CreateNewPost(Post postModel, User authorUser);
 
         Task<Post> GetPost(Guid postId);
+
+        Task<PagedQuery.PagedResult<Post>> GetPagePosts(Guid userId, int page, int quantity);
     }
 }

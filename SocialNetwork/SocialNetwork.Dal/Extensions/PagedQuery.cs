@@ -37,8 +37,8 @@ namespace SocialNetwork.Dal.Extensions
                 Results = new List<T>();
             }
         }
-        public static async Task<PagedResult<T>> GetPaged<T>(this IQueryable<T> query,
-                                         Guid pageId ,int page, int pageSize) where T : class
+        public static async Task<PagedResult<T>> GetPaged<T>(this IQueryable<T> query
+                                                            ,int page, int pageSize) where T : class
         {
             var result = new PagedResult<T>
             {

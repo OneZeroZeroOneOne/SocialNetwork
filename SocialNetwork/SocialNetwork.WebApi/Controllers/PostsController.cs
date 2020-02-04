@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
 using System.Collections.Generic;
+using SocialNetwork.Dal.Extensions;
 
 namespace SocialNetwork.WebApi.Controllers
 {
@@ -62,8 +63,13 @@ namespace SocialNetwork.WebApi.Controllers
 
             return _mapper.Map<Post, OutPostViewModel>(insertedPost);
         }
-        
-        
-        
+        [HttpGet, Route("/PostPage/{userId}", Name = "GetPagePosts")]
+        public async Task<PagedQuery.PagedResult<Post>> GetPagePosts([FromRoute]Guid userId, [FromQuery]int page, [FromQuery]int quantity)
+        {
+            return await _postService.GetPagePosts(userId, page, quantity);
+        }
+
+
+
     }
 }
