@@ -15,5 +15,5 @@ jobs:
         dotnet-version: 3.1.100
     - name: Build with dotnet
       run: dotnet build SocialNetwork/SocialNetwork.WebApi/SocialNetwork.WebApi.csproj --configuration Release
-    - name: Build with dotnet
-      run: dotnet run SocialNetwork/SocialNetwork.WebApi/bin/Release/netcoreapp3.0/SocialNetwork.WebApi.dll
+    - name: List builded files
+      run: ls
