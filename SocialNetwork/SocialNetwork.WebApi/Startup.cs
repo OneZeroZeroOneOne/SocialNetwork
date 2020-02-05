@@ -50,7 +50,6 @@ namespace SocialNetwork.WebApi
 
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();
-            services.AddTransient<IMailClient, MailJetClient>();
 
             services.AddTransient<PublicContext>();
 
@@ -141,7 +140,7 @@ namespace SocialNetwork.WebApi
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("./v1/swagger.json", "My API V1");
             });
         }
     }
