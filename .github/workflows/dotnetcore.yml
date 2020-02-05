@@ -1,4 +1,4 @@
-name: SocailNetwork.WebApi Build and Deploy
+name: SocialNetwork.WebApi Build and Deploy
 
 on: 
   push:
