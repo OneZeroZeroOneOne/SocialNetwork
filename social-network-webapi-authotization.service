@@ -2,8 +2,8 @@
 Description=Social Network app AuthServer
 
 [Service]
-WorkingDirectory={{path_to_builded}}
-ExecStart=/usr/bin/dotnet {{path_to_builded}}/SocialNetwork.WebApi.AuthorizationServer.dll
+WorkingDirectory=/root/SocialNetwork.WebApi.AuthorizationServer.Builded/SocialNetwork/SocialNetwork.WebApi.AuthorizationServer/bin/Release/netcoreapp3.0
+ExecStart=/usr/bin/dotnet /root/SocialNetwork.WebApi.AuthorizationServer.Builded/SocialNetwork/SocialNetwork.WebApi.AuthorizationServer/bin/Release/netcoreapp3.0/SocialNetwork.WebApi.AuthorizationServer.dll
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
 RestartSec=10

@@ -2,8 +2,8 @@
 Description=Social Network app
 
 [Service]
-WorkingDirectory={{path_to_builded}}
-ExecStart=/usr/bin/dotnet {{path_to_builded}}/SocialNetwork.WebApi.dll
+WorkingDirectory=/root/SocialNetwork.WebApi.Builded/SocialNetwork/SocialNetwork.WebApi/bin/Release/netcoreapp3.0
+ExecStart=/usr/bin/dotnet /root/SocialNetwork.WebApi.Builded/SocialNetwork/SocialNetwork.WebApi/bin/Release/netcoreapp3.0/SocialNetwork.WebApi.dll
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
 RestartSec=10
