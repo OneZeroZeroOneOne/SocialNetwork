@@ -55,7 +55,9 @@ namespace SocialNetwork.Security.Services
             if (!userConfirmationToken.IsActive) //maybe need additional logic after those step idk
                 return false;
 
-            userConfirmationToken.UserSecurity.Role = "Member";
+            userConfirmationToken.UserSecurity.Role =
+                await _publicContext.Role.FirstOrDefaultAsync(x => x.RoleName == "Member");
+
             userConfirmationToken.UserSecurity.IsConfirmed = true;
             userConfirmationToken.IsActive = false;
 
@@ -96,7 +98,7 @@ namespace SocialNetwork.Security.Services
                 UserSecurity = new UserSecurity()
                 {
                     Password = password,
-                    Role = "PreMember", //PreMember because email not confirmed!
+                    Role = await _publicContext.Role.FirstOrDefaultAsync(x => x.RoleName == "PreMember"), 
                     IsConfirmed = false,
                     UserConfirmationTokens = new List<UserConfirmationToken>()
                     {
