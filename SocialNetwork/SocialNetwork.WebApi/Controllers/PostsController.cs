@@ -28,12 +28,6 @@ namespace SocialNetwork.WebApi.Controllers
             _postService = postService;
         }
 
-        [HttpPatch, Route("test")]
-        public async Task<bool> Patch()
-        {
-            return true;
-        }
-
         [HttpGet, Route("{postId}", Name = "postId")]
         public async Task<OutPostViewModel> Get([FromRoute]Guid postId)
         {
