@@ -1,9 +1,14 @@
-name: .NET Core
+name: SocailNetwork.WebApi Build and Deploy
 
 on: 
   push:
     branches: 
       - master
+    paths:
+      - 'SocialNetwork/SocialNetwork.Bll/**'
+      - 'SocialNetwork/SocialNetwork.Dal/**'
+      - 'SocialNetwork/SocialNetwork.Security/**'
+      - 'SocialNetwork/SocialNetwork.Utilities/**'
 
 jobs:
   build:
