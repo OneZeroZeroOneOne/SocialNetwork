@@ -11,11 +11,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SocialNetwork.Bll.Abstractions;
-using SocialNetwork.Bll.Services;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Security;
+using SocialNetwork.Security.Abstractions;
+using SocialNetwork.Security.Services;
 using SocialNetwork.Utilities;
 using SocialNetwork.Utilities.Abstractions;
 using SocialNetwork.Utilities.ApiClients;
@@ -23,9 +23,7 @@ using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
 
-
-
-namespace SocialNetwork.WebApi
+namespace SocialNetwork.WebApi.AuthorizationServer
 {
     public class Startup
     {
@@ -49,8 +47,9 @@ namespace SocialNetwork.WebApi
                 mc.AddProfile(new MappingProfile());
             });
 
-            services.AddTransient<IPostService, PostService>();
-            services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IRegistrationService, RegistrationService>();
+            services.AddTransient<IMailClient, MailJetClient>();
 
             services.AddTransient<PublicContext>();
 
@@ -128,7 +127,7 @@ namespace SocialNetwork.WebApi
             //app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

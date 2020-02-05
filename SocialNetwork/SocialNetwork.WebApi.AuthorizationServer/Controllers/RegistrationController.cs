@@ -1,15 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SocialNetwork.Dal.Models;
-using SocialNetwork.Dal.ViewModels;
-using SocialNetwork.Security.Abstractions;
-using System.Threading.Tasks;
 using SocialNetwork.Dal.ViewModels.Out;
+using SocialNetwork.Security.Abstractions;
 
-
-namespace SocialNetwork.WebApi.Controllers
+namespace SocialNetwork.WebApi.AuthorizationServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]

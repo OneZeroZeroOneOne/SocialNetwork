@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SocialNetwork.Dal.Models;
+using SocialNetwork.Dal.ViewModels;
+using System;
 using System.Threading.Tasks;
-using SocialNetwork.Dal.Extensions;
-using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.Bll.Abstractions
 {
@@ -15,6 +13,6 @@ namespace SocialNetwork.Bll.Abstractions
 
         Task<Comment> EditComment(Comment commentModel, User editorUser);
 
-        Task<PagedQuery.PagedResult<Comment>> GetPageComments(Guid postId, int page, int quantity);
+        Task<PagedResult<Comment>> GetPageComments(Guid postId, int page, int quantity);
     }
 }

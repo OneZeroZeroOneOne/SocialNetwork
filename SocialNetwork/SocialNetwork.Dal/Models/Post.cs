@@ -8,6 +8,7 @@ namespace SocialNetwork.Dal.Models
         public Post()
         {
             Comments = new HashSet<Comment>();
+            ReactionPost = new HashSet<ReactionPost>();
         }
 
         public Guid Id { get; set; }
@@ -17,5 +18,6 @@ namespace SocialNetwork.Dal.Models
 
         public virtual User User { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<ReactionPost> ReactionPost { get; set; }
     }
 }

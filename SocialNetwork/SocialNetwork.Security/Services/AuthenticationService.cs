@@ -24,6 +24,7 @@ namespace SocialNetwork.Security.Services
         public async Task<ClaimsIdentity> GetIdentity(string email, string password)
         {
             var user = await _context.User.Include(x => x.UserSecurity)
+                .ThenInclude(x => x.Role)
                 .FirstOrDefaultAsync(x => x.Email == email);
 
             if (user?.UserSecurity == null)
@@ -40,7 +41,7 @@ namespace SocialNetwork.Security.Services
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.UserSecurity.Role),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.UserSecurity.Role.RoleName),
             };
 
             return new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
