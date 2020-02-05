@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
+
 namespace SocialNetwork.Dal.ViewModels.In
 {
-    public class ReactionPostViewModel
+    public class ReactionCommentViewModel
     {
         [Required]
-        public string PostId { get; set; }
+        public string CommentId { get; set; }
         public string ReactionId { get; set; }
+        public string UserId { get; set; }
     }
 }

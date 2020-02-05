@@ -3,9 +3,9 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using SocialNetwork.Dal.Extensions;
+using SocialNetwork.Dal.ViewModels.In;
 
-
-namespace SocialNetwork.Bll.Services
+namespace SocialNetwork.Bll.Abstractions
 {
     
     public interface IReactionService
@@ -14,8 +14,8 @@ namespace SocialNetwork.Bll.Services
 
         Task<CommentReaction> AddCommentReaction(Post postModel, User authorUser);
 
-        Task<PostReaction> GetPostReaction(Guid postId);
+        Task<List<PostReaction>> GetPostReaction(Guid postId);
 
-        Task<CommentReaction> GetCommentReaction(Guid postId);
+        Task<List<CommentReaction>> GetCommentReaction(Guid commentId);
     }
 }
