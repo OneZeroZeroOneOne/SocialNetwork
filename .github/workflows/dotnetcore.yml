@@ -9,6 +9,7 @@ on:
       - 'SocialNetwork/SocialNetwork.Dal/**'
       - 'SocialNetwork/SocialNetwork.Security/**'
       - 'SocialNetwork/SocialNetwork.Utilities/**'
+      - 'SocialNetwork/SocialNetwork.WebApi/**'
 
 jobs:
   build:
