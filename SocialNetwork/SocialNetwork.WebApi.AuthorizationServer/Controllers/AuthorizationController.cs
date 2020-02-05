@@ -19,6 +19,12 @@ namespace SocialNetwork.WebApi.AuthorizationServer.Controllers
             _authService = authService;
         }
 
+        [HttpPatch, Route("test")]
+        public async Task<bool> Patch()
+        {
+            return true;
+        }
+
         [HttpGet]
         public async Task<OutRegistrationViewModel> Get(string email, string password)
         {
