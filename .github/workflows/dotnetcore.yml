@@ -29,3 +29,11 @@ jobs:
         port: ${{ secrets.PORT }}
         source: "SocialNetwork/SocialNetwork.WebApi/bin/Release/netcoreapp3.0/*"
         target: "SocialNetwork.WebApi.Builded"
+    - name: Restarting SocialNetwork WebApi
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: systemctl restart social-network-webapi.service
