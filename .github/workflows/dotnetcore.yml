@@ -27,5 +27,5 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        source: "/home/runner/work/SocialNetwork/SocialNetwork/SocialNetwork/SocialNetwork.WebApi/bin/Release/netcoreapp3.0/*"
+        source: "netcoreapp3.0/*"
         target: "SocialNetwork.WebApi.Builded"
