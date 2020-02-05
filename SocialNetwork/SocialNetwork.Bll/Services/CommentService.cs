@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Exceptions;
-using SocialNetwork.Dal.Models;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using SocialNetwork.Dal.Extensions;
+using SocialNetwork.Dal.Models;
+using SocialNetwork.Dal.ViewModels;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -67,17 +67,13 @@ namespace SocialNetwork.Bll.Services
 
             return comment;
         }
-        public async Task<PagedQuery.PagedResult<Comment>> GetPageComments(Guid postId, int page, int quantity)
+        public async Task<PagedResult<Comment>> GetPageComments(Guid postId, int page, int quantity)
         {
-            if (page > 0 && quantity > 0)
-            {
-                return await _context.Comment.Where(x => x.PostId == postId).AsQueryable().GetPaged(page, quantity);
-            }
-            else
-            {
-                throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters, $"inappropriate parameters page or quantity");
-            }
-            
+            if (page <= 0 || quantity <= 0)
+                throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
+                    "inappropriate parameters page or quantity");
+
+            return await _context.Comment.Where(x => x.PostId == postId).AsQueryable().GetPaged(page, quantity);
         }
 
     }

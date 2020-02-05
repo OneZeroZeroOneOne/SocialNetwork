@@ -1,13 +1,13 @@
-﻿using SocialNetwork.Bll.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Exceptions;
+using SocialNetwork.Dal.Extensions;
 using SocialNetwork.Dal.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using SocialNetwork.Dal.Extensions;
+using SocialNetwork.Dal.ViewModels;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -60,18 +60,13 @@ namespace SocialNetwork.Bll.Services
             return post;
         }
 
-        public async Task<PagedQuery.PagedResult<Post>> GetPagePosts(Guid userId, int page, int quantity)
+        public async Task<PagedResult<Post>> GetPagePosts(Guid userId, int page, int quantity)
         {
-            if (page > 0 && quantity > 0)
-            {
-                return await _context.Post.Where(x => x.UserId == userId).AsQueryable().GetPaged(page, quantity);
-            }
-            else
-            {
-                throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters, $"inappropriate parameters page or quantity");
-            }
+            if (page <= 0 || quantity <= 0)
+                throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
+                    $"inappropriate parameters page or quantity");
 
+            return await _context.Post.Where(x => x.UserId == userId).AsQueryable().GetPaged(page, quantity);
         }
-
     }
 }
