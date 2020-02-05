@@ -20,12 +20,12 @@ jobs:
       run: dotnet build SocialNetwork/SocialNetwork.WebApi/SocialNetwork.WebApi.csproj --configuration Release
     - name: List builded files
       run: ls
-    - name: copy file via ssh password
+    - name: Copy file via ssh password
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        source: "SocialNetwork/SocialNetwork.WebApi/bin/Release/netcoreapp3.0/*"
+        source: "SocialNetwork/SocialNetwork.WebApi/bin/Release/netcoreapp3.0/*.dll"
         target: "SocialNetwork.WebApi.Builded"
