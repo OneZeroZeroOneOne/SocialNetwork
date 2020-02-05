@@ -16,8 +16,6 @@ using SocialNetwork.Bll.Services;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Security;
-using SocialNetwork.Security.Abstractions;
-using SocialNetwork.Security.Services;
 using SocialNetwork.Utilities;
 using SocialNetwork.Utilities.Abstractions;
 using SocialNetwork.Utilities.ApiClients;
@@ -52,10 +50,6 @@ namespace SocialNetwork.WebApi
 
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();
-
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
-            services.AddTransient<IRegistrationService, RegistrationService>();
-
             services.AddTransient<IMailClient, MailJetClient>();
 
             services.AddTransient<PublicContext>();
@@ -123,7 +117,6 @@ namespace SocialNetwork.WebApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "log.log"));
-            var logger = loggerFactory.CreateLogger("FileLogger");
 
             if (env.IsDevelopment())
             {
