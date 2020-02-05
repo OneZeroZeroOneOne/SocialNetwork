@@ -120,12 +120,6 @@ namespace SocialNetwork.Dal.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("ReactionToComment_fk0");
 
-                entity.HasOne(d => d.Reaction)
-                    .WithMany(p => p.ReactionComment)
-                    .HasForeignKey(d => d.ReactionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("ReactionComment_fk0");
-
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ReactionComments)
                     .HasForeignKey(d => d.UserId)
@@ -143,12 +137,6 @@ namespace SocialNetwork.Dal.Context
                     .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("ReactionToPost_fk0");
-
-                entity.HasOne(d => d.Reaction)
-                    .WithMany(p => p.ReactionPost)
-                    .HasForeignKey(d => d.ReactionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("ReactionPost_fk0");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ReactionPosts)

@@ -5,13 +5,10 @@ using Microsoft.Extensions.Logging;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
-using System;
-using System.Threading.Tasks;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
-using System.Collections.Generic;
-using System.Linq;
-using SocialNetwork.Dal.Extensions;
+using System;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
 {
@@ -64,7 +61,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet, Route("/CommentPage/{postId}", Name = "GetPageСomments")]
-        public async Task<PagedQuery.PagedResult<Comment>> GetPageComments([FromRoute]Guid postId, [FromQuery]int page, [FromQuery]int quantity)
+        public async Task<PagedResult<Comment>> GetPageComments([FromRoute]Guid postId, [FromQuery]int page, [FromQuery]int quantity)
         {
             return await _commentService.GetPageComments(postId, page, quantity);
         }
