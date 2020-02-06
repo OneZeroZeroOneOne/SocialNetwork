@@ -1,6 +1,36 @@
 
 -- Drop table
 
+-- DROP TABLE public."ReactionTypeComment";
+
+CREATE TABLE public."ReactionTypeComment" (
+	"ReactionId" uuid NOT NULL,
+	"Content" text NOT NULL,
+	CONSTRAINT "ReactionTypeComment_pk" PRIMARY KEY ("ReactionId")
+);
+
+-- Drop table
+
+-- DROP TABLE public."ReactionTypePost";
+
+CREATE TABLE public."ReactionTypePost" (
+	"ReactionId" uuid NOT NULL,
+	"Content" text NOT NULL,
+	CONSTRAINT "ReactionTypePost_pk" PRIMARY KEY ("ReactionId")
+);
+
+-- Drop table
+
+-- DROP TABLE public."Role";
+
+CREATE TABLE public."Role" (
+	"RoleId" uuid NOT NULL,
+	"RoleName" text NOT NULL,
+	CONSTRAINT "Role_pkey" PRIMARY KEY ("RoleId")
+);
+
+-- Drop table
+
 -- DROP TABLE public."User";
 
 CREATE TABLE public."User" (
@@ -10,6 +40,33 @@ CREATE TABLE public."User" (
 	"AvatarUrl" text NULL,
 	"DateOfBirth" timestamp NULL,
 	CONSTRAINT "User_pk" PRIMARY KEY ("Id")
+);
+
+-- Drop table
+
+-- DROP TABLE public."Post";
+
+CREATE TABLE public."Post" (
+	"Id" uuid NOT NULL,
+	"Text" text NOT NULL,
+	"Date" timestamp NOT NULL,
+	"UserId" uuid NOT NULL,
+	CONSTRAINT "Post_pk" PRIMARY KEY ("Id"),
+	CONSTRAINT "Post_fk0" FOREIGN KEY ("UserId") REFERENCES "User"("Id")
+);
+
+-- Drop table
+
+-- DROP TABLE public."ReactionPost";
+
+CREATE TABLE public."ReactionPost" (
+	"ReactionId" uuid NOT NULL,
+	"UserId" uuid NOT NULL,
+	"PostId" uuid NOT NULL,
+	CONSTRAINT "ReactionPost_pk" PRIMARY KEY ("ReactionId", "UserId"),
+	CONSTRAINT "ReactionPost_fk0" FOREIGN KEY ("ReactionId") REFERENCES "ReactionTypePost"("ReactionId"),
+	CONSTRAINT "ReactionPost_fk1" FOREIGN KEY ("UserId") REFERENCES "User"("Id"),
+	CONSTRAINT "ReactionToPost_fk0" FOREIGN KEY ("PostId") REFERENCES "Post"("Id")
 );
 
 -- Drop table
@@ -33,8 +90,37 @@ CREATE TABLE public."UserConfirmationToken" (
 CREATE TABLE public."UserSecurity" (
 	"UserId" uuid NOT NULL,
 	"Password" text NOT NULL,
-	"Role" text NOT NULL,
+	"RoleId" uuid NOT NULL,
 	"IsConfirmed" bool NOT NULL DEFAULT false,
+	CONSTRAINT "UserSecurity_RoleId_fkey" FOREIGN KEY ("RoleId") REFERENCES "Role"("RoleId"),
 	CONSTRAINT "UserSecurity_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "User"("Id")
 );
 
+-- Drop table
+
+-- DROP TABLE public."Comment";
+
+CREATE TABLE public."Comment" (
+	"Id" uuid NOT NULL,
+	"Text" text NOT NULL,
+	"Date" timestamp NOT NULL,
+	"UserId" uuid NOT NULL,
+	"PostId" uuid NOT NULL,
+	CONSTRAINT "Comment_pk" PRIMARY KEY ("Id"),
+	CONSTRAINT "Comment_fk0" FOREIGN KEY ("UserId") REFERENCES "User"("Id"),
+	CONSTRAINT "Comment_fk1" FOREIGN KEY ("PostId") REFERENCES "Post"("Id")
+);
+
+-- Drop table
+
+-- DROP TABLE public."ReactionComment";
+
+CREATE TABLE public."ReactionComment" (
+	"ReactionId" uuid NOT NULL,
+	"UserId" uuid NOT NULL,
+	"CommentId" uuid NOT NULL,
+	CONSTRAINT "ReactionComment_pk" PRIMARY KEY ("ReactionId", "UserId"),
+	CONSTRAINT "ReactionComment_fk0" FOREIGN KEY ("ReactionId") REFERENCES "ReactionTypeComment"("ReactionId"),
+	CONSTRAINT "ReactionComment_fk1" FOREIGN KEY ("UserId") REFERENCES "User"("Id"),
+	CONSTRAINT "ReactionToComment_fk0" FOREIGN KEY ("CommentId") REFERENCES "Comment"("Id")
+);
