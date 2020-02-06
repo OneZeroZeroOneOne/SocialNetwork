@@ -37,6 +37,8 @@
             console.log(arguments[1].headers);
             arguments[1].headers["Authorization"] = key;
             console.log(arguments[1].headers);
+            var origin = window.location.origin;
+            console.log(origin);
             return constantMock.apply(this, arguments);
         }
 
