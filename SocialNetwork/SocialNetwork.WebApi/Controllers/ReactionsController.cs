@@ -36,6 +36,7 @@ namespace SocialNetwork.WebApi.Controllers
             var currentUser = await CurrentUser();
             var dataModel = _mapper.Map<ReactionPostViewModel, ReactionPost>(reactionPost);
             var post = await _reactionService.AddReactionPost(dataModel, currentUser);
+
             return _mapper.Map<ReactionPost, OutReactionPostViewModel>(post);
         }
 
