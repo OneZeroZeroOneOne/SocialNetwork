@@ -142,7 +142,19 @@ namespace SocialNetwork.WebApi
                 endpoints.MapControllers();
             });
 
-            app.UseSwagger();
+            if (env.IsDevelopment())
+            {
+                app.UseSwagger();
+            }
+            else
+            {
+                var basePath = "/social";
+                app.UseSwagger(c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+                {
+                    swaggerDoc.Servers = new List<OpenApiServer>
+                        {new OpenApiServer {Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{basePath}"}};
+                }));
+            }
 
             app.UseSwaggerUI(c =>
             {

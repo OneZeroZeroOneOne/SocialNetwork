@@ -159,10 +159,9 @@ namespace SocialNetwork.WebApi.AuthorizationServer
                 }));
             }
 
-           
-        
+            
 
-        app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("v1/swagger.json", "My API V1");
                 c.InjectJavascript("https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js");
