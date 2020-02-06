@@ -9,6 +9,5 @@ namespace SocialNetwork.Dal.ViewModels.In
         [Required]
         public string CommentId { get; set; }
         public string ReactionId { get; set; }
-        public string UserId { get; set; }
     }
 }

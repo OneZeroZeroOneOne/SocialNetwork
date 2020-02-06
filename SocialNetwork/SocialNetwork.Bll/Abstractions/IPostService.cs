@@ -3,7 +3,7 @@ using SocialNetwork.Dal.ViewModels;
 using System;
 using System.Threading.Tasks;
 
-namespace SocialNetwork.Bll.Services;
+namespace SocialNetwork.Bll.Abstractions
 {
     public interface IPostService
     {

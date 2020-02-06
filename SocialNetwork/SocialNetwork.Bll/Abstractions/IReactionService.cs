@@ -10,12 +10,12 @@ namespace SocialNetwork.Bll.Abstractions
     
     public interface IReactionService
     {
-        Task<PostReaction> AddPostReaction(Post postModel, User editorUser);
+        Task<ReactionPost> AddReactionPost(ReactionPost reactionPost, User authorUser);
 
-        Task<CommentReaction> AddCommentReaction(Post postModel, User authorUser);
+        Task<ReactionComment> AddReactionComment(ReactionComment reactionComment, User authorUser);
 
-        Task<List<PostReaction>> GetPostReaction(Guid postId);
+        Task<List<ReactionPost>> GetReactionPost(Guid postId);
 
-        Task<List<CommentReaction>> GetCommentReaction(Guid commentId);
+        Task<List<ReactionComment>> GetReactionComment(Guid commentId);
     }
 }

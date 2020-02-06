@@ -21,13 +21,14 @@ namespace SocialNetwork.WebApi.Controllers
     {
         private readonly IPostService _postService;
         private readonly IMapper _mapper;
-
+        private readonly IReactionService _reactionService;
         private readonly ILogger<PostsController> _logger;
-        public PostsController(ILogger<PostsController> logger, IMapper mapper, IPostService postService)
+        public PostsController(ILogger<PostsController> logger, IMapper mapper, IPostService postService,
+                                                                                    IReactionService reactionService)
         {
             _logger = logger;
             _mapper = mapper;
-
+            _reactionService = reactionService;
             _postService = postService;
         }
 
@@ -67,6 +68,18 @@ namespace SocialNetwork.WebApi.Controllers
         public async Task<PagedResult<Post>> GetPagePosts([FromRoute]Guid userId, [FromQuery]int page, [FromQuery]int quantity)
         {
             return await _postService.GetPagePosts(userId, page, quantity);
+        }
+
+        [HttpGet, Route("/{postId}/Reactions", Name = "GetPostReactions")]
+        public async Task<List<OutReactionPostViewModel>> Reaction([FromRoute]Guid postId)
+        {
+            List<ReactionPost> listReactionPost = await _reactionService.GetReactionPost(postId);
+            List<OutReactionPostViewModel> listOutReactionPost = new List<OutReactionPostViewModel>();
+            foreach (ReactionPost i in listReactionPost)
+            {
+                listOutReactionPost.Add(_mapper.Map<ReactionPost, OutReactionPostViewModel>(i));
+            }
+            return listOutReactionPost;
         }
     }
 }

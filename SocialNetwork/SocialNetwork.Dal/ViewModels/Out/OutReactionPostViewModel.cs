@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SocialNetwork.Dal.ViewModels.Out
 {
-    class OutReactionPostViewModel
+    public class OutReactionPostViewModel
     {
         public Guid ReactionId { get; set; }
         public Guid UserId { get; set; }
