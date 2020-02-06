@@ -127,6 +127,11 @@ namespace SocialNetwork.WebApi
 
             //app.UseHttpsRedirection();
 
+            app.UseCors(x => x.AllowAnyOrigin());
+            app.UseCors(x => x.AllowAnyHeader());
+
+            app.UseStaticFiles();
+
             app.UseRouting();
             
             app.UseAuthentication();
@@ -142,6 +147,9 @@ namespace SocialNetwork.WebApi
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("./v1/swagger.json", "My API V1");
+                c.InjectJavascript("https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js");
+                c.InjectJavascript("https://unpkg.com/browse/webextension-polyfill@0.6.0/dist/browser-polyfill.min.js", type: "text/html");
+                c.InjectJavascript("/customJs.js");
             });
         }
     }
