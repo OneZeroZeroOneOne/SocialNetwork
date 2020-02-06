@@ -21,8 +21,8 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<UserSecurity> UserSecurity { get; set; }
         public virtual DbSet<UserConfirmationToken> UserConfirmationToken { get; set; }
-        public virtual DbSet<CommentReaction> CommentReaction { get; set; }
-        public virtual DbSet<PostReaction> PostReaction { get; set; }
+        public virtual DbSet<ReactionComment> ReactionComment { get; set; }
+        public virtual DbSet<ReactionPost> ReactionPost { get; set; }
         public virtual DbSet<Reaction> Reaction { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

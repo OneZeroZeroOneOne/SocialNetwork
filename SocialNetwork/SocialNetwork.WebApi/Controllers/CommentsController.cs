@@ -8,6 +8,7 @@ using SocialNetwork.Dal.ViewModels;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
@@ -18,13 +19,14 @@ namespace SocialNetwork.WebApi.Controllers
     {
         private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
-
+        private readonly IReactionService _reactionService;
         private readonly ILogger<PostsController> _logger;
-        public CommentsController(ILogger<PostsController> logger, IMapper mapper, ICommentService commentService)
+        public CommentsController(ILogger<PostsController> logger, IMapper mapper, ICommentService commentService,
+                                                                                    IReactionService reactionService)
         {
             _logger = logger;
             _mapper = mapper;
-
+            _reactionService = reactionService;
             _commentService = commentService;
         }
 
@@ -64,6 +66,18 @@ namespace SocialNetwork.WebApi.Controllers
         public async Task<PagedResult<Comment>> GetPageComments([FromRoute]Guid postId, [FromQuery]int page, [FromQuery]int quantity)
         {
             return await _commentService.GetPageComments(postId, page, quantity);
+        }
+
+        [HttpGet, Route("{commentId}/Reactions", Name = "GetCommentReactions")]
+        public async Task<List<OutReactionCommentViewModel>> Reaction([FromRoute]Guid commentId)
+        {
+            List<ReactionComment> listReactionComment = await _reactionService.GetReactionComment(commentId);
+            List<OutReactionCommentViewModel> listOutReactionComment = new List<OutReactionCommentViewModel>();
+            foreach (ReactionComment i in listReactionComment)
+            {
+                listOutReactionComment.Add(_mapper.Map<ReactionComment, OutReactionCommentViewModel>(i));
+            }
+            return listOutReactionComment;
         }
     }
 }

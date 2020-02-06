@@ -22,6 +22,11 @@ namespace SocialNetwork.Dal
                 .ForMember(destinationMember => destinationMember.Id, sourceMember => sourceMember.MapFrom(x => x.CommentId));
 
             CreateMap<User, OutUserRegisterViewModel>();
+
+            CreateMap<ReactionPostViewModel, ReactionPost>();
+            CreateMap<ReactionPost, OutReactionPostViewModel>();
+            CreateMap<ReactionCommentViewModel, ReactionComment>();
+            CreateMap<ReactionComment, OutReactionCommentViewModel>();
         }
     }
 }
