@@ -136,10 +136,7 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             var options = new ForwardedHeadersOptions
             {
@@ -147,16 +144,25 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             };
 
             app.UseForwardedHeaders(options);
+
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
             }
             else
             {
-                app.UseSwagger(c => { c.RouteTemplate = "auth/{documentName}/swagger.json"; });
+                var basePath = "/auth";
+                app.UseSwagger(c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+                {
+                    swaggerDoc.Servers = new List<OpenApiServer>
+                        {new OpenApiServer {Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{basePath}"}};
+                }));
             }
 
-            app.UseSwaggerUI(c =>
+           
+        
+
+        app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("v1/swagger.json", "My API V1");
                 c.InjectJavascript("https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js");
