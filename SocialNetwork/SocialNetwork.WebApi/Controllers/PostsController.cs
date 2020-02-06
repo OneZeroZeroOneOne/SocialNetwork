@@ -8,6 +8,7 @@ using SocialNetwork.Dal.ViewModels;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
