@@ -44,6 +44,7 @@
             pathname = pathname.replace("/swagger/index.html", "");
             console.log(pathname);
             var new_origin = origin + pathname;
+            console.log(arguments[1].url.replace(origin, new_origin));
             arguments[1].url = arguments[1].url.replace(origin, new_origin);
 
             return constantMock.apply(this, arguments);
