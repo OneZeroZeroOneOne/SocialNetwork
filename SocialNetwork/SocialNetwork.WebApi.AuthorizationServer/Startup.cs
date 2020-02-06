@@ -22,6 +22,7 @@ using SocialNetwork.Utilities.ApiClients;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace SocialNetwork.WebApi.AuthorizationServer
 {
@@ -61,7 +62,6 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Description =
@@ -121,10 +121,6 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UsePathBase("/auth");
-            }
 
             app.UseCors(x => x.AllowAnyOrigin());
             app.UseCors(x => x.AllowAnyHeader());
@@ -144,6 +140,13 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             {
                 endpoints.MapControllers();
             });
+
+            var options = new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            };
+
+            app.UseForwardedHeaders(options);
 
             app.UseSwagger();
 
