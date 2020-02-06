@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Dal.Extensions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Services
 {

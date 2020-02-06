@@ -1,13 +1,11 @@
 ﻿using SocialNetwork.Dal.Models;
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using SocialNetwork.Dal.Extensions;
-using SocialNetwork.Dal.ViewModels.In;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Abstractions
 {
-    
+
     public interface IReactionService
     {
         Task<ReactionPost> AddReactionPost(ReactionPost reactionPost, User authorUser);

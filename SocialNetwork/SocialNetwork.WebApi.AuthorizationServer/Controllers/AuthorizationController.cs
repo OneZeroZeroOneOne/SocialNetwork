@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SocialNetwork.Dal.ViewModels.Out;
 using SocialNetwork.Security.Abstractions;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.AuthorizationServer.Controllers
 {

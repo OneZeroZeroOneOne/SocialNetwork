@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Mailjet.Client;
 using User = SocialNetwork.Dal.Models.User;
 using SocialNetwork.Utilities.Abstractions;
 

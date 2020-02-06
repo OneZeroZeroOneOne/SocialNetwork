@@ -4,10 +4,10 @@ using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Dal.Extensions;
 using SocialNetwork.Dal.Models;
+using SocialNetwork.Dal.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SocialNetwork.Dal.ViewModels;
 
 namespace SocialNetwork.Bll.Services
 {

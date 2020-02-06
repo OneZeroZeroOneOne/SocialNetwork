@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
-using Microsoft.Extensions.Logging;
 
 namespace SocialNetwork.Utilities
 {
@@ -33,11 +33,11 @@ namespace SocialNetwork.Utilities
 
     public class FileLogger : ILogger
     {
-        private string filePath;
-        private static object _lock = new object();
+        private readonly string _filePath;
+        private static readonly object Lock = new object();
         public FileLogger(string path)
         {
-            filePath = path;
+            _filePath = path;
         }
         public IDisposable BeginScope<TState>(TState state)
         {
@@ -54,9 +54,9 @@ namespace SocialNetwork.Utilities
         {
             if (formatter != null)
             {
-                lock (_lock)
+                lock (Lock)
                 {
-                    File.AppendAllText(filePath, formatter(state, exception) + Environment.NewLine + Environment.NewLine);
+                    File.AppendAllText(_filePath, formatter(state, exception) + Environment.NewLine + Environment.NewLine);
                 }
             }
         }

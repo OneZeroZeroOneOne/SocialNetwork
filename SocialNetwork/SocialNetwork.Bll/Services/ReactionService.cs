@@ -2,13 +2,11 @@
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Exceptions;
-using SocialNetwork.Dal.Extensions;
 using SocialNetwork.Dal.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SocialNetwork.Dal.ViewModels.In;
-using System.Collections.Generic;
 
 namespace SocialNetwork.Bll.Services
 {

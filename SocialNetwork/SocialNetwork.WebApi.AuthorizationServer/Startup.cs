@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -22,7 +23,6 @@ using SocialNetwork.Utilities.ApiClients;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.AspNetCore.HttpOverrides;
 
 namespace SocialNetwork.WebApi.AuthorizationServer
 {
@@ -99,10 +99,10 @@ namespace SocialNetwork.WebApi.AuthorizationServer
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = AuthOptions.ISSUER,
+                        ValidIssuer = AuthOptions.Issuer,
 
                         ValidateAudience = true,
-                        ValidAudience = AuthOptions.AUDIENCE,
+                        ValidAudience = AuthOptions.Audience,
                         ValidateLifetime = true,
 
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),

@@ -17,8 +17,6 @@ using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Security;
 using SocialNetwork.Utilities;
-using SocialNetwork.Utilities.Abstractions;
-using SocialNetwork.Utilities.ApiClients;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
@@ -101,10 +99,10 @@ namespace SocialNetwork.WebApi
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = AuthOptions.ISSUER,
+                        ValidIssuer = AuthOptions.Issuer,
 
                         ValidateAudience = true,
-                        ValidAudience = AuthOptions.AUDIENCE,
+                        ValidAudience = AuthOptions.Audience,
                         ValidateLifetime = true,
 
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),

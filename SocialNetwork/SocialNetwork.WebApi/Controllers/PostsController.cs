@@ -10,7 +10,6 @@ using SocialNetwork.Dal.ViewModels.Out;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace SocialNetwork.WebApi.Controllers
 {

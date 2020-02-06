@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels.Out;
 using SocialNetwork.Security.Abstractions;
+using System;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.AuthorizationServer.Controllers
 {

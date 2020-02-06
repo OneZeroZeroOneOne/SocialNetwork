@@ -6,7 +6,6 @@ using SocialNetwork.Security.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -52,11 +51,11 @@ namespace SocialNetwork.Security.Services
             var now = DateTime.UtcNow;
 
             var jwt = new JwtSecurityToken(
-                issuer: AuthOptions.ISSUER,
-                audience: AuthOptions.AUDIENCE,
+                issuer: AuthOptions.Issuer,
+                audience: AuthOptions.Audience,
                 notBefore: now,
                 claims: claims.Claims,
-                expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                expires: now.Add(TimeSpan.FromMinutes(AuthOptions.Lifetime)),
                 signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             return "Bearer " + new JwtSecurityTokenHandler().WriteToken(jwt);
