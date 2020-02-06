@@ -24,6 +24,7 @@ namespace SocialNetwork.WebApi.AuthorizationServer.Controllers
             _mapper = mapper;
 
             _registrationService = registrationService;
+
         }
 
         [HttpPost]
