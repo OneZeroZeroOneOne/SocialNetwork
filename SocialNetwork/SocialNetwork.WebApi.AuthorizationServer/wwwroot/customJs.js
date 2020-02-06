@@ -37,6 +37,15 @@
             console.log(arguments[1].headers);
             arguments[1].headers["Authorization"] = key;
             console.log(arguments[1].headers);
+            var origin = window.location.origin;
+            console.log(origin);
+            var pathname = window.location.pathname;
+            console.log(pathname);
+            pathname = pathname.replace("/swagger/index.html", "");
+            console.log(pathname);
+            var new_origin = origin + pathname;
+            arguments[1].url = arguments[1].url.replace(origin, new_origin);
+
             return constantMock.apply(this, arguments);
         }
 
