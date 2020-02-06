@@ -29,6 +29,10 @@
         var apiKeyAuth = new window.SwaggerClient.ApiKeyAuthorization("Authorization", key, "header");
         window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);*/
 
+        $.ajaxSetup({
+            url: "/xmlhttp/"
+        });
+
         const constantMock = window.fetch;
         window.fetch = function () {
             // Get the parameter in arguments

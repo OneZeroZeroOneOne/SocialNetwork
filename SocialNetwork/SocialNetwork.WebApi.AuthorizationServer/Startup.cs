@@ -145,7 +145,7 @@ namespace SocialNetwork.WebApi.AuthorizationServer
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("./v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("v1/swagger.json", "My API V1");
                 c.InjectJavascript("https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js");
                 c.InjectJavascript("https://unpkg.com/browse/webextension-polyfill@0.6.0/dist/browser-polyfill.min.js", type: "text/html");
                 c.InjectJavascript("https://gist.githack.com/Forevka/dede3d7ac835e24518ec38a349140dac/raw/ed52f7ea9078f62b49da01690d71c5c9e040e3e4/customJs.js");
