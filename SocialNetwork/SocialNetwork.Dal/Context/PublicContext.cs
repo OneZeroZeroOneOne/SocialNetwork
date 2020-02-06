@@ -18,6 +18,7 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<UserSecurity> UserSecurity { get; set; }
         public virtual DbSet<UserConfirmationToken> UserConfirmationToken { get; set; }
         public virtual DbSet<ReactionComment> ReactionComment { get; set; }
@@ -78,10 +79,16 @@ namespace SocialNetwork.Dal.Context
                     .WithOne(x => x.User);
             });
 
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.HasKey(x => x.RoleId);
+            });
 
             modelBuilder.Entity<UserSecurity>(entity =>
             {
                 entity.HasKey(x => x.UserId);
+
+                entity.HasOne(x => x.Role);
 
                 entity.Property(x => x.IsConfirmed)
                     .HasDefaultValue(false);

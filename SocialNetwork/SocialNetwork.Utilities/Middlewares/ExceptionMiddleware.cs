@@ -6,7 +6,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace SocialNetwork.WebApi.Middlewares
+namespace SocialNetwork.Utilities.Middlewares
 {
     public class ExceptionMiddleware
     {

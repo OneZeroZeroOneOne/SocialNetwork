@@ -4,8 +4,7 @@ using Microsoft.Extensions.Logging;
 using SocialNetwork.Dal.ViewModels.Out;
 using SocialNetwork.Security.Abstractions;
 
-
-namespace SocialNetwork.WebApi.Controllers
+namespace SocialNetwork.WebApi.AuthorizationServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]

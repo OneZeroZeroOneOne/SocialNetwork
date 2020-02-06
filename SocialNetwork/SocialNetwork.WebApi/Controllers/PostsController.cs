@@ -5,13 +5,10 @@ using Microsoft.Extensions.Logging;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
-using System.Collections.Generic;
-using SocialNetwork.Dal.Extensions;
+using System;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
 {

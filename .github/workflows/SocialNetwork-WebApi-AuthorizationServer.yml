@@ -1,0 +1,45 @@
+name: SocialNetwork-WebApi-AuthorizationServer Build and Deploy
+
+on: 
+  push:
+    branches: 
+      - master
+    paths:
+      - 'SocialNetwork/SocialNetwork.Bll/**'
+      - 'SocialNetwork/SocialNetwork.Dal/**'
+      - 'SocialNetwork/SocialNetwork.Security/**'
+      - 'SocialNetwork/SocialNetwork.Utilities/**'
+      - 'SocialNetwork/SocialNetwork.WebApi.AuthorizationServer/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+    - name: Build with dotnet
+      run: dotnet build SocialNetwork/SocialNetwork.WebApi.AuthorizationServer/SocialNetwork.WebApi.AuthorizationServer.csproj --configuration Release
+    - name: List builded files
+      run: ls
+    - name: Copy file via ssh password
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        source: "SocialNetwork/SocialNetwork.WebApi.AuthorizationServer/bin/Release/netcoreapp3.0/*"
+        target: "SocialNetwork.WebApi.AuthorizationServer.Builded"
+    - name: Restarting SocialNetwork.AuthorizationServer WebApi
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: systemctl restart social-network-webapi-authotization.service

@@ -1,3 +1,4 @@
+
 -- Drop table
 
 -- DROP TABLE public."User";
@@ -21,7 +22,8 @@ CREATE TABLE public."UserConfirmationToken" (
 	"CreateDateTime" timestamp NOT NULL DEFAULT now(),
 	"ConfirmId" uuid NOT NULL,
 	"IsActive" bool NOT NULL DEFAULT true,
-	CONSTRAINT userconfirmationtoken_pk PRIMARY KEY ("ConfirmId")
+	CONSTRAINT userconfirmationtoken_pk PRIMARY KEY ("ConfirmId"),
+	CONSTRAINT "UserConfirmationToken_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "User"("Id")
 );
 
 -- Drop table
@@ -32,5 +34,7 @@ CREATE TABLE public."UserSecurity" (
 	"UserId" uuid NOT NULL,
 	"Password" text NOT NULL,
 	"Role" text NOT NULL,
-	"IsConfirmed" bool NOT NULL DEFAULT false
+	"IsConfirmed" bool NOT NULL DEFAULT false,
+	CONSTRAINT "UserSecurity_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "User"("Id")
 );
+

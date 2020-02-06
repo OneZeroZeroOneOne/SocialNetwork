@@ -11,11 +11,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SocialNetwork.Bll.Abstractions;
-using SocialNetwork.Bll.Services;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Security;
+using SocialNetwork.Security.Abstractions;
+using SocialNetwork.Security.Services;
 using SocialNetwork.Utilities;
 using SocialNetwork.Utilities.Abstractions;
 using SocialNetwork.Utilities.ApiClients;
@@ -23,9 +23,7 @@ using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
 
-
-
-namespace SocialNetwork.WebApi
+namespace SocialNetwork.WebApi.AuthorizationServer
 {
     public class Startup
     {
@@ -49,8 +47,9 @@ namespace SocialNetwork.WebApi
                 mc.AddProfile(new MappingProfile());
             });
 
-            services.AddTransient<IPostService, PostService>();
-            services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IRegistrationService, RegistrationService>();
+            services.AddTransient<IMailClient, MailJetClient>();
 
             services.AddTransient<PublicContext>();
 
@@ -123,17 +122,17 @@ namespace SocialNetwork.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.ConfigureCustomExceptionMiddleware();
-
-            //app.UseHttpsRedirection();
-
             app.UseCors(x => x.AllowAnyOrigin());
             app.UseCors(x => x.AllowAnyHeader());
 
+            app.ConfigureCustomExceptionMiddleware();
+
             app.UseStaticFiles();
 
+            //app.UseHttpsRedirection();
+
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -149,7 +148,7 @@ namespace SocialNetwork.WebApi
                 c.SwaggerEndpoint("./v1/swagger.json", "My API V1");
                 c.InjectJavascript("https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js");
                 c.InjectJavascript("https://unpkg.com/browse/webextension-polyfill@0.6.0/dist/browser-polyfill.min.js", type: "text/html");
-                c.InjectJavascript("https://gistcdn.githack.com/Forevka/dede3d7ac835e24518ec38a349140dac/raw/94d095aebdc460d42f90732be5c4ec057ac0a374/customJs.js");
+                c.InjectJavascript("https://gist.githack.com/Forevka/dede3d7ac835e24518ec38a349140dac/raw/ed52f7ea9078f62b49da01690d71c5c9e040e3e4/customJs.js");
             });
         }
     }

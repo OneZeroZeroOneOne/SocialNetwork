@@ -1,10 +1,10 @@
-using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Net;
 
-namespace SocialNetwork.WebApi
+namespace SocialNetwork.WebApi.AuthorizationServer
 {
     public class Program
     {
@@ -12,7 +12,6 @@ namespace SocialNetwork.WebApi
         {
             CreateHostBuilder(args).Build().Run();
         }
-
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
@@ -26,10 +25,10 @@ namespace SocialNetwork.WebApi
                 {
                     webBuilder.ConfigureKestrel(serverOptions =>
                     {
-                        serverOptions.Listen(IPAddress.Any, 8000, listenOptions =>
-                            {
-                                listenOptions.UseConnectionLogging();
-                            });
+                        serverOptions.Listen(IPAddress.Any, 8001, listenOptions =>
+                        {
+                            listenOptions.UseConnectionLogging();
+                        });
                         /*serverOptions.Listen(IPAddress.Loopback, 5001,
                             listenOptions =>
                             {
@@ -38,7 +37,6 @@ namespace SocialNetwork.WebApi
                             });*/
                         // Set properties and call methods on options
                     }).UseStartup<Startup>();
-					
                 });
 
         }
