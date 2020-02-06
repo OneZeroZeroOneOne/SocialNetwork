@@ -148,7 +148,7 @@ namespace SocialNetwork.WebApi.AuthorizationServer
                 c.SwaggerEndpoint("./v1/swagger.json", "My API V1");
                 c.InjectJavascript("https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js");
                 c.InjectJavascript("https://unpkg.com/browse/webextension-polyfill@0.6.0/dist/browser-polyfill.min.js", type: "text/html");
-                c.InjectJavascript("https://gistcdn.githack.com/Forevka/dede3d7ac835e24518ec38a349140dac/raw/8cfe4b2593ad0cb3ad4c188693f403a007991c7e/customJs.js");
+                c.InjectJavascript("https://gistcdn.githack.com/Forevka/dede3d7ac835e24518ec38a349140dac/raw/787404333bd8a5ffa2940b471a1b082421ef4de6/customJs.js");
             });
         }
     }
