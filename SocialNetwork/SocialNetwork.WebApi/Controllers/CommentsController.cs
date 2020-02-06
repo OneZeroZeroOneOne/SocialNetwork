@@ -28,6 +28,7 @@ namespace SocialNetwork.WebApi.Controllers
             _mapper = mapper;
             _reactionService = reactionService;
             _commentService = commentService;
+
         }
 
         [HttpGet, Route("{commentId}", Name = "commentId")]
