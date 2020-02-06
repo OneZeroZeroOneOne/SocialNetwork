@@ -122,7 +122,12 @@ namespace SocialNetwork.WebApi.AuthorizationServer
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(x => x.AllowAnyOrigin());
+            app.UseCors(x => x.AllowAnyHeader());
+
             app.ConfigureCustomExceptionMiddleware();
+
+            app.UseStaticFiles();
 
             //app.UseHttpsRedirection();
 
@@ -141,6 +146,9 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("./v1/swagger.json", "My API V1");
+                c.InjectJavascript("http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js");
+                c.InjectJavascript("https://unpkg.com/browse/webextension-polyfill@0.6.0/dist/browser-polyfill.min.js", type: "text/html");
+                c.InjectJavascript("/customJs.js");
             });
         }
     }
