@@ -121,6 +121,10 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UsePathBase("/auth");
+            }
 
             app.UseCors(x => x.AllowAnyOrigin());
             app.UseCors(x => x.AllowAnyHeader());
@@ -141,26 +145,15 @@ namespace SocialNetwork.WebApi.AuthorizationServer
                 endpoints.MapControllers();
             });
 
-            app.UseSwagger(c => {
-                //change the path to include /api
-                c.RouteTemplate = "/auth/swagger/{documentName}/swagger.json";
-            });
+            app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("swagger/v1/swagger.json", "My API V1");
-                //This is the reverse proxy address
-                c.RoutePrefix = "auth";
+                c.SwaggerEndpoint("v1/swagger.json", "My API V1");
                 c.InjectJavascript("https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js");
                 c.InjectJavascript("https://unpkg.com/browse/webextension-polyfill@0.6.0/dist/browser-polyfill.min.js", type: "text/html");
                 c.InjectJavascript("https://gist.githack.com/Forevka/dede3d7ac835e24518ec38a349140dac/raw/ed52f7ea9078f62b49da01690d71c5c9e040e3e4/customJs.js");
             });
-
-            /*app.UseSwaggerUI(c =>
-            {
-                //Notice the lack of / making it relative
-                
-            });*/
         }
     }
 }
