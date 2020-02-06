@@ -147,8 +147,14 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             };
 
             app.UseForwardedHeaders(options);
-
-            app.UseSwagger();
+            if (env.IsDevelopment())
+            {
+                app.UseSwagger();
+            }
+            else
+            {
+                app.UseSwagger(c => { c.RouteTemplate = "auth/{documentName}/swagger.json"; });
+            }
 
             app.UseSwaggerUI(c =>
             {
