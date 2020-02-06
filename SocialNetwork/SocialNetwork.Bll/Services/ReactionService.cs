@@ -54,7 +54,7 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<List<ReactionPost>> GetReactionPost(Guid postId)
         {
-            if (postId != null)
+            if (postId == null)
             {
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     $"inappropriate parameters postId");
@@ -66,7 +66,7 @@ namespace SocialNetwork.Bll.Services
         
         public async Task<List<ReactionComment>> GetReactionComment(Guid commentId)
         {
-            if (commentId != null)
+            if (commentId == null)
             {
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     $"inappropriate parameters commentId");

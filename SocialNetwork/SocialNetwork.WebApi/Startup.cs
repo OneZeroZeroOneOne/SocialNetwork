@@ -51,6 +51,7 @@ namespace SocialNetwork.WebApi
 
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<IReactionService, ReactionService>();
 
             services.AddTransient<PublicContext>();
 

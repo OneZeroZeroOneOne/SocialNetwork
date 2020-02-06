@@ -68,7 +68,7 @@ namespace SocialNetwork.WebApi.Controllers
             return await _commentService.GetPageComments(postId, page, quantity);
         }
 
-        [HttpGet, Route("/{commetId}/Reactions", Name = "GetCommentReactions")]
+        [HttpGet, Route("{commentId}/Reactions", Name = "GetCommentReactions")]
         public async Task<List<OutReactionCommentViewModel>> Reaction([FromRoute]Guid commentId)
         {
             List<ReactionComment> listReactionComment = await _reactionService.GetReactionComment(commentId);

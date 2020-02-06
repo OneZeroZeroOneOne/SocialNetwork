@@ -17,21 +17,21 @@ namespace SocialNetwork.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ReactionController : SocialNetworkBaseApiController
+    public class ReactionsController : SocialNetworkBaseApiController
     {
         private readonly IReactionService _reactionService;
         private readonly IMapper _mapper;
-        private readonly ILogger<ReactionController> _logger;
-        public ReactionController(ILogger<ReactionController> logger, IMapper mapper, IReactionService reactionService)
+        private readonly ILogger<ReactionsController> _logger;
+        public ReactionsController(ILogger<ReactionsController> logger, IMapper mapper, IReactionService reactionService)
         {
             _logger = logger;
             _mapper = mapper;
             _reactionService = reactionService;
         }
 
-        [HttpPost, Route("/Post/{postId}", Name = "AddReactionPost")]
+        [HttpPost, Route("Post", Name = "AddReactionPost")]
         [Authorize(Roles = "Member")]
-        public async Task<OutReactionPostViewModel> AddReactionPost([FromRoute]ReactionPostViewModel reactionPost)
+        public async Task<OutReactionPostViewModel> AddReactionPost([FromBody]ReactionPostViewModel reactionPost)
         {
             var currentUser = await CurrentUser();
             var dataModel = _mapper.Map<ReactionPostViewModel, ReactionPost>(reactionPost);
@@ -39,9 +39,9 @@ namespace SocialNetwork.WebApi.Controllers
             return _mapper.Map<ReactionPost, OutReactionPostViewModel>(post);
         }
 
-        [HttpPost, Route("/Comment/{commentId}", Name = "AddReactionComment")]
+        [HttpPost, Route("Comment", Name = "AddReactionComment")]
         [Authorize(Roles = "Member")]
-        public async Task<OutReactionCommentViewModel> AddReactionComment([FromRoute]ReactionCommentViewModel reactionComment)
+        public async Task<OutReactionCommentViewModel> AddReactionComment([FromBody]ReactionCommentViewModel reactionComment)
         {
             var currentUser = await CurrentUser();
             var dataModel = _mapper.Map<ReactionCommentViewModel, ReactionComment>(reactionComment);

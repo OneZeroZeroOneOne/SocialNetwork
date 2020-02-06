@@ -9,6 +9,7 @@ using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SocialNetwork.WebApi.Controllers
 {
@@ -67,7 +68,7 @@ namespace SocialNetwork.WebApi.Controllers
             return await _postService.GetPagePosts(userId, page, quantity);
         }
 
-        [HttpGet, Route("/{postId}/Reactions", Name = "GetPostReactions")]
+        [HttpGet, Route("{postId}/Reactions", Name = "GetPostReactions")]
         public async Task<List<OutReactionPostViewModel>> Reaction([FromRoute]Guid postId)
         {
             List<ReactionPost> listReactionPost = await _reactionService.GetReactionPost(postId);
