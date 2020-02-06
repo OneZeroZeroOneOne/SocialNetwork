@@ -13,7 +13,9 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -22,9 +24,8 @@ jobs:
         dotnet-version: 3.1.100
     - name: Build with dotnet
       run: dotnet build SocialNetwork/SocialNetwork.WebApi/SocialNetwork.WebApi.csproj --configuration Release
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
+    - name: List builded files
+      run: ls
     - name: Copy file via ssh password
       uses: appleboy/scp-action@master
       with:
