@@ -1,6 +1,16 @@
 
 -- Drop table
 
+-- DROP TABLE public."GroupType";
+
+CREATE TABLE public."GroupType" (
+	"Id" uuid NOT NULL,
+	"Description" text NOT NULL,
+	CONSTRAINT "GroupType_pkey" PRIMARY KEY ("Id")
+);
+
+-- Drop table
+
 -- DROP TABLE public."ReactionTypeComment";
 
 CREATE TABLE public."ReactionTypeComment" (
@@ -40,6 +50,19 @@ CREATE TABLE public."User" (
 	"AvatarUrl" text NULL,
 	"DateOfBirth" timestamp NULL,
 	CONSTRAINT "User_pk" PRIMARY KEY ("Id")
+);
+
+-- Drop table
+
+-- DROP TABLE public."Group";
+
+CREATE TABLE public."Group" (
+	"Id" uuid NOT NULL,
+	"GroupTypeId" uuid NOT NULL,
+	"CreateDateTime" timestamp NOT NULL,
+	"IsArchived" bool NOT NULL DEFAULT false,
+	CONSTRAINT "Group_pkey" PRIMARY KEY ("Id"),
+	CONSTRAINT "Group_GroupTypeId_fkey" FOREIGN KEY ("GroupTypeId") REFERENCES "GroupType"("Id")
 );
 
 -- Drop table
@@ -85,6 +108,18 @@ CREATE TABLE public."UserConfirmationToken" (
 
 -- Drop table
 
+-- DROP TABLE public."UserGroup";
+
+CREATE TABLE public."UserGroup" (
+	"GroupId" uuid NOT NULL,
+	"UserId" uuid NOT NULL,
+	CONSTRAINT "UserGroup_pkey" PRIMARY KEY ("GroupId", "UserId"),
+	CONSTRAINT "UserGroup_GroupId_fkey" FOREIGN KEY ("GroupId") REFERENCES "Group"("Id"),
+	CONSTRAINT "UserGroup_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "User"("Id")
+);
+
+-- Drop table
+
 -- DROP TABLE public."UserSecurity";
 
 CREATE TABLE public."UserSecurity" (
@@ -109,6 +144,18 @@ CREATE TABLE public."Comment" (
 	CONSTRAINT "Comment_pk" PRIMARY KEY ("Id"),
 	CONSTRAINT "Comment_fk0" FOREIGN KEY ("UserId") REFERENCES "User"("Id"),
 	CONSTRAINT "Comment_fk1" FOREIGN KEY ("PostId") REFERENCES "Post"("Id")
+);
+
+-- Drop table
+
+-- DROP TABLE public."GroupPost";
+
+CREATE TABLE public."GroupPost" (
+	"PostId" uuid NOT NULL,
+	"GroupId" uuid NOT NULL,
+	CONSTRAINT "GroupPost_pkey" PRIMARY KEY ("PostId", "GroupId"),
+	CONSTRAINT "GroupPost_GroupId_fkey" FOREIGN KEY ("GroupId") REFERENCES "Group"("Id"),
+	CONSTRAINT "GroupPost_PostId_fkey" FOREIGN KEY ("PostId") REFERENCES "Post"("Id")
 );
 
 -- Drop table
