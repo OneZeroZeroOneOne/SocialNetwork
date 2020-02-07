@@ -23,6 +23,7 @@ using SocialNetwork.Utilities.ApiClients;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
+using SocialNetwork.Security.Extensions;
 
 namespace SocialNetwork.WebApi.AuthorizationServer
 {
@@ -48,6 +49,8 @@ namespace SocialNetwork.WebApi.AuthorizationServer
                 mc.AddProfile(new MappingProfile());
             });
 
+            services.AddAuthorization(x => x.ConfigurePolicy());
+
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IRegistrationService, RegistrationService>();
             services.AddTransient<IMailClient, MailJetClient>();
@@ -57,6 +60,7 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             services.AddTransient<PublicContext>();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
