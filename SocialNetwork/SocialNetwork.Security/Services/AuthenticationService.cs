@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SocialNetwork.Dal.Context;
-using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Security.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using SocialNetwork.Utilities.Exceptions;
 
 namespace SocialNetwork.Security.Services
 {

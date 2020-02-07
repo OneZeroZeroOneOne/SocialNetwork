@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Utilities", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Security", "SocialNetwork.Security\SocialNetwork.Security.csproj", "{B8B861B3-F1CA-4DD7-A374-835A48B2909D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.WebApi.AuthorizationServer", "SocialNetwork.WebApi.AuthorizationServer\SocialNetwork.WebApi.AuthorizationServer.csproj", "{492062A2-E7D0-4828-A93B-A09AD9AEE901}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.WebApi.AuthorizationServer", "SocialNetwork.WebApi.AuthorizationServer\SocialNetwork.WebApi.AuthorizationServer.csproj", "{492062A2-E7D0-4828-A93B-A09AD9AEE901}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

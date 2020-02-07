@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Dal.Context;
-using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Security.Abstractions;
 using System;
@@ -11,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using User = SocialNetwork.Dal.Models.User;
 using SocialNetwork.Utilities.Abstractions;
+using SocialNetwork.Utilities.Exceptions;
 
 namespace SocialNetwork.Security.Services
 {

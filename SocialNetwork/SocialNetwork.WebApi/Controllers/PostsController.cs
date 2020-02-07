@@ -10,6 +10,7 @@ using SocialNetwork.Dal.ViewModels.Out;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SocialNetwork.Dal.Context;
 
 namespace SocialNetwork.WebApi.Controllers
 {
@@ -21,8 +22,8 @@ namespace SocialNetwork.WebApi.Controllers
         private readonly IMapper _mapper;
         private readonly IReactionService _reactionService;
         private readonly ILogger<PostsController> _logger;
-        public PostsController(ILogger<PostsController> logger, IMapper mapper, IPostService postService,
-                                                                                    IReactionService reactionService)
+        public PostsController(ILogger<PostsController> logger, IMapper mapper, 
+            IPostService postService, IReactionService reactionService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -42,8 +43,7 @@ namespace SocialNetwork.WebApi.Controllers
         [Authorize(Roles = "Member")]
         public async Task<OutPostViewModel> Post([FromBody]PostViewModel post)
         {
-
-            var currentUser = await CurrentUser();
+            var currentUser = CurrentUser();
 
             var dataModel = _mapper.Map<PostViewModel, Post>(post);
             var insertedPost = await _postService.CreateNewPost(dataModel, currentUser);
@@ -55,7 +55,7 @@ namespace SocialNetwork.WebApi.Controllers
         [Authorize(Roles = "Member")]
         public async Task<OutPostViewModel> Patch([FromBody]EditPostViewModel post)
         {
-            var currentUser = await CurrentUser();
+            var currentUser = CurrentUser();
 
             var dataModel = _mapper.Map<EditPostViewModel, Post>(post);
             var insertedPost = await _postService.EditPost(dataModel, currentUser);

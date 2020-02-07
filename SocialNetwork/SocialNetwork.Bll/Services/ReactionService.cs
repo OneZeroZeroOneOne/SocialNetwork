@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
-using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Dal.Models;
+using SocialNetwork.Utilities.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,27 +18,27 @@ namespace SocialNetwork.Bll.Services
             _context = publicContext;
         }
 
-        public async Task<ReactionPost> AddReactionPost(ReactionPost reactionPost, User authorUser)
+        public async Task<ReactionPost> AddReactionPost(ReactionPost reactionPost, Guid authorUser)
         {
             if (reactionPost.ReactionId == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     $"reactionPost han no ReactionId");
 
-            reactionPost.UserId = authorUser.Id;
+            reactionPost.UserId = authorUser;
             var insertedReactionPost = await _context.ReactionPost.AddAsync(reactionPost);
             await _context.SaveChangesAsync();
 
             return insertedReactionPost.Entity;
         }
 
-        public async Task<ReactionComment> AddReactionComment(ReactionComment reactionComment, User authorUser)
+        public async Task<ReactionComment> AddReactionComment(ReactionComment reactionComment, Guid authorUser)
         {
             if (reactionComment == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     $"inappropriate parameters commentId");
 
             
-            reactionComment.UserId = authorUser.Id;
+            reactionComment.UserId = authorUser;
             var insertedReactionComment = await _context.ReactionComment.AddAsync(reactionComment);
             await _context.SaveChangesAsync();
 

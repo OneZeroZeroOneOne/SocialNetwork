@@ -9,9 +9,9 @@ namespace SocialNetwork.Bll.Abstractions
     {
         Task<Comment> GetComment(Guid commentId);
 
-        Task<Comment> AddComment(Comment commentModel, User authorUser);
+        Task<Comment> AddComment(Comment commentModel, Guid authorUser);
 
-        Task<Comment> EditComment(Comment commentModel, User editorUser);
+        Task<Comment> EditComment(Comment commentModel, Guid editorUser);
 
         Task<PagedResult<Comment>> GetPageComments(Guid postId, int page, int quantity);
     }

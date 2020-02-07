@@ -1,17 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
-using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Dal.Extensions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
+using SocialNetwork.Utilities.Exceptions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Services
 {
-
     public class PostService : IPostService
     {
         private readonly PublicContext _context;
@@ -20,7 +19,7 @@ namespace SocialNetwork.Bll.Services
             _context = publicContext;
         }
 
-        public async Task<Post> EditPost(Post postModel, User editorUser)
+        public async Task<Post> EditPost(Post postModel, Guid editorUser)
         {
             var postInDb = await _context.Post.FirstOrDefaultAsync(x => x.Id == postModel.Id);
 
@@ -35,12 +34,9 @@ namespace SocialNetwork.Bll.Services
             return postInDb;
         }
 
-        public async Task<Post> CreateNewPost(Post postModel, User authorUser)
+        public async Task<Post> CreateNewPost(Post postModel, Guid authorUser)
         {
-            if (authorUser == null)
-                throw ExceptionFactory.SoftException(ExceptionEnum.UserNotFound, $"User {postModel.UserId} doesn't exist");
-
-            postModel.UserId = authorUser.Id;
+            postModel.UserId = authorUser;
 
             var insertedPost = await _context.Post.AddAsync(postModel);
             await _context.SaveChangesAsync();

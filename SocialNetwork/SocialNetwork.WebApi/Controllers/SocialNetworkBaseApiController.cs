@@ -5,19 +5,20 @@ using SocialNetwork.Dal.Models;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using SocialNetwork.Utilities.Abstractions;
+using SocialNetwork.Utilities.Exceptions;
 
 namespace SocialNetwork.WebApi.Controllers
 {
     public class SocialNetworkBaseApiController : ControllerBase
     {
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<User> CurrentUser()
+        public Guid CurrentUser()
         {
-            PublicContext publicContext = new PublicContext();
-            if (Guid.TryParse(this.User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value, out Guid currentUserId))
-                return await publicContext.User.FirstOrDefaultAsync(x => x.Id == currentUserId);
+            if (Guid.TryParse(User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value, out Guid currentUserId))
+                return currentUserId;
 
-            return null;//??FUCK??//
+            throw ExceptionFactory.SoftException(ExceptionEnum.UserNotFound, "User not found while getting currentUser");
         }
     }
 }
