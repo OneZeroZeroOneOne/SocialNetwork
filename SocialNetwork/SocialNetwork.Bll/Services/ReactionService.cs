@@ -22,33 +22,32 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<ReactionPost> AddReactionPost(ReactionPost reactionPost, User authorUser)
         {
-            if (reactionPost.ReactionId == null)
+            Console.WriteLine(reactionPost.ReactionId);
+            if (await _context.ReactionTypePost.AnyAsync(x => x.ReactionId == reactionPost.ReactionId))
             {
-                throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
-                    $"reactionPost han no ReactionId");
-
+                Console.WriteLine(reactionPost.ReactionId);
+                reactionPost.UserId = authorUser.Id;
+                var insertedReactionPost = await _context.ReactionPost.AddAsync(reactionPost);
+                await _context.SaveChangesAsync();
+                return insertedReactionPost.Entity;
             }
-            reactionPost.UserId = authorUser.Id;
-            var insertedReactionPost = await _context.ReactionPost.AddAsync(reactionPost);
-            await _context.SaveChangesAsync();
-
-            return insertedReactionPost.Entity;
+            throw ExceptionFactory.SoftException(ExceptionEnum.ReactionDoesNotExist,
+                    $"reaction does not exist");
         }
 
         public async Task<ReactionComment> AddReactionComment(ReactionComment reactionComment, User authorUser)
         {
-            if (reactionComment == null) 
+            Console.WriteLine(reactionComment.ReactionId);
+            if (await _context.ReactionTypeComment.AnyAsync(x => x.ReactionId == reactionComment.ReactionId))
             {
-                throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
-                    $"inappropriate parameters commentId");
-
+                Console.WriteLine(reactionComment.ReactionId);
+                reactionComment.UserId = authorUser.Id;
+                var insertedReactionComment = await _context.ReactionComment.AddAsync(reactionComment);
+                await _context.SaveChangesAsync();
+                return insertedReactionComment.Entity;
             }
-            reactionComment.UserId = authorUser.Id;
-            var insertedReactionComment = await _context.ReactionComment.AddAsync(reactionComment);
-            await _context.SaveChangesAsync();
-
-            return insertedReactionComment.Entity;
-
+            throw ExceptionFactory.SoftException(ExceptionEnum.ReactionDoesNotExist,
+                    $"reaction does not exist");
 
         }
 
@@ -59,7 +58,13 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     $"inappropriate parameters postId");
             }
-            return await _context.ReactionPost.Where(x => x.PostId == postId).ToListAsync();
+            var post = await _context.ReactionPost.Where(x => x.PostId == postId).ToListAsync();
+            if (post == null)
+            {
+                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound,
+                    $"post not found");
+            }
+            return post;
 
         }
 
@@ -71,7 +76,13 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     $"inappropriate parameters commentId");
             }
-            return await _context.ReactionComment.Where(x => x.CommentId == commentId).ToListAsync();
+            var comment = await _context.ReactionComment.Where(x => x.CommentId == commentId).ToListAsync();
+            if (comment == null)
+            {
+                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound,
+                    $"comment not found");
+            }
+            return comment;
 
         }
     }

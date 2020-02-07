@@ -14,5 +14,6 @@
         PasswordIncorrect = 10,
         CantLoadSecrets = 11,
         InappropriatParameters = 12,
+        ReactionDoesNotExist = 13,
     }
 }

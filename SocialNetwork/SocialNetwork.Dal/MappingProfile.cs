@@ -23,10 +23,14 @@ namespace SocialNetwork.Dal
 
             CreateMap<User, OutUserRegisterViewModel>();
 
-            CreateMap<ReactionPostViewModel, ReactionPost>();
-            CreateMap<ReactionPost, OutReactionPostViewModel>();
-            CreateMap<ReactionCommentViewModel, ReactionComment>();
-            CreateMap<ReactionComment, OutReactionCommentViewModel>();
+            CreateMap<ReactionPostViewModel, ReactionPost>()
+                .ForMember(destinationMember => destinationMember.PostId, sourceMember => sourceMember.MapFrom(x => x.PostId));
+            CreateMap<ReactionPost, OutReactionPostViewModel>()
+                .ForMember(destinationMember => destinationMember.PostId, sourceMember => sourceMember.MapFrom(x => x.PostId));
+            CreateMap<ReactionCommentViewModel, ReactionComment>()
+                .ForMember(destinationMember => destinationMember.CommentId, sourceMember => sourceMember.MapFrom(x => x.CommentId));
+            CreateMap<ReactionComment, OutReactionCommentViewModel>()
+                .ForMember(destinationMember => destinationMember.CommentId, sourceMember => sourceMember.MapFrom(x => x.CommentId));
         }
     }
 }
