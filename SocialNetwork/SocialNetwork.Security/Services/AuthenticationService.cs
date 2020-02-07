@@ -8,16 +8,19 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using SocialNetwork.Security.Options;
 
 namespace SocialNetwork.Security.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
         private readonly PublicContext _context;
+        private readonly IPasswordHasherService _passwordHasherService;
 
-        public AuthenticationService(PublicContext publicContext) 
+        public AuthenticationService(PublicContext publicContext, IPasswordHasherService passwordHasherService)
         {
             _context = publicContext;
+            _passwordHasherService = passwordHasherService;
         }
 
         public async Task<ClaimsIdentity> GetIdentity(string email, string password)
@@ -29,7 +32,7 @@ namespace SocialNetwork.Security.Services
             if (user?.UserSecurity == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.UserNotFound, $"User with email {email} not found");
 
-            if (user.UserSecurity.Password != password)
+            if (!_passwordHasherService.Check(user.UserSecurity.Password, password).Verified)
                 throw ExceptionFactory.SoftException(ExceptionEnum.PasswordIncorrect, "Password is incorrect");
 
             /*Ignore user not confirmed email because they have role preMember

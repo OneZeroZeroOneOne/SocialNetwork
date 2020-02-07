@@ -1,7 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Text;
+﻿using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
-namespace SocialNetwork.Security
+namespace SocialNetwork.Security.Options
 {
     public class AuthOptions
     {

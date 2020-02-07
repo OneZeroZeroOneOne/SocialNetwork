@@ -15,13 +15,13 @@ using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Bll.Services;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
-using SocialNetwork.Security;
+using SocialNetwork.Security.Abstractions;
+using SocialNetwork.Security.Options;
+using SocialNetwork.Security.Services;
 using SocialNetwork.Utilities;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
-
-
 
 namespace SocialNetwork.WebApi
 {

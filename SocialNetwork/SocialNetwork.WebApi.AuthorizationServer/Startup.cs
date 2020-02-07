@@ -14,8 +14,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
-using SocialNetwork.Security;
 using SocialNetwork.Security.Abstractions;
+using SocialNetwork.Security.Options;
 using SocialNetwork.Security.Services;
 using SocialNetwork.Utilities;
 using SocialNetwork.Utilities.Abstractions;
@@ -51,7 +51,9 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IRegistrationService, RegistrationService>();
             services.AddTransient<IMailClient, MailJetClient>();
+            services.AddTransient<IPasswordHasherService, PasswordHasherService>();
 
+            services.AddTransient<HashingOptions>();
             services.AddTransient<PublicContext>();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
