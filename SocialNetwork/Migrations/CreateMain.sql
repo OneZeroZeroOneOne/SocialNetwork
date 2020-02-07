@@ -74,6 +74,7 @@ CREATE TABLE public."Post" (
 	"Text" text NOT NULL,
 	"Date" timestamp NOT NULL,
 	"UserId" uuid NOT NULL,
+	"IsArchived" varchar NULL DEFAULT false,
 	CONSTRAINT "Post_pk" PRIMARY KEY ("Id"),
 	CONSTRAINT "Post_fk0" FOREIGN KEY ("UserId") REFERENCES "User"("Id")
 );
@@ -141,6 +142,7 @@ CREATE TABLE public."Comment" (
 	"Date" timestamp NOT NULL,
 	"UserId" uuid NOT NULL,
 	"PostId" uuid NOT NULL,
+	"IsArchived" bool NULL DEFAULT false,
 	CONSTRAINT "Comment_pk" PRIMARY KEY ("Id"),
 	CONSTRAINT "Comment_fk0" FOREIGN KEY ("UserId") REFERENCES "User"("Id"),
 	CONSTRAINT "Comment_fk1" FOREIGN KEY ("PostId") REFERENCES "Post"("Id")
