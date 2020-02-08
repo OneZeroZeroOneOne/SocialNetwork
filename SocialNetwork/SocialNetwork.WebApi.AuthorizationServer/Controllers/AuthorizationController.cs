@@ -32,5 +32,6 @@ namespace SocialNetwork.WebApi.AuthorizationServer.Controllers
                 email = email,
             };
         }
+
     }
 }
