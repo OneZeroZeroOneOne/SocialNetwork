@@ -22,6 +22,12 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<ReactionPost> AddReactionPost(ReactionPost reactionPost, User authorUser)
         {
+            List<ReactionPost> all_reactions = await _context.ReactionPost.Where(x => x.UserId == authorUser.Id && x.PostId == reactionPost.PostId).ToListAsync();
+            if (all_reactions.Count >= 1)
+            {
+                throw ExceptionFactory.SoftException(ExceptionEnum.ReactionAlreadyExist,
+                    $"another reaction already  exist");
+            }
             Console.WriteLine(reactionPost.ReactionId);
             if (await _context.ReactionTypePost.AnyAsync(x => x.ReactionId == reactionPost.ReactionId))
             {
@@ -37,6 +43,12 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<ReactionComment> AddReactionComment(ReactionComment reactionComment, User authorUser)
         {
+            List<ReactionComment> all_reactions = await _context.ReactionComment.Where(x => x.UserId == authorUser.Id && x.CommentId == reactionComment.CommentId).ToListAsync();
+            if (all_reactions.Count >= 1)
+            {
+                throw ExceptionFactory.SoftException(ExceptionEnum.ReactionAlreadyExist,
+                    $"another reaction already  exist");
+            }
             Console.WriteLine(reactionComment.ReactionId);
             if (await _context.ReactionTypeComment.AnyAsync(x => x.ReactionId == reactionComment.ReactionId))
             {
@@ -47,8 +59,7 @@ namespace SocialNetwork.Bll.Services
                 return insertedReactionComment.Entity;
             }
             throw ExceptionFactory.SoftException(ExceptionEnum.ReactionDoesNotExist,
-                    $"reaction does not exist");
-
+                    $"reactionId does not exist");
         }
 
         public async Task<List<ReactionPost>> GetReactionPost(Guid postId)
