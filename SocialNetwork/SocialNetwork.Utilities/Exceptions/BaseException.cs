@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using Newtonsoft.Json;
 
-namespace SocialNetwork.Dal.Exceptions
+namespace SocialNetwork.Utilities.Exceptions
 {
     public class BaseException : Exception
     {

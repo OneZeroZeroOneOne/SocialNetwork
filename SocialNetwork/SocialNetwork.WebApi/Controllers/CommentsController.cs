@@ -10,6 +10,7 @@ using SocialNetwork.Dal.ViewModels.Out;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SocialNetwork.Dal.Context;
 
 namespace SocialNetwork.WebApi.Controllers
 {
@@ -21,8 +22,8 @@ namespace SocialNetwork.WebApi.Controllers
         private readonly IMapper _mapper;
         private readonly IReactionService _reactionService;
         private readonly ILogger<PostsController> _logger;
-        public CommentsController(ILogger<PostsController> logger, IMapper mapper, ICommentService commentService,
-                                                                                    IReactionService reactionService)
+        public CommentsController(ILogger<PostsController> logger, IMapper mapper,
+            ICommentService commentService, IReactionService reactionService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -43,7 +44,7 @@ namespace SocialNetwork.WebApi.Controllers
         [Authorize(Policy = "ConfirmedUser")]
         public async Task<OutCommentViewModel> Post([FromBody]CommentViewModel comment)
         {
-            var currentUser = await CurrentUser();
+            var currentUser = CurrentUser();
 
             var dataModel = _mapper.Map<CommentViewModel, Comment>(comment);
             var insertedComment = await _commentService.AddComment(dataModel, currentUser);
@@ -55,7 +56,7 @@ namespace SocialNetwork.WebApi.Controllers
         [Authorize(Policy = "ConfirmedUser")]
         public async Task<OutCommentViewModel> Patch([FromBody]EditCommentViewModel comment)
         {
-            var currentUser = await CurrentUser();
+            var currentUser = CurrentUser();
 
             var dataModel = _mapper.Map<EditCommentViewModel, Comment>(comment);
             var insertedComment = await _commentService.EditComment(dataModel, currentUser);

@@ -21,6 +21,10 @@ using SocialNetwork.Utilities;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
+using ConfigCat.Client;
+using SocialNetwork.Utilities.Abstractions;
+using SocialNetwork.Utilities.ApiClients;
+
 
 namespace SocialNetwork.WebApi
 {
@@ -45,6 +49,11 @@ namespace SocialNetwork.WebApi
             {
                 mc.AddProfile(new MappingProfile());
             });
+
+            var configClient = new ConfigSettingService("uFPXCG79WkAW0mKMuJg96Q/hg9Rwi9qLkSxddIpUEIxpA");
+            configClient.ForceRefresh();
+
+            services.AddSingleton<IConfigSettingService>(configClient);
 
             services.AddAuthorization(x => x.ConfigurePolicy());
 

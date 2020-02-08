@@ -1,21 +1,20 @@
 ﻿using Mailjet.Client;
 using Mailjet.Client.Resources;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
-using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Utilities.Abstractions;
+using SocialNetwork.Utilities.Exceptions;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.Utilities.ApiClients
 {
     public class MailJetClient : IMailClient
     {
-        private readonly IConfiguration _config;
+        private readonly IConfigSettingService _config;
 
         private string _apiSecret;
         private string _apiKey;
 
-        public MailJetClient(IConfiguration config)
+        public MailJetClient(IConfigSettingService config)
         {
             _config = config;
 
@@ -24,8 +23,17 @@ namespace SocialNetwork.Utilities.ApiClients
 
         private void LoadSecrets()
         {
-            _apiSecret = _config.GetSection("MailJet").GetSection("ApiSecret").Value;
-            _apiKey = _config.GetSection("MailJet").GetSection("ApiKey").Value;
+            _apiSecret = _config.GetSetting<string>("MailJet_ApiSecret", null);
+            _apiKey = _config.GetSetting<string>("MailJet_ApiKey", null);
+
+            if (_apiKey == null || _apiSecret == null)
+                throw ExceptionFactory.SoftException(ExceptionEnum.CantLoadSecrets, "Cant load secrets for Mail Jet Client");
+        }
+
+        private async Task LoadSecretsAsync()
+        {
+            _apiSecret = await _config.GetSettingAsync<string>("MailJet_ApiSecret", null);
+            _apiKey = await _config.GetSettingAsync<string>("MailJet_ApiKey", null);
 
             if (_apiKey == null || _apiSecret == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.CantLoadSecrets, "Cant load secrets for Mail Jet Client");
@@ -34,7 +42,7 @@ namespace SocialNetwork.Utilities.ApiClients
         public async Task<bool> SendConfirmationMail(string email, string confirmUrl)
         {
             if (_apiKey == null || _apiSecret == null)
-                LoadSecrets();
+                await LoadSecretsAsync();
 
             MailjetClient client = new MailjetClient(_apiKey, _apiSecret)
             {

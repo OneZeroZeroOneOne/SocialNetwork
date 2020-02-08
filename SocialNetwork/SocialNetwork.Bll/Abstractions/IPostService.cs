@@ -7,9 +7,9 @@ namespace SocialNetwork.Bll.Abstractions
 {
     public interface IPostService
     {
-        Task<Post> EditPost(Post postModel, User editorUser);
+        Task<Post> EditPost(Post postModel, Guid editorUser);
 
-        Task<Post> CreateNewPost(Post postModel, User authorUser);
+        Task<Post> CreateNewPost(Post postModel, Guid authorUser);
 
         Task<Post> GetPost(Guid postId);
 

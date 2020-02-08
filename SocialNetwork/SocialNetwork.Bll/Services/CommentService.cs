@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
-using SocialNetwork.Dal.Exceptions;
 using SocialNetwork.Dal.Extensions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SocialNetwork.Utilities.Exceptions;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -20,17 +20,14 @@ namespace SocialNetwork.Bll.Services
             _context = publicContext;
         }
 
-        public async Task<Comment> AddComment(Comment commentModel, User authorUser)
+        public async Task<Comment> AddComment(Comment commentModel, Guid authorUser)
         {
-            if (authorUser == null)
-                throw ExceptionFactory.SoftException(ExceptionEnum.UserNotFound, $"User {commentModel.UserId} doesn't exist");
-
             var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == commentModel.PostId);
 
             if (post == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {commentModel.PostId} doesn't exist");
 
-            commentModel.UserId = authorUser.Id;
+            commentModel.UserId = authorUser;
 
             post.Comments.Add(commentModel);
 
@@ -40,11 +37,8 @@ namespace SocialNetwork.Bll.Services
             return commentModel;
         }
 
-        public async Task<Comment> EditComment(Comment commentModel, User editorUser)
+        public async Task<Comment> EditComment(Comment commentModel, Guid editorUser)
         {
-            if (editorUser == null)
-                throw ExceptionFactory.SoftException(ExceptionEnum.UserNotFound, $"User {commentModel.UserId} doesn't exist");
-
             var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentModel.Id);
 
             if (comment == null)

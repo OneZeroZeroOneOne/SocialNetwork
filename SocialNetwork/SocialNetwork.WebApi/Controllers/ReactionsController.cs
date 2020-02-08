@@ -28,7 +28,7 @@ namespace SocialNetwork.WebApi.Controllers
         [Authorize(Policy = "ConfirmedUser")]
         public async Task<OutReactionPostViewModel> AddReactionPost([FromBody]ReactionPostViewModel reactionPost)
         {
-            var currentUser = await CurrentUser();
+            var currentUser = CurrentUser();
             var dataModel = _mapper.Map<ReactionPostViewModel, ReactionPost>(reactionPost);
             var post = await _reactionService.AddReactionPost(dataModel, currentUser);
 
@@ -39,7 +39,7 @@ namespace SocialNetwork.WebApi.Controllers
         [Authorize(Policy = "ConfirmedUser")]
         public async Task<OutReactionCommentViewModel> AddReactionComment([FromBody]ReactionCommentViewModel reactionComment)
         {
-            var currentUser = await CurrentUser();
+            var currentUser = CurrentUser();
             var dataModel = _mapper.Map<ReactionCommentViewModel, ReactionComment>(reactionComment);
             var comment = await _reactionService.AddReactionComment(dataModel, currentUser);
 

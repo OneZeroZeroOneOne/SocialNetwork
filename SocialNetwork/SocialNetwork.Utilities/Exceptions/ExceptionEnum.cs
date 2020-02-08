@@ -1,4 +1,4 @@
-﻿namespace SocialNetwork.Dal.Exceptions
+﻿namespace SocialNetwork.Utilities.Exceptions
 {
     public enum ExceptionEnum
     {

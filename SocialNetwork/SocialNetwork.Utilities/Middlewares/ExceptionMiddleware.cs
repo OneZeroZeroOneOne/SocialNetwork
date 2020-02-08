@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using SocialNetwork.Dal.Exceptions;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using SocialNetwork.Utilities.Exceptions;
 
 namespace SocialNetwork.Utilities.Middlewares
 {
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private ILogger<ExceptionMiddleware> _logger;
+        private readonly ILogger<ExceptionMiddleware> _logger;
 
         public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
         {
