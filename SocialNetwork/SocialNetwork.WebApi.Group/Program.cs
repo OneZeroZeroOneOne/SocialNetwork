@@ -26,7 +26,7 @@ namespace SocialNetwork.WebApi.Group
                 {
                     webBuilder.ConfigureKestrel(serverOptions =>
                     {
-                        serverOptions.Listen(IPAddress.Any, 8000, listenOptions =>
+                        serverOptions.Listen(IPAddress.Any, 8002, listenOptions =>
                         {
                             listenOptions.UseConnectionLogging();
                         });
