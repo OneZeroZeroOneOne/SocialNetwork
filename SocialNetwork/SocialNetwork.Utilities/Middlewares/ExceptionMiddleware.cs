@@ -25,10 +25,15 @@ namespace SocialNetwork.Utilities.Middlewares
             {
                 await _next(httpContext);
             }
-            catch (BaseException ex)
+            catch (BaseErrorException ex)
             {
                 _logger.LogError(ex, ex.StackTrace);
-                await HandleMyExceptionAsync(httpContext, ex);
+                await HandleSoftExceptionAsync(httpContext, ex);
+            }
+            catch (BaseNormalException ex)
+            {
+                _logger.LogError(ex, ex.StackTrace);
+                await HandleUserFriendlyExceptionAsync(httpContext, ex);
             }
             catch (Exception ex)
             {
@@ -37,11 +42,19 @@ namespace SocialNetwork.Utilities.Middlewares
             }
         }
 
-        private Task HandleMyExceptionAsync(HttpContext context, BaseException exception)
+        private Task HandleSoftExceptionAsync(HttpContext context, BaseErrorException exception)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = 400;
 
+            return context.Response.WriteAsync(exception.ToString());
+        }
+
+        private Task HandleUserFriendlyExceptionAsync(HttpContext context, BaseNormalException exception)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = 204; //no content
+            
             return context.Response.WriteAsync(exception.ToString());
         }
 

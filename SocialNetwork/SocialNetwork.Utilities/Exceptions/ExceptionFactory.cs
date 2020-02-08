@@ -2,15 +2,20 @@
 {
     public class ExceptionFactory
     {
-        public static BaseException SoftException(ExceptionEnum code, string message, params object[] args)
+        public static BaseErrorException SoftException(ExceptionEnum code, string message, params object[] args)
         {
             message = string.Format(message, args);
-            return new BaseException((int)code, message);
+            return new BaseErrorException((int)code, message);
         }
 
-        public static BaseException SoftException(ExceptionEnum code, string message)
+        public static BaseErrorException SoftException(ExceptionEnum code, string message)
         {
-            return new BaseException((int)code, message);
+            return new BaseErrorException((int)code, message);
+        }
+
+        public static BaseNormalException UserFriendlyException(ExceptionEnum code, string message)
+        {
+            return new BaseNormalException((int)code, message);
         }
     }
 }

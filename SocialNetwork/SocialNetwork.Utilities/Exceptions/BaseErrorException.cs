@@ -3,9 +3,9 @@ using Newtonsoft.Json;
 
 namespace SocialNetwork.Utilities.Exceptions
 {
-    public class BaseException : Exception
+    public class BaseErrorException : Exception
     {
-        public BaseException(int code, string message) 
+        public BaseErrorException(int code, string message) 
             : base(message)
         {
             Code = code;
