@@ -1,23 +1,16 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Utilities.Abstractions;
+using SocialNetwork.Utilities.Controllers;
 
 namespace SocialNetwork.WebApi.AuthorizationServer.Controllers
 {
     [Route("[controller]")]
-    public class ConfigSettingController : ControllerBase
+    public class ConfigController : ConfigSettingController
     {
-        private readonly IConfigSettingService _configSettingService;
-
-        public ConfigSettingController(IConfigSettingService configSettingService)
+        public ConfigController(IConfigSettingService configSettingService)
+            : base(configSettingService)
         {
-            _configSettingService = configSettingService;
-        }
 
-        [HttpPost]
-        public async Task ConfigChanged()
-        {
-            await _configSettingService.ForceRefreshAsync();
         }
     }
 }
