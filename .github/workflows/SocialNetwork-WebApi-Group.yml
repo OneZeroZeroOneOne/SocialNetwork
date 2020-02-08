@@ -33,7 +33,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        source: "SocialNetwork/SocialNetwork.WebApi.Group/bin/Release/netcoreapp3.1/*"
+        source: "SocialNetwork/SocialNetwork.WebApi.Group/bin/Release/netcoreapp3.0/*"
         target: "SocialNetwork.WebApi.Group.Builded"
     - name: Restarting SocialNetwork.Group WebApi
       uses: appleboy/ssh-action@master
