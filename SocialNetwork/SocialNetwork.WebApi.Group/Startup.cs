@@ -20,6 +20,7 @@ using SocialNetwork.Security.Options;
 using SocialNetwork.Utilities;
 using SocialNetwork.Utilities.Abstractions;
 using SocialNetwork.Utilities.ApiClients;
+using SocialNetwork.Utilities.Controllers;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
@@ -41,6 +42,9 @@ namespace SocialNetwork.WebApi.Group
             IdentityModelEventSource.ShowPII = true;
 
             services.AddControllers();
+            services.AddControllers()
+                .AddApplicationPart(typeof(ConfigSettingController).Assembly)
+                .AddControllersAsServices();
 
             //services.AddAutoMapper(typeof(Startup));
             var mappingConfig = new MapperConfiguration(mc =>

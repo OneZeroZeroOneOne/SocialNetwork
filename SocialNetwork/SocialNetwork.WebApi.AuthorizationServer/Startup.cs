@@ -15,15 +15,16 @@ using Microsoft.OpenApi.Models;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Security.Abstractions;
+using SocialNetwork.Security.Extensions;
 using SocialNetwork.Security.Options;
 using SocialNetwork.Security.Services;
 using SocialNetwork.Utilities;
 using SocialNetwork.Utilities.Abstractions;
 using SocialNetwork.Utilities.ApiClients;
+using SocialNetwork.Utilities.Controllers;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
-using SocialNetwork.Security.Extensions;
 
 namespace SocialNetwork.WebApi.AuthorizationServer
 {
@@ -42,6 +43,9 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             IdentityModelEventSource.ShowPII = true;
 
             services.AddControllers();
+            services.AddControllers()
+                .AddApplicationPart(typeof(ConfigSettingController).Assembly)
+                .AddControllersAsServices();
 
             //services.AddAutoMapper(typeof(Startup));
             var mappingConfig = new MapperConfiguration(mc =>
