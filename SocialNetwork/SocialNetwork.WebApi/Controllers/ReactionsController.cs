@@ -6,6 +6,7 @@ using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
@@ -22,6 +23,18 @@ namespace SocialNetwork.WebApi.Controllers
             _logger = logger;
             _mapper = mapper;
             _reactionService = reactionService;
+        }
+
+        [HttpGet, Route("Post", Name = "GetReactionTypePost")]
+        public async Task<List<ReactionTypePost>> ReactionTypePost()
+        {
+            return await _reactionService.GetReactionTypePost();
+        }
+
+        [HttpGet, Route("Comment", Name = "GetReactionTypeComment")]
+        public async Task<List<ReactionTypeComment>> ReactionTypeComment()
+        {
+            return await _reactionService.GetReactionTypeComment();
         }
 
         [HttpPost, Route("Post", Name = "AddReactionPost")]

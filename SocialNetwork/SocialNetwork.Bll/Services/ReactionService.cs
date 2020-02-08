@@ -75,5 +75,15 @@ namespace SocialNetwork.Bll.Services
 
             return comment.ReactionComment.ToList();
         }
+
+        public Task<List<ReactionTypePost>> GetReactionTypePost()
+        {
+            return _context.ReactionTypePost.ToListAsync();
+        }
+
+        public Task<List<ReactionTypeComment>> GetReactionTypeComment()
+        {
+            return _context.ReactionTypeComment.ToListAsync();
+        }
     }
 }

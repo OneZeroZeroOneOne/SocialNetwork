@@ -9,7 +9,5 @@ namespace SocialNetwork.Dal.ViewModels.Out
         public string Text { get; set; }
         public DateTime Date { get; set; }
         public Guid UserId { get; set; }
-
-        public List<OutCommentViewModel> Comments { get; set; }
     }
 }

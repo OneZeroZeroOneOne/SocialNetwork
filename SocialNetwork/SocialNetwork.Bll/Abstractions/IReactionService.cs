@@ -15,5 +15,8 @@ namespace SocialNetwork.Bll.Abstractions
         Task<List<ReactionPost>> GetReactionPost(Guid postId);
 
         Task<List<ReactionComment>> GetReactionComment(Guid commentId);
+
+        Task<List<ReactionTypePost>> GetReactionTypePost();
+        Task<List<ReactionTypeComment>> GetReactionTypeComment();
     }
 }
