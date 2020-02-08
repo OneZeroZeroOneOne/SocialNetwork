@@ -26,7 +26,6 @@ using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
 
-
 namespace SocialNetwork.WebApi.AuthorizationServer
 {
     public class Startup
