@@ -1,4 +1,3 @@
-
 -- Drop table
 
 -- DROP TABLE public."GroupType";
@@ -87,7 +86,7 @@ CREATE TABLE public."ReactionPost" (
 	"ReactionId" uuid NOT NULL,
 	"UserId" uuid NOT NULL,
 	"PostId" uuid NOT NULL,
-	CONSTRAINT "ReactionPost_pk" PRIMARY KEY ("ReactionId", "UserId"),
+	CONSTRAINT reactionpost_pk PRIMARY KEY ("ReactionId", "UserId", "PostId"),
 	CONSTRAINT "ReactionPost_fk0" FOREIGN KEY ("ReactionId") REFERENCES "ReactionTypePost"("ReactionId"),
 	CONSTRAINT "ReactionPost_fk1" FOREIGN KEY ("UserId") REFERENCES "User"("Id"),
 	CONSTRAINT "ReactionToPost_fk0" FOREIGN KEY ("PostId") REFERENCES "Post"("Id")
@@ -168,7 +167,7 @@ CREATE TABLE public."ReactionComment" (
 	"ReactionId" uuid NOT NULL,
 	"UserId" uuid NOT NULL,
 	"CommentId" uuid NOT NULL,
-	CONSTRAINT "ReactionComment_pk" PRIMARY KEY ("ReactionId", "UserId"),
+	CONSTRAINT reactioncomment_pk PRIMARY KEY ("ReactionId", "UserId", "CommentId"),
 	CONSTRAINT "ReactionComment_fk0" FOREIGN KEY ("ReactionId") REFERENCES "ReactionTypeComment"("ReactionId"),
 	CONSTRAINT "ReactionComment_fk1" FOREIGN KEY ("UserId") REFERENCES "User"("Id"),
 	CONSTRAINT "ReactionToComment_fk0" FOREIGN KEY ("CommentId") REFERENCES "Comment"("Id")
