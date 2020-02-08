@@ -19,6 +19,7 @@ namespace SocialNetwork.Security.Services
         private readonly PublicContext _publicContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMailClient _mailClient;
+        private readonly IPasswordHasherService _passwordHasherService;
 
         private readonly Regex _emailRegex;
 
@@ -26,11 +27,12 @@ namespace SocialNetwork.Security.Services
         private readonly Regex _hasUpperChar;
         private readonly Regex _hasMinimum8Chars;
 
-        public RegistrationService(PublicContext publicContext, IHttpContextAccessor httpContextAccessor, IMailClient mailClient)
+        public RegistrationService(PublicContext publicContext, IHttpContextAccessor httpContextAccessor, IMailClient mailClient, IPasswordHasherService passwordHasherService)
         {
             _publicContext = publicContext;
             _httpContextAccessor = httpContextAccessor;
             _mailClient = mailClient;
+            _passwordHasherService = passwordHasherService;
 
             _hasNumber = new Regex(@"[0-9]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             _hasUpperChar = new Regex(@"[A-Z]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -96,7 +98,7 @@ namespace SocialNetwork.Security.Services
                 Email = email,
                 UserSecurity = new UserSecurity()
                 {
-                    Password = password,
+                    Password = _passwordHasherService.Hash(password),
                     Role = await _publicContext.Role.FirstOrDefaultAsync(x => x.RoleName == "PreMember"), 
                     IsConfirmed = false,
                     UserConfirmationTokens = new List<UserConfirmationToken>()

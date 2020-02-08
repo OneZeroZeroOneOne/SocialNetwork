@@ -25,7 +25,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpPost, Route("Post", Name = "AddReactionPost")]
-        [Authorize(Roles = "Member")]
+        [Authorize(Policy = "ConfirmedUser")]
         public async Task<OutReactionPostViewModel> AddReactionPost([FromBody]ReactionPostViewModel reactionPost)
         {
             var currentUser = await CurrentUser();
@@ -36,7 +36,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpPost, Route("Comment", Name = "AddReactionComment")]
-        [Authorize(Roles = "Member")]
+        [Authorize(Policy = "ConfirmedUser")]
         public async Task<OutReactionCommentViewModel> AddReactionComment([FromBody]ReactionCommentViewModel reactionComment)
         {
             var currentUser = await CurrentUser();

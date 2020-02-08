@@ -39,7 +39,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Member")]
+        [Authorize(Policy = "ConfirmedUser")]
         public async Task<OutPostViewModel> Post([FromBody]PostViewModel post)
         {
 
@@ -52,7 +52,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpPatch]
-        [Authorize(Roles = "Member")]
+        [Authorize(Policy = "ConfirmedUser")]
         public async Task<OutPostViewModel> Patch([FromBody]EditPostViewModel post)
         {
             var currentUser = await CurrentUser();

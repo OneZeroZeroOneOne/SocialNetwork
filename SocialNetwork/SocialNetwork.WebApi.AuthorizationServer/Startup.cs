@@ -14,8 +14,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
-using SocialNetwork.Security;
 using SocialNetwork.Security.Abstractions;
+using SocialNetwork.Security.Options;
 using SocialNetwork.Security.Services;
 using SocialNetwork.Utilities;
 using SocialNetwork.Utilities.Abstractions;
@@ -23,6 +23,7 @@ using SocialNetwork.Utilities.ApiClients;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
+using SocialNetwork.Security.Extensions;
 
 namespace SocialNetwork.WebApi.AuthorizationServer
 {
@@ -48,13 +49,18 @@ namespace SocialNetwork.WebApi.AuthorizationServer
                 mc.AddProfile(new MappingProfile());
             });
 
+            services.AddAuthorization(x => x.ConfigurePolicy());
+
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IRegistrationService, RegistrationService>();
             services.AddTransient<IMailClient, MailJetClient>();
+            services.AddTransient<IPasswordHasherService, PasswordHasherService>();
 
+            services.AddTransient<HashingOptions>();
             services.AddTransient<PublicContext>();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);

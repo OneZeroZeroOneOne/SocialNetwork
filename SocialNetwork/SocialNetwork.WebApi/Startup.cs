@@ -15,13 +15,12 @@ using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Bll.Services;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
-using SocialNetwork.Security;
+using SocialNetwork.Security.Extensions;
+using SocialNetwork.Security.Options;
 using SocialNetwork.Utilities;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
-
-
 
 namespace SocialNetwork.WebApi
 {
@@ -46,6 +45,8 @@ namespace SocialNetwork.WebApi
             {
                 mc.AddProfile(new MappingProfile());
             });
+
+            services.AddAuthorization(x => x.ConfigurePolicy());
 
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();
