@@ -42,4 +42,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        script: systemctl restart social-network-webapi-Group.service
+        script: systemctl restart social-network-webapi-group.service
