@@ -1,0 +1,17 @@
+[Unit]
+Description=Social Network app Group
+
+[Service]
+WorkingDirectory=/root/SocialNetwork.WebApi.Group.Builded/SocialNetwork/SocialNetwork.WebApi.Group/bin/Release/netcoreapp3.0
+ExecStart=/usr/bin/dotnet /root/SocialNetwork.WebApi.Group.Builded/SocialNetwork/SocialNetwork.WebApi.Group/bin/Release/netcoreapp3.0/SocialNetwork.WebApi.Group.dll
+Restart=always
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=SocialNetwork-Group
+User=root
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
