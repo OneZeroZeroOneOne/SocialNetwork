@@ -24,7 +24,7 @@ using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
 
-namespace SocialNetwork.WebApi
+namespace SocialNetwork.WebApi.Group
 {
     public class Startup
     {
@@ -140,7 +140,7 @@ namespace SocialNetwork.WebApi
             app.UseStaticFiles();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -155,7 +155,7 @@ namespace SocialNetwork.WebApi
             }
             else
             {
-                var basePath = "/social";
+                var basePath = "/group";
                 app.UseSwagger(c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
                     swaggerDoc.Servers = new List<OpenApiServer>
