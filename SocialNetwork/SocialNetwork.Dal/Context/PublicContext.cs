@@ -5,7 +5,7 @@ using SocialNetwork.Utilities.Abstractions;
 
 namespace SocialNetwork.Dal.Context
 {
-    public partial class PublicContext : DbContext
+    public class PublicContext : DbContext
     {
         private readonly IConfigSettingService _configSettingService;
 
@@ -24,13 +24,26 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Role> Role { get; set; }
+
+        #region Security
         public virtual DbSet<UserSecurity> UserSecurity { get; set; }
         public virtual DbSet<UserConfirmationToken> UserConfirmationToken { get; set; }
+        #endregion
+
+        #region Reaction
         public virtual DbSet<ReactionComment> ReactionComment { get; set; }
         public virtual DbSet<ReactionPost> ReactionPost { get; set; }
         public virtual DbSet<Reaction> Reaction { get; set; }
         public virtual DbSet<ReactionTypeComment> ReactionTypeComment { get; set; }
         public virtual DbSet<ReactionTypePost> ReactionTypePost { get; set; }
+        #endregion
+
+        #region Group
+        public virtual DbSet<UserGroup> UserGroup { get; set; }
+        public virtual DbSet<Group> Group { get; set; }
+        public virtual DbSet<GroupPost> GroupPost { get; set; }
+        public virtual DbSet<GroupType> GroupType { get; set; }
+        #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -43,6 +56,59 @@ namespace SocialNetwork.Dal.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("uuid-ossp");
+
+            modelBuilder.Entity<Group>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.HasOne(d => d.GroupType)
+                    .WithMany(p => p.Group)
+                    .HasForeignKey(d => d.GroupTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Group_GroupTypeId_fkey");
+            });
+
+            modelBuilder.Entity<GroupPost>(entity =>
+            {
+                entity.HasKey(e => new { e.PostId, e.GroupId })
+                    .HasName("GroupPost_pkey");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.GroupPost)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("GroupPost_GroupId_fkey");
+
+                entity.HasOne(d => d.Post)
+                    .WithOne(p => p.GroupPost)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("GroupPost_PostId_fkey");
+            });
+
+            modelBuilder.Entity<UserGroup>(entity =>
+            {
+                entity.HasKey(e => new { e.GroupId, e.UserId })
+                    .HasName("UserGroup_pkey");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.UserGroup)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("UserGroup_GroupId_fkey");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserGroup)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("UserGroup_UserId_fkey");
+            });
+
+            modelBuilder.Entity<GroupType>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Description).IsRequired();
+            });
 
             modelBuilder.Entity<Comment>(entity =>
             {
@@ -178,10 +244,6 @@ namespace SocialNetwork.Dal.Context
 
                 entity.Property(e => e.Content).IsRequired();
             });
-
-            OnModelCreatingPartial(modelBuilder);
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
