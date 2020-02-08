@@ -1,24 +1,23 @@
-﻿using System.Threading.Tasks;
-using ConfigCat.Client;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Utilities.Abstractions;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
 {
     [Route("[controller]")]
     public class ConfigSettingController : ControllerBase
     {
-        private readonly IConfigSettingService _configCatClient;
+        private readonly IConfigSettingService _configSettingService;
 
-        public ConfigSettingController(IConfigSettingService configCatClient) // Inject the ConfigCat client.
+        public ConfigSettingController(IConfigSettingService configSettingService)
         {
-            _configCatClient = configCatClient;
+            _configSettingService = configSettingService;
         }
 
         [HttpPost]
-        public async Task ConfigCatChanged()
+        public async Task ConfigChanged()
         {
-            await _configCatClient.ForceRefreshAsync(); // Manually refresh the cache with the new setting values.
+            await _configSettingService.ForceRefreshAsync();
         }
     }
 }
