@@ -24,10 +24,6 @@
     <ProjectReference Include="..\SocialNetwork.Security\SocialNetwork.Security.csproj" />
     <ProjectReference Include="..\SocialNetwork.Utilities\SocialNetwork.Utilities.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
 
 
 </Project>

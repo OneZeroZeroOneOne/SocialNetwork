@@ -60,12 +60,6 @@ namespace SocialNetwork.Dal.Context
             modelBuilder.Entity<Group>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.HasOne(d => d.GroupType)
-                    .WithMany(p => p.Group)
-                    .HasForeignKey(d => d.GroupTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Group_GroupTypeId_fkey");
             });
 
             modelBuilder.Entity<GroupPost>(entity =>
