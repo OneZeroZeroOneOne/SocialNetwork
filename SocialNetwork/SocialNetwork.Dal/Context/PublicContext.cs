@@ -24,6 +24,8 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<ReactionComment> ReactionComment { get; set; }
         public virtual DbSet<ReactionPost> ReactionPost { get; set; }
         public virtual DbSet<Reaction> Reaction { get; set; }
+        public virtual DbSet<ReactionTypeComment> ReactionTypeComment { get; set; }
+        public virtual DbSet<ReactionTypePost> ReactionTypePost { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -118,7 +120,7 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<ReactionComment>(entity =>
             {
-                entity.HasKey(e => new { e.ReactionId, e.UserId })
+                entity.HasKey(e => new { e.UserId, e.CommentId })
                     .HasName("ReactionComment_pk");
 
                 entity.HasOne(d => d.Comment)
@@ -136,7 +138,7 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<ReactionPost>(entity =>
             {
-                entity.HasKey(e => new { e.ReactionId, e.UserId })
+                entity.HasKey(e => new { e.UserId, e.PostId })
                     .HasName("ReactionPost_pk");
 
                 entity.HasOne(d => d.Post)
