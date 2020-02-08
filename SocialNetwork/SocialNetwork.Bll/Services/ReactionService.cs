@@ -20,77 +20,61 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<ReactionPost> AddReactionPost(ReactionPost reactionPost, User authorUser)
         {
-            List<ReactionPost> all_reactions = await _context.ReactionPost.Where(x => x.UserId == authorUser.Id && x.PostId == reactionPost.PostId).ToListAsync();
-            if (all_reactions.Count >= 1)
-            {
-                throw ExceptionFactory.SoftException(ExceptionEnum.ReactionAlreadyExist,
-                    $"another reaction already  exist");
-            }
-            Console.WriteLine(reactionPost.ReactionId);
-            if (await _context.ReactionTypePost.AnyAsync(x => x.ReactionId == reactionPost.ReactionId))
-            {
-                Console.WriteLine(reactionPost.ReactionId);
-                reactionPost.UserId = authorUser.Id;
-                var insertedReactionPost = await _context.ReactionPost.AddAsync(reactionPost);
-                await _context.SaveChangesAsync();
-                return insertedReactionPost.Entity;
-            }
-            throw ExceptionFactory.SoftException(ExceptionEnum.ReactionDoesNotExist,
+            if (await _context.ReactionPost.AnyAsync(x => x.PostId == reactionPost.PostId && x.UserId == authorUser.Id))
+                    throw ExceptionFactory.SoftException(ExceptionEnum.ReactionAlreadyExist,
+                        $"another reaction already  exist");
+
+            if (!await _context.ReactionTypePost.AnyAsync(x => x.ReactionId == reactionPost.ReactionId))
+                throw ExceptionFactory.SoftException(ExceptionEnum.ReactionDoesNotExist,
                     $"reaction does not exist");
+
+            reactionPost.UserId = authorUser.Id;
+            var insertedReactionPost = await _context.ReactionPost.AddAsync(reactionPost);
+            await _context.SaveChangesAsync();
+            return insertedReactionPost.Entity;
         }
 
         public async Task<ReactionComment> AddReactionComment(ReactionComment reactionComment, User authorUser)
         {
-            List<ReactionComment> all_reactions = await _context.ReactionComment.Where(x => x.UserId == authorUser.Id && x.CommentId == reactionComment.CommentId).ToListAsync();
-            if (all_reactions.Count >= 1)
-            {
+            if (await _context.ReactionComment.AnyAsync(x => x.CommentId == reactionComment.CommentId && x.UserId == authorUser.Id))
                 throw ExceptionFactory.SoftException(ExceptionEnum.ReactionAlreadyExist,
                     $"another reaction already  exist");
-            }
-            Console.WriteLine(reactionComment.ReactionId);
-            if (await _context.ReactionTypeComment.AnyAsync(x => x.ReactionId == reactionComment.ReactionId))
-            {
-                Console.WriteLine(reactionComment.ReactionId);
-                reactionComment.UserId = authorUser.Id;
-                var insertedReactionComment = await _context.ReactionComment.AddAsync(reactionComment);
-                await _context.SaveChangesAsync();
-                return insertedReactionComment.Entity;
-            }
-            throw ExceptionFactory.SoftException(ExceptionEnum.ReactionDoesNotExist,
+
+            if (!await _context.ReactionTypeComment.AnyAsync(x => x.ReactionId == reactionComment.ReactionId))
+                throw ExceptionFactory.SoftException(ExceptionEnum.ReactionDoesNotExist,
                     $"reactionId does not exist");
+
+            reactionComment.UserId = authorUser.Id;
+
+            var insertedReactionComment = await _context.ReactionComment.AddAsync(reactionComment);
+
+            await _context.SaveChangesAsync();
+            return insertedReactionComment.Entity;
         }
 
         public async Task<List<ReactionPost>> GetReactionPost(Guid postId)
         {
-            if (postId == null)
-                throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
-                    $"inappropriate parameters postId");
-            }
-            var post = await _context.ReactionPost.Where(x => x.PostId == postId).ToListAsync();
-            if (post == null)
-            {
-                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound,
-                    $"post not found");
-            }
-            return post;
+            var post = await _context.Post.Where(x => x.Id == postId)
+                .Include(x => x.ReactionPost).FirstOrDefaultAsync();
 
+            if (post == null)
+                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound,
+                    $"Post with {postId} post id not found");
+
+            return post.ReactionPost.ToList();
         }
 
         
         public async Task<List<ReactionComment>> GetReactionComment(Guid commentId)
         {
-            if (commentId == null)
-                throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
-                    $"inappropriate parameters commentId");
-            }
-            var comment = await _context.ReactionComment.Where(x => x.CommentId == commentId).ToListAsync();
-            if (comment == null)
-            {
-                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound,
-                    $"comment not found");
-            }
-            return comment;
+            var comment = await _context.Comment.Where(x => x.Id == commentId)
+                .Include(x => x.ReactionComment).FirstOrDefaultAsync();
 
+            if (comment == null)
+                throw ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound,
+                    $"Comment with {commentId} comment id not exist");
+
+            return comment.ReactionComment.ToList();
         }
     }
 }
