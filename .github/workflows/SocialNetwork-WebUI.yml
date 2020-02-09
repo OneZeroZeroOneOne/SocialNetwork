@@ -18,8 +18,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.5.0
-    - run: npm install
-    - run: npm run build --if-present
-    - run: npm test
+    - run: npm install SocialNetwork.WebUI
+    - run: npm run build --prefix SocialNetwork.WebUI --if-present 
+    - run: npm test --prefix SocialNetwork.WebUI
       env:
         CI: true
