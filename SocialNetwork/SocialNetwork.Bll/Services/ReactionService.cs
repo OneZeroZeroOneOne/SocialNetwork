@@ -86,20 +86,16 @@ namespace SocialNetwork.Bll.Services
             return _context.ReactionTypeComment.ToListAsync();
         }
 
-        public void DeleteReactionPost(Guid postId, Guid currentUserId)
+        public async Task DeleteReactionPost(Guid postId, Guid currentUserId)
         {
-            ReactionPost reactionPost = new ReactionPost();
-            reactionPost.PostId = postId;
-            reactionPost.UserId = currentUserId;
+            var reactionPost = await _context.ReactionPost.FirstOrDefaultAsync(x => x.PostId == postId && x.UserId == currentUserId);
             _context.ReactionPost.Remove(reactionPost);
-            
+
         }
 
-        public void DeleteReactionComment(Guid commentId, Guid currentUserId)
+        public async Task DeleteReactionComment(Guid commentId, Guid currentUserId)
         {
-            ReactionComment reactionComment = new ReactionComment();
-            reactionComment.CommentId = commentId;
-            reactionComment.UserId = currentUserId;
+            var reactionComment = await _context.ReactionComment.FirstOrDefaultAsync(x => x.CommentId == commentId && x.UserId == currentUserId);
             _context.ReactionComment.Remove(reactionComment);
         }
     }

@@ -60,22 +60,23 @@ namespace SocialNetwork.WebApi.Controllers
             return _mapper.Map<ReactionComment, OutReactionCommentViewModel>(comment);
         }
 
-        [HttpDelete, Route("DeletePost", Name = "DeletePost")]
+        [HttpDelete, Route("Post", Name = "DeletePost")]
         [Authorize(Policy = "ConfirmedUser")]
-        public async Task<IActionResult> DeleteReactionPost([FromQuery]Guid reactionPostId)
+        public async Task<IActionResult> DeletePost([FromQuery]Guid postId)
         {
             var currentUser = CurrentUser();
-            _reactionService.DeleteReactionPost(reactionPostId, currentUser);
+            await _reactionService.DeleteReactionPost(postId, currentUser);
 
             return Ok();
         }
 
-        [HttpDelete, Route("DeleteComment", Name = "DeleteComment")]
+        [HttpDelete, Route("Comment", Name = "DeleteComment")]
         [Authorize(Policy = "ConfirmedUser")]
-        public async Task<IActionResult> DeleteReactionComment([FromQuery]Guid reactionCommentId)
+        public async Task<IActionResult> DeleteComment([FromQuery]Guid commentId)
         {
             var currentUser = CurrentUser();
-            _reactionService.DeleteReactionComment(reactionCommentId, currentUser);
+            await _reactionService.DeleteReactionComment(commentId, currentUser);
+
             return Ok();
         }
     }
