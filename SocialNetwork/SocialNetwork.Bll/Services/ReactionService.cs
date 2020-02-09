@@ -92,7 +92,7 @@ namespace SocialNetwork.Bll.Services
             reactionPost.PostId = postId;
             reactionPost.UserId = currentUserId;
             _context.ReactionPost.Remove(reactionPost);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteReactionComment(Guid commentId, Guid currentUserId)
@@ -101,7 +101,7 @@ namespace SocialNetwork.Bll.Services
             reactionComment.CommentId = commentId;
             reactionComment.UserId = currentUserId;
             _context.ReactionComment.Remove(reactionComment);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
