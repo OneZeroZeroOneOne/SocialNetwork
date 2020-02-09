@@ -46,7 +46,7 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<Post> GetPost(Guid postId)
         {
-            var post = await _context.Post.Where(x => x.Id == postId)
+            var post = await _context.Post.Where(x => x.Id == postId && x.IsArchived == false)
                 .Include(x => x.Comments)
                 .FirstOrDefaultAsync();
 
@@ -62,7 +62,7 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     $"inappropriate parameters page or quantity");
 
-            return await _context.Post.Where(x => x.UserId == userId).AsQueryable().GetPaged(page, quantity);
+            return await _context.Post.Where(x => x.UserId == userId && x.IsArchived == false).AsQueryable().GetPaged(page, quantity);
         }
     }
 }

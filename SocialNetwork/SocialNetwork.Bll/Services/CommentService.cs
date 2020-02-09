@@ -54,7 +54,7 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<Comment> GetComment(Guid commentId)
         {
-            var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentId);
+            var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentId && x.IsArchived == false);
 
             if (comment == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, $"Comment {commentId} doesn't exist");
@@ -67,7 +67,7 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     "inappropriate parameters page or quantity");
 
-            return await _context.Comment.Where(x => x.PostId == postId).AsQueryable().GetPaged(page, quantity);
+            return await _context.Comment.Where(x => x.PostId == postId && x.IsArchived == false).AsQueryable().GetPaged(page, quantity);
         }
 
     }
