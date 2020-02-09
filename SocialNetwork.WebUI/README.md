@@ -1,4 +1,4 @@
-# YouTube Downloader UI
+# SocialNetwork.WebUI
 
 ## Project setup
 ```
