@@ -46,9 +46,7 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<Post> GetPost(Guid postId)
         {
-            var post = await _context.Post.Where(x => x.Id == postId && x.IsArchived == false)
-                .Include(x => x.Comments)
-                .FirstOrDefaultAsync();
+            var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == postId && x.IsArchived == false);
 
             if (post == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {postId} not found");
