@@ -46,9 +46,7 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<Post> GetPost(Guid postId)
         {
-            var post = await _context.Post.Where(x => x.Id == postId)
-                .Include(x => x.Comments)
-                .FirstOrDefaultAsync();
+            var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == postId && x.IsArchived == false);
 
             if (post == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {postId} not found");
@@ -62,7 +60,21 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     $"inappropriate parameters page or quantity");
 
-            return await _context.Post.Where(x => x.UserId == userId).AsQueryable().GetPaged(page, quantity);
+            return await _context.Post.Where(x => x.UserId == userId && x.IsArchived == false).AsQueryable().GetPaged(page, quantity);
+        }
+
+        public async Task DeletePost(Guid postId, Guid currentUserId)
+        {
+
+            var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == postId && x.UserId == currentUserId);
+            if (post == null)
+            {
+                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound,
+                    $"Post with {postId} post id not exist");
+            }
+            post.IsArchived = true;
+            _context.Post.Update(post);
+            await _context.SaveChangesAsync();
         }
     }
 }

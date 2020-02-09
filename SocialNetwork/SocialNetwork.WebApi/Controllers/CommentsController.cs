@@ -81,5 +81,15 @@ namespace SocialNetwork.WebApi.Controllers
             }
             return listOutReactionComment;
         }
+
+        [HttpDelete]
+        [Authorize(Policy = "ConfirmedUser")]
+        public async Task<IActionResult> DeleteComment([FromQuery]Guid commentId)
+        {
+            var currentUser = CurrentUser();
+            await _commentService.DeleteComment(commentId, currentUser);
+
+            return Ok();
+        }
     }
 }
