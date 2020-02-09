@@ -69,6 +69,12 @@ namespace SocialNetwork.Bll.Services
 
             return await _context.Comment.Where(x => x.PostId == postId && x.IsArchived == false).AsQueryable().GetPaged(page, quantity);
         }
-
+        public async Task DeleteComment(Guid commentId, Guid currentUserId)
+        {
+            var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentId && x.UserId == currentUserId);
+            comment.IsArchived = true;
+            _context.Comment.Update(comment);
+            await _context.SaveChangesAsync();
+        }
     }
 }

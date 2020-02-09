@@ -80,5 +80,15 @@ namespace SocialNetwork.WebApi.Controllers
             }
             return listOutReactionPost;
         }
+
+        [HttpDelete]
+        [Authorize(Policy = "ConfirmedUser")]
+        public async Task<IActionResult> DeletePost([FromQuery]Guid postId)
+        {
+            var currentUser = CurrentUser();
+            await _postService.DeletePost(postId, currentUser);
+
+            return Ok();
+        }
     }
 }

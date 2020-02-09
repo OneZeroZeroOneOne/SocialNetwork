@@ -62,5 +62,14 @@ namespace SocialNetwork.Bll.Services
 
             return await _context.Post.Where(x => x.UserId == userId && x.IsArchived == false).AsQueryable().GetPaged(page, quantity);
         }
+
+        public async Task DeletePost(Guid postId, Guid currentUserId)
+        {
+
+            var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == postId && x.UserId == currentUserId);
+            post.IsArchived = true;
+            _context.Post.Update(post);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -14,5 +14,7 @@ namespace SocialNetwork.Bll.Abstractions
         Task<Comment> EditComment(Comment commentModel, Guid editorUser);
 
         Task<PagedResult<Comment>> GetPageComments(Guid postId, int page, int quantity);
+
+        Task DeleteComment(Guid commentId, Guid userId);
     }
 }
