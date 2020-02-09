@@ -1,4 +1,5 @@
-﻿using ConfigCat.Client;
+﻿using System.Collections.Generic;
+using ConfigCat.Client;
 using SocialNetwork.Utilities.Abstractions;
 using System.Threading.Tasks;
 
@@ -10,11 +11,14 @@ namespace SocialNetwork.Utilities.ApiClients
 
         public ConfigSettingService(string apiKey)
         {
-            _configClient = new ConfigCatClient(new ManualPollConfiguration
+            _configClient = new ConfigCatClient(new LazyLoadConfiguration
             {
-                ApiKey = apiKey
+                ApiKey = apiKey, // <-- This is the actual API key for your Production environment
+                CacheTimeToLiveSeconds = 720 * 60,
             });
         }
+
+
 
         public async Task<T> GetSettingAsync<T>(string settingName, T defaultValue)
         {
@@ -34,6 +38,24 @@ namespace SocialNetwork.Utilities.ApiClients
         public T GetSetting<T>(string settingName, T defaultValue)
         {
             return _configClient.GetValue(settingName, defaultValue);
+        }
+
+        public async Task<List<Setting>> GetAllSettingsAsync()
+        {
+            var keys = await _configClient.GetAllKeysAsync();
+
+            var settings = new List<Setting>();
+
+            foreach (var key in keys)
+            {
+                settings.Add(new Setting()
+                {
+                    Key = key,
+                    Value = await _configClient.GetValueAsync(key, "non present")
+                });
+            }
+
+            return settings;
         }
     }
 }

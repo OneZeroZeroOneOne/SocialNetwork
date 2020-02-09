@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Utilities.Abstractions;
@@ -26,6 +27,13 @@ namespace SocialNetwork.Utilities.Controllers
         public async Task<string> GetSetting([FromQuery]string settingName)
         {
             return await _configSettingService.GetSettingAsync(settingName, "default value");
+        }
+
+        //[Authorize(Policy = "AdminUser")]
+        [HttpGet("All")]
+        public async Task<List<Setting>> GetSettingAll()
+        {
+            return await _configSettingService.GetAllSettingsAsync();
         }
     }
 }

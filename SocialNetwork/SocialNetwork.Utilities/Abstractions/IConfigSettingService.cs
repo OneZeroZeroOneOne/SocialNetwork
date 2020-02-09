@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.Utilities.Abstractions
 {
@@ -11,5 +12,7 @@ namespace SocialNetwork.Utilities.Abstractions
         public void ForceRefresh();
 
         public T GetSetting<T>(string settingName, T defaultValue);
+
+        public Task<List<Setting>> GetAllSettingsAsync();
     }
 }
