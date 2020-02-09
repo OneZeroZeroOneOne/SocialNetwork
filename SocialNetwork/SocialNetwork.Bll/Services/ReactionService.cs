@@ -86,7 +86,7 @@ namespace SocialNetwork.Bll.Services
             return _context.ReactionTypeComment.ToListAsync();
         }
 
-        public void DeleteReactionPost(Guid postId, Guid currentUserId)
+        public async Task DeleteReactionPost(Guid postId, Guid currentUserId)
         {
             ReactionPost reactionPost = new ReactionPost();
             reactionPost.PostId = postId;
@@ -95,7 +95,7 @@ namespace SocialNetwork.Bll.Services
             _context.SaveChanges();
         }
 
-        public void DeleteReactionComment(Guid commentId, Guid currentUserId)
+        public async Task DeleteReactionComment(Guid commentId, Guid currentUserId)
         {
             ReactionComment reactionComment = new ReactionComment();
             reactionComment.CommentId = commentId;

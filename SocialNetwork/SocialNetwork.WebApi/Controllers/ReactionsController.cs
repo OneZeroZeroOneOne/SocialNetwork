@@ -62,20 +62,20 @@ namespace SocialNetwork.WebApi.Controllers
 
         [HttpDelete, Route("Post", Name = "DeletePost")]
         [Authorize(Policy = "ConfirmedUser")]
-        public IActionResult DeletePost([FromQuery]Guid postId)
+        public async Task<IActionResult> DeletePost([FromQuery]Guid postId)
         {
             var currentUser = CurrentUser();
-            _reactionService.DeleteReactionPost(postId, currentUser);
+            await _reactionService.DeleteReactionPost(postId, currentUser);
 
             return Ok();
         }
 
         [HttpDelete, Route("Comment", Name = "DeleteComment")]
         [Authorize(Policy = "ConfirmedUser")]
-        public IActionResult DeleteComment([FromQuery]Guid commentId)
+        public async Task<IActionResult> DeleteComment([FromQuery]Guid commentId)
         {
             var currentUser = CurrentUser();
-            _reactionService.DeleteReactionComment(commentId, currentUser);
+            await _reactionService.DeleteReactionComment(commentId, currentUser);
 
             return Ok();
         }
