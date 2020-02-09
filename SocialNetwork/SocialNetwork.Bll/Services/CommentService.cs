@@ -72,6 +72,11 @@ namespace SocialNetwork.Bll.Services
         public async Task DeleteComment(Guid commentId, Guid currentUserId)
         {
             var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentId && x.UserId == currentUserId);
+            if (comment == null)
+            {
+                throw ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound,
+                    $"Comment with {commentId} comment id not exist");
+            }
             comment.IsArchived = true;
             _context.Comment.Update(comment);
             await _context.SaveChangesAsync();

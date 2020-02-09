@@ -67,6 +67,11 @@ namespace SocialNetwork.Bll.Services
         {
 
             var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == postId && x.UserId == currentUserId);
+            if (post == null)
+            {
+                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound,
+                    $"Post with {postId} post id not exist");
+            }
             post.IsArchived = true;
             _context.Post.Update(post);
             await _context.SaveChangesAsync();
