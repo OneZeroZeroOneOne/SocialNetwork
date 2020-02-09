@@ -54,6 +54,7 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             });
 
             var configClient = new ConfigSettingService("uFPXCG79WkAW0mKMuJg96Q/hg9Rwi9qLkSxddIpUEIxpA");
+            configClient.ForceRefresh();
 
             services.AddSingleton<IConfigSettingService>(configClient);
 
