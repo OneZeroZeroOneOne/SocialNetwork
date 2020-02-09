@@ -18,5 +18,10 @@ namespace SocialNetwork.Bll.Abstractions
 
         Task<List<ReactionTypePost>> GetReactionTypePost();
         Task<List<ReactionTypeComment>> GetReactionTypeComment();
+
+        void DeleteReactionPost(Guid postId, Guid currentUserId);
+        void DeleteReactionComment(Guid commentId, Guid currentUserId);
+
+
     }
 }

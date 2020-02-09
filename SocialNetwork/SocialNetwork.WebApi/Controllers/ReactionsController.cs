@@ -6,6 +6,7 @@ using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -57,6 +58,25 @@ namespace SocialNetwork.WebApi.Controllers
             var comment = await _reactionService.AddReactionComment(dataModel, currentUser);
 
             return _mapper.Map<ReactionComment, OutReactionCommentViewModel>(comment);
+        }
+
+        [HttpDelete, Route("DeletePost", Name = "DeletePost")]
+        [Authorize(Policy = "ConfirmedUser")]
+        public async Task<IActionResult> DeleteReactionPost([FromQuery]Guid reactionPostId)
+        {
+            var currentUser = CurrentUser();
+            _reactionService.DeleteReactionPost(reactionPostId, currentUser);
+
+            return Ok();
+        }
+
+        [HttpDelete, Route("DeleteComment", Name = "DeleteComment")]
+        [Authorize(Policy = "ConfirmedUser")]
+        public async Task<IActionResult> DeleteReactionComment([FromQuery]Guid reactionCommentId)
+        {
+            var currentUser = CurrentUser();
+            _reactionService.DeleteReactionComment(reactionCommentId, currentUser);
+            return Ok();
         }
     }
 }
