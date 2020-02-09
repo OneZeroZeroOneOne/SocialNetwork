@@ -14,6 +14,7 @@ namespace SocialNetwork.Dal.Models
         public DateTime Date { get; set; }
         public Guid UserId { get; set; }
         public Guid PostId { get; set; }
+        public bool IsArchived { get; set; }
 
         public virtual Post Post { get; set; }
         public virtual User User { get; set; }

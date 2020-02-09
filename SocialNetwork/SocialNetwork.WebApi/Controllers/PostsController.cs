@@ -62,6 +62,7 @@ namespace SocialNetwork.WebApi.Controllers
 
             return _mapper.Map<Post, OutPostViewModel>(insertedPost);
         }
+
         [HttpGet, Route("/PostPage/{userId}", Name = "GetPagePosts")]
         public async Task<PagedResult<Post>> GetPagePosts([FromRoute]Guid userId, [FromQuery]int page, [FromQuery]int quantity)
         {
@@ -78,6 +79,16 @@ namespace SocialNetwork.WebApi.Controllers
                 listOutReactionPost.Add(_mapper.Map<ReactionPost, OutReactionPostViewModel>(i));
             }
             return listOutReactionPost;
+        }
+
+        [HttpDelete]
+        [Authorize(Policy = "ConfirmedUser")]
+        public async Task<IActionResult> DeletePost([FromQuery]Guid postId)
+        {
+            var currentUser = CurrentUser();
+            await _postService.DeletePost(postId, currentUser);
+
+            return Ok();
         }
     }
 }
