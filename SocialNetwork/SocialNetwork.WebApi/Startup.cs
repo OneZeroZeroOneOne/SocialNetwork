@@ -134,8 +134,6 @@ namespace SocialNetwork.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.ConfigureElapsedTimeMiddleware();
-
             app.ConfigureCustomExceptionMiddleware();
 
             //app.UseHttpsRedirection();

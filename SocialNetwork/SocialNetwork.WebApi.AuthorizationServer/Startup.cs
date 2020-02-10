@@ -140,7 +140,6 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             app.UseCors(x => x.AllowAnyOrigin());
             app.UseCors(x => x.AllowAnyHeader());
 
-            app.ConfigureElapsedTimeMiddleware();
             app.ConfigureCustomExceptionMiddleware();
 
             app.UseStaticFiles();
