@@ -1,8 +1,13 @@
 <template>
   <div class="post">
-    <b-field label="Post Id">
-      <b-input v-model="postId"></b-input>
-      <b-button @click="loadPost">Load Post</b-button>
+    <b-field label="From Home">
+      <label>Post ID: {{postId}}</label>
+    </b-field>
+    <b-field label="From Backend" v-if="isLoading === false">
+      <label>Post Text: {{postObj.text}}</label>
+    </b-field>
+    <b-field label="From Backend" v-else>
+      <label>Post Text: LOADING</label>
     </b-field>
   </div>
 </template>
@@ -10,17 +15,22 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { PostService } from "@/services/PostService";
+import { IPost } from "@/models/responses/PostViewModel"
 
 @Component({})
-export default class Post extends Vue {
-  public postId: string = "";
+export default class PostComponent extends Vue {
+  @Prop() public postId!: string;
+  private postObj!: IPost; 
+  private isLoading: boolean = true;
   constructor() {
     super();
+    this.loadPost();
   }
 
   async loadPost(): Promise<void> {
-    let post = await PostService.getPost(this.postId);
-    console.log(post);
+    this.postObj = await PostService.getPost(this.postId);
+    this.isLoading = false;
+    console.log(this.postObj);
   }
 
 }
@@ -28,5 +38,4 @@ export default class Post extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
 </style>
