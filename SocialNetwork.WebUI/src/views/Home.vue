@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <PostComponent postId="84ef93b0-1a13-429b-82c3-4c72ee0deecb"/>
+    <PostComponent :postId="postId"/>
   </div>
 </template>
 
@@ -12,6 +12,16 @@ export default {
   name: 'home',
   components: {
     PostComponent
+  },
+  computed: {
+    // a computed getter
+    postId: function () {
+      // `this` points to the vm instance
+      console.log(this.$route)
+      if (this.$route.query.hasOwnProperty('id'))
+        return this.$route.query.id
+      return 'error'
+    }
   }
 }
 </script>
