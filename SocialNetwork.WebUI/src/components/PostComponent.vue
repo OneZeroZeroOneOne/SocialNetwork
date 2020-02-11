@@ -20,7 +20,10 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { PostService } from "@/services/PostService";
 import { IPost } from "@/models/responses/PostViewModel";
 import { ResponseState } from "@/models/enum/ResponseState";
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
 
+Vue.use(Buefy)
 @Component({})
 export default class PostComponent extends Vue {
   @Prop() public postId!: string;
@@ -49,4 +52,13 @@ export default class PostComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+  .post {
+    background-color: rgb(185, 182, 6);
+    width: 30%;
+    margin: auto;
+    border: 4px ridge;
+    border-color: rgb(165, 162, 9);
+    border-width: 25;
+
+  }
 </style>
