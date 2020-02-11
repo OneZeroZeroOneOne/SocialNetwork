@@ -6,10 +6,10 @@
 
 <script>
 // @ is an alias to /src
-import PostComponent from '@/components/Post.vue'
+import PostComponent from '@/components/PostComponent.vue'
 
 export default {
-  name: 'home',
+  name: 'PostView',
   components: {
     PostComponent
   },

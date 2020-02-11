@@ -3,11 +3,14 @@
     <b-field label="From Home">
       <label>Post ID: {{postId}}</label>
     </b-field>
-    <b-field label="From Backend" v-if="isLoading === false">
+    <b-field label="From Backend" v-if="requestStatus === 1">
       <label>Post Text: {{postObj.text}}</label>
     </b-field>
-    <b-field label="From Backend" v-else>
+    <b-field label="From Backend" v-if="requestStatus === 0">
       <label>Post Text: LOADING</label>
+    </b-field>
+    <b-field label="From Backend" v-if="requestStatus === 2">
+      <label>Post Text: error</label>
     </b-field>
   </div>
 </template>
@@ -15,21 +18,29 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { PostService } from "@/services/PostService";
-import { IPost } from "@/models/responses/PostViewModel"
+import { IPost } from "@/models/responses/PostViewModel";
+import { ResponseState } from "@/models/enum/ResponseState";
 
 @Component({})
 export default class PostComponent extends Vue {
   @Prop() public postId!: string;
   private postObj!: IPost; 
-  private isLoading: boolean = true;
+  private requestStatus: ResponseState = ResponseState.loading;
+
   constructor() {
     super();
     this.loadPost();
   }
 
   async loadPost(): Promise<void> {
-    this.postObj = await PostService.getPost(this.postId);
-    this.isLoading = false;
+    PostService.getPost(this.postId)
+      .then(response => {
+        this.postObj = response;
+        this.requestStatus = ResponseState.success;
+      })
+      .catch(error => {
+        this.requestStatus = ResponseState.fail;
+      });
     console.log(this.postObj);
   }
 
