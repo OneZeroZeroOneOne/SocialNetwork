@@ -3,6 +3,9 @@
   <div class="comment-body" v-if="requestStatus === 1">
     <div class="comment-header"> 
       HEADER
+      <div class="comment-header-time">
+        {{commentObj.date}}
+      </div>
     </div>
     <div class="comment-content">
       {{commentObj.text}}
@@ -93,6 +96,10 @@ $text-color: #ccc;
     border-bottom-color: $comment-header-border-color;
     padding-left: 10px;
     padding-top: 5px;
+    .comment-header-time {
+      float: right;
+      margin-right: 10px;
+    }
   }
   .comment-content {
     max-width: calc(100% - 10px);

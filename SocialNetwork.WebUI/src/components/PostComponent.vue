@@ -34,7 +34,8 @@
       </div>
     </div>
       <ul id="comments">
-        <li v-for="item in commentObjs" v-bind:key="item.id">
+        <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
+          {{index}}
           <CommentComponent :commentObj="item"/>
         </li>
       </ul>
@@ -47,6 +48,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import { Guid } from "@/utilities/guid";
 import CommentComponent from "./CommentComponent.vue";
 import { PostService } from "@/services/PostService";
 import { CommentService } from "@/services/CommentService";
@@ -67,10 +69,13 @@ export default class PostComponent extends Vue {
   private postObj!: IPost; 
 
   private commentObjs: IComment[] = [];
+  private commentIds: Guid[] = [];
   private currentPage: number = 1;
 
   private requestPostStatus: ResponseState = ResponseState.loading;
   private requestCommentsStatus: ResponseState = ResponseState.loading;
+
+  private scrolledToBottom: boolean = false;
 
   constructor() {
     super();
@@ -79,6 +84,15 @@ export default class PostComponent extends Vue {
     Nprogress.set(0.5)
     this.loadComments();
     Nprogress.done();
+
+    window.onscroll = () => {
+      let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight === document.documentElement.offsetHeight
+      if (bottomOfWindow) {
+        this.scrolledToBottom = true // replace it with your code
+        console.log("scrolled to bottom")
+        this.loadComments()
+      }
+    }
   }
   
 
@@ -97,15 +111,24 @@ export default class PostComponent extends Vue {
 
   async loadComments()
   {
+    console.log("loading comments")
     this.requestCommentsStatus = ResponseState.loading;
 
-    CommentService.getCommentForPost(this.postId, this.currentPage, 3)
+    CommentService.getCommentForPost(this.postId, this.currentPage, 6)
       .then(response => {
-        console.log(response.results)
-        console.log(this.commentObjs)
-        this.commentObjs = this.commentObjs.concat(response.results);
+        if (response.currentPage < response.pageCount)
+        {
+          this.currentPage += 1;
+        }
         this.requestCommentsStatus = ResponseState.success;
-        this.currentPage += 1;
+        response.results.forEach(x => {
+          if (this.commentIds.indexOf(x.id) === -1)
+          {
+            this.commentIds.push(x.id);
+            this.commentObjs.push(x);
+          }
+        })
+        console.log(this.commentIds);
         console.log(this.commentObjs)
       })
       .catch(error => {
