@@ -33,11 +33,14 @@
         ERROR
       </div>
     </div>
-      <ul id="comments" v-if="requestCommentsStatus === 1">
-        <li v-for="item in commentObjs.results" v-bind:key="item.id">
+      <ul id="comments">
+        <li v-for="item in commentObjs" v-bind:key="item.id">
           <CommentComponent :commentObj="item"/>
         </li>
       </ul>
+    <div class="footer-end">
+
+    </div>
   </div>
 
 </template>
@@ -51,7 +54,8 @@ import { IPost } from "@/models/responses/PostViewModel";
 import { ResponseState } from "@/models/enum/ResponseState";
 import { IPagedResult } from '../models/responses/PagedResult';
 import { IComment } from '../models/responses/CommentViewModel';
-
+import Nprogress from "nprogress"
+import 'nprogress/nprogress.css';
 
 @Component({
   components: { 
@@ -62,19 +66,24 @@ export default class PostComponent extends Vue {
   @Prop() public postId!: string;
   private postObj!: IPost; 
 
-  private commentObjs!: IPagedResult<IComment>;
+  private commentObjs: IComment[] = [];
+  private currentPage: number = 1;
 
   private requestPostStatus: ResponseState = ResponseState.loading;
   private requestCommentsStatus: ResponseState = ResponseState.loading;
 
   constructor() {
     super();
+    Nprogress.start()
     this.loadPost();
+    Nprogress.set(0.5)
+    this.loadComments();
+    Nprogress.done();
   }
+  
 
   async loadPost(): Promise<void> {
     this.requestPostStatus = ResponseState.loading;
-    this.requestCommentsStatus = ResponseState.loading;
 
     PostService.getPost(this.postId)
       .then(response => {
@@ -84,12 +93,19 @@ export default class PostComponent extends Vue {
       .catch(error => {
         this.requestPostStatus = ResponseState.fail;
       });
-    
+  }
 
-    CommentService.getCommentForPost(this.postId)
+  async loadComments()
+  {
+    this.requestCommentsStatus = ResponseState.loading;
+
+    CommentService.getCommentForPost(this.postId, this.currentPage, 3)
       .then(response => {
-        this.commentObjs = response;
+        console.log(response.results)
+        console.log(this.commentObjs)
+        this.commentObjs = this.commentObjs.concat(response.results);
         this.requestCommentsStatus = ResponseState.success;
+        this.currentPage += 1;
         console.log(this.commentObjs)
       })
       .catch(error => {
