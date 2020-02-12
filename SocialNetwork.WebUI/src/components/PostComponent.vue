@@ -35,7 +35,6 @@
     </div>
       <ul id="comments">
         <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
-          {{index}}
           <CommentComponent :commentObj="item"/>
         </li>
       </ul>
