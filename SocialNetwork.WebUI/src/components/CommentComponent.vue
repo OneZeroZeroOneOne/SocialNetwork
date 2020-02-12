@@ -65,14 +65,23 @@ $comment-footer-height: 25px;
 $comment-offset-left: 10px;
 $comment-offset-between: 6px;
 
+$comment-body-color: #192734;
+$comment-body-border-color: rgb(56, 68, 77);
+$comment-header-border-color: cornflowerblue;
+$comment-footer-border-color: rgb(76, 96, 116);
+
+$header-text-color: #6995c5;
+$text-color: #ccc;
+
 .comment {
-  color: #e1f4f3;
+  color: $text-color;
   margin: 0 0px $comment-offset-between $comment-offset-left;
-  background-color: #5b5656;
+  background-color: $comment-body-color;
   width: 80%;
   min-height: 100px;
   border: 2px solid;
-  border-color: #d18169ea;
+  border-left-width: 4px;
+  border-color: $comment-body-border-color;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
 
@@ -81,7 +90,7 @@ $comment-offset-between: 6px;
     min-height: $comment-header-height;
     border-bottom-style: solid;
     border-bottom-width: 2px;
-    border-bottom-color: cornflowerblue;
+    border-bottom-color: $comment-header-border-color;
     padding-left: 10px;
     padding-top: 5px;
   }
@@ -96,7 +105,7 @@ $comment-offset-between: 6px;
     min-height: $comment-footer-height;
     border-top-style: solid;
     border-top-width: 2px;
-    border-top-color: cornflowerblue;
+    border-top-color: $comment-footer-border-color;
   }
 }
 </style>

@@ -122,15 +122,22 @@ $post-header-height: 25px;
 $post-content-height: 100px;
 $post-footer-height: 45px;
 
+$post-body-color: rgb(21, 32, 43);
+$post-body-border-color: rgb(56, 68, 77);
+$post-header-border-color: cornflowerblue;
+
+$header-text-color: #6995c5;
+$text-color: #ccc;
+
 .post-body {
   position: relative;
-  color: #eff8f8;
-  background-color: #706c61;
+  color: $text-color;
+  background-color: $post-body-color;
   width: 80%;
   min-height: 150px;
   height: auto;
   border: 2px solid;
-  border-color: #801336;
+  border-color: $post-body-border-color;
   border-bottom-width: 4px; 
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -138,11 +145,12 @@ $post-footer-height: 45px;
   margin: 20px;
 
   .post-header {
-    max-width: calc(100% - 10px);
+    max-width: calc(100% - 50px);
     min-height: $post-header-height;
+    color: $header-text-color;
     border-bottom-style: solid;
     border-bottom-width: 2px;
-    border-bottom-color: cornflowerblue;
+    border-bottom-color: $post-header-border-color;
     padding-left: 10px;
     padding-top: 5px;
   }
