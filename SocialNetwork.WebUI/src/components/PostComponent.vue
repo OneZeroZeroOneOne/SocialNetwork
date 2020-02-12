@@ -113,6 +113,7 @@ export default class PostComponent extends Vue {
   {
     console.log("loading comments")
     this.requestCommentsStatus = ResponseState.loading;
+    Nprogress.start()
 
     CommentService.getCommentForPost(this.postId, this.currentPage, 6)
       .then(response => {
@@ -128,11 +129,13 @@ export default class PostComponent extends Vue {
             this.commentObjs.push(x);
           }
         })
+        Nprogress.done();
         console.log(this.commentIds);
         console.log(this.commentObjs)
       })
       .catch(error => {
         this.requestCommentsStatus = ResponseState.fail;
+        Nprogress.done();
       })
   }
 
