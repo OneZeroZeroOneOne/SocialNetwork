@@ -93,6 +93,8 @@ export default class PostComponent extends Vue {
         this.throttleLoadComments();
       }
     }
+
+    setInterval(() => this.loadComments(), 30000);
   }
   
   throttleLoadComments = _.throttle(() => this.loadComments(), 2000);
