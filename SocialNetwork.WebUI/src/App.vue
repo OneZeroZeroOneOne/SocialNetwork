@@ -6,4 +6,7 @@
 </template>
 
 <style lang="scss">
+html {
+  background: url('assets/background-tiled-memphis.png')
+}
 </style>
