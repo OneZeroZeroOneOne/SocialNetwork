@@ -57,7 +57,7 @@ import { ResponseState } from "@/models/enum/ResponseState";
 import { IPagedResult } from '../models/responses/PagedResult';
 import { IComment } from '../models/responses/CommentViewModel';
 import Nprogress from "nprogress"
-import 'nprogress/nprogress.css';
+import _ from 'lodash'
 
 @Component({
   components: { 
@@ -90,11 +90,12 @@ export default class PostComponent extends Vue {
       if (bottomOfWindow) {
         this.scrolledToBottom = true // replace it with your code
         console.log("scrolled to bottom")
-        this.loadComments()
+        this.throttleLoadComments();
       }
     }
   }
   
+  throttleLoadComments = _.throttle(() => this.loadComments(), 2000);
 
   async loadPost(): Promise<void> {
     this.requestPostStatus = ResponseState.loading;
@@ -122,16 +123,25 @@ export default class PostComponent extends Vue {
           this.currentPage += 1;
         }
         this.requestCommentsStatus = ResponseState.success;
+        let newComCount: number = 0;
         response.results.forEach(x => {
           if (this.commentIds.indexOf(x.id) === -1)
           {
             this.commentIds.push(x.id);
             this.commentObjs.push(x);
+            newComCount += 1;
           }
         })
         Nprogress.done();
         console.log(this.commentIds);
         console.log(this.commentObjs)
+        this.$notify({
+          group: 'foo',
+          title: 'Loaded comments',
+          text: newComCount === 0 ? 
+            'No new comments' : 
+            'Loaded ' + newComCount.toString() + " comments",
+        });
       })
       .catch(error => {
         this.requestCommentsStatus = ResponseState.fail;
