@@ -1,15 +1,39 @@
 <template>
-  <div class="post">
-    <b-field label="From Backend" v-if="requestStatus === 1">
-      <label>Post Text: {{commentObj.text}}</label>
-    </b-field>
-    <b-field label="From Backend" v-if="requestStatus === 0">
-      <label>Post Text: LOADING</label>
-    </b-field>
-    <b-field label="From Backend" v-if="requestStatus === 2">
-      <label>Post Text: error</label>
-    </b-field>
+<div class="comment">
+  <div class="comment-body" v-if="requestStatus === 1">
+    <div class="comment-header"> 
+      HEADER
+    </div>
+    <div class="comment-content">
+      {{commentObj.text}}
+    </div>
+    <div class="comment-footer">
+      Footer
+    </div>
   </div>
+   <div class="comment-body" v-if="requestStatus === 0">
+    <div class="comment-header"> 
+      LOADING
+    </div>
+    <div class="comment-content">
+      LOADING
+    </div>
+    <div class="comment-footer">
+      LOADING
+    </div>
+  </div>
+   <div class="comment-body" v-if="requestStatus === 2">
+    <div class="comment-header"> 
+      ERROR
+    </div>
+    <div class="comment-content">
+      ERROR
+    </div>
+    <div class="comment-footer">
+      ERROR
+    </div>
+  </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -21,52 +45,58 @@ import { ResponseState } from "@/models/enum/ResponseState";
 import { IComment } from '../models/responses/CommentViewModel';
 
 @Component({})
-export default class PostComponent extends Vue {
+export default class CommentComponent extends Vue {
   @Prop() public commentObj!: IComment;
   private requestStatus: ResponseState = ResponseState.loading;
 
   constructor() {
     super();
-    this.loadPost();
     this.requestStatus = ResponseState.success;
   }
-
-  async loadPost(): Promise<void> {
-
-    /*PostService.getPost(this.postId)
-      .then(response => {
-        this.postObj = response;
-        this.requestStatus = ResponseState.success;
-      })
-      .catch(error => {
-        this.requestStatus = ResponseState.fail;
-      });
-    
-    CommentService.getCommentForPost(this.postId)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    console.log(this.postObj);*/
-  }
-
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .post {
-    background-color: rgb(185, 182, 6);
-    width: 80%;
-    min-height: 150px;
-    height: auto;
-    border: 4px ridge;
-    border-color: rgb(165, 162, 9);
-    border-width: 25;
+$comment-header-height: 25px;
+$comment-content-height: 75px;
+$comment-footer-height: 25px;
 
-    float: left;
-    margin: 20px;
+$comment-offset-left: 10px;
+$comment-offset-between: 6px;
+
+.comment {
+  color: #e1f4f3;
+  margin: 0 0px $comment-offset-between $comment-offset-left;
+  background-color: #5b5656;
+  width: 80%;
+  min-height: 100px;
+  border: 2px solid;
+  border-color: #4d4646;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+
+  .comment-header {
+    max-width: 100%;
+    min-height: $comment-header-height;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: cornflowerblue;
+    padding-left: 10px;
+    padding-top: 5px;
   }
+  .comment-content {
+    max-width: calc(100% - 10px);
+    min-height: $comment-content-height;
+    padding-left: 10px;
+    padding-top: 5px;
+  }
+  .comment-footer {
+    padding-left: 10px;
+    min-height: $comment-footer-height;
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: cornflowerblue;
+  }
+}
 </style>

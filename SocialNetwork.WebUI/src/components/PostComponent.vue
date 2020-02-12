@@ -1,28 +1,50 @@
 <template>
-  
   <div class="post">
-    <div class="post-body">
-    <b-field label="From Backend" v-if="requestPostStatus === 1">
-      <label>Post Text: {{postObj.text}}</label>
-    </b-field>
-    <b-field label="From Backend" v-if="requestPostStatus === 0">
-      <label>Post Text: LOADING</label>
-    </b-field>
-    <b-field label="From Backend" v-if="requestPostStatus === 2">
-      <label>Post Text: error</label>
-    </b-field>
+    <div class="post-body" v-if="requestPostStatus === 1">
+      <div class="post-header">
+        Header
+      </div>
+      <div class="post-content" >
+        Post Text: {{postObj.text}}
+      </div>
+      <div class="post-footer">
+        Footer
+      </div>
     </div>
-    <ul id="comments" v-if="requestCommentsStatus === 1">
-    <li class="comment" v-for="item in commentObjs.results" v-bind:key="item.id">
-      {{ item.text }}
-    </li>
-  </ul>
+    <div class="post-body" v-if="requestPostStatus === 0">
+      <div class="post-header">
+        loading
+      </div>
+      <div class="post-content" >
+        loading
+      </div>
+      <div class="post-footer">
+        loading
+      </div>
+    </div>
+    <div class="post-body" v-if="requestPostStatus === 2">
+      <div class="post-header">
+        ERROR
+      </div>
+      <div class="post-content" >
+        ERROR
+      </div>
+      <div class="post-footer">
+        ERROR
+      </div>
+    </div>
+      <ul id="comments" v-if="requestCommentsStatus === 1">
+        <li v-for="item in commentObjs.results" v-bind:key="item.id">
+          <CommentComponent :commentObj="item"/>
+        </li>
+      </ul>
   </div>
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import CommentComponent from "./CommentComponent.vue";
 import { PostService } from "@/services/PostService";
 import { CommentService } from "@/services/CommentService";
 import { IPost } from "@/models/responses/PostViewModel";
@@ -30,7 +52,12 @@ import { ResponseState } from "@/models/enum/ResponseState";
 import { IPagedResult } from '../models/responses/PagedResult';
 import { IComment } from '../models/responses/CommentViewModel';
 
-@Component({})
+
+@Component({
+  components: { 
+    CommentComponent
+  }
+})
 export default class PostComponent extends Vue {
   @Prop() public postId!: string;
   private postObj!: IPost; 
@@ -75,36 +102,53 @@ export default class PostComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .post-body {
+$post-header-height: 25px;
+$post-content-height: 100px;
+$post-footer-height: 45px;
+
+.post-body {
+  position: relative;
+  color: #eff8f8;
+  background-color: #706c61;
+  width: 80%;
+  min-height: 150px;
+  height: auto;
+  border: 2px solid;
+  border-color: #333333;
+  border-bottom-width: 4px; 
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  float: left;
+  margin: 20px;
+
+  .post-header {
+    max-width: calc(100% - 10px);
+    min-height: $post-header-height;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: cornflowerblue;
     padding-left: 10px;
     padding-top: 5px;
-    background-color: rgb(185, 182, 6);
-    width: 80%;
-    min-height: 150px;
-    height: auto;
-    border: 4px ridge;
-    border-color: rgb(165, 162, 9);
-    border-width: 25;
-
-    float: left;
-    margin: 20px;
   }
-
-  #comments {
-    width: 80%;
-    float: left;
-    margin-left: 40px;
-  }
-  .comment {
+  .post-content {
+    max-width: calc(100% - 10px);
+    min-height: $post-content-height;
     padding-left: 10px;
     padding-top: 5px;
-    margin: 0 0 5px 0;
-    background-color: rgb(185, 182, 6);
-    width: 80%;
-    min-height: 100px;
-    height: auto;
-    border: 4px ridge;
-    border-color: rgb(165, 162, 9);
-    border-width: 25;
   }
+  .post-footer {
+    padding-left: 10px;
+    min-height: $post-footer-height;
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: cornflowerblue;
+  }
+
+}
+
+#comments {
+  width: 80%;
+  float: left;
+  margin-left: 40px;
+}
 </style>
