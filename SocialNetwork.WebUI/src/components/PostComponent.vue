@@ -114,7 +114,7 @@ $post-footer-height: 45px;
   min-height: 150px;
   height: auto;
   border: 2px solid;
-  border-color: #333333;
+  border-color: #801336;
   border-bottom-width: 4px; 
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;

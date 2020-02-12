@@ -72,7 +72,7 @@ $comment-offset-between: 6px;
   width: 80%;
   min-height: 100px;
   border: 2px solid;
-  border-color: #4d4646;
+  border-color: #d18169ea;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
 
