@@ -1,14 +1,12 @@
 <template>
-  <div class="home">
+  <div class="post-view">
     <PostComponent :postId="postId()"/>
     <ul id="comments">
       <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
-        <CommentComponent :commentObj="item" :commentNum="index"/>
+        <CommentComponent :commentObj="item" :commentNum="index+1"/>
       </li>
     </ul>
-    <div class="footer-end">
-
-    </div>
+    <div class="footer-end">Footer</div>
   </div>
 </template>
 
@@ -113,5 +111,6 @@ export default class PostView extends Vue {
   width: 80%;
   float: left;
   margin-left: 40px;
+  padding-bottom: 2.5rem;
 }
 </style>
