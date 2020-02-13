@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SocialNetwork.Dal.Models
 {
-    public partial class Comment
+    public partial class Comment : Sortable
     {
         public Comment()
         {
@@ -11,7 +11,6 @@ namespace SocialNetwork.Dal.Models
         }
         public Guid Id { get; set; }
         public string Text { get; set; }
-        public DateTime Date { get; set; }
         public Guid UserId { get; set; }
         public Guid PostId { get; set; }
         public bool IsArchived { get; set; }

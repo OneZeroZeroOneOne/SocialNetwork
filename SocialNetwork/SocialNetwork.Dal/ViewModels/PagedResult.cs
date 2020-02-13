@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.Dal.ViewModels
 {
@@ -15,7 +16,7 @@ namespace SocialNetwork.Dal.ViewModels
         public int LastRowOnPage => Math.Min(CurrentPage * PageSize, RowCount);
     }
 
-    public class PagedResult<T> : PagedResultBase where T : class
+    public class PagedResult<T> : PagedResultBase where T : Sortable
     {
         public IList<T> Results { get; set; }
 

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.Dal.Extensions
 {
     public static class PagedQuery
     {
         public static async Task<PagedResult<T>> GetPaged<T>(this IQueryable<T> query
-                                                            ,int page, int pageSize) where T : class
+                                                            ,int page, int pageSize) where T : Sortable
         {
             var result = new PagedResult<T>
             {
@@ -24,7 +23,7 @@ namespace SocialNetwork.Dal.Extensions
             result.PageCount = (int)Math.Ceiling(pageCount);
 
             var skip = (page - 1) * pageSize;
-            result.Results = await query.Skip(skip).Take(pageSize).ToListAsync();
+            result.Results = await query.OrderBy(x => x.Date).Skip(skip).Take(pageSize).ToListAsync();
 
             return result;
         }

@@ -9,6 +9,7 @@ using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SocialNetwork.Dal.Context;
 
@@ -73,12 +74,7 @@ namespace SocialNetwork.WebApi.Controllers
         public async Task<List<OutReactionPostViewModel>> Reaction([FromRoute]Guid postId)
         {
             List<ReactionPost> listReactionPost = await _reactionService.GetReactionPost(postId);
-            List<OutReactionPostViewModel> listOutReactionPost = new List<OutReactionPostViewModel>();
-            foreach (ReactionPost i in listReactionPost)
-            {
-                listOutReactionPost.Add(_mapper.Map<ReactionPost, OutReactionPostViewModel>(i));
-            }
-            return listOutReactionPost;
+            return listReactionPost.Select(i => _mapper.Map<ReactionPost, OutReactionPostViewModel>(i)).ToList();
         }
 
         [HttpDelete]
