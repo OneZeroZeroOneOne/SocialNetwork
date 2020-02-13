@@ -2,8 +2,8 @@
   <div class="home">
     <PostComponent :postId="postId()"/>
     <ul id="comments">
-      <li v-for="item in commentObjs" v-bind:key="item.id">
-        <CommentComponent :commentObj="item"/>
+      <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
+        <CommentComponent :commentObj="item" :commentNum="index"/>
       </li>
     </ul>
     <div class="footer-end">

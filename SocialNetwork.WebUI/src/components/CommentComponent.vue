@@ -2,7 +2,7 @@
 <div class="comment">
   <div class="comment-body" v-if="requestStatus === 1">
     <div class="comment-header"> 
-      HEADER
+      #{{commentNum}}
       <div class="comment-header-time">
         {{commentObj.date}}
       </div>
@@ -50,6 +50,7 @@ import { IComment } from '../models/responses/CommentViewModel';
 @Component({})
 export default class CommentComponent extends Vue {
   @Prop() public commentObj!: IComment;
+  @Prop() public commentNum!: number;
   private requestStatus: ResponseState = ResponseState.loading;
 
   constructor() {
@@ -72,6 +73,7 @@ $comment-body-color: #192734;
 $comment-body-border-color: rgb(56, 68, 77);
 $comment-header-border-color: cornflowerblue;
 $comment-footer-border-color: rgb(76, 96, 116);
+$comment-number-header-color: #cc2c11;
 
 $header-text-color: #6995c5;
 $text-color: #ccc;
@@ -96,7 +98,9 @@ $text-color: #ccc;
     border-bottom-color: $comment-header-border-color;
     padding-left: 10px;
     padding-top: 5px;
+    color: $comment-number-header-color;
     .comment-header-time {
+      color: $text-color;
       float: right;
       margin-right: 10px;
     }
