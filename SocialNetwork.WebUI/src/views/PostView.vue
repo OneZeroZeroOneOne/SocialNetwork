@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts">
-// @ is an alias to /src
 import { Component, Prop, Vue } from "vue-property-decorator";
 import PostComponent from '@/components/PostComponent.vue'
 import CommentComponent from "@/components/CommentComponent.vue";
