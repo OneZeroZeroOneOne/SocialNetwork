@@ -21,12 +21,12 @@ jobs:
     
     - name: ls
       working-directory: ./SocialNetwork.WebUI
-    - run: ls
+      run: ls
       
     - name: install dependencies
       working-directory: ./SocialNetwork.WebUI
-    - run: npm install  
+      run: npm install  
       
     - name: build 
       working-directory: ./SocialNetwork.WebUI
-    - run: npm run build
+      run: npm run build
