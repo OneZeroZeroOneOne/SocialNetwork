@@ -13,7 +13,7 @@ namespace SocialNetwork.Bll.Abstractions
 
         Task<Post> GetPost(Guid postId);
 
-        Task<PagedResult<Post>> GetPagePosts(Guid userId, int page, int quantity);
+        Task<PagedResult<Post>> GetPagePosts(int page, int quantity);
 
         Task DeletePost(Guid postId, Guid userId);
     }

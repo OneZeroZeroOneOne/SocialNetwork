@@ -64,10 +64,10 @@ namespace SocialNetwork.WebApi.Controllers
             return _mapper.Map<Post, OutPostViewModel>(insertedPost);
         }
 
-        [HttpGet, Route("/PostPage/{userId}", Name = "GetPagePosts")]
-        public async Task<PagedResult<Post>> GetPagePosts([FromRoute]Guid userId, [FromQuery]int page, [FromQuery]int quantity)
+        [HttpGet, Route("/Page/{userId}", Name = "GetPagePosts")]
+        public async Task<PagedResult<Post>> GetPagePosts([FromQuery]int page, [FromQuery]int quantity)
         {
-            return await _postService.GetPagePosts(userId, page, quantity);
+            return await _postService.GetPagePosts(page, quantity);
         }
 
         [HttpGet, Route("{postId}/Reactions", Name = "GetPostReactions")]

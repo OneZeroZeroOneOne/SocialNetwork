@@ -60,7 +60,7 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     $"inappropriate parameters page or quantity");
 
-            return await _context.Post.Where(x => x.UserId == userId && x.IsArchived == false).AsQueryable().GetPaged(page, quantity);
+            return await _context.Post.Where(x => x.IsArchived == false).AsQueryable().GetPaged(page, quantity);
         }
 
         public async Task DeletePost(Guid postId, Guid currentUserId)
