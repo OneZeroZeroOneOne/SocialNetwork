@@ -18,7 +18,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.5.0
-    - run: cd /home/runner/work/SocialNetwork/SocialNetwork/SocialNetwork.WebUI
+    
+    - name: ls
+      working-directory: ./SocialNetwork.WebUI
     - run: ls
     - run: npm install  
     - run: npm run build
