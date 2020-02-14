@@ -42,5 +42,5 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        source: "SocialNetwork/SocialNetwork.WebUI/dist"
+        source: "./SocialNetwork/SocialNetwork.WebUI/dist/*"
         target: "/var/www/socapp"
