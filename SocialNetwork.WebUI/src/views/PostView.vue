@@ -6,7 +6,6 @@
         <CommentComponent :commentObj="item" :commentNum="index+1"/>
       </li>
     </ul>
-    <div class="footer-end">Footer</div>
   </div>
 </template>
 
@@ -40,14 +39,14 @@ export default class PostView extends Vue {
 
   constructor() {
     super();
-    window.onscroll = () => {
+    /*window.onscroll = () => {
       let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 100
       if (bottomOfWindow) {
         this.scrolledToBottom = true // replace it with your code
         console.log("scrolled to bottom")
         this.throttleLoadComments();
       }
-    }
+    }*/
 
     setInterval(() => this.loadComments(), 30000);
 
