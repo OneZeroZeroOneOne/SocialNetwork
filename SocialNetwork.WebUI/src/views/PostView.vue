@@ -38,23 +38,16 @@ export default class PostView extends Vue {
   private currentPage: number = 1;
   private postObj!: IPost; 
 
-  private scrolledToBottom: boolean = false;
-
   constructor() {
     super();
-    /*window.onscroll = () => {
-      let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 100
-      if (bottomOfWindow) {
-        this.scrolledToBottom = true // replace it with your code
-        console.log("scrolled to bottom")
-        this.throttleLoadComments();
-      }
-    }*/
-
-    setInterval(() => this.loadComments(), 30000);
+    setInterval(() => this.loadComments(), 1000 * 30); //every 30 sec update
 
     this.loadComments()
     this.loadPost()
+
+    this.$root.$on('footerInView', () => {
+      this.throttleLoadComments();
+    })
   }
 
   throttleLoadComments = _.throttle(() => this.loadComments(), 2000);

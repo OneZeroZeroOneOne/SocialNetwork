@@ -29,7 +29,7 @@ export default class FooterComponent extends Vue {
     //console.log(e.target.rect) // element.getBoundingClientRect() result
     if(e.type == "enter")//(e.percentInView >= 0.8 && e.percentTop >= 0.8 && e.percentCenter >= 0.8 && e.scrollPercent >= 0.8)
     {
-      console.log("IN VIEW")
+      this.$root.$emit('footerInView');
     }
   }
 }
