@@ -11,7 +11,7 @@ export class PostService {
         return (await this.postsAxios.get<IPost>(url)).data;
     }
     static async getNewPosts(user_id: string, page: string, quantity: string): Promise<IPagedResult<IPost>> {
-        let url = 'http://82.146.37.127/social/PostPage/'+ user_id+ "?page=" + page + "?page=" + quantity;
+        let url = 'http://82.146.37.127/social/Post/Page/' + "?page=" + page + "?page=" + quantity;
         return (await this.postsAxios.get<IPagedResult<IPost>>(url)).data;
     }
 }
