@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Security", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.WebApi.AuthorizationServer", "SocialNetwork.WebApi.AuthorizationServer\SocialNetwork.WebApi.AuthorizationServer.csproj", "{492062A2-E7D0-4828-A93B-A09AD9AEE901}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.WebApi.Group", "SocialNetwork.WebApi.Group\SocialNetwork.WebApi.Group.csproj", "{235B3CED-D703-4E64-A5BA-1DAA9B0D8C93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.WebApi.Group", "SocialNetwork.WebApi.Group\SocialNetwork.WebApi.Group.csproj", "{235B3CED-D703-4E64-A5BA-1DAA9B0D8C93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.WebApi.Attachment", "SocialNetwork.WebApi.Attachment\SocialNetwork.WebApi.Attachment.csproj", "{F1157793-4CFB-4963-91C6-50B8986C06CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,14 @@ Global
 		{235B3CED-D703-4E64-A5BA-1DAA9B0D8C93}.Release|Any CPU.Build.0 = Release|Any CPU
 		{235B3CED-D703-4E64-A5BA-1DAA9B0D8C93}.Release|x86.ActiveCfg = Release|Any CPU
 		{235B3CED-D703-4E64-A5BA-1DAA9B0D8C93}.Release|x86.Build.0 = Release|Any CPU
+		{F1157793-4CFB-4963-91C6-50B8986C06CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1157793-4CFB-4963-91C6-50B8986C06CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1157793-4CFB-4963-91C6-50B8986C06CF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F1157793-4CFB-4963-91C6-50B8986C06CF}.Debug|x86.Build.0 = Debug|Any CPU
+		{F1157793-4CFB-4963-91C6-50B8986C06CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1157793-4CFB-4963-91C6-50B8986C06CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1157793-4CFB-4963-91C6-50B8986C06CF}.Release|x86.ActiveCfg = Release|Any CPU
+		{F1157793-4CFB-4963-91C6-50B8986C06CF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
