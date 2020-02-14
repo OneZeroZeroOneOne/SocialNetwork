@@ -172,3 +172,42 @@ CREATE TABLE public."ReactionComment" (
 	CONSTRAINT "ReactionComment_fk1" FOREIGN KEY ("UserId") REFERENCES "User"("Id"),
 	CONSTRAINT "ReactionToComment_fk0" FOREIGN KEY ("CommentId") REFERENCES "Comment"("Id")
 );
+
+
+-- Drop table
+
+-- DROP TABLE public."Attachment";
+
+CREATE TABLE public."Attachment" (
+	"Id" uuid NOT NULL,
+	"ContentType" text NOT NULL,
+	"Path" text NOT NULL,
+	"CreateDateTime" date NOT NULL,
+	CONSTRAINT "Attachment_pkey" PRIMARY KEY ("Id")
+);
+
+-- Drop table
+
+-- DROP TABLE public."AttachmentComment";
+
+CREATE TABLE public."AttachmentComment" (
+	"CommentId" uuid NOT NULL,
+	"AttachmentId" uuid NOT NULL,
+	CONSTRAINT "AttachmentComment_pkey" PRIMARY KEY ("CommentId", "AttachmentId")
+);
+
+-- Drop table
+
+-- DROP TABLE public."AttachmentPost";
+
+CREATE TABLE public."AttachmentPost" (
+	"PostId" uuid NOT NULL,
+	"AttachmentId" uuid NOT NULL,
+	CONSTRAINT "AttachmentPost_pkey" PRIMARY KEY ("PostId", "AttachmentId")
+);
+
+ALTER TABLE public."AttachmentComment" ADD CONSTRAINT "AttachmentComment_AttachmentId_fkey" FOREIGN KEY ("AttachmentId") REFERENCES "Attachment"("Id");
+ALTER TABLE public."AttachmentComment" ADD CONSTRAINT "AttachmentComment_CommentId_fkey" FOREIGN KEY ("CommentId") REFERENCES "Comment"("Id");
+
+ALTER TABLE public."AttachmentPost" ADD CONSTRAINT "AttachmentPost_AttachmentId_fkey" FOREIGN KEY ("AttachmentId") REFERENCES "Attachment"("Id");
+ALTER TABLE public."AttachmentPost" ADD CONSTRAINT "AttachmentPost_PostId_fkey" FOREIGN KEY ("PostId") REFERENCES "Post"("Id");
