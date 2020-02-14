@@ -54,7 +54,7 @@ namespace SocialNetwork.Bll.Services
             return post;
         }
 
-        public async Task<PagedResult<Post>> GetPagePosts(Guid userId, int page, int quantity)
+        public async Task<PagedResult<Post>> GetPagePosts(int page, int quantity)
         {
             if (page <= 0 || quantity <= 0)
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
