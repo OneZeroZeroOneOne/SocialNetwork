@@ -1,6 +1,6 @@
 <template>
   <div class="post">
-    <div class="post-body" v-if="requestPostStatus === 1">
+    <div class="post-body">
       <div class="post-header">
         Header
       </div>
@@ -9,28 +9,6 @@
       </div>
       <div class="post-footer">
         Footer
-      </div>
-    </div>
-    <div class="post-body" v-if="requestPostStatus === 0">
-      <div class="post-header">
-        loading
-      </div>
-      <div class="post-content" >
-        loading
-      </div>
-      <div class="post-footer">
-        loading
-      </div>
-    </div>
-    <div class="post-body" v-if="requestPostStatus === 2">
-      <div class="post-header">
-        ERROR
-      </div>
-      <div class="post-content" >
-        ERROR
-      </div>
-      <div class="post-footer">
-        ERROR
       </div>
     </div>
   </div>
@@ -51,30 +29,16 @@ import _ from 'lodash'
 
 @Component({})
 export default class PostComponent extends Vue {
-  @Prop() public postId!: string;
-  private postObj!: IPost; 
-  private requestPostStatus: ResponseState = ResponseState.loading;
-
+  @Prop() public postObj!: IPost; 
   constructor() {
     super();
-    Nprogress.start()
+    /*Nprogress.start()
     this.loadPost();
-    Nprogress.done();
+    Nprogress.done();*/
   }
   
 
-  async loadPost(): Promise<void> {
-    this.requestPostStatus = ResponseState.loading;
-
-    PostService.getPost(this.postId)
-      .then(response => {
-        this.postObj = response;
-        this.requestPostStatus = ResponseState.success;
-      })
-      .catch(error => {
-        this.requestPostStatus = ResponseState.fail;
-      });
-  }
+  
 }
 </script>
 
