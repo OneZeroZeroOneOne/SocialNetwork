@@ -35,12 +35,7 @@ jobs:
       working-directory: ./SocialNetwork.WebUI/dist/
       run: ls
     
-    - name: Copy file via ssh password
-      uses: appleboy/scp-action@master
+    - uses: actions/upload-artifact@v1
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        source: "./SocialNetwork/SocialNetwork.WebUI/dist/*"
-        target: "/var/www/socapp"
+        name: my-artifact
+        path: SocialNetwork/SocialNetwork.WebUI/dist
