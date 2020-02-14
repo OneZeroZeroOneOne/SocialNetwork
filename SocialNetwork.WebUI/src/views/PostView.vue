@@ -53,7 +53,6 @@ export default class PostView extends Vue {
   throttleLoadComments = _.throttle(() => this.loadComments(), 2000);
 
   postId(): string {
-    console.log(this.$route)
     if (this.$route.query.hasOwnProperty('id'))
       return this.$route.query.id.toString()
     return 'error'
@@ -74,7 +73,6 @@ export default class PostView extends Vue {
 
   async loadComments()
   {
-    console.log("loading comments")
     this.requestCommentsStatus = ResponseState.loading;
     Nprogress.start()
 
@@ -95,8 +93,6 @@ export default class PostView extends Vue {
           }
         })
         Nprogress.done();
-        console.log(this.commentIds);
-        console.log(this.commentObjs)
         this.$notify({
           group: 'foo',
           title: 'Loaded comments',

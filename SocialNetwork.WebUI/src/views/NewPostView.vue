@@ -41,35 +41,9 @@ export default class NewPostView extends Vue {
   private commentObjs: IComment[] = [];
   private currentPage: number = 1;
   private scrolledToBottom: boolean = false;
+
     constructor() {
     super();
-    /*window.onscroll = () => {
-      let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 100
-      if (bottomOfWindow) {
-        this.scrolledToBottom = true // replace it with your code
-        console.log("scrolled to bottom")
-        this.throttleLoadComments();
-      }
-    }*/
-
-    setInterval(() => this.loadComments(), 30000);
-
-    this.loadComments()
-    this.loadPost()
   }
-
-
-async loadPosts(): Promise<void> {
-    this.requestPostsStatus = ResponseState.loading;
-
-    PostService.getNewPosts()
-      .then(response => {
-        this.postObjs = response.results;
-        this.requestPostsStatus = ResponseState.success;
-      })
-      .catch(error => {
-        this.requestPostsStatus = ResponseState.fail;
-      });
-  }
-
+}
 </script>
