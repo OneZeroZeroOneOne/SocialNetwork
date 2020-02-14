@@ -45,6 +45,12 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<GroupType> GroupType { get; set; }
         #endregion
 
+        #region Attachments
+        public virtual DbSet<Attachment> Attachment { get; set; }
+        public virtual DbSet<AttachmentComment> AttachmentComment { get; set; }
+        public virtual DbSet<AttachmentPost> AttachmentPost { get; set; }
+        #endregion
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -56,6 +62,53 @@ namespace SocialNetwork.Dal.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("uuid-ossp");
+
+            modelBuilder.Entity<Attachment>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.ContentType).IsRequired();
+
+                entity.Property(e => e.CreateDateTime).HasColumnType("date");
+
+                entity.Property(e => e.Path).IsRequired();
+            });
+
+            modelBuilder.Entity<AttachmentComment>(entity =>
+            {
+                entity.HasKey(e => new { e.CommentId, e.AttachmentId })
+                    .HasName("AttachmentComment_pkey");
+
+                entity.HasOne(d => d.Attachment)
+                    .WithMany(p => p.AttachmentComment)
+                    .HasForeignKey(d => d.AttachmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("AttachmentComment_AttachmentId_fkey");
+
+                entity.HasOne(d => d.Comment)
+                    .WithMany(p => p.AttachmentComment)
+                    .HasForeignKey(d => d.CommentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("AttachmentComment_CommentId_fkey");
+            });
+
+            modelBuilder.Entity<AttachmentPost>(entity =>
+            {
+                entity.HasKey(e => new { e.PostId, e.AttachmentId })
+                    .HasName("AttachmentPost_pkey");
+
+                entity.HasOne(d => d.Attachment)
+                    .WithMany(p => p.AttachmentPost)
+                    .HasForeignKey(d => d.AttachmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("AttachmentPost_AttachmentId_fkey");
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.AttachmentPost)
+                    .HasForeignKey(d => d.PostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("AttachmentPost_PostId_fkey");
+            });
 
             modelBuilder.Entity<Group>(entity =>
             {
