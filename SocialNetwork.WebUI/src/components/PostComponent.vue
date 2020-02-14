@@ -30,15 +30,10 @@ import _ from 'lodash'
 @Component({})
 export default class PostComponent extends Vue {
   @Prop() public postObj!: IPost; 
+  
   constructor() {
     super();
-    /*Nprogress.start()
-    this.loadPost();
-    Nprogress.done();*/
   }
-  
-
-  
 }
 </script>
 

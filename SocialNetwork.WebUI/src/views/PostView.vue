@@ -1,6 +1,6 @@
 <template>
   <div class="post-view">
-    <PostComponent :postId="postId()"/>
+    <PostComponent :postObj="postObj" v-if="requestPostStatus === 1"/>
     <ul id="comments">
       <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
         <CommentComponent :commentObj="item" :commentNum="index+1"/>
@@ -17,6 +17,7 @@ import CommentComponent from "@/components/CommentComponent.vue";
 import { ResponseState } from "@/models/enum/ResponseState";
 import { IPagedResult } from '../models/responses/PagedResult';
 import { IComment } from '../models/responses/CommentViewModel';
+import { IPost } from "@/models/responses/PostViewModel";
 import { Guid } from "@/utilities/guid";
 import { PostService } from "@/services/PostService";
 import { CommentService } from "@/services/CommentService";
@@ -31,27 +32,30 @@ import _ from 'lodash'
 })
 export default class PostView extends Vue {
   private requestCommentsStatus: ResponseState = ResponseState.loading;
+  private requestPostStatus: ResponseState = ResponseState.loading;
 
   private commentObjs: IComment[] = [];
   private commentIds: Guid[] = [];
   private currentPage: number = 1;
+  private postObj!: IPost; 
 
   private scrolledToBottom: boolean = false;
 
   constructor() {
     super();
-    window.onscroll = () => {
+    /*window.onscroll = () => {
       let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 100
       if (bottomOfWindow) {
         this.scrolledToBottom = true // replace it with your code
         console.log("scrolled to bottom")
         this.throttleLoadComments();
       }
-    }
+    }*/
 
     setInterval(() => this.loadComments(), 30000);
 
     this.loadComments()
+    this.loadPost()
   }
 
   throttleLoadComments = _.throttle(() => this.loadComments(), 2000);
@@ -61,6 +65,19 @@ export default class PostView extends Vue {
     if (this.$route.query.hasOwnProperty('id'))
       return this.$route.query.id.toString()
     return 'error'
+  }
+
+  async loadPost(): Promise<void> {
+    this.requestPostStatus = ResponseState.loading;
+
+    PostService.getPost(this.postId())
+      .then(response => {
+        this.postObj = response;
+        this.requestPostStatus = ResponseState.success;
+      })
+      .catch(error => {
+        this.requestPostStatus = ResponseState.fail;
+      });
   }
 
   async loadComments()
