@@ -6,7 +6,6 @@
         <CommentComponent :commentObj="item" :commentNum="index+1"/>
       </li>
     </ul>
-    <div class="footer-end">Footer</div>
   </div>
 </template>
 
