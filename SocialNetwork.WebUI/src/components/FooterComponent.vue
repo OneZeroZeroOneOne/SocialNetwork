@@ -1,5 +1,9 @@
 <template>
-  <footer class="footer">This footer will always be positioned at the bottom of the page, but <strong>not fixed</strong>.</footer>
+  <div class="footer">
+    <div class="footer-body">
+    FOOTER
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -19,11 +23,20 @@ export default class FooterComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+$post-body-color: rgb(2, 16, 32);
+$text-color: #ccc;
+
+$post-body-border-color: rgb(56, 68, 77);
+
 .footer {
-  position: relative;
+  left: 8px;  
+  float: right;
   text-align: center;
-  width:100%;
-  height:60px;			/* Height of the footer */
-  background:#6cf;
+  clear: both;
+  position: relative;
+  width: 100vw;
+  height: 5em;
+  color: $text-color;
+  background-color: $post-body-color;
 }
 </style>

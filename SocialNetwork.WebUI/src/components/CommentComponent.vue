@@ -1,6 +1,6 @@
 <template>
 <div class="comment">
-  <div class="comment-body" v-if="requestStatus === 1">
+  <div class="comment-body">
     <div class="comment-header"> 
       #{{commentNum}}
       <div class="comment-header-time">
@@ -12,28 +12,6 @@
     </div>
     <div class="comment-footer">
       Footer
-    </div>
-  </div>
-   <div class="comment-body" v-if="requestStatus === 0">
-    <div class="comment-header"> 
-      LOADING
-    </div>
-    <div class="comment-content">
-      LOADING
-    </div>
-    <div class="comment-footer">
-      LOADING
-    </div>
-  </div>
-   <div class="comment-body" v-if="requestStatus === 2">
-    <div class="comment-header"> 
-      ERROR
-    </div>
-    <div class="comment-content">
-      ERROR
-    </div>
-    <div class="comment-footer">
-      ERROR
     </div>
   </div>
 </div>
@@ -51,11 +29,9 @@ import { IComment } from '../models/responses/CommentViewModel';
 export default class CommentComponent extends Vue {
   @Prop() public commentObj!: IComment;
   @Prop() public commentNum!: number;
-  private requestStatus: ResponseState = ResponseState.loading;
 
   constructor() {
     super();
-    this.requestStatus = ResponseState.success;
   }
 }
 </script>

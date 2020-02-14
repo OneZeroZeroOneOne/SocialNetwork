@@ -2,8 +2,8 @@
   <div id="app">
     <div id="nav"></div>
     <router-view/>
+    <FooterComponent/>
     <notifications group="foo" position="bottom right"/>
-    <!--<FooterComponent/>-->
   </div>
 </template>
 
@@ -26,9 +26,6 @@ export default class App extends Vue {
 <style lang="scss">
 html {
   background: url('assets/background-tiled-memphis.png');
-}
-
-#app {
-  display: relative;
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 </style>
