@@ -30,3 +30,13 @@ jobs:
     - name: build 
       working-directory: ./SocialNetwork.WebUI
       run: npm run build
+    
+    - name: Copy file via ssh password
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        source: "SocialNetwork/SocialNetwork.WebUI/dist/*"
+        target: "/var/www/socapp"
