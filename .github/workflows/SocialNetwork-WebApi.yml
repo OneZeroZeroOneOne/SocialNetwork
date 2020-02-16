@@ -23,6 +23,7 @@ jobs:
       with:
         dotnet-version: 3.1.100
     - name: Build with dotnet
+      id: building
       run: dotnet build SocialNetwork/SocialNetwork.WebApi/SocialNetwork.WebApi.csproj --configuration Release
     - name: List builded files
       run: ls
@@ -35,14 +36,6 @@ jobs:
         port: ${{ secrets.PORT }}
         source: "SocialNetwork/SocialNetwork.WebApi/bin/Release/netcoreapp3.0/*"
         target: "SocialNetwork.WebApi.Builded"
-    - name: Restarting SocialNetwork WebApi
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: systemctl restart social-network-webapi.service
     - name: Downloading service-check script
       uses: appleboy/ssh-action@master
       with:
@@ -67,3 +60,12 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: /root/service-check social-network-webapi.service
+    - name: Notify when builded success
+      if: steps.building.outputs.status == 'success'
+      uses: appleboy/telegram-action@master
+      with:
+        to: "-373392644"
+        token: "914543704:AAGxCfEN279RPLCAFsFTsQR2ava6P13c5ZE"
+        message: |
+          The ${{ github.event_name }} event triggered final step.
+          echo This event is a pull request that had an assignee removed.
