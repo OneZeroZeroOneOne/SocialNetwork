@@ -19,3 +19,4 @@ else
  systemctl restart $serv
  echo "restarted"
 fi
+
