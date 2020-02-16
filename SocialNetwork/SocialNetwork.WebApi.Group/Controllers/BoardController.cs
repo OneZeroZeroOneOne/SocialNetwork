@@ -20,10 +20,10 @@ namespace SocialNetwork.WebApi.Board.Controllers
             _mapper = mapper;
         }
 
-        /*[HttpGet]
+        [HttpGet]
         public async Task<List<BoardType>> GetGroupTypes()
         {
             return await _groupService.GetBoardTypesAsync();
-        }*/
+        }
     }
 }

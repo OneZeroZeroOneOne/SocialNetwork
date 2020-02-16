@@ -6,6 +6,6 @@ namespace SocialNetwork.Bll.Abstractions
 {
     public interface IBoardService
     {
-        //Task<List<BoardType>> GetBoardTypesAsync();
+        Task<List<BoardType>> GetBoardTypesAsync();
     }
 }

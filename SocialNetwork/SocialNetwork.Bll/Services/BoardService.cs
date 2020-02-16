@@ -16,9 +16,9 @@ namespace SocialNetwork.Bll.Services
             _publicContext = publicContext;
         }
 
-        /*public async Task<List<BoardType>> GetBoardTypesAsync()
+        public async Task<List<BoardType>> GetBoardTypesAsync()
         {
             return await _publicContext.BoardType.ToListAsync();
-        }*/
+        }
     }
 }
