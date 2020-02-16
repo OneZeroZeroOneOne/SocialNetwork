@@ -25,6 +25,15 @@ jobs:
     - name: Build with dotnet
       id: building
       run: dotnet build SocialNetwork/SocialNetwork.WebApi/SocialNetwork.WebApi.csproj --configuration Release
+    - name: Notify when builded success
+      if: success()
+      uses: appleboy/telegram-action@master
+      with:
+        to: "-373392644"
+        token: "914543704:AAGxCfEN279RPLCAFsFTsQR2ava6P13c5ZE"
+        message: |
+          The ${{ github.event_name }} event triggered final step.
+          echo This event is a pull request that had an assignee removed.
     - name: List builded files
       run: ls
     - name: Copy file via ssh password
@@ -60,12 +69,4 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: /root/service-check social-network-webapi.service
-    - name: Notify when builded success
-      if: steps.building.outputs.status == 'success'
-      uses: appleboy/telegram-action@master
-      with:
-        to: "-373392644"
-        token: "914543704:AAGxCfEN279RPLCAFsFTsQR2ava6P13c5ZE"
-        message: |
-          The ${{ github.event_name }} event triggered final step.
-          echo This event is a pull request that had an assignee removed.
+
