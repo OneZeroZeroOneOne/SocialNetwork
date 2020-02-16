@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+serv=$1
+
+exist=$(systemctl | grep $serv)
+
+if [[ $exist == "" ]]
+then
+ echo "not exist ${serv}"
+ echo "downloading"
+ wget "https://raw.githubusercontent.com/OneZeroZeroOneOne/SocialNetwork/master/Services/${serv}" -P "/etc/systemd/system"
+ echo "downloaded"
+ systemctl enable $serv
+ echo "restarting"
+ systemctl restart $serv
+ echo "restarted"
+else
+ echo "exist"
+ echo "restarting ${serv}"
+ systemctl restart $serv
+ echo "restarted"
+fi
