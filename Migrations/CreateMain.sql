@@ -1,11 +1,23 @@
 -- Drop table
 
--- DROP TABLE public."GroupType";
+-- DROP TABLE public."Attachment";
 
-CREATE TABLE public."GroupType" (
+CREATE TABLE public."Attachment" (
+	"Id" uuid NOT NULL,
+	"ContentType" text NOT NULL,
+	"Path" text NOT NULL,
+	"CreateDateTime" date NOT NULL,
+	CONSTRAINT "Attachment_pkey" PRIMARY KEY ("Id")
+);
+
+-- Drop table
+
+-- DROP TABLE public."BoardType";
+
+CREATE TABLE public."BoardType" (
 	"Id" uuid NOT NULL,
 	"Description" text NOT NULL,
-	CONSTRAINT "GroupType_pkey" PRIMARY KEY ("Id")
+	CONSTRAINT "BoardType_pkey" PRIMARY KEY ("Id")
 );
 
 -- Drop table
@@ -53,15 +65,15 @@ CREATE TABLE public."User" (
 
 -- Drop table
 
--- DROP TABLE public."Group";
+-- DROP TABLE public."Board";
 
-CREATE TABLE public."Group" (
+CREATE TABLE public."Board" (
 	"Id" uuid NOT NULL,
-	"GroupTypeId" uuid NOT NULL,
+	"BoardTypeId" uuid NOT NULL,
 	"CreateDateTime" timestamp NOT NULL,
 	"IsArchived" bool NOT NULL DEFAULT false,
-	CONSTRAINT "Group_pkey" PRIMARY KEY ("Id"),
-	CONSTRAINT "Group_GroupTypeId_fkey" FOREIGN KEY ("GroupTypeId") REFERENCES "GroupType"("Id")
+	CONSTRAINT "Board_pkey" PRIMARY KEY ("Id"),
+	CONSTRAINT "Board_BoardTypeId_fkey" FOREIGN KEY ("BoardTypeId") REFERENCES "BoardType"("Id")
 );
 
 -- Drop table
@@ -73,7 +85,7 @@ CREATE TABLE public."Post" (
 	"Text" text NOT NULL,
 	"Date" timestamp NOT NULL,
 	"UserId" uuid NOT NULL,
-	"IsArchived" varchar NULL DEFAULT false,
+	"IsArchived" bool NULL DEFAULT false,
 	CONSTRAINT "Post_pk" PRIMARY KEY ("Id"),
 	CONSTRAINT "Post_fk0" FOREIGN KEY ("UserId") REFERENCES "User"("Id")
 );
@@ -108,18 +120,6 @@ CREATE TABLE public."UserConfirmationToken" (
 
 -- Drop table
 
--- DROP TABLE public."UserGroup";
-
-CREATE TABLE public."UserGroup" (
-	"GroupId" uuid NOT NULL,
-	"UserId" uuid NOT NULL,
-	CONSTRAINT "UserGroup_pkey" PRIMARY KEY ("GroupId", "UserId"),
-	CONSTRAINT "UserGroup_GroupId_fkey" FOREIGN KEY ("GroupId") REFERENCES "Group"("Id"),
-	CONSTRAINT "UserGroup_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "User"("Id")
-);
-
--- Drop table
-
 -- DROP TABLE public."UserSecurity";
 
 CREATE TABLE public."UserSecurity" (
@@ -129,6 +129,29 @@ CREATE TABLE public."UserSecurity" (
 	"IsConfirmed" bool NOT NULL DEFAULT false,
 	CONSTRAINT "UserSecurity_RoleId_fkey" FOREIGN KEY ("RoleId") REFERENCES "Role"("RoleId"),
 	CONSTRAINT "UserSecurity_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "User"("Id")
+);
+
+-- Drop table
+
+-- DROP TABLE public."AttachmentPost";
+
+CREATE TABLE public."AttachmentPost" (
+	"PostId" uuid NOT NULL,
+	"AttachmentId" uuid NOT NULL,
+	CONSTRAINT "AttachmentPost_pkey" PRIMARY KEY ("PostId", "AttachmentId"),
+	CONSTRAINT "AttachmentPost_AttachmentId_fkey" FOREIGN KEY ("AttachmentId") REFERENCES "Attachment"("Id"),
+	CONSTRAINT "AttachmentPost_PostId_fkey" FOREIGN KEY ("PostId") REFERENCES "Post"("Id")
+);
+
+-- Drop table
+
+-- DROP TABLE public."BoardPost";
+
+CREATE TABLE public."BoardPost" (
+	"PostId" uuid NOT NULL,
+	"BoardId" uuid NOT NULL,
+	CONSTRAINT "BoardPost_BoardId_fkey" FOREIGN KEY ("BoardId") REFERENCES "Board"("Id"),
+	CONSTRAINT "BoardPost_PostId_fkey" FOREIGN KEY ("PostId") REFERENCES "Post"("Id")
 );
 
 -- Drop table
@@ -149,18 +172,6 @@ CREATE TABLE public."Comment" (
 
 -- Drop table
 
--- DROP TABLE public."GroupPost";
-
-CREATE TABLE public."GroupPost" (
-	"PostId" uuid NOT NULL,
-	"GroupId" uuid NOT NULL,
-	CONSTRAINT "GroupPost_pkey" PRIMARY KEY ("PostId", "GroupId"),
-	CONSTRAINT "GroupPost_GroupId_fkey" FOREIGN KEY ("GroupId") REFERENCES "Group"("Id"),
-	CONSTRAINT "GroupPost_PostId_fkey" FOREIGN KEY ("PostId") REFERENCES "Post"("Id")
-);
-
--- Drop table
-
 -- DROP TABLE public."ReactionComment";
 
 CREATE TABLE public."ReactionComment" (
@@ -173,19 +184,6 @@ CREATE TABLE public."ReactionComment" (
 	CONSTRAINT "ReactionToComment_fk0" FOREIGN KEY ("CommentId") REFERENCES "Comment"("Id")
 );
 
-
--- Drop table
-
--- DROP TABLE public."Attachment";
-
-CREATE TABLE public."Attachment" (
-	"Id" uuid NOT NULL,
-	"ContentType" text NOT NULL,
-	"Path" text NOT NULL,
-	"CreateDateTime" date NOT NULL,
-	CONSTRAINT "Attachment_pkey" PRIMARY KEY ("Id")
-);
-
 -- Drop table
 
 -- DROP TABLE public."AttachmentComment";
@@ -193,21 +191,7 @@ CREATE TABLE public."Attachment" (
 CREATE TABLE public."AttachmentComment" (
 	"CommentId" uuid NOT NULL,
 	"AttachmentId" uuid NOT NULL,
-	CONSTRAINT "AttachmentComment_pkey" PRIMARY KEY ("CommentId", "AttachmentId")
+	CONSTRAINT "AttachmentComment_pkey" PRIMARY KEY ("CommentId", "AttachmentId"),
+	CONSTRAINT "AttachmentComment_AttachmentId_fkey" FOREIGN KEY ("AttachmentId") REFERENCES "Attachment"("Id"),
+	CONSTRAINT "AttachmentComment_CommentId_fkey" FOREIGN KEY ("CommentId") REFERENCES "Comment"("Id")
 );
-
--- Drop table
-
--- DROP TABLE public."AttachmentPost";
-
-CREATE TABLE public."AttachmentPost" (
-	"PostId" uuid NOT NULL,
-	"AttachmentId" uuid NOT NULL,
-	CONSTRAINT "AttachmentPost_pkey" PRIMARY KEY ("PostId", "AttachmentId")
-);
-
-ALTER TABLE public."AttachmentComment" ADD CONSTRAINT "AttachmentComment_AttachmentId_fkey" FOREIGN KEY ("AttachmentId") REFERENCES "Attachment"("Id");
-ALTER TABLE public."AttachmentComment" ADD CONSTRAINT "AttachmentComment_CommentId_fkey" FOREIGN KEY ("CommentId") REFERENCES "Comment"("Id");
-
-ALTER TABLE public."AttachmentPost" ADD CONSTRAINT "AttachmentPost_AttachmentId_fkey" FOREIGN KEY ("AttachmentId") REFERENCES "Attachment"("Id");
-ALTER TABLE public."AttachmentPost" ADD CONSTRAINT "AttachmentPost_PostId_fkey" FOREIGN KEY ("PostId") REFERENCES "Post"("Id");
