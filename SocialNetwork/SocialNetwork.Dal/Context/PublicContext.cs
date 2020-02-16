@@ -122,7 +122,7 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<BoardPost>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(x => new {x.BoardId, x.PostId});
 
                 entity.HasOne(d => d.Board)
                     .WithMany(p => p.BoardPost)
