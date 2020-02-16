@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Security", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.WebApi.AuthorizationServer", "SocialNetwork.WebApi.AuthorizationServer\SocialNetwork.WebApi.AuthorizationServer.csproj", "{492062A2-E7D0-4828-A93B-A09AD9AEE901}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.WebApi.Group", "SocialNetwork.WebApi.Group\SocialNetwork.WebApi.Group.csproj", "{235B3CED-D703-4E64-A5BA-1DAA9B0D8C93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.WebApi.Board", "SocialNetwork.WebApi.Group\SocialNetwork.WebApi.Board.csproj", "{235B3CED-D703-4E64-A5BA-1DAA9B0D8C93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.WebApi.Attachment", "SocialNetwork.WebApi.Attachment\SocialNetwork.WebApi.Attachment.csproj", "{F1157793-4CFB-4963-91C6-50B8986C06CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.WebApi.Attachment", "SocialNetwork.WebApi.Attachment\SocialNetwork.WebApi.Attachment.csproj", "{F1157793-4CFB-4963-91C6-50B8986C06CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

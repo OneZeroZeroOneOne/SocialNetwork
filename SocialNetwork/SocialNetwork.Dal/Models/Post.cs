@@ -10,6 +10,7 @@ namespace SocialNetwork.Dal.Models
             Comments = new HashSet<Comment>();
             ReactionPost = new HashSet<ReactionPost>();
             AttachmentPost = new HashSet<AttachmentPost>();
+            BoardPost = new HashSet<BoardPost>();
         }
 
         public Guid Id { get; set; }
@@ -17,8 +18,7 @@ namespace SocialNetwork.Dal.Models
         public Guid UserId { get; set; }
         public bool IsArchived { get; set; }
         public virtual User User { get; set; }
-
-        public virtual GroupPost GroupPost { get; set; }
+        public virtual ICollection<BoardPost> BoardPost { get; set; }
         public virtual ICollection<AttachmentPost> AttachmentPost { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ReactionPost> ReactionPost { get; set; }

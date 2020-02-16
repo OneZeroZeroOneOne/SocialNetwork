@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Services
 {
-    public class GroupService : IGroupService
+    public class BoardService : IBoardService
     {
         private readonly PublicContext _publicContext;
 
-        public GroupService(PublicContext publicContext)
+        public BoardService(PublicContext publicContext)
         {
             _publicContext = publicContext;
         }
 
-        public async Task<List<GroupType>> GetGroupTypesAsync()
+        /*public async Task<List<BoardType>> GetBoardTypesAsync()
         {
-            return await _publicContext.GroupType.ToListAsync();
-        }
+            return await _publicContext.BoardType.ToListAsync();
+        }*/
     }
 }

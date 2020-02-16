@@ -4,8 +4,8 @@ using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.Bll.Abstractions
 {
-    public interface IGroupService
+    public interface IBoardService
     {
-        Task<List<GroupType>> GetGroupTypesAsync();
+        //Task<List<BoardType>> GetBoardTypesAsync();
     }
 }

@@ -2,12 +2,12 @@
 
 namespace SocialNetwork.Dal.Models
 {
-    public partial class GroupPost
+    public partial class BoardPost
     {
         public Guid PostId { get; set; }
-        public Guid GroupId { get; set; }
+        public Guid BoardId { get; set; }
 
-        public virtual Group Group { get; set; }
+        public virtual Board Board { get; set; }
         public virtual Post Post { get; set; }
     }
 }

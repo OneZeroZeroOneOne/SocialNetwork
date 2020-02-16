@@ -38,11 +38,10 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<ReactionTypePost> ReactionTypePost { get; set; }
         #endregion
 
-        #region Group
-        public virtual DbSet<UserGroup> UserGroup { get; set; }
-        public virtual DbSet<Group> Group { get; set; }
-        public virtual DbSet<GroupPost> GroupPost { get; set; }
-        public virtual DbSet<GroupType> GroupType { get; set; }
+        #region Board
+        public virtual DbSet<Board> Board { get; set; }
+        public virtual DbSet<BoardPost> BoardPost { get; set; }
+        public virtual DbSet<BoardType> BoardType { get; set; }
         #endregion
 
         #region Attachments
@@ -110,47 +109,35 @@ namespace SocialNetwork.Dal.Context
                     .HasConstraintName("AttachmentPost_PostId_fkey");
             });
 
-            modelBuilder.Entity<Group>(entity =>
+            modelBuilder.Entity<Board>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.HasOne(d => d.BoardType)
+                    .WithMany(p => p.Board)
+                    .HasForeignKey(d => d.BoardTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Board_BoardTypeId_fkey");
             });
 
-            modelBuilder.Entity<GroupPost>(entity =>
+            modelBuilder.Entity<BoardPost>(entity =>
             {
-                entity.HasKey(e => new { e.PostId, e.GroupId })
-                    .HasName("GroupPost_pkey");
+                entity.HasNoKey();
 
-                entity.HasOne(d => d.Group)
-                    .WithMany(p => p.GroupPost)
-                    .HasForeignKey(d => d.GroupId)
+                entity.HasOne(d => d.Board)
+                    .WithMany(p => p.BoardPost)
+                    .HasForeignKey(d => d.BoardId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("GroupPost_GroupId_fkey");
+                    .HasConstraintName("BoardPost_BoardId_fkey");
 
                 entity.HasOne(d => d.Post)
-                    .WithOne(p => p.GroupPost)
+                    .WithMany(p => p.BoardPost)
+                    .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("GroupPost_PostId_fkey");
+                    .HasConstraintName("BoardPost_PostId_fkey");
             });
 
-            modelBuilder.Entity<UserGroup>(entity =>
-            {
-                entity.HasKey(e => new { e.GroupId, e.UserId })
-                    .HasName("UserGroup_pkey");
-
-                entity.HasOne(d => d.Group)
-                    .WithMany(p => p.UserGroup)
-                    .HasForeignKey(d => d.GroupId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("UserGroup_GroupId_fkey");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserGroup)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("UserGroup_UserId_fkey");
-            });
-
-            modelBuilder.Entity<GroupType>(entity =>
+            modelBuilder.Entity<BoardType>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 

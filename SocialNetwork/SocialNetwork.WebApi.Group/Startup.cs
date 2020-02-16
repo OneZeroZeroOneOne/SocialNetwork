@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -22,10 +24,8 @@ using SocialNetwork.Utilities.Abstractions;
 using SocialNetwork.Utilities.ApiClients;
 using SocialNetwork.Utilities.Controllers;
 using SocialNetwork.Utilities.Middlewares;
-using System.Collections.Generic;
-using System.IO;
 
-namespace SocialNetwork.WebApi.Group
+namespace SocialNetwork.WebApi.Board
 {
     public class Startup
     {
@@ -59,7 +59,7 @@ namespace SocialNetwork.WebApi.Group
 
             services.AddAuthorization(x => x.ConfigurePolicy());
 
-            services.AddTransient<IGroupService, GroupService>();
+            services.AddTransient<IBoardService, BoardService>();
 
             services.AddTransient<PublicContext>();
 
@@ -157,7 +157,7 @@ namespace SocialNetwork.WebApi.Group
             }
             else
             {
-                var basePath = "/group";
+                var basePath = "/board";
                 app.UseSwagger(c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
                     swaggerDoc.Servers = new List<OpenApiServer>

@@ -1,10 +1,10 @@
+using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Net;
 
-namespace SocialNetwork.WebApi.Group
+namespace SocialNetwork.WebApi.Board
 {
     public class Program
     {
