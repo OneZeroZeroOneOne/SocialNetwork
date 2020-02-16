@@ -14,6 +14,7 @@ namespace SocialNetwork.WebApi.Board
         }
 
 
+
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
