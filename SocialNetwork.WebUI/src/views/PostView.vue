@@ -6,13 +6,16 @@
         <CommentComponent :commentObj="item" :commentNum="index+1"/>
       </li>
     </ul>
+    <FooterComponent/>
   </div>
+
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import PostComponent from '@/components/PostComponent.vue'
 import CommentComponent from "@/components/CommentComponent.vue";
+import FooterComponent from "@/components/FooterComponent.vue";
 import { ResponseState } from "@/models/enum/ResponseState";
 import { IPagedResult } from '../models/responses/PagedResult';
 import { IComment } from '../models/responses/CommentViewModel';
@@ -26,7 +29,8 @@ import _ from 'lodash'
 @Component({
   components: { 
     CommentComponent,
-    PostComponent
+    PostComponent,
+    FooterComponent
   }
 })
 export default class PostView extends Vue {
