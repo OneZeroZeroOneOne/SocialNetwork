@@ -35,11 +35,27 @@ jobs:
         port: ${{ secrets.PORT }}
         source: "SocialNetwork/SocialNetwork.WebApi.Attachment/bin/Release/netcoreapp3.0/*"
         target: "SocialNetwork.WebApi.Attachment.Builded"
-    - name: Restarting SocialNetwork.Attachment WebApi
+    - name: Downloading service-check script
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        script: systemctl restart social-network-webapi-attachment.service
+        script: wget "https://raw.githubusercontent.com/OneZeroZeroOneOne/SocialNetwork/master/service-check" -O "/root/service-check"
+    - name: Giving rights for service check
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: chmod +rx "/root/service-check"
+    - name: Starting service-check
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: /root/service-check social-network-webapi-attachment.service
