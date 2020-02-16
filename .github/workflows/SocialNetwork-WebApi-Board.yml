@@ -58,4 +58,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        script: /root/service-check
+        script: /root/service-check social-network-webapi-board.service
