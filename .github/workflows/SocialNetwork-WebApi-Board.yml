@@ -35,11 +35,27 @@ jobs:
         port: ${{ secrets.PORT }}
         source: "SocialNetwork/SocialNetwork.WebApi.Board/bin/Release/netcoreapp3.0/*"
         target: "SocialNetwork.WebApi.Board.Builded"
-    - name: Restarting SocialNetwork.Board WebApi
+    - name: Downloading  service-check script
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        script: systemctl restart social-network-webapi-board.service
+        script: wget "https://raw.githubusercontent.com/OneZeroZeroOneOne/SocialNetwork/master/service-check"
+    - name: Giving rights for service check
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: chmod +rx "/root/service-check"
+    - name: Starting service-check
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: /root/service-check
