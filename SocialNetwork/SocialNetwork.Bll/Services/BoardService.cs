@@ -20,5 +20,10 @@ namespace SocialNetwork.Bll.Services
         {
             return await _publicContext.BoardType.ToListAsync();
         }
+
+        public async Task<List<Board>> GetBoardsAsync()
+        {
+            return await _publicContext.Board.ToListAsync();
+        }
     }
 }

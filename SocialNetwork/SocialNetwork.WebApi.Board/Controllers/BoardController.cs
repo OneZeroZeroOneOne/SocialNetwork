@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Models;
+using SocialNetwork.Dal.ViewModels.Out;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Board.Controllers
 {
@@ -21,7 +22,13 @@ namespace SocialNetwork.WebApi.Board.Controllers
         }
 
         [HttpGet]
-        public async Task<List<BoardType>> GetGroupTypes()
+        public async Task<List<OutBoardViewModel>> GetBoards()
+        {
+            return _mapper.Map<List<Dal.Models.Board>, List<OutBoardViewModel>>(await _groupService.GetBoardsAsync());
+        }
+
+        [HttpGet("Types")]
+        public async Task<List<BoardType>> GetBoardTypes()
         {
             return await _groupService.GetBoardTypesAsync();
         }
