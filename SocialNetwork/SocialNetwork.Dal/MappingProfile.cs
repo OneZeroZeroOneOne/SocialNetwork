@@ -10,6 +10,7 @@ namespace SocialNetwork.Dal
     {
         public MappingProfile()
         {
+			
             CreateMap<Board, OutBoardViewModel>();
 
             // Add as many of these lines as you need to map your objects
