@@ -7,12 +7,12 @@ export class BoardService {
     private static boardAxios = axios.create();
 
     static async getBoards(): Promise<IBoard[]> {
-        let url = 'http://localhost:56075/Board/';
+        let url = 'http://16ch.tk/Board/';
         return (await this.boardAxios.get<IBoard[]>(url)).data;
     }
 
     static async getBoardByName(name: string): Promise<AxiosResponse<IBoard>> {
-        let url = 'http://localhost:56075/Board/' + encodeURIComponent(name);
+        let url = 'http://16ch.tk/Board/' + encodeURIComponent(name);
         return await this.boardAxios.get<IBoard>(url);
     }
 }
