@@ -131,7 +131,7 @@ namespace SocialNetwork.WebApi.Attachment
             {
                 app.UseDeveloperExceptionPage();
             }
-
+			app.UseStaticFiles();
             app.ConfigureCustomExceptionMiddleware();
 
             //app.UseHttpsRedirection();
