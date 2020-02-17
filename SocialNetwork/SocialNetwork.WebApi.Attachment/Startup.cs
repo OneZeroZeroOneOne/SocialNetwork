@@ -148,7 +148,7 @@ namespace SocialNetwork.WebApi.Attachment
 
             app.UseStaticFiles(new StaticFileOptions()
             {
-                FileProvider = new PhysicalFileProvider(attachmentPathProvider.GetPath()),
+                FileProvider = new PhysicalFileProvider(Path.Combine(attachmentPathProvider.GetPath(), "Files")),
                 RequestPath = new PathString("/Files")
             });
 
