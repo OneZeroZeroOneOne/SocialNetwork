@@ -1,10 +1,22 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import PostView from '../views/PostView.vue'
+import MainView from '../views/MainView.vue'
+import BoardView from '../views/BoardView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/:boardname',
+    name: 'board',
+    component: BoardView
+  },
+  {
+    path: '/',
+    name: '',
+    component: MainView
+  },
   {
     path: '/post',
     name: 'post',
