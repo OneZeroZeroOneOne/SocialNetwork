@@ -149,7 +149,7 @@ namespace SocialNetwork.WebApi.Attachment
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(attachmentPathProvider.GetPath()),
-                RequestPath = new PathString(env.IsDevelopment() ? "/Files" : basePath + "/Files")
+                RequestPath = new PathString("/Files")
             });
 
             app.UseRouting();
