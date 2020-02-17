@@ -30,6 +30,7 @@ namespace SocialNetwork.Bll.Services
                 ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, "Comment not found");
 
             var path = "/Files/" + postAttachment.UploadFile.FileName;
+            
             await using (var fileStream = new FileStream(rootPath + @"\wwwroot\" + path, FileMode.Create))
             {
                 await postAttachment.UploadFile.CopyToAsync(fileStream);

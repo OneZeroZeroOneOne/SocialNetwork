@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
@@ -61,6 +62,10 @@ namespace SocialNetwork.WebApi.Attachment
 
             services.AddTransient<IAttachmentService, AttachmentService>();
 
+            var pathProvider = new AttachmentPathProvider();
+            pathProvider.ConfigurePath();
+
+            services.AddSingleton<IAttachmentPathProvider>(pathProvider);
             services.AddTransient<PublicContext>();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -123,7 +128,7 @@ namespace SocialNetwork.WebApi.Attachment
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IAttachmentPathProvider attachmentPathProvider)
         {
             loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "log.log"));
 
@@ -139,7 +144,11 @@ namespace SocialNetwork.WebApi.Attachment
             app.UseCors(x => x.AllowAnyOrigin());
             app.UseCors(x => x.AllowAnyHeader());
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory() + attachmentPathProvider.GetPath()),
+                RequestPath = new PathString("/Files")
+            });
 
             app.UseRouting();
 
