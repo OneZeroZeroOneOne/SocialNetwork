@@ -18,5 +18,6 @@
         ReactionAlreadyExist = 14,
         BoardDoesntExist = 15,
         ProvideFile = 16,
+        AttachmentNotFound = 17,
     }
 }

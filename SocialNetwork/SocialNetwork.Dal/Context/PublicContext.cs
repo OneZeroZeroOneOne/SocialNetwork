@@ -64,7 +64,8 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<Attachment>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
+                entity.Property(x => x.CreateDateTime).HasValueGenerator<CurrentDateTimeGenerator>();
 
                 entity.Property(e => e.ContentType).IsRequired();
 

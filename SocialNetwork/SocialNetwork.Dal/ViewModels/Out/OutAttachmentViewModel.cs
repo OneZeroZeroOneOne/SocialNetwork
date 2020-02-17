@@ -6,6 +6,7 @@ namespace SocialNetwork.Dal.ViewModels.Out
 {
     public class OutAttachmentViewModel
     {
+        public Guid Id { get; set; }
         public string Path { get; set; }
     }
 }

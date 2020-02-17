@@ -1,34 +1,43 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 
 namespace SocialNetwork.WebApi.Attachment.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class AttachmentController
     {
-        private readonly IWebHostEnvironment _appEnvironment;
         private readonly IAttachmentService _attachmentService;
+        private readonly IMapper _mapper;
 
-        public AttachmentController(IWebHostEnvironment appEnvironment, IAttachmentService attachmentService)
+        public AttachmentController(IAttachmentService attachmentService, IMapper mapper)
         {
-            _appEnvironment = appEnvironment;
             _attachmentService = attachmentService;
+            _mapper = mapper;
         }
 
-        [HttpPost, Route("Post")]
-        public async Task<OutAttachmentViewModel> CreatePostAttachment(PostAttachmentViewModel postAttachment)
+        [HttpPost]
+        public async Task<OutAttachmentViewModel> CreateAttachment(IFormFile postAttachment)
         {
-            return await _attachmentService.SaveAttachmentPost(postAttachment, _appEnvironment.ContentRootPath);
+            return _mapper.Map<Dal.Models.Attachment, OutAttachmentViewModel>(await _attachmentService.SaveAttachment(new AttachmentViewModel() {UploadFile = postAttachment}));
         }
 
-        [HttpPost, Route("Comment")]
-        public async Task<OutAttachmentViewModel> CreateCommentAttachment(CommentAttachmentViewModel commentAttachment)
+        [HttpPut, Route("Post")]
+        public async Task<bool> CreatePostAttachment(PostAttachmentViewModel postAttachment)
         {
-            return await _attachmentService.SaveAttachmentComment(commentAttachment, _appEnvironment.ContentRootPath);
+            return await _attachmentService.AttachmentToPost(postAttachment);
+        }
+
+        [HttpPut, Route("Comment")]
+        public async Task<bool> CreateCommentAttachment(CommentAttachmentViewModel commentAttachment)
+        {
+            return await _attachmentService.AttachmentToComment(commentAttachment);
         }
     }
 }

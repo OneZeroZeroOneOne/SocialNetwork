@@ -3,7 +3,6 @@ using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels.In;
-using SocialNetwork.Dal.ViewModels.Out;
 using SocialNetwork.Utilities.Exceptions;
 using System;
 using System.IO;
@@ -22,77 +21,72 @@ namespace SocialNetwork.Bll.Services
             _attachmentPathProvider = attachmentPathProvider;
         }
 
-        public async Task<OutAttachmentViewModel> SaveAttachmentPost(PostAttachmentViewModel postAttachment, string rootPath)
+        public async Task<Attachment> SaveAttachment(AttachmentViewModel attachment)
         {
-            if (postAttachment.UploadFile == null)
-                ExceptionFactory.SoftException(ExceptionEnum.ProvideFile, "Need to provide file");
+            var ext = Path.GetExtension(attachment.UploadFile.FileName);
+            var fileName = DateTime.UtcNow.ToFileTimeUtc();
 
+            await using (var fileStream = new FileStream(Path.Combine(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), fileName + ext), FileMode.Create))
+            {
+                await attachment.UploadFile.CopyToAsync(fileStream);
+            }
+
+            var attachmentDb = new Attachment()
+            {
+                ContentType = attachment.UploadFile.ContentType,
+                Path = "Files/" + fileName + ext,
+            };
+
+            await _publicContext.Attachment.AddAsync(attachmentDb);
+            await _publicContext.SaveChangesAsync();
+
+            return attachmentDb;
+        }
+
+        public async Task<bool> AttachmentToPost(PostAttachmentViewModel postAttachment)
+        {
             var post = await _publicContext.Post.FirstOrDefaultAsync(x => x.Id == postAttachment.PostId);
+
             if (post == null)
                 ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, "Comment not found");
 
-            var path =  "Files/" + postAttachment.UploadFile.FileName;
-            
-            await using (var fileStream = new FileStream(Path.Combine(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), postAttachment.UploadFile.FileName), FileMode.Create))
-            {
-                await postAttachment.UploadFile.CopyToAsync(fileStream);
-            }
-
-            var attachment = new Attachment()
-            {
-                Id = Guid.NewGuid(),
-                ContentType = postAttachment.UploadFile.ContentType,
-                Path = path,
-                CreateDateTime = DateTime.UtcNow,
-            };
+            if (!await _publicContext.Attachment.AnyAsync(x => x.Id == postAttachment.AttachmentId))
+                ExceptionFactory.SoftException(ExceptionEnum.AttachmentNotFound,
+                    $"Attachment {postAttachment.AttachmentId} not found");
 
             var attachmentToPost = new AttachmentPost()
             {
-                AttachmentId = attachment.Id,
+                AttachmentId = postAttachment.AttachmentId,
                 PostId = postAttachment.PostId,
             };
 
-            await _publicContext.Attachment.AddAsync(attachment);
             await _publicContext.AttachmentPost.AddAsync(attachmentToPost);
             await _publicContext.SaveChangesAsync();
 
-            return new OutAttachmentViewModel { Path = path };
+            return true;
         }
 
-        public async Task<OutAttachmentViewModel> SaveAttachmentComment(CommentAttachmentViewModel commentAttachment, string rootPath)
+        public async Task<bool> AttachmentToComment(CommentAttachmentViewModel commentAttachment)
         {
-            if (commentAttachment.UploadFile == null)
-                ExceptionFactory.SoftException(ExceptionEnum.ProvideFile, "Need to provide file");
-
             var comment = await _publicContext.Comment.FirstOrDefaultAsync(x => x.Id == commentAttachment.CommentId);
+
             if (comment == null)
                 ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, "Comment not found");
 
-            var path = "Files/" + commentAttachment.UploadFile.FileName;
-            await using (var fileStream = new FileStream(Path.Combine(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), commentAttachment.UploadFile.FileName), FileMode.Create))
-            {
-                await commentAttachment.UploadFile.CopyToAsync(fileStream);
-            }
-
-            var attachment = new Attachment()
-            {
-                Id = Guid.NewGuid(),
-                ContentType = commentAttachment.UploadFile.ContentType,
-                Path = path,
-                CreateDateTime = DateTime.UtcNow,
-            };
+            if (!await _publicContext.Attachment.AnyAsync(x => x.Id == commentAttachment.AttachmentId))
+                ExceptionFactory.SoftException(ExceptionEnum.AttachmentNotFound,
+                    $"Attachment {commentAttachment.AttachmentId} not found");
 
             var attachmentToComment = new AttachmentComment()
             {
-                AttachmentId = attachment.Id,
+                AttachmentId = commentAttachment.AttachmentId,
                 CommentId = commentAttachment.CommentId,
             };
 
-            await _publicContext.Attachment.AddAsync(attachment);
             await _publicContext.AttachmentComment.AddAsync(attachmentToComment);
             await _publicContext.SaveChangesAsync();
 
-            return new OutAttachmentViewModel { Path = path };
+            return true;
         }
     }
 }

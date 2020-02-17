@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels.In;
-using SocialNetwork.Dal.ViewModels.Out;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Abstractions
 {
     public interface IAttachmentService
     {
-        Task<OutAttachmentViewModel> SaveAttachmentPost(PostAttachmentViewModel postAttachment, string rootPath);
+        Task<Attachment> SaveAttachment(AttachmentViewModel attachment);
+        Task<bool> AttachmentToPost(PostAttachmentViewModel postAttachment);
 
-        Task<OutAttachmentViewModel> SaveAttachmentComment(CommentAttachmentViewModel commentAttachment, string rootPath);
+        Task<bool> AttachmentToComment(CommentAttachmentViewModel commentAttachment);
     }
 }
