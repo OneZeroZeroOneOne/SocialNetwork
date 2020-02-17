@@ -23,7 +23,7 @@ namespace SocialNetwork.Bll.Services
 
         public void ConfigurePath()
         { 
-            Path = IsLinux ? "/root/Files" : @"\wwwroot\Files";
+            Path = IsLinux ? "/root/Files" : Directory.GetCurrentDirectory() + @"\wwwroot\Files";
         }
     }
 }
