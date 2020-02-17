@@ -16,5 +16,6 @@
         InappropriatParameters = 12,
         ReactionDoesNotExist = 13,
         ReactionAlreadyExist = 14,
+        BoardDoesntExist = 15,
     }
 }

@@ -4,6 +4,7 @@ using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Models;
 using System.Threading.Tasks;
+using SocialNetwork.Utilities.Exceptions;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -24,6 +25,13 @@ namespace SocialNetwork.Bll.Services
         public async Task<List<Board>> GetBoardsAsync()
         {
             return await _publicContext.Board.ToListAsync();
+        }
+
+        public async Task<Board> GetBoardAsync(string name)
+        {
+            var board = await _publicContext.Board.FirstOrDefaultAsync(x => x.Name == name);
+
+            return board;
         }
     }
 }

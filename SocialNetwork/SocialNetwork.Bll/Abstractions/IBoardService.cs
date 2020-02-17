@@ -8,5 +8,7 @@ namespace SocialNetwork.Bll.Abstractions
     {
         Task<List<BoardType>> GetBoardTypesAsync();
         Task<List<Board>> GetBoardsAsync();
+
+        Task<Board> GetBoardAsync(string name);
     }
 }

@@ -111,6 +111,8 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<Board>(entity =>
             {
+                entity.HasKey(x => x.Id);
+
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.HasOne(d => d.BoardType)

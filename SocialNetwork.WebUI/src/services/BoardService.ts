@@ -10,4 +10,9 @@ export class BoardService {
         let url = 'http://localhost:56075/Board/';
         return (await this.boardAxios.get<IBoard[]>(url)).data;
     }
+
+    static async getBoardByName(name: string): Promise<AxiosResponse<IBoard>> {
+        let url = 'http://localhost:56075/Board/' + encodeURIComponent(name);
+        return await this.boardAxios.get<IBoard>(url);
+    }
 }

@@ -8,6 +8,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/notfound',
+    name: 'notfound',
+    component: () => import('../views/NotFoundView.vue')
+  },
+  {
     path: '/:boardname',
     name: 'board',
     component: BoardView
@@ -32,6 +37,7 @@ const routes = [
   },
   {
     path: '*',
+    name: 'notfound',
     component: () => import('../views/NotFoundView.vue')
   }
 ]

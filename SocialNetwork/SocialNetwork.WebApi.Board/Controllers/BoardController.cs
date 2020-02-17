@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Models;
@@ -25,6 +26,13 @@ namespace SocialNetwork.WebApi.Board.Controllers
         public async Task<List<OutBoardViewModel>> GetBoards()
         {
             return _mapper.Map<List<Dal.Models.Board>, List<OutBoardViewModel>>(await _groupService.GetBoardsAsync());
+        }
+
+        [HttpGet, Route("{name}", Name = "GetBoardByName")]
+        public async Task<OutBoardViewModel> GetBoard([FromRoute]string name)
+        {
+            var board = await _groupService.GetBoardAsync(Uri.UnescapeDataString(name));
+            return _mapper.Map<Dal.Models.Board, OutBoardViewModel>(board);
         }
 
         [HttpGet("Types")]
