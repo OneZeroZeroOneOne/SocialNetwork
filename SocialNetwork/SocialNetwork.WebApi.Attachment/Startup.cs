@@ -157,7 +157,7 @@ namespace SocialNetwork.WebApi.Attachment
             }
             else
             {
-                var basePath = "/social";
+                var basePath = "/attachment";
                 app.UseSwagger(c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
                     swaggerDoc.Servers = new List<OpenApiServer>
