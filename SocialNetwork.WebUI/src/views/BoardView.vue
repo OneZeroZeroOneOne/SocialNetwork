@@ -43,6 +43,7 @@ export default class BoardView extends Vue {
         })
         .catch(error => {
             this.requestBoardStatus = ResponseState.fail;
+            this.$router.push({name: "notfound"})
         });
   }
 }
