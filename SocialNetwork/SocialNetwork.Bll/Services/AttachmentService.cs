@@ -38,12 +38,12 @@ namespace SocialNetwork.Bll.Services
             var attachment = new Attachment()
             {
                 Id = Guid.NewGuid(),
-                ContentType = "image",
+                ContentType = postAttachment.UploadFile.ContentType,
                 Path = path,
                 CreateDateTime = DateTime.UtcNow,
             };
 
-            AttachmentPost attachmentToPost = new AttachmentPost()
+            var attachmentToPost = new AttachmentPost()
             {
                 AttachmentId = attachment.Id,
                 PostId = postAttachment.PostId,
@@ -74,12 +74,12 @@ namespace SocialNetwork.Bll.Services
             var attachment = new Attachment()
             {
                 Id = Guid.NewGuid(),
-                ContentType = "image",
+                ContentType = commentAttachment.UploadFile.ContentType,
                 Path = path,
                 CreateDateTime = DateTime.UtcNow,
             };
 
-            AttachmentComment attachmentToComment = new AttachmentComment()
+            var attachmentToComment = new AttachmentComment()
             {
                 AttachmentId = attachment.Id,
                 CommentId = commentAttachment.CommentId,
