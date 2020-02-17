@@ -40,7 +40,6 @@ namespace SocialNetwork.Dal.Context
 
         #region Board
         public virtual DbSet<Board> Board { get; set; }
-        public virtual DbSet<BoardPost> BoardPost { get; set; }
         public virtual DbSet<BoardType> BoardType { get; set; }
         #endregion
 
@@ -123,23 +122,6 @@ namespace SocialNetwork.Dal.Context
                     .HasConstraintName("Board_BoardTypeId_fkey");
             });
 
-            modelBuilder.Entity<BoardPost>(entity =>
-            {
-                entity.HasKey(x => new {x.BoardId, x.PostId});
-
-                entity.HasOne(d => d.Board)
-                    .WithMany(p => p.BoardPost)
-                    .HasForeignKey(d => d.BoardId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("BoardPost_BoardId_fkey");
-
-                entity.HasOne(d => d.Post)
-                    .WithMany(p => p.BoardPost)
-                    .HasForeignKey(d => d.PostId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("BoardPost_PostId_fkey");
-            });
-
             modelBuilder.Entity<BoardType>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -171,6 +153,10 @@ namespace SocialNetwork.Dal.Context
             modelBuilder.Entity<Post>(entity =>
             {
                 entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
+
+                entity.Property(x => x.Date).HasValueGenerator<CurrentDateTimeGenerator>();
+
+                entity.HasOne(x => x.Board);
 
                 entity.Property(e => e.Text).IsRequired();
 

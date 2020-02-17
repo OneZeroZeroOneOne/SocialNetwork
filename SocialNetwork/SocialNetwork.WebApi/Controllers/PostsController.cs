@@ -32,10 +32,10 @@ namespace SocialNetwork.WebApi.Controllers
             _postService = postService;
         }
 
-        [HttpGet, Route("{postId}", Name = "postId")]
-        public async Task<OutPostViewModel> Get([FromRoute]Guid postId)
+        [HttpGet, Route("{boardId}/{postId}", Name = "postId")]
+        public async Task<OutPostViewModel> Get([FromRoute]Guid boardId, [FromRoute]Guid postId)
         {
-            var post = await _postService.GetPost(postId);
+            var post = await _postService.GetPost(boardId, postId);
 
             return _mapper.Map<Post, OutPostViewModel>(post);
         }
@@ -64,25 +64,25 @@ namespace SocialNetwork.WebApi.Controllers
             return _mapper.Map<Post, OutPostViewModel>(insertedPost);
         }
 
-        [HttpGet, Route("Page/", Name = "GetPagePosts")]
-        public async Task<PagedResult<Post>> GetPagePosts([FromQuery]int page, [FromQuery]int quantity)
+        [HttpGet, Route("{boardId}/Page", Name = "GetPagePosts")]
+        public async Task<PagedResult<Post>> GetPagePosts([FromRoute]Guid boardId, [FromQuery]int page, [FromQuery]int quantity)
         {
-            return await _postService.GetPagePosts(page, quantity);
+            return await _postService.GetPagePosts(boardId, page, quantity);
         }
 
-        [HttpGet, Route("{postId}/Reactions", Name = "GetPostReactions")]
+        [HttpGet, Route("{boardId}/{postId}/Reactions", Name = "GetPostReactions")]
         public async Task<List<OutReactionPostViewModel>> Reaction([FromRoute]Guid postId)
         {
             List<ReactionPost> listReactionPost = await _reactionService.GetReactionPost(postId);
             return listReactionPost.Select(i => _mapper.Map<ReactionPost, OutReactionPostViewModel>(i)).ToList();
         }
 
-        [HttpDelete]
+        [HttpDelete, Route("{boardId}/{postId}")]
         [Authorize(Policy = "ConfirmedUser")]
-        public async Task<IActionResult> DeletePost([FromQuery]Guid postId)
+        public async Task<IActionResult> DeletePost([FromRoute]Guid boardId, [FromRoute]Guid postId)
         {
             var currentUser = CurrentUser();
-            await _postService.DeletePost(postId, currentUser);
+            await _postService.DeletePost(boardId, postId, currentUser);
 
             return Ok();
         }

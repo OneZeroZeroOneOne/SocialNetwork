@@ -7,6 +7,7 @@ namespace SocialNetwork.Dal.ViewModels.In
     {
         [Required]
         public string Text { get; set; }
-        public DateTime Date { get; set; }
+        [Required]
+        public Guid BoardId { get; set; }
     }
 }
