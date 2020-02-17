@@ -1,20 +1,13 @@
-﻿using System;
+﻿using SocialNetwork.Bll.Abstractions;
 using System.IO;
-using SocialNetwork.Bll.Abstractions;
+using System.Runtime.InteropServices;
 
 namespace SocialNetwork.Bll.Services
 {
     public class AttachmentPathProvider : IAttachmentPathProvider
     {
         public string Path;
-        public static bool IsLinux
-        {
-            get
-            {
-                var p = (int)Environment.OSVersion.Platform;
-                return (p == 4) || (p == 6) || (p == 128);
-            }
-        }
+        public static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
         public string GetPath()
         {
@@ -23,7 +16,7 @@ namespace SocialNetwork.Bll.Services
 
         public void ConfigurePath()
         { 
-            Path = IsLinux ? "/root/Files" : Directory.GetCurrentDirectory() + @"\wwwroot\Files";
+            Path = IsLinux ? "/root" : Directory.GetCurrentDirectory() + @"\wwwroot";
         }
     }
 }

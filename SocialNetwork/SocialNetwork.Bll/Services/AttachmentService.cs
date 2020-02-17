@@ -14,10 +14,12 @@ namespace SocialNetwork.Bll.Services
     public class AttachmentService : IAttachmentService
     {
         private readonly PublicContext _publicContext;
+        private readonly IAttachmentPathProvider _attachmentPathProvider;
 
-        public AttachmentService(PublicContext publicContext)
+        public AttachmentService(PublicContext publicContext, IAttachmentPathProvider attachmentPathProvider)
         {
             _publicContext = publicContext;
+            _attachmentPathProvider = attachmentPathProvider;
         }
 
         public async Task<OutAttachmentViewModel> SaveAttachmentPost(PostAttachmentViewModel postAttachment, string rootPath)
@@ -29,9 +31,9 @@ namespace SocialNetwork.Bll.Services
             if (post == null)
                 ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, "Comment not found");
 
-            var path = "/Files/" + postAttachment.UploadFile.FileName;
+            var path =  "Files/" + postAttachment.UploadFile.FileName;
             
-            await using (var fileStream = new FileStream(rootPath + @"\wwwroot\" + path, FileMode.Create))
+            await using (var fileStream = new FileStream(Path.Combine(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), postAttachment.UploadFile.FileName), FileMode.Create))
             {
                 await postAttachment.UploadFile.CopyToAsync(fileStream);
             }
@@ -66,8 +68,8 @@ namespace SocialNetwork.Bll.Services
             if (comment == null)
                 ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, "Comment not found");
 
-            var path = "/Files/" + commentAttachment.UploadFile.FileName;
-            await using (var fileStream = new FileStream(rootPath + @"\wwwroot\" + path, FileMode.Create))
+            var path = "Files/" + commentAttachment.UploadFile.FileName;
+            await using (var fileStream = new FileStream(Path.Combine(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), commentAttachment.UploadFile.FileName), FileMode.Create))
             {
                 await commentAttachment.UploadFile.CopyToAsync(fileStream);
             }
