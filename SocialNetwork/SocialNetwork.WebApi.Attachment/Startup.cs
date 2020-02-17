@@ -59,9 +59,7 @@ namespace SocialNetwork.WebApi.Attachment
 
             services.AddAuthorization(x => x.ConfigurePolicy());
 
-            services.AddTransient<IPostService, PostService>();
-            services.AddTransient<ICommentService, CommentService>();
-            services.AddTransient<IReactionService, ReactionService>();
+            services.AddTransient<IAttachmentService, AttachmentService>();
 
             services.AddTransient<PublicContext>();
 

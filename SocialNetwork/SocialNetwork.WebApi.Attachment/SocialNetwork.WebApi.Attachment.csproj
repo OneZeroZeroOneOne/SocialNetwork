@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
   </ItemGroup>
@@ -22,6 +18,10 @@
     <ProjectReference Include="..\SocialNetwork.Dal\SocialNetwork.Dal.csproj" />
     <ProjectReference Include="..\SocialNetwork.Security\SocialNetwork.Security.csproj" />
     <ProjectReference Include="..\SocialNetwork.Utilities\SocialNetwork.Utilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Files\" />
   </ItemGroup>
 
 </Project>
