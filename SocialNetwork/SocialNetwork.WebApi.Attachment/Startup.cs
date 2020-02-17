@@ -141,13 +141,15 @@ namespace SocialNetwork.WebApi.Attachment
 
             //app.UseHttpsRedirection();
 
+            var basePath = "/attachment";
+
             app.UseCors(x => x.AllowAnyOrigin());
             app.UseCors(x => x.AllowAnyHeader());
 
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(attachmentPathProvider.GetPath()),
-                RequestPath = new PathString("/Files")
+                RequestPath = new PathString(env.IsDevelopment() ? "/Files" : basePath + "/Files")
             });
 
             app.UseRouting();
@@ -166,7 +168,6 @@ namespace SocialNetwork.WebApi.Attachment
             }
             else
             {
-                var basePath = "/attachment";
                 app.UseSwagger(c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
                     swaggerDoc.Servers = new List<OpenApiServer>
