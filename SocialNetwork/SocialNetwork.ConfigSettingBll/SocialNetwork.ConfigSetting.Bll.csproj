@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>SocialNetwork.ConfigSetting.Bll</AssemblyName>
+    <RootNamespace>SocialNetwork.ConfigSetting.Bll</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
