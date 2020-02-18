@@ -37,7 +37,8 @@ jobs:
         to: "-373392644"
         token: "914543704:AAGxCfEN279RPLCAFsFTsQR2ava6P13c5ZE"
         message: |
-          ${{ github.workflow }} by ${{ github.actor }}
+          📃 ${{ github.workflow }}
+          👺 ${{ github.actor }}
           ✅ Success!
     - name: Notify when builded failure
       if: failure()
@@ -46,7 +47,8 @@ jobs:
         to: "-373392644"
         token: "914543704:AAGxCfEN279RPLCAFsFTsQR2ava6P13c5ZE"
         message: |
-          ${{ github.workflow }} by ${{ github.actor }}
+          📃 ${{ github.workflow }}
+          👺 ${{ github.actor }}
           ❌ Failure!
     - name: ls
       working-directory: ./SocialNetwork.WebUI/dist/
