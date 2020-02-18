@@ -61,7 +61,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         source: "SocialNetwork.WebUI/dist/*"
-        target: "/root/site"
+        target: "/var/www/socapp"
     - uses: actions/upload-artifact@v1
       with:
         name: my-artifact
