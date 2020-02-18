@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SocialNetwork.ConfigSettingBll.Abstractions;
+using SocialNetwork.ConfigSettingBll.Services;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Security.Abstractions;
@@ -53,10 +55,10 @@ namespace SocialNetwork.WebApi.AuthorizationServer
                 mc.AddProfile(new MappingProfile());
             });
 
-            var configClient = new ConfigSettingService("uFPXCG79WkAW0mKMuJg96Q/hg9Rwi9qLkSxddIpUEIxpA");
+            var configClient = new ConfigService("uFPXCG79WkAW0mKMuJg96Q/hg9Rwi9qLkSxddIpUEIxpA");
             configClient.ForceRefresh();
 
-            services.AddSingleton<IConfigSettingService>(configClient);
+            services.AddSingleton<IConfigService>(configClient);
 
             services.AddAuthorization(x => x.ConfigurePolicy());
 

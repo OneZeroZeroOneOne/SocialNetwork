@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SocialNetwork.ConfigSettingBll\SocialNetwork.ConfigSettingBll.csproj" />
     <ProjectReference Include="..\SocialNetwork.Security\SocialNetwork.Security.csproj" />
   </ItemGroup>
 

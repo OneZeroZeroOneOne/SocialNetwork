@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SocialNetwork.Bll.Abstractions;
+using SocialNetwork.ConfigSettingBll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Models;
 
-namespace SocialNetwork.Bll.Services
+namespace SocialNetwork.ConfigSettingBll.Services
 {
     public class SettingService : ISettingService
     {

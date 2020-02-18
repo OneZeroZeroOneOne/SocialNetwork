@@ -1,23 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ValueGenerators;
-using SocialNetwork.Utilities.Abstractions;
 
 namespace SocialNetwork.Dal.Context
 {
     public class PublicContext : DbContext
     {
-        private readonly IConfigSettingService _configSettingService;
+        private readonly string _connectionString;
 
-        public PublicContext(IConfigSettingService configSettingService)
+        public PublicContext(string connectionString)
         {
-            _configSettingService = configSettingService;
+            _connectionString = connectionString;
         }
 
-        public PublicContext(DbContextOptions<PublicContext> options, IConfigSettingService configSettingService)
+        public PublicContext(DbContextOptions<PublicContext> options, string connectionString)
             : base(options)
         {
-            _configSettingService = configSettingService;
+            _connectionString = connectionString;
         }
 
         public virtual DbSet<Comment> Comment { get; set; }
@@ -53,7 +52,7 @@ namespace SocialNetwork.Dal.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql(_configSettingService.GetSetting("connectionString", "default"));
+                optionsBuilder.UseNpgsql(_connectionString);
             }
         }
 

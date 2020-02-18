@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using SocialNetwork.Dal.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SocialNetwork.Utilities.Abstractions
+namespace SocialNetwork.ConfigSettingBll.Abstractions
 {
-    public interface IConfigSettingService
+    public interface IConfigService
     {
         public Task<T> GetSettingAsync<T>(string settingName, T defaultValue);
 
@@ -13,6 +14,6 @@ namespace SocialNetwork.Utilities.Abstractions
 
         public T GetSetting<T>(string settingName, T defaultValue);
 
-        public Task<List<Setting>> GetAllSettingsAsync();
+        public Task<List<Setting<T>>> GetAllSettingsAsync<T>();
     }
 }

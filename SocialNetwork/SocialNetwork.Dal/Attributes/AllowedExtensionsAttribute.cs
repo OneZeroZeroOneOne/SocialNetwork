@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
-namespace SocialNetwork.Utilities.Attributes
+namespace SocialNetwork.Dal.Attributes
 {
     public class AllowedExtensionsAttribute : ValidationAttribute
     {

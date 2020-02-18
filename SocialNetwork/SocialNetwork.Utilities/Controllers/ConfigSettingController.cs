@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SocialNetwork.Utilities.Abstractions;
+using SocialNetwork.ConfigSettingBll.Abstractions;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.Utilities.Controllers
 {
     [Route("[controller]")]
     public class ConfigSettingController : ControllerBase
     {
-        private readonly IConfigSettingService _configSettingService;
+        private readonly IConfigService _configSettingService;
 
-        public ConfigSettingController(IConfigSettingService configSettingService)
+        public ConfigSettingController(IConfigService configSettingService)
         {
             _configSettingService = configSettingService;
         }
@@ -31,9 +32,9 @@ namespace SocialNetwork.Utilities.Controllers
 
         //[Authorize(Policy = "AdminUser")]
         [HttpGet("All")]
-        public async Task<List<Setting>> GetSettingAll()
+        public async Task<List<Setting<string>>> GetSettingAll()
         {
-            return await _configSettingService.GetAllSettingsAsync();
+            return await _configSettingService.GetAllSettingsAsync<string>();
         }
     }
 }

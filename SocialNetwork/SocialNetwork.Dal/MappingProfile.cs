@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using SocialNetwork.Dal.Models;
-using SocialNetwork.Dal.ViewModels;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
 

@@ -4,17 +4,18 @@ using Newtonsoft.Json.Linq;
 using SocialNetwork.Utilities.Abstractions;
 using SocialNetwork.Utilities.Exceptions;
 using System.Threading.Tasks;
+using SocialNetwork.ConfigSettingBll.Abstractions;
 
 namespace SocialNetwork.Utilities.ApiClients
 {
     public class MailJetClient : IMailClient
     {
-        private readonly IConfigSettingService _config;
+        private readonly IConfigService _config;
 
         private string _apiSecret;
         private string _apiKey;
 
-        public MailJetClient(IConfigSettingService config)
+        public MailJetClient(IConfigService config)
         {
             _config = config;
 
