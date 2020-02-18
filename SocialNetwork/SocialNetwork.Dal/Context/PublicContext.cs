@@ -61,6 +61,17 @@ namespace SocialNetwork.Dal.Context
         {
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
+            modelBuilder.Entity<Setting<int>>(entity =>
+            {
+                entity.ToTable("SettingNumber");
+                entity.HasKey(x => x.Key);
+            });
+            modelBuilder.Entity<Setting<string>>(entity =>
+            {
+                entity.ToTable("SettingText");
+                entity.HasKey(x => x.Key);
+            });
+
             modelBuilder.Entity<Attachment>(entity =>
             {
                 entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();

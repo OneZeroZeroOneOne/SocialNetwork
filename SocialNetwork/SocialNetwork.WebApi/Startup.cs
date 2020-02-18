@@ -59,6 +59,8 @@ namespace SocialNetwork.WebApi
 
             services.AddAuthorization(x => x.ConfigurePolicy());
 
+            services.AddTransient<ISettingService, SettingService>();
+
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IReactionService, ReactionService>();
