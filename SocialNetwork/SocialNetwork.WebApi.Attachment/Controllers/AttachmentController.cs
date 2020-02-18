@@ -4,7 +4,6 @@ using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 
 namespace SocialNetwork.WebApi.Attachment.Controllers
@@ -23,9 +22,9 @@ namespace SocialNetwork.WebApi.Attachment.Controllers
         }
 
         [HttpPost]
-        public async Task<OutAttachmentViewModel> CreateAttachment(IFormFile postAttachment)
+        public async Task<OutAttachmentViewModel> CreateAttachment([FromForm]AttachmentViewModel postAttachment)
         {
-            return _mapper.Map<Dal.Models.Attachment, OutAttachmentViewModel>(await _attachmentService.SaveAttachment(new AttachmentViewModel() {UploadFile = postAttachment}));
+            return _mapper.Map<Dal.Models.Attachment, OutAttachmentViewModel>(await _attachmentService.SaveAttachment(postAttachment));
         }
 
         [HttpPut, Route("Post")]

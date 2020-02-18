@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
+using SocialNetwork.Utilities.Attributes;
 
 namespace SocialNetwork.Dal.ViewModels.In
 {
@@ -23,6 +24,10 @@ namespace SocialNetwork.Dal.ViewModels.In
 
     public class AttachmentViewModel
     {
+        [Required(ErrorMessage = "Please provide a file.")]
+        [DataType(DataType.Upload)]
+        [MaxFileSize(5 * 1024 * 1024)]
+        [AllowedExtensions(new[] { ".jpg", ".png", ".gif" })]
         public IFormFile UploadFile { get; set; }
     }
 }
