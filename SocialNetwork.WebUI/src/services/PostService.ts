@@ -15,3 +15,4 @@ export class PostService {
         return (await this.postsAxios.get<IPagedResult<IPost>>(url)).data;
     }
 }
+
