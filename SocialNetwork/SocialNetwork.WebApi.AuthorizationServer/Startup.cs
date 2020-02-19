@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SocialNetwork.ConfigSettingBll.Abstractions;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Security.Abstractions;
@@ -25,6 +26,8 @@ using SocialNetwork.Utilities.Controllers;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
+using SocialNetwork.ConfigSetting.Bll.Abstractions;
+using SocialNetwork.ConfigSetting.Bll.Services;
 
 namespace SocialNetwork.WebApi.AuthorizationServer
 {
@@ -53,10 +56,10 @@ namespace SocialNetwork.WebApi.AuthorizationServer
                 mc.AddProfile(new MappingProfile());
             });
 
-            var configClient = new ConfigSettingService("uFPXCG79WkAW0mKMuJg96Q/hg9Rwi9qLkSxddIpUEIxpA");
+            var configClient = new ConfigService("uFPXCG79WkAW0mKMuJg96Q/hg9Rwi9qLkSxddIpUEIxpA");
             configClient.ForceRefresh();
 
-            services.AddSingleton<IConfigSettingService>(configClient);
+            services.AddSingleton<IConfigService>(configClient);
 
             services.AddAuthorization(x => x.ConfigurePolicy());
 
@@ -66,7 +69,11 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             services.AddTransient<IPasswordHasherService, PasswordHasherService>();
 
             services.AddTransient<HashingOptions>();
-            services.AddTransient<PublicContext>();
+            services.AddTransient(x =>
+            {
+                var configService = x.GetService<IConfigService>();
+                return new PublicContext(configService.GetSetting("connectionString", ""));
+            });
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

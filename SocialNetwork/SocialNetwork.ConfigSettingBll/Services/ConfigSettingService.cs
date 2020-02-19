@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
-using ConfigCat.Client;
-using SocialNetwork.Utilities.Abstractions;
 using System.Threading.Tasks;
+using ConfigCat.Client;
+using SocialNetwork.ConfigSetting.Bll.Abstractions;
+using SocialNetwork.ConfigSetting.Dal.Models;
 
-namespace SocialNetwork.Utilities.ApiClients
+namespace SocialNetwork.ConfigSetting.Bll.Services
 {
-    public class ConfigSettingService : IConfigSettingService
+    public class ConfigService : IConfigService
     {
         private readonly ConfigCatClient _configClient;
 
-        public ConfigSettingService(string apiKey)
+        public ConfigService(string apiKey)
         {
             _configClient = new ConfigCatClient(new LazyLoadConfiguration
             {
@@ -17,8 +18,6 @@ namespace SocialNetwork.Utilities.ApiClients
                 CacheTimeToLiveSeconds = 720 * 60,
             });
         }
-
-
 
         public async Task<T> GetSettingAsync<T>(string settingName, T defaultValue)
         {
@@ -40,18 +39,18 @@ namespace SocialNetwork.Utilities.ApiClients
             return _configClient.GetValue(settingName, defaultValue);
         }
 
-        public async Task<List<Setting>> GetAllSettingsAsync()
+        public async Task<List<Setting<T>>> GetAllSettingsAsync<T>()
         {
             var keys = await _configClient.GetAllKeysAsync();
 
-            var settings = new List<Setting>();
+            var settings = new List<Setting<T>>();
 
             foreach (var key in keys)
             {
-                settings.Add(new Setting()
+                settings.Add(new Setting<T>()
                 {
                     Key = key,
-                    Value = await _configClient.GetValueAsync(key, "non present")
+                    Value = await _configClient.GetValueAsync<T>(key, default)
                 });
             }
 

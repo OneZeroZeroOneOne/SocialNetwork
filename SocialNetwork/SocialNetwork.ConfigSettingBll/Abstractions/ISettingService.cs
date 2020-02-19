@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SocialNetwork.ConfigSetting.Dal.Models;
 using System.Threading.Tasks;
-using SocialNetwork.Dal.Models;
 
-namespace SocialNetwork.Bll.Abstractions
+namespace SocialNetwork.ConfigSettingBll.Abstractions
 {
     public interface ISettingService
     {

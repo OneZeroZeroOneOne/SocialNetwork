@@ -1,4 +1,4 @@
-﻿namespace SocialNetwork.Dal.Models
+﻿namespace SocialNetwork.ConfigSetting.Dal.Models
 {
     public class Setting<T>
     {

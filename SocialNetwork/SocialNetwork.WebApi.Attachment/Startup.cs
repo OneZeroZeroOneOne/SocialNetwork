@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -16,15 +14,18 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Bll.Services;
+using SocialNetwork.ConfigSettingBll.Abstractions;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Security.Extensions;
 using SocialNetwork.Security.Options;
 using SocialNetwork.Utilities;
-using SocialNetwork.Utilities.Abstractions;
-using SocialNetwork.Utilities.ApiClients;
 using SocialNetwork.Utilities.Controllers;
 using SocialNetwork.Utilities.Middlewares;
+using System.Collections.Generic;
+using System.IO;
+using SocialNetwork.ConfigSetting.Bll.Abstractions;
+using SocialNetwork.ConfigSetting.Bll.Services;
 
 namespace SocialNetwork.WebApi.Attachment
 {
@@ -53,10 +54,10 @@ namespace SocialNetwork.WebApi.Attachment
                 mc.AddProfile(new MappingProfile());
             });
 
-            var configClient = new ConfigSettingService("uFPXCG79WkAW0mKMuJg96Q/hg9Rwi9qLkSxddIpUEIxpA");
+            var configClient = new ConfigService("uFPXCG79WkAW0mKMuJg96Q/hg9Rwi9qLkSxddIpUEIxpA");
             configClient.ForceRefresh();
 
-            services.AddSingleton<IConfigSettingService>(configClient);
+            services.AddSingleton<IConfigService>(configClient);
 
             services.AddAuthorization(x => x.ConfigurePolicy());
 
@@ -66,7 +67,12 @@ namespace SocialNetwork.WebApi.Attachment
             pathProvider.ConfigurePath();
 
             services.AddSingleton<IAttachmentPathProvider>(pathProvider);
-            services.AddTransient<PublicContext>();
+
+            services.AddTransient(x =>
+            {
+                var configService = x.GetService<IConfigService>();
+                return new PublicContext(configService.GetSetting("connectionString", ""));
+            });
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
