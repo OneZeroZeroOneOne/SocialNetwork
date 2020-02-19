@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using SocialNetwork.Dal.Models;
+﻿using SocialNetwork.ConfigSetting.Dal.Models;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.ConfigSettingBll.Abstractions
 {

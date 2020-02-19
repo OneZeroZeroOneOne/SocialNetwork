@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.ConfigSettingBll.Abstractions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SocialNetwork.Dal.Models;
+using SocialNetwork.ConfigSetting.Bll.Abstractions;
+using SocialNetwork.ConfigSetting.Dal.Models;
 
 namespace SocialNetwork.Utilities.Controllers
 {

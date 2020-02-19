@@ -14,7 +14,6 @@ using Microsoft.OpenApi.Models;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Bll.Services;
 using SocialNetwork.ConfigSettingBll.Abstractions;
-using SocialNetwork.ConfigSettingBll.Services;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Security.Extensions;
@@ -24,6 +23,9 @@ using SocialNetwork.Utilities.Controllers;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
+using SocialNetwork.ConfigSetting.Bll.Abstractions;
+using SocialNetwork.ConfigSetting.Bll.Services;
+using SocialNetwork.ConfigSetting.Dal.Context;
 
 namespace SocialNetwork.WebApi
 {
@@ -69,6 +71,12 @@ namespace SocialNetwork.WebApi
             {
                 var configService = x.GetService<IConfigService>();
                 return new PublicContext(configService.GetSetting("connectionString", ""));
+            });
+
+            services.AddTransient(x =>
+            {
+                var configService = x.GetService<IConfigService>();
+                return new ConfigSettingContext(configService.GetSetting("connectionString", ""));
             });
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

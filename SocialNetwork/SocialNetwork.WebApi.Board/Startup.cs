@@ -14,7 +14,6 @@ using Microsoft.OpenApi.Models;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Bll.Services;
 using SocialNetwork.ConfigSettingBll.Abstractions;
-using SocialNetwork.ConfigSettingBll.Services;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Security.Extensions;
@@ -24,6 +23,8 @@ using SocialNetwork.Utilities.Controllers;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
+using SocialNetwork.ConfigSetting.Bll.Abstractions;
+using SocialNetwork.ConfigSetting.Bll.Services;
 
 namespace SocialNetwork.WebApi.Board
 {

@@ -1,23 +1,23 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SocialNetwork.ConfigSetting.Dal.Context;
+using SocialNetwork.ConfigSetting.Dal.Models;
 using SocialNetwork.ConfigSettingBll.Abstractions;
-using SocialNetwork.Dal.Context;
-using SocialNetwork.Dal.Models;
 
-namespace SocialNetwork.ConfigSettingBll.Services
+namespace SocialNetwork.ConfigSetting.Bll.Services
 {
     public class SettingService : ISettingService
     {
-        private readonly PublicContext _publicContext;
+        private readonly ConfigSettingContext _configSettingContext;
 
-        public SettingService(PublicContext publicContext)
+        public SettingService(ConfigSettingContext configSettingContext)
         {
-            _publicContext = publicContext;
+            _configSettingContext = configSettingContext;
         }
 
         public Task<Setting<T>> GetSetting<T>(string key)
         {
-            return _publicContext.Set<Setting<T>>().FirstOrDefaultAsync(x => x.Key == key);
+            return _configSettingContext.Set<Setting<T>>().FirstOrDefaultAsync(x => x.Key == key);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SocialNetwork.ConfigSetting.Dal.Models;
 using SocialNetwork.ConfigSettingBll.Abstractions;
-using SocialNetwork.Dal.Models;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers

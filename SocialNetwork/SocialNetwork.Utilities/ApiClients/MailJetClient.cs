@@ -1,10 +1,10 @@
 ﻿using Mailjet.Client;
 using Mailjet.Client.Resources;
 using Newtonsoft.Json.Linq;
+using SocialNetwork.ConfigSetting.Bll.Abstractions;
 using SocialNetwork.Utilities.Abstractions;
 using SocialNetwork.Utilities.Exceptions;
 using System.Threading.Tasks;
-using SocialNetwork.ConfigSettingBll.Abstractions;
 
 namespace SocialNetwork.Utilities.ApiClients
 {
