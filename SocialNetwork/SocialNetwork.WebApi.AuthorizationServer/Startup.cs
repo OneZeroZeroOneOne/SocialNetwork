@@ -68,7 +68,11 @@ namespace SocialNetwork.WebApi.AuthorizationServer
             services.AddTransient<IPasswordHasherService, PasswordHasherService>();
 
             services.AddTransient<HashingOptions>();
-            services.AddTransient<PublicContext>();
+            services.AddTransient(x =>
+            {
+                var configService = x.GetService<IConfigService>();
+                return new PublicContext(configService.GetSetting("connectionString", ""));
+            });
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

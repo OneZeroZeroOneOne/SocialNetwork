@@ -66,7 +66,12 @@ namespace SocialNetwork.WebApi.Attachment
             pathProvider.ConfigurePath();
 
             services.AddSingleton<IAttachmentPathProvider>(pathProvider);
-            services.AddTransient<PublicContext>();
+
+            services.AddTransient(x =>
+            {
+                var configService = x.GetService<IConfigService>();
+                return new PublicContext(configService.GetSetting("connectionString", ""));
+            });
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
