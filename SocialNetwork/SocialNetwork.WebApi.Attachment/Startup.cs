@@ -147,7 +147,7 @@ namespace SocialNetwork.WebApi.Attachment
 
             //app.UseHttpsRedirection();
 
-            var basePath = "/attachment";
+            var basePath = "/api/attachment";
 
             app.UseCors(x => x.AllowAnyOrigin());
             app.UseCors(x => x.AllowAnyHeader());

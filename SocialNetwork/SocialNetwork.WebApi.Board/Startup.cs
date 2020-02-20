@@ -162,7 +162,7 @@ namespace SocialNetwork.WebApi.Board
             }
             else
             {
-                var basePath = "/board";
+                var basePath = "/api/board";
                 app.UseSwagger(c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
                     swaggerDoc.Servers = new List<OpenApiServer>

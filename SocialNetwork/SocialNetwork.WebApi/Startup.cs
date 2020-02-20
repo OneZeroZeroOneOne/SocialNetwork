@@ -173,7 +173,7 @@ namespace SocialNetwork.WebApi
             }
             else
             {
-                var basePath = "/social";
+                var basePath = "/api/social";
                 app.UseSwagger(c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
                     swaggerDoc.Servers = new List<OpenApiServer>
