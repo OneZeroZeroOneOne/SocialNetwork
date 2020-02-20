@@ -62,7 +62,8 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<Attachment>(entity =>
             {
-                entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
+                entity.HasKey(x => x.Id);
+
                 entity.Property(x => x.CreateDateTime).HasValueGenerator<CurrentDateTimeGenerator>();
 
                 entity.Property(e => e.ContentType).IsRequired();
@@ -130,7 +131,7 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<Comment>(entity =>
             {
-                entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
+                entity.HasKey(x => x.Id);
 
                 entity.Property(x => x.Date).HasValueGenerator<CurrentDateTimeGenerator>();
 
@@ -151,7 +152,7 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<Post>(entity =>
             {
-                entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
+                entity.HasKey(x => x.Id);
 
                 entity.Property(x => x.Date).HasValueGenerator<CurrentDateTimeGenerator>();
 
@@ -168,6 +169,8 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.HasKey(x => x.Id);
+
                 entity.Property(e => e.Id).HasValueGenerator<GuidGenerator>();
 
                 entity.HasOne(x => x.UserSecurity)
