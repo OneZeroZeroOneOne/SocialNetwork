@@ -23,6 +23,8 @@ import { IPost } from "@/models/responses/PostViewModel";
 import { Guid } from "@/utilities/guid";
 import { PostService } from "@/services/PostService";
 import { CommentService } from "@/services/CommentService";
+import { IBoard } from "@/models/responses/Board";
+import { BoardService } from "@/services/BoardService";
 import Nprogress from "nprogress"
 import _ from 'lodash'
 
@@ -36,22 +38,28 @@ import _ from 'lodash'
 export default class PostView extends Vue {
   private requestCommentsStatus: ResponseState = ResponseState.loading;
   private requestPostStatus: ResponseState = ResponseState.loading;
+  private requestBoardStatus: ResponseState = ResponseState.loading;
 
   private commentObjs: IComment[] = [];
   private commentIds: Guid[] = [];
   private currentPage: number = 1;
   private postObj!: IPost; 
 
+  private boardObj!: IBoard;
+
   constructor() {
     super();
     setInterval(() => this.loadComments(), 1000 * 30); //every 30 sec update
-
-    this.loadComments()
-    this.loadPost()
-
-    this.$root.$on('footerInView', () => {
+    
+    this.loadBoardByName(this.boardName())
+    .then(x => {
+      console.log(this.boardObj)
+      this.loadPost()
+      this.loadComments()
+    });
+    /*this.$root.$on('footerInView', () => {
       this.throttleLoadComments();
-    })
+    })*/
   }
 
   throttleLoadComments = _.throttle(() => this.loadComments(), 2000);
@@ -62,10 +70,33 @@ export default class PostView extends Vue {
     return 'error'
   }
 
+  boardName(): string {
+    console.log(this.$route)
+    return this.$route.params.boardname;
+  }
+
+  async loadBoardByName(name: string): Promise<void> {
+      await BoardService.getBoardByName(name)
+        .then(response => {
+            if (response.status == 200)
+            {
+                this.boardObj = response.data;
+                this.requestBoardStatus = ResponseState.success;
+            } else {
+                this.requestBoardStatus = ResponseState.fail;
+                this.$router.push({name: "notfound"})
+            }
+        })
+        .catch(error => {
+            this.requestBoardStatus = ResponseState.fail;
+            this.$router.push({name: "notfound"})
+        });
+  }
+
   async loadPost(): Promise<void> {
     this.requestPostStatus = ResponseState.loading;
 
-    PostService.getPost(this.postId())
+    await PostService.getPost(this.boardObj.id, this.postId())
       .then(response => {
         this.postObj = response;
         this.requestPostStatus = ResponseState.success;
@@ -80,7 +111,7 @@ export default class PostView extends Vue {
     this.requestCommentsStatus = ResponseState.loading;
     Nprogress.start()
 
-    CommentService.getCommentForPost(this.postId(), this.currentPage, 50)
+    await CommentService.getCommentForPost(this.postId(), this.currentPage, 1000)
       .then(response => {
         if (response.currentPage < response.pageCount)
         {

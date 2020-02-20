@@ -2,7 +2,7 @@
     <div class="board-list">
         <div class="board-list-container" v-if="boardRequestStatus === 1">
         <li v-for="item in boards" v-bind:key="item.id" class="board-link">
-            <span @click="$router.push(item.name)">
+            <span @click="$router.push('board/'+item.name)">
                 <div class="board-name">/{{item.name}}/</div> - <div class="board-description">{{item.description}}</div>
             </span>
         </li>

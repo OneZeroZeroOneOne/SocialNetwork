@@ -13,17 +13,12 @@ const routes = [
     component: () => import('../views/NotFoundView.vue')
   },
   {
-    path: '/:boardname',
+    path: '/board/:boardname',
     name: 'board',
     component: BoardView
   },
   {
-    path: '/',
-    name: '',
-    component: MainView
-  },
-  {
-    path: '/post',
+    path: '/board/:boardname/post',
     name: 'post',
     component: PostView
   },
@@ -36,8 +31,13 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
+    path: '/',
+    name: '',
+    component: MainView
+  },
+  {
     path: '*',
-    name: 'notfound',
+    name: 'notfound_wildcard',
     component: () => import('../views/NotFoundView.vue')
   }
 ]
