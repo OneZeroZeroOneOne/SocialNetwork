@@ -9,7 +9,7 @@ namespace SocialNetwork.Dal.ViewModels.Out
     {
         public Guid ReactionId { get; set; }
         public Guid UserId { get; set; }
-        public BigInteger PostId { get; set; }
+        public int PostId { get; set; }
 
     }
 }

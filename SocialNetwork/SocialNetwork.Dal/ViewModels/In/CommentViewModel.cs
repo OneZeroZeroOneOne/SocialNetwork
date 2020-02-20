@@ -8,6 +8,6 @@ namespace SocialNetwork.Dal.ViewModels.In
         [Required]
         public string Text { get; set; }
         [Required]
-        public BigInteger PostId { get; set; }
+        public int PostId { get; set; }
     }
 }

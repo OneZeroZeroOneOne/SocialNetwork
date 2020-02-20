@@ -53,7 +53,7 @@ namespace SocialNetwork.Bll.Services
             return comment;
         }
 
-        public async Task<Comment> GetComment(BigInteger commentId)
+        public async Task<Comment> GetComment(int commentId)
         {
             var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentId && x.IsArchived == false);
 
@@ -62,7 +62,7 @@ namespace SocialNetwork.Bll.Services
 
             return comment;
         }
-        public async Task<PagedResult<Comment>> GetPageComments(BigInteger postId, int page, int quantity)
+        public async Task<PagedResult<Comment>> GetPageComments(int postId, int page, int quantity)
         {
             if (page <= 0 || quantity <= 0)
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
@@ -70,7 +70,7 @@ namespace SocialNetwork.Bll.Services
 
             return await _context.Comment.Where(x => x.PostId == postId && x.IsArchived == false).AsQueryable().GetPaged(page, quantity);
         }
-        public async Task DeleteComment(BigInteger commentId, Guid currentUserId)
+        public async Task DeleteComment(int commentId, Guid currentUserId)
         {
             var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentId && x.UserId == currentUserId);
             if (comment == null)

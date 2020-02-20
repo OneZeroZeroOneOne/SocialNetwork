@@ -8,14 +8,14 @@ namespace SocialNetwork.Bll.Abstractions
 {
     public interface ICommentService
     {
-        Task<Comment> GetComment(BigInteger commentId);
+        Task<Comment> GetComment(int commentId);
 
         Task<Comment> AddComment(Comment commentModel, Guid authorUser);
 
         Task<Comment> EditComment(Comment commentModel, Guid editorUser);
 
-        Task<PagedResult<Comment>> GetPageComments(BigInteger postId, int page, int quantity);
+        Task<PagedResult<Comment>> GetPageComments(int postId, int page, int quantity);
 
-        Task DeleteComment(BigInteger commentId, Guid userId);
+        Task DeleteComment(int commentId, Guid userId);
     }
 }

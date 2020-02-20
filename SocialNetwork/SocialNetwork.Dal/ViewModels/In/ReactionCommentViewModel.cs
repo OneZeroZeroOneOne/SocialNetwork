@@ -8,7 +8,7 @@ namespace SocialNetwork.Dal.ViewModels.In
     public class ReactionCommentViewModel
     {
         [Required]
-        public BigInteger CommentId { get; set; }
+        public int CommentId { get; set; }
         public Guid ReactionId { get; set; }
     }
 }

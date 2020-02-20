@@ -62,7 +62,7 @@ namespace SocialNetwork.WebApi.Controllers
 
         [HttpDelete, Route("Post", Name = "DeletePost")]
         [Authorize(Policy = "ConfirmedUser")]
-        public async Task<IActionResult> DeletePost([FromQuery]BigInteger postId)
+        public async Task<IActionResult> DeletePost([FromQuery]int postId)
         {
             var currentUser = CurrentUser();
             await _reactionService.DeleteReactionPost(postId, currentUser);
@@ -72,7 +72,7 @@ namespace SocialNetwork.WebApi.Controllers
 
         [HttpDelete, Route("Comment", Name = "DeleteComment")]
         [Authorize(Policy = "ConfirmedUser")]
-        public async Task<IActionResult> DeleteComment([FromQuery]BigInteger commentId)
+        public async Task<IActionResult> DeleteComment([FromQuery]int commentId)
         {
             var currentUser = CurrentUser();
             await _reactionService.DeleteReactionComment(commentId, currentUser);

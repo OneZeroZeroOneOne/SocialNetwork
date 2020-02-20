@@ -7,7 +7,7 @@ namespace SocialNetwork.Dal.Models
     {
         public Guid ReactionId { get; set; }
         public Guid UserId { get; set; }
-        public BigInteger PostId { get; set; }
+        public int PostId { get; set; }
 
         public virtual Post Post { get; set; }
         public virtual ReactionTypePost Reaction { get; set; }

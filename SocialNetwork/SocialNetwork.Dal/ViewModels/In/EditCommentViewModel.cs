@@ -9,7 +9,7 @@ namespace SocialNetwork.Dal.ViewModels.In
     public class EditCommentViewModel
     {
         [Required]
-        public BigInteger CommentId { get; set; }
+        public int CommentId { get; set; }
 
         [Required]
         public string Text { get; set; }

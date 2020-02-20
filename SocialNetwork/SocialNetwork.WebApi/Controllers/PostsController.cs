@@ -33,7 +33,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet, Route("{boardId}/{postId}", Name = "postId")]
-        public async Task<OutPostViewModel> Get([FromRoute]Guid boardId, [FromRoute]BigInteger postId)
+        public async Task<OutPostViewModel> Get([FromRoute]Guid boardId, [FromRoute]int postId)
         {
             var post = await _postService.GetPost(boardId, postId);
 
@@ -71,7 +71,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet, Route("{boardId}/{postId}/Reactions", Name = "GetPostReactions")]
-        public async Task<List<OutReactionPostViewModel>> Reaction([FromRoute]BigInteger postId)
+        public async Task<List<OutReactionPostViewModel>> Reaction([FromRoute]int postId)
         {
             List<ReactionPost> listReactionPost = await _reactionService.GetReactionPost(postId);
             return listReactionPost.Select(i => _mapper.Map<ReactionPost, OutReactionPostViewModel>(i)).ToList();
@@ -79,7 +79,7 @@ namespace SocialNetwork.WebApi.Controllers
 
         [HttpDelete, Route("{boardId}/{postId}")]
         [Authorize(Policy = "ConfirmedUser")]
-        public async Task<IActionResult> DeletePost([FromRoute]Guid boardId, [FromRoute]BigInteger postId)
+        public async Task<IActionResult> DeletePost([FromRoute]Guid boardId, [FromRoute]int postId)
         {
             var currentUser = CurrentUser();
             await _postService.DeletePost(boardId, postId, currentUser);

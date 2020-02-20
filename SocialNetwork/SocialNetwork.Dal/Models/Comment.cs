@@ -11,10 +11,10 @@ namespace SocialNetwork.Dal.Models
             ReactionComment = new HashSet<ReactionComment>();
             AttachmentComment = new HashSet<AttachmentComment>();
         }
-        public BigInteger Id { get; set; }
+        public int Id { get; set; }
         public string Text { get; set; }
         public Guid UserId { get; set; }
-        public BigInteger PostId { get; set; }
+        public int PostId { get; set; }
         public bool IsArchived { get; set; }
 
         public virtual Post Post { get; set; }

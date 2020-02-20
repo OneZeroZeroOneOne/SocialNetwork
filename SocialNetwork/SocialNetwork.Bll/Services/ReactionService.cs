@@ -52,7 +52,7 @@ namespace SocialNetwork.Bll.Services
             return insertedReactionComment.Entity;
         }
 
-        public async Task<List<ReactionPost>> GetReactionPost(BigInteger postId)
+        public async Task<List<ReactionPost>> GetReactionPost(int postId)
         {
             var post = await _context.Post.Where(x => x.Id == postId)
                 .Include(x => x.ReactionPost).FirstOrDefaultAsync();
@@ -65,7 +65,7 @@ namespace SocialNetwork.Bll.Services
         }
 
         
-        public async Task<List<ReactionComment>> GetReactionComment(BigInteger commentId)
+        public async Task<List<ReactionComment>> GetReactionComment(int commentId)
         {
             var comment = await _context.Comment.Where(x => x.Id == commentId)
                 .Include(x => x.ReactionComment).FirstOrDefaultAsync();
@@ -87,7 +87,7 @@ namespace SocialNetwork.Bll.Services
             return _context.ReactionTypeComment.ToListAsync();
         }
 
-        public async Task DeleteReactionPost(BigInteger postId, Guid currentUserId)
+        public async Task DeleteReactionPost(int postId, Guid currentUserId)
         {
             ReactionPost reactionPost = new ReactionPost
             {
@@ -98,7 +98,7 @@ namespace SocialNetwork.Bll.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteReactionComment(BigInteger commentId, Guid currentUserId)
+        public async Task DeleteReactionComment(int commentId, Guid currentUserId)
         {
             ReactionComment reactionComment = new ReactionComment
             {

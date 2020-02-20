@@ -4,8 +4,8 @@ namespace SocialNetwork.Dal.Models
 {
     public class AttachmentComment
     {
-        public BigInteger CommentId { get; set; }
-        public BigInteger AttachmentId { get; set; }
+        public int CommentId { get; set; }
+        public int AttachmentId { get; set; }
 
         public virtual Attachment Attachment { get; set; }
         public virtual Comment Comment { get; set; }

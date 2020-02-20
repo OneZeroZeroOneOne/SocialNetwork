@@ -34,7 +34,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet, Route("{commentId}", Name = "commentId")]
-        public async Task<OutCommentViewModel> Get([FromRoute]BigInteger commentId)
+        public async Task<OutCommentViewModel> Get([FromRoute]int commentId)
         {
             var comment = await _commentService.GetComment(commentId);
 
@@ -66,13 +66,13 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet, Route("Page/{postId}", Name = "GetPageСomments")]
-        public async Task<PagedResult<Comment>> GetPageComments([FromRoute]BigInteger postId, [FromQuery]int page, [FromQuery]int quantity)
+        public async Task<PagedResult<Comment>> GetPageComments([FromRoute]int postId, [FromQuery]int page, [FromQuery]int quantity)
         {
             return await _commentService.GetPageComments(postId, page, quantity);
         }
 
         [HttpGet, Route("{commentId}/Reactions", Name = "GetCommentReactions")]
-        public async Task<List<OutReactionCommentViewModel>> Reaction([FromRoute]BigInteger commentId)
+        public async Task<List<OutReactionCommentViewModel>> Reaction([FromRoute]int commentId)
         {
             List<ReactionComment> listReactionComment = await _reactionService.GetReactionComment(commentId);
             return listReactionComment.Select(i => _mapper.Map<ReactionComment, OutReactionCommentViewModel>(i)).ToList();
@@ -80,7 +80,7 @@ namespace SocialNetwork.WebApi.Controllers
 
         [HttpDelete]
         [Authorize(Policy = "ConfirmedUser")]
-        public async Task<IActionResult> DeleteComment([FromQuery]BigInteger commentId)
+        public async Task<IActionResult> DeleteComment([FromQuery]int commentId)
         {
             var currentUser = CurrentUser();
             await _commentService.DeleteComment(commentId, currentUser);

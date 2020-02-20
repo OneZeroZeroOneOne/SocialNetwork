@@ -12,10 +12,10 @@ namespace SocialNetwork.Bll.Abstractions
 
         Task<Post> CreateNewPost(Post postModel, Guid authorUser);
 
-        Task<Post> GetPost(Guid boardId, BigInteger postId);
+        Task<Post> GetPost(Guid boardId, int postId);
 
         Task<PagedResult<Post>> GetPagePosts(Guid boardId, int page, int quantity);
 
-        Task DeletePost(Guid boardId, BigInteger postId, Guid userId);
+        Task DeletePost(Guid boardId, int postId, Guid userId);
     }
 }

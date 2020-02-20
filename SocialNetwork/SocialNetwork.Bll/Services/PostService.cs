@@ -45,7 +45,7 @@ namespace SocialNetwork.Bll.Services
             return insertedPost.Entity;
         }
 
-        public async Task<Post> GetPost(Guid boardId, BigInteger postId)
+        public async Task<Post> GetPost(Guid boardId, int postId)
         {
             var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == postId && x.IsArchived == false && x.BoardId == boardId);
 
@@ -64,7 +64,7 @@ namespace SocialNetwork.Bll.Services
             return await _context.Post.Where(x => x.IsArchived == false && x.BoardId == boardId).AsQueryable().GetPaged(page, quantity);
         }
 
-        public async Task DeletePost(Guid boardId, BigInteger postId, Guid currentUserId)
+        public async Task DeletePost(Guid boardId, int postId, Guid currentUserId)
         {
             var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == postId && x.UserId == currentUserId);
             if (post == null)

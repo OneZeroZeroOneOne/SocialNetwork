@@ -13,15 +13,15 @@ namespace SocialNetwork.Bll.Abstractions
 
         Task<ReactionComment> AddReactionComment(ReactionComment reactionComment, Guid authorUser);
 
-        Task<List<ReactionPost>> GetReactionPost(BigInteger postId);
+        Task<List<ReactionPost>> GetReactionPost(int postId);
 
-        Task<List<ReactionComment>> GetReactionComment(BigInteger commentId);
+        Task<List<ReactionComment>> GetReactionComment(int commentId);
 
         Task<List<ReactionTypePost>> GetReactionTypePost();
         Task<List<ReactionTypeComment>> GetReactionTypeComment();
 
-        Task DeleteReactionPost(BigInteger postId, Guid currentUserId);
-        Task DeleteReactionComment(BigInteger commentId, Guid currentUserId);
+        Task DeleteReactionPost(int postId, Guid currentUserId);
+        Task DeleteReactionComment(int commentId, Guid currentUserId);
 
 
     }

@@ -10,17 +10,17 @@ namespace SocialNetwork.Dal.ViewModels.In
     public class PostAttachmentViewModel
     {
         [Required]
-        public BigInteger PostId { get; set; }
+        public int PostId { get; set; }
         [Required]
-        public BigInteger AttachmentId { get; set; }
+        public int AttachmentId { get; set; }
     }
 
     public class CommentAttachmentViewModel
     {
         [Required]
-        public BigInteger CommentId { get; set; }
+        public int CommentId { get; set; }
         [Required]
-        public BigInteger AttachmentId { get; set; }
+        public int AttachmentId { get; set; }
     }
 
     public class AttachmentViewModel
