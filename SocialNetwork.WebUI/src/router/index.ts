@@ -13,12 +13,12 @@ const routes = [
     component: () => import('../views/NotFoundView.vue')
   },
   {
-    path: '/board/:boardname',
+    path: '/:boardname',
     name: 'board',
     component: BoardView
   },
   {
-    path: '/board/:boardname/post',
+    path: '/:boardname/:postid',
     name: 'post',
     component: PostView
   },

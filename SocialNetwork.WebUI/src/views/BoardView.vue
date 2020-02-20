@@ -26,7 +26,6 @@ export default class BoardView extends Vue {
   }
 
   boardName(): string {
-    console.log(this.$route)
     return this.$route.params.boardname;
   }
 

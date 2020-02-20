@@ -50,7 +50,7 @@ export default class PostView extends Vue {
   constructor() {
     super();
     setInterval(() => this.loadComments(), 1000 * 30); //every 30 sec update
-    
+    console.log("postview")
     this.loadBoardByName(this.boardName())
     .then(x => {
       console.log(this.boardObj)
@@ -65,9 +65,7 @@ export default class PostView extends Vue {
   throttleLoadComments = _.throttle(() => this.loadComments(), 2000);
 
   postId(): string {
-    if (this.$route.query.hasOwnProperty('id'))
-      return this.$route.query.id.toString()
-    return 'error'
+    return this.$route.params.postid
   }
 
   boardName(): string {
