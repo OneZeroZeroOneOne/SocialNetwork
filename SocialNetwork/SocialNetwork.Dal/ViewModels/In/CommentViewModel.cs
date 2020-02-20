@@ -1,5 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 
 namespace SocialNetwork.Dal.ViewModels.In
 {
@@ -8,6 +8,6 @@ namespace SocialNetwork.Dal.ViewModels.In
         [Required]
         public string Text { get; set; }
         [Required]
-        public Guid PostId { get; set; }
+        public BigInteger PostId { get; set; }
     }
 }

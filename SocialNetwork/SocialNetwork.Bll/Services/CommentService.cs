@@ -6,6 +6,7 @@ using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using System;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using SocialNetwork.Utilities.Exceptions;
 
@@ -52,7 +53,7 @@ namespace SocialNetwork.Bll.Services
             return comment;
         }
 
-        public async Task<Comment> GetComment(Guid commentId)
+        public async Task<Comment> GetComment(BigInteger commentId)
         {
             var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentId && x.IsArchived == false);
 
@@ -61,7 +62,7 @@ namespace SocialNetwork.Bll.Services
 
             return comment;
         }
-        public async Task<PagedResult<Comment>> GetPageComments(Guid postId, int page, int quantity)
+        public async Task<PagedResult<Comment>> GetPageComments(BigInteger postId, int page, int quantity)
         {
             if (page <= 0 || quantity <= 0)
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
@@ -69,7 +70,7 @@ namespace SocialNetwork.Bll.Services
 
             return await _context.Comment.Where(x => x.PostId == postId && x.IsArchived == false).AsQueryable().GetPaged(page, quantity);
         }
-        public async Task DeleteComment(Guid commentId, Guid currentUserId)
+        public async Task DeleteComment(BigInteger commentId, Guid currentUserId)
         {
             var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentId && x.UserId == currentUserId);
             if (comment == null)

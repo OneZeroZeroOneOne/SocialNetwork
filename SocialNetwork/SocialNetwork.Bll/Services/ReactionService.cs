@@ -6,6 +6,7 @@ using SocialNetwork.Utilities.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Services
@@ -51,7 +52,7 @@ namespace SocialNetwork.Bll.Services
             return insertedReactionComment.Entity;
         }
 
-        public async Task<List<ReactionPost>> GetReactionPost(Guid postId)
+        public async Task<List<ReactionPost>> GetReactionPost(BigInteger postId)
         {
             var post = await _context.Post.Where(x => x.Id == postId)
                 .Include(x => x.ReactionPost).FirstOrDefaultAsync();
@@ -64,7 +65,7 @@ namespace SocialNetwork.Bll.Services
         }
 
         
-        public async Task<List<ReactionComment>> GetReactionComment(Guid commentId)
+        public async Task<List<ReactionComment>> GetReactionComment(BigInteger commentId)
         {
             var comment = await _context.Comment.Where(x => x.Id == commentId)
                 .Include(x => x.ReactionComment).FirstOrDefaultAsync();
@@ -86,20 +87,24 @@ namespace SocialNetwork.Bll.Services
             return _context.ReactionTypeComment.ToListAsync();
         }
 
-        public async Task DeleteReactionPost(Guid postId, Guid currentUserId)
+        public async Task DeleteReactionPost(BigInteger postId, Guid currentUserId)
         {
-            ReactionPost reactionPost = new ReactionPost();
-            reactionPost.PostId = postId;
-            reactionPost.UserId = currentUserId;
+            ReactionPost reactionPost = new ReactionPost
+            {
+                PostId = postId,
+                UserId = currentUserId
+            };
             _context.ReactionPost.Remove(reactionPost);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteReactionComment(Guid commentId, Guid currentUserId)
+        public async Task DeleteReactionComment(BigInteger commentId, Guid currentUserId)
         {
-            ReactionComment reactionComment = new ReactionComment();
-            reactionComment.CommentId = commentId;
-            reactionComment.UserId = currentUserId;
+            ReactionComment reactionComment = new ReactionComment
+            {
+                CommentId = commentId,
+                UserId = currentUserId
+            };
             _context.ReactionComment.Remove(reactionComment);
             await _context.SaveChangesAsync();
         }

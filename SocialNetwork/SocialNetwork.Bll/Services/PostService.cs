@@ -7,6 +7,7 @@ using SocialNetwork.Dal.ViewModels;
 using SocialNetwork.Utilities.Exceptions;
 using System;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Services
@@ -44,7 +45,7 @@ namespace SocialNetwork.Bll.Services
             return insertedPost.Entity;
         }
 
-        public async Task<Post> GetPost(Guid boardId, Guid postId)
+        public async Task<Post> GetPost(Guid boardId, BigInteger postId)
         {
             var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == postId && x.IsArchived == false && x.BoardId == boardId);
 
@@ -63,7 +64,7 @@ namespace SocialNetwork.Bll.Services
             return await _context.Post.Where(x => x.IsArchived == false && x.BoardId == boardId).AsQueryable().GetPaged(page, quantity);
         }
 
-        public async Task DeletePost(Guid boardId, Guid postId, Guid currentUserId)
+        public async Task DeletePost(Guid boardId, BigInteger postId, Guid currentUserId)
         {
             var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == postId && x.UserId == currentUserId);
             if (post == null)

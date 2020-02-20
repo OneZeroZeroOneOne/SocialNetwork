@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace SocialNetwork.Dal.Models
 {
-    public partial class Comment : Sortable
+    public class Comment : Sortable
     {
         public Comment()
         {
             ReactionComment = new HashSet<ReactionComment>();
             AttachmentComment = new HashSet<AttachmentComment>();
         }
-        public Guid Id { get; set; }
+        public BigInteger Id { get; set; }
         public string Text { get; set; }
         public Guid UserId { get; set; }
-        public Guid PostId { get; set; }
+        public BigInteger PostId { get; set; }
         public bool IsArchived { get; set; }
 
         public virtual Post Post { get; set; }

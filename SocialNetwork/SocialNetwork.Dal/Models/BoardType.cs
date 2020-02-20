@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SocialNetwork.Dal.Models
 {
-    public partial class BoardType
+    public class BoardType
     {
         public BoardType()
         {

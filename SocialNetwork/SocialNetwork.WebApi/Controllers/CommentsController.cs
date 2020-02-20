@@ -10,6 +10,7 @@ using SocialNetwork.Dal.ViewModels.Out;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
@@ -33,7 +34,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet, Route("{commentId}", Name = "commentId")]
-        public async Task<OutCommentViewModel> Get([FromRoute]Guid commentId)
+        public async Task<OutCommentViewModel> Get([FromRoute]BigInteger commentId)
         {
             var comment = await _commentService.GetComment(commentId);
 
@@ -65,13 +66,13 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet, Route("Page/{postId}", Name = "GetPageСomments")]
-        public async Task<PagedResult<Comment>> GetPageComments([FromRoute]Guid postId, [FromQuery]int page, [FromQuery]int quantity)
+        public async Task<PagedResult<Comment>> GetPageComments([FromRoute]BigInteger postId, [FromQuery]int page, [FromQuery]int quantity)
         {
             return await _commentService.GetPageComments(postId, page, quantity);
         }
 
         [HttpGet, Route("{commentId}/Reactions", Name = "GetCommentReactions")]
-        public async Task<List<OutReactionCommentViewModel>> Reaction([FromRoute]Guid commentId)
+        public async Task<List<OutReactionCommentViewModel>> Reaction([FromRoute]BigInteger commentId)
         {
             List<ReactionComment> listReactionComment = await _reactionService.GetReactionComment(commentId);
             return listReactionComment.Select(i => _mapper.Map<ReactionComment, OutReactionCommentViewModel>(i)).ToList();
@@ -79,7 +80,7 @@ namespace SocialNetwork.WebApi.Controllers
 
         [HttpDelete]
         [Authorize(Policy = "ConfirmedUser")]
-        public async Task<IActionResult> DeleteComment([FromQuery]Guid commentId)
+        public async Task<IActionResult> DeleteComment([FromQuery]BigInteger commentId)
         {
             var currentUser = CurrentUser();
             await _commentService.DeleteComment(commentId, currentUser);

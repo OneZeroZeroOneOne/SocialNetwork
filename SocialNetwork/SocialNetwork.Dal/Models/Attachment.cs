@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace SocialNetwork.Dal.Models
 {
-    public partial class Attachment
+    public class Attachment
     {
         public Attachment()
         {
@@ -11,7 +12,7 @@ namespace SocialNetwork.Dal.Models
             AttachmentPost = new HashSet<AttachmentPost>();
         }
 
-        public Guid Id { get; set; }
+        public BigInteger Id { get; set; }
         public string ContentType { get; set; }
         public string Path { get; set; }
         public DateTime CreateDateTime { get; set; }

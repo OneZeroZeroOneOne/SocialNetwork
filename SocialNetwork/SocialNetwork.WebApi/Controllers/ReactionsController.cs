@@ -6,8 +6,8 @@ using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
-using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
@@ -62,7 +62,7 @@ namespace SocialNetwork.WebApi.Controllers
 
         [HttpDelete, Route("Post", Name = "DeletePost")]
         [Authorize(Policy = "ConfirmedUser")]
-        public async Task<IActionResult> DeletePost([FromQuery]Guid postId)
+        public async Task<IActionResult> DeletePost([FromQuery]BigInteger postId)
         {
             var currentUser = CurrentUser();
             await _reactionService.DeleteReactionPost(postId, currentUser);
@@ -72,7 +72,7 @@ namespace SocialNetwork.WebApi.Controllers
 
         [HttpDelete, Route("Comment", Name = "DeleteComment")]
         [Authorize(Policy = "ConfirmedUser")]
-        public async Task<IActionResult> DeleteComment([FromQuery]Guid commentId)
+        public async Task<IActionResult> DeleteComment([FromQuery]BigInteger commentId)
         {
             var currentUser = CurrentUser();
             await _reactionService.DeleteReactionComment(commentId, currentUser);

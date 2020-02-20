@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace SocialNetwork.Dal.Models
 {
-    public partial class Post : Sortable
+    public class Post : Sortable
     {
         public Post()
         {
@@ -12,7 +13,7 @@ namespace SocialNetwork.Dal.Models
             AttachmentPost = new HashSet<AttachmentPost>();
         }
 
-        public Guid Id { get; set; }
+        public BigInteger Id { get; set; }
         public string Text { get; set; }
         public Guid UserId { get; set; }
         public bool IsArchived { get; set; }

@@ -1,6 +1,7 @@
 ﻿using SocialNetwork.Dal.Models;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Abstractions
@@ -12,15 +13,15 @@ namespace SocialNetwork.Bll.Abstractions
 
         Task<ReactionComment> AddReactionComment(ReactionComment reactionComment, Guid authorUser);
 
-        Task<List<ReactionPost>> GetReactionPost(Guid postId);
+        Task<List<ReactionPost>> GetReactionPost(BigInteger postId);
 
-        Task<List<ReactionComment>> GetReactionComment(Guid commentId);
+        Task<List<ReactionComment>> GetReactionComment(BigInteger commentId);
 
         Task<List<ReactionTypePost>> GetReactionTypePost();
         Task<List<ReactionTypeComment>> GetReactionTypeComment();
 
-        Task DeleteReactionPost(Guid postId, Guid currentUserId);
-        Task DeleteReactionComment(Guid commentId, Guid currentUserId);
+        Task DeleteReactionPost(BigInteger postId, Guid currentUserId);
+        Task DeleteReactionComment(BigInteger commentId, Guid currentUserId);
 
 
     }

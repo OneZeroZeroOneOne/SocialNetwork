@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Numerics;
 
 
 namespace SocialNetwork.Dal.ViewModels.In
@@ -7,7 +8,7 @@ namespace SocialNetwork.Dal.ViewModels.In
     public class ReactionCommentViewModel
     {
         [Required]
-        public string CommentId { get; set; }
-        public string ReactionId { get; set; }
+        public BigInteger CommentId { get; set; }
+        public Guid ReactionId { get; set; }
     }
 }

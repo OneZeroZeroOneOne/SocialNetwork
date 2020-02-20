@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace SocialNetwork.Dal.ViewModels.Out
@@ -8,7 +9,7 @@ namespace SocialNetwork.Dal.ViewModels.Out
     {
         public Guid ReactionId { get; set; }
         public Guid UserId { get; set; }
-        public Guid PostId { get; set; }
+        public BigInteger PostId { get; set; }
 
     }
 }

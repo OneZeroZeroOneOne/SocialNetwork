@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SocialNetwork.Dal.Models
 {
-    public partial class Board
+    public class Board
     {
         public Guid Id { get; set; }
         public Guid BoardTypeId { get; set; }
