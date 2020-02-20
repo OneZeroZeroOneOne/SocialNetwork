@@ -41,7 +41,7 @@ export default class PostView extends Vue {
   private requestBoardStatus: ResponseState = ResponseState.loading;
 
   private commentObjs: IComment[] = [];
-  private commentIds: Guid[] = [];
+  private commentIds: number[] = [];
   private currentPage: number = 1;
   private postObj!: IPost; 
 

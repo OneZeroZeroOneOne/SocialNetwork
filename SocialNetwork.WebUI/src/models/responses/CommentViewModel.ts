@@ -1,11 +1,11 @@
 import { Guid } from "@/utilities/guid";
 
 export interface IComment {
-    id: Guid
+    id: number
     date: string
     userId: Guid
     text: string
-    postId: Guid
+    postId: number
 }
 
 export interface IComments {

@@ -1,7 +1,7 @@
 import { Guid } from "@/utilities/guid";
 
 export interface IPost {
-    id:	Guid
+    id:	number
     text: string
     nullable: boolean
     date: string
