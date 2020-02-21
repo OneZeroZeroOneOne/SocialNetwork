@@ -2,13 +2,16 @@
   <div class="post">
     <div class="post-body">
       <div class="post-header">
-        Header
+        Header {{postObj.id}}
       </div>
       <div class="post-content" >
         Post Text: {{postObj.text}}
       </div>
       <div class="post-footer">
         Footer
+        <div v-on:click="goToPost" class="post-footer-enter button noselect" v-if="showEnterButton === true">
+          To thread
+        </div>
       </div>
     </div>
   </div>
@@ -29,9 +32,20 @@ import _ from 'lodash'
 @Component({})
 export default class PostComponent extends Vue {
   @Prop() public postObj!: IPost; 
+  @Prop() public postNum!: number;
+  @Prop() public showEnterButton!: boolean;
   
   constructor() {
     super();
+    console.log(this.showEnterButton)
+  }
+
+  boardName(): string {
+    return this.$route.params.boardname;
+  }
+
+  goToPost(): void {
+    this.$router.push({name: 'post', params: { board: this.boardName(), postid: this.postObj.id.toString()}})
   }
 }
 </script>
@@ -86,6 +100,12 @@ $text-color: #ccc;
     border-top-style: solid;
     border-top-width: 2px;
     border-top-color: cornflowerblue;
+  }
+
+  .post-footer-enter {
+    float: right;
+    margin: 6px;
+    margin-right: 10px;
   }
 }
 </style>
