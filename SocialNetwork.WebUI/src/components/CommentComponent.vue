@@ -58,7 +58,7 @@ $text-color: #ccc;
   color: $text-color;
   margin: 0 0px $comment-offset-between $comment-offset-left;
   background-color: $comment-body-color;
-  width: 80%;
+  width: 100%;
   min-height: 100px;
   border: 2px solid;
   border-left-width: 4px;

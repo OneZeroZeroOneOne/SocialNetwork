@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import PostComponent from '@/components/PostComponent.vue'
 import CommentComponent from "@/components/CommentComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
@@ -47,10 +47,13 @@ export default class PostView extends Vue {
 
   private boardObj!: IBoard;
 
+  private refreshInterval!: number;
+
   constructor() {
     super();
-    setInterval(() => this.loadComments(), 1000 * 30); //every 30 sec update
-    console.log("postview")
+
+    //this.refreshInterval = setInterval(() => this.loadComments(), 1000 * 30); //every 30 sec update
+
     this.loadBoardByName(this.boardName())
     .then(x => {
       this.loadPost()
@@ -59,6 +62,12 @@ export default class PostView extends Vue {
     /*this.$root.$on('footerInView', () => {
       this.throttleLoadComments();
     })*/
+  }
+
+  @Watch('$route',{ immediate: true}) 
+  onRouteChange(obj): void {
+    //console.log(obj)
+    //clearInterval(this.refreshInterval)
   }
 
   throttleLoadComments = _.throttle(() => this.loadComments(), 2000);

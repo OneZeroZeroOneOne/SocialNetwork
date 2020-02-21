@@ -1,5 +1,8 @@
 <template>
   <div class="board-view">
+    <div class="board-name-description" v-if="requestBoardStatus == 1">
+      <div class="board-name">{{boardObj.name}}</div> - <div class="board-description">{{boardObj.description}}</div>
+    </div>
     <ul id="comments" v-if="requestPostsStatus === 1">
       <li v-for="(item, index) in postObjs" v-bind:key="item.id">
         <PostComponent :postObj="item" :postNum="index+1" :showEnterButton="true"/>
@@ -131,4 +134,21 @@ export default class BoardView extends Vue {
 	width: 100%;
 	height: 80px;
 }
+
+.board-name-description {
+  margin-top: 10px;
+  color: white;
+  text-align: center;
+  font-size: 4em;  
+  .board-description {
+    display: inline;
+    color: orange;
+  }
+  .board-name {
+    display: inline;
+    color: orangered;
+  }
+
+}
+
 </style>

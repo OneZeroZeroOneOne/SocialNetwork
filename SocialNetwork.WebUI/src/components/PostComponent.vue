@@ -67,7 +67,7 @@ $text-color: #ccc;
   position: relative;
   color: $text-color;
   background-color: $post-body-color;
-  width: 80%;
+  width: 90%;
   min-height: 150px;
   height: auto;
   border: 2px solid;
