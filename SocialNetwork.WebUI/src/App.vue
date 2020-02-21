@@ -38,11 +38,10 @@ html {
   border:0.15em solid #CCCCCC;
   box-sizing: border-box;
   text-decoration:none;
-  font-family:'Segoe UI','Roboto',sans-serif;
   font-weight:400;
   color:#000000;
   background-color:#CCCCCC;
-  text-align:center;
+  text-align: center;
   position:relative;
 }
   
