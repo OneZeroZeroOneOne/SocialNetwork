@@ -5,7 +5,12 @@
         <PostComponent :postObj="item" :postNum="index+1" :showEnterButton="true"/>
       </li>
     </ul>
-    <FooterComponent/>
+    <li v-if="postObjs.length > 0">
+      <FooterComponent/>
+    </li>
+    <li v-else>
+      <FooterComponent class="foo"/>
+    </li>
   </div>
 </template>
 
@@ -119,5 +124,11 @@ export default class BoardView extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
+.foo {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 80px;
+}
 </style>
