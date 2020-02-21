@@ -18,8 +18,11 @@
         (<span style="color: #a6a61f">"(╯°□°)╯︵ ┻━┻"</span>);
         </span>
         <span style="display:block">}</span>
-        <span style="color: #777;font-style:italic;">
-            // <a href="/">Go home!</a>
+        <span style="color: #777;font-style:italic;" v-if="fromBoardName!=''">
+            // <a v-on:click="navigateTo">Go back to {{fromBoardName}}!</a>
+        </span>
+        <span style="color: #777;font-style:italic;" v-else>
+            // <a v-on:click="navigateTo">Go back!</a>
         </span>
     </span>
     </div>
@@ -30,9 +33,18 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({})
 export default class NotFoundView extends Vue {
+  @Prop() public fromBoard!: string;
 
   constructor() {
     super();
+  }
+
+  get fromBoardName(): string {
+      return (this.fromBoard === undefined ? "" : this.fromBoard)
+  }
+
+  navigateTo() {
+      this.$router.push("/" + this.fromBoardName);
   }
 }
 </script>
@@ -51,6 +63,8 @@ body {
 
 a {
 	color: #fff;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .code-area {

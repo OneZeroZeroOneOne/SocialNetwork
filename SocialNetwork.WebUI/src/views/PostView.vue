@@ -53,7 +53,6 @@ export default class PostView extends Vue {
     console.log("postview")
     this.loadBoardByName(this.boardName())
     .then(x => {
-      console.log(this.boardObj)
       this.loadPost()
       this.loadComments()
     });
@@ -78,16 +77,16 @@ export default class PostView extends Vue {
         .then(response => {
             if (response.status == 200)
             {
-                this.boardObj = response.data;
-                this.requestBoardStatus = ResponseState.success;
+              this.boardObj = response.data;
+              this.requestBoardStatus = ResponseState.success;
             } else {
-                this.requestBoardStatus = ResponseState.fail;
-                this.$router.push({name: "notfound"})
+              this.requestBoardStatus = ResponseState.fail;
+              this.$router.push({name: "notfound"})
             }
         })
         .catch(error => {
-            this.requestBoardStatus = ResponseState.fail;
-            this.$router.push({name: "notfound"})
+          this.requestBoardStatus = ResponseState.fail;
+          this.$router.push({name: "notfound"})
         });
   }
 
@@ -96,11 +95,17 @@ export default class PostView extends Vue {
 
     await PostService.getPost(this.boardObj.id, this.postId())
       .then(response => {
-        this.postObj = response;
+        this.postObj = response.data;
         this.requestPostStatus = ResponseState.success;
+        console.log(response)
       })
       .catch(error => {
         this.requestPostStatus = ResponseState.fail;
+        if (error.response.status === 400)
+        {
+          this.requestPostStatus = ResponseState.fail;
+          this.$router.push({name: "notfound", params: {fromBoard: this.boardObj.name} })
+        }
       });
   }
 

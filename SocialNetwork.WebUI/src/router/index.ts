@@ -10,7 +10,8 @@ const routes = [
   {
     path: '/notfound',
     name: 'notfound',
-    component: () => import('../views/NotFoundView.vue')
+    component: () => import('../views/NotFoundView.vue'),  
+    props: true
   },
   {
     path: '/:boardname',
