@@ -8,9 +8,11 @@
         Post Text: {{postObj.text}}
       </div>
       <div class="post-footer">
-        Footer
         <div v-on:click="goToPost" class="post-footer-enter button noselect" v-if="showEnterButton === true">
           To thread
+        </div>
+        <div class="post-footer-reply button noselect">
+          Reply
         </div>
       </div>
     </div>
@@ -103,6 +105,12 @@ $text-color: #ccc;
   }
 
   .post-footer-enter {
+    float: right;
+    margin: 6px;
+    margin-right: 10px;
+  }
+  
+  .post-footer-reply {
     float: right;
     margin: 6px;
     margin-right: 10px;

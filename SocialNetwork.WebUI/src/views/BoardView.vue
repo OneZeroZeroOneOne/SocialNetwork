@@ -3,9 +3,14 @@
     <div class="board-name-description" v-if="requestBoardStatus == 1">
       <div class="board-name">/{{boardObj.name}}/</div> - <div class="board-description">{{boardObj.description}}</div>
     </div>
-    <ul id="comments" v-if="requestPostsStatus === 1">
-      <li v-for="(item, index) in postObjs" v-bind:key="item.id">
-        <PostComponent :postObj="item" :postNum="index+1" :showEnterButton="true"/>
+    <ul id="posts" v-if="requestPostsStatus === 1">
+      <li v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id">
+        <PostComponent :postObj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
+        <ul id="comments">
+          <li v-for="(commentO, indexComment) in getPreloadedCommentForPost.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
+            <CommentComponent :commentObj="commentO" :commentNum="indexComment+1"/>
+          </li>
+        </ul>
       </li>
     </ul>
     <li v-if="postObjs.length > 0">
@@ -19,6 +24,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import { Getter } from 'vuex'
 import { IBoard } from '../models/responses/Board';
 import { Guid } from '../utilities/guid';
 import { BoardService } from '../services/BoardService';
@@ -28,11 +34,16 @@ import PostComponent from '../components/PostComponent.vue'
 import FooterComponent from "@/components/FooterComponent.vue";
 import Nprogress from "nprogress"
 import _ from 'lodash'
+import { Dictionary } from 'vue-router/types/router';
+import { IComment } from '../models/responses/CommentViewModel';
+import { CommentService } from '../services/CommentService';
+import CommentComponent from '../components/CommentComponent.vue'
 
 @Component({
   components: { 
     PostComponent,
-    FooterComponent
+    FooterComponent,
+    CommentComponent
   }
 })
 export default class BoardView extends Vue {
@@ -45,12 +56,17 @@ export default class BoardView extends Vue {
   private postIds: number[] = [];
   private currentPage: number = 1;
 
+  private preloadedComments: IComment[] = [];
+
   constructor() {
     super();
     this.currentBoardName = this.boardName();
     this.loadBoardByName(this.currentBoardName)
       .then(x => {
         this.loadPagePosts()
+        /*.then(xx => {
+          this.preloadComments()
+        })*/
       })
     
     this.$root.$on('footerInView', () => {
@@ -60,8 +76,24 @@ export default class BoardView extends Vue {
 
   throttleLoadPosts = _.throttle(() => this.loadPagePosts(), 2000);
 
+  thisPostId(postId: number) {
+
+  }
+
+  get getPreloadedCommentForPost(): IComment[] {
+    //let comments = this.preloadedComments.get(postId)
+    console.log(this.preloadedComments)
+    return this.preloadedComments === undefined ? [] : this.preloadedComments;
+  }
+
   boardName(): string {
     return this.$route.params.boardname;
+  }
+
+  async preloadComments(): Promise<void> {
+    this.postIds.forEach(x => {
+      let resp = CommentService.getCommentForPost(x.toString(), 1, 5);
+    })
   }
 
   async loadBoardByName(name: string): Promise<void> {
@@ -95,14 +127,30 @@ export default class BoardView extends Vue {
 
           let newPostCount: number = 0;
           console.log(response.data)
+
+          let newPostIds: number[] = []
           response.data.results.forEach(x => {
             if (this.postIds.indexOf(x.id) === -1)
             {
               this.postIds.push(x.id);
               this.postObjs.push(x);
+              newPostIds.push(x.id);
               newPostCount += 1;
             }
           })
+
+          /*
+          preload comments
+          */
+          console.log(newPostIds)
+          newPostIds.forEach(x => {
+            let resp = CommentService.getCommentForPost(x.toString(), 1, 5).then(resp => {
+              this.preloadedComments.push(...resp.results)//.set(x, resp.results)
+            })
+          })
+          console.log(this.preloadedComments)
+          /* 
+          */
           this.$notify({
             group: 'foo',
             title: 'Loaded posts',
@@ -149,6 +197,12 @@ export default class BoardView extends Vue {
     color: orangered;
   }
 
+}
+#comments {
+  width: 80%;
+  float: left;
+  margin-left: 40px;
+  padding-bottom: 2.5rem;
 }
 
 </style>
