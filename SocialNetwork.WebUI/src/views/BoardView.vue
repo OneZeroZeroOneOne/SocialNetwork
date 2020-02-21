@@ -1,7 +1,7 @@
 <template>
   <div class="board-view">
     <div class="board-name-description" v-if="requestBoardStatus == 1">
-      <div class="board-name">{{boardObj.name}}</div> - <div class="board-description">{{boardObj.description}}</div>
+      <div class="board-name">/{{boardObj.name}}/</div> - <div class="board-description">{{boardObj.description}}</div>
     </div>
     <ul id="comments" v-if="requestPostsStatus === 1">
       <li v-for="(item, index) in postObjs" v-bind:key="item.id">
