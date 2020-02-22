@@ -55,7 +55,7 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<Comment> GetComment(int commentId)
         {
-            var comment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == commentId && x.IsArchived == false);
+            var comment = await _context.Comment.Include(x => x.AttachmentComment).FirstOrDefaultAsync(x => x.Id == commentId && x.IsArchived == false);
 
             if (comment == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, $"Comment {commentId} doesn't exist");
