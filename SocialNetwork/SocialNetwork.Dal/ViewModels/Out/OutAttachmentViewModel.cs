@@ -11,3 +11,4 @@ namespace SocialNetwork.Dal.ViewModels.Out
         public string Path { get; set; }
     }
 }
+
