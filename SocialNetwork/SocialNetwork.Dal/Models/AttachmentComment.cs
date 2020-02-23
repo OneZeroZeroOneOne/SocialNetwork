@@ -8,6 +8,5 @@ namespace SocialNetwork.Dal.Models
         public int AttachmentId { get; set; }
 
         public virtual Attachment Attachment { get; set; }
-        public virtual Comment Comment { get; set; }
     }
 }

@@ -1,5 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using SocialNetwork.Dal.Models;
+using SocialNetwork.Dal.ViewModels;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
 
@@ -19,7 +22,15 @@ namespace SocialNetwork.Dal
             CreateMap<EditPostViewModel, Post>();
 
             CreateMap<CommentViewModel, Comment>();
+            
             CreateMap<Comment, OutCommentViewModel>();
+            CreateMap<PagedResult<Comment>, PagedResult<OutCommentViewModel>>();
+
+            CreateMap<List<AttachmentComment>, List<OutAttachmentViewModel>>();
+            CreateMap<AttachmentComment, OutAttachmentViewModel>()
+                .ForMember(x => x.Id, y => y.MapFrom(x => x.Attachment.Id))
+                .ForMember(x => x.Path, y => y.MapFrom(x => x.Attachment.Path));
+
             CreateMap<EditCommentViewModel, Comment>()
                 .ForMember(destinationMember => destinationMember.Id, sourceMember => sourceMember.MapFrom(x => x.CommentId));
 

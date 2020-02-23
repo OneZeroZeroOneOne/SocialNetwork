@@ -55,7 +55,10 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<Comment> GetComment(int commentId)
         {
-            var comment = await _context.Comment.Include(x => x.AttachmentComment).FirstOrDefaultAsync(x => x.Id == commentId && x.IsArchived == false);
+            var comment = await _context.Comment
+                .Include(x => x.AttachmentComment)
+                    .ThenInclude(x => x.Attachment)
+                .FirstOrDefaultAsync(x => x.Id == commentId && x.IsArchived == false);
 
             if (comment == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, $"Comment {commentId} doesn't exist");
@@ -68,7 +71,10 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     "inappropriate parameters page or quantity");
 
-            return await _context.Comment.Where(x => x.PostId == postId && x.IsArchived == false).AsQueryable().GetPaged(page, quantity);
+            return await _context.Comment.Where(x => x.PostId == postId && x.IsArchived == false)
+                .Include(x => x.AttachmentComment)
+                    .ThenInclude(x => x.Attachment)
+                .AsQueryable().GetPaged(page, quantity);
         }
         public async Task DeleteComment(int commentId, Guid currentUserId)
         {

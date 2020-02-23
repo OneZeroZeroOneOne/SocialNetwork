@@ -7,10 +7,8 @@ using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
@@ -66,9 +64,9 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet, Route("Page/{postId}", Name = "GetPageСomments")]
-        public async Task<PagedResult<Comment>> GetPageComments([FromRoute]int postId, [FromQuery]int page, [FromQuery]int quantity)
+        public async Task<PagedResult<OutCommentViewModel>> GetPageComments([FromRoute]int postId, [FromQuery]int page, [FromQuery]int quantity)
         {
-            return await _commentService.GetPageComments(postId, page, quantity);
+            return _mapper.Map<PagedResult<Comment>, PagedResult<OutCommentViewModel>>(await _commentService.GetPageComments(postId, page, quantity));
         }
 
         [HttpGet, Route("{commentId}/Reactions", Name = "GetCommentReactions")]

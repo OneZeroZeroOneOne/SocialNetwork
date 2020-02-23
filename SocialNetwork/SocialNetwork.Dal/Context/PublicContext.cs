@@ -78,17 +78,6 @@ namespace SocialNetwork.Dal.Context
                 entity.HasKey(e => new { e.CommentId, e.AttachmentId })
                     .HasName("AttachmentComment_pkey");
 
-                entity.HasOne(d => d.Attachment)
-                    .WithMany(p => p.AttachmentComment)
-                    .HasForeignKey(d => d.AttachmentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("AttachmentComment_AttachmentId_fkey");
-
-                entity.HasOne(d => d.Comment)
-                    .WithMany(p => p.AttachmentComment)
-                    .HasForeignKey(d => d.CommentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("AttachmentComment_CommentId_fkey");
             });
 
             modelBuilder.Entity<AttachmentPost>(entity =>
@@ -96,11 +85,6 @@ namespace SocialNetwork.Dal.Context
                 entity.HasKey(e => new { e.PostId, e.AttachmentId })
                     .HasName("AttachmentPost_pkey");
 
-                entity.HasOne(d => d.Attachment)
-                    .WithMany(p => p.AttachmentPost)
-                    .HasForeignKey(d => d.AttachmentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("AttachmentPost_AttachmentId_fkey");
 
                 entity.HasOne(d => d.Post)
                     .WithMany(p => p.AttachmentPost)
