@@ -65,7 +65,7 @@ namespace SocialNetwork.WebApi.Controllers
         }
 
         [HttpGet, Route("{boardId}/Page", Name = "GetPagePosts")]
-        public async Task<PagedResult<Post>> GetPagePosts([FromRoute]Guid boardId, [FromQuery]int page, [FromQuery]int quantity)
+        public async Task<PagedResult<OutPostViewModel>> GetPagePosts([FromRoute]Guid boardId, [FromQuery]int page, [FromQuery]int quantity)
         {
             return _mapper.Map<PagedResult<Post>, PagedResult<OutPostViewModel>>(await _postService.GetPagePosts(boardId, page, quantity));
         }
