@@ -25,8 +25,11 @@ namespace SocialNetwork.Dal
             
             CreateMap<Comment, OutCommentViewModel>();
             CreateMap<PagedResult<Comment>, PagedResult<OutCommentViewModel>>();
+            CreateMap<PagedResult<Post>, PagedResult<OutPostViewModel>>();
 
             CreateMap<List<AttachmentComment>, List<OutAttachmentViewModel>>();
+            CreateMap<List<AttachmentPost>, List<OutAttachmentViewModel>>();
+
             CreateMap<AttachmentComment, OutAttachmentViewModel>()
                 .ForMember(x => x.Id, y => y.MapFrom(x => x.Attachment.Id))
                 .ForMember(x => x.Path, y => y.MapFrom(x => x.Attachment.Path));
