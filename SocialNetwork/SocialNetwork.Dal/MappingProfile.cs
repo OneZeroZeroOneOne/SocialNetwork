@@ -31,6 +31,10 @@ namespace SocialNetwork.Dal
                 .ForMember(x => x.Id, y => y.MapFrom(x => x.Attachment.Id))
                 .ForMember(x => x.Path, y => y.MapFrom(x => x.Attachment.Path));
 
+            CreateMap<AttachmentPost, OutAttachmentViewModel>()
+                .ForMember(x => x.Id, y => y.MapFrom(x => x.Attachment.Id))
+                .ForMember(x => x.Path, y => y.MapFrom(x => x.Attachment.Path));
+
             CreateMap<EditCommentViewModel, Comment>()
                 .ForMember(destinationMember => destinationMember.Id, sourceMember => sourceMember.MapFrom(x => x.CommentId));
 

@@ -47,7 +47,10 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<Post> GetPost(Guid boardId, int postId)
         {
-            var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == postId && x.IsArchived == false && x.BoardId == boardId);
+            var post = await _context.Post
+                .Include(x => x.AttachmentPost)
+                    .ThenInclude(x => x.Attachment)
+                .FirstOrDefaultAsync(x => x.Id == postId && x.IsArchived == false && x.BoardId == boardId);
 
             if (post == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {postId} not found");
@@ -61,7 +64,10 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     $"inappropriate parameters page or quantity");
 
-            return await _context.Post.Where(x => x.IsArchived == false && x.BoardId == boardId).AsQueryable().GetPaged(page, quantity);
+            return await _context.Post.Where(x => x.IsArchived == false && x.BoardId == boardId)
+                .Include(x => x.AttachmentPost)
+                    .ThenInclude(x => x.Attachment)
+                .AsQueryable().GetPaged(page, quantity);
         }
 
         public async Task DeletePost(Guid boardId, int postId, Guid currentUserId)
