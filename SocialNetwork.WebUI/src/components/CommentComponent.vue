@@ -10,7 +10,7 @@
     <div class="comment-content">
       <div class=comment-content-header v-if="commentObj.attachmentComment.length > 0">
         <div class="comment-attachment" v-for="attachment in commentObj.attachmentComment" v-bind:key="attachment.id">
-          <img v-bind:src="getAttachmentPath(attachment.path)" />
+          <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" />
         </div>
       </div>
       <div class=comment-content-body>
@@ -31,8 +31,12 @@ import { CommentService } from "@/services/CommentService";
 import { IPost } from "@/models/responses/PostViewModel";
 import { ResponseState } from "@/models/enum/ResponseState";
 import { IComment } from '../models/responses/CommentViewModel';
+import { IAttachment } from '../models/responses/Attachment';
+import PreviewModal from '@/components/PreviewModal.vue';
 
-@Component({})
+@Component({
+  components: {}
+})
 export default class CommentComponent extends Vue {
   @Prop() public commentObj!: IComment;
   @Prop() public commentNum!: number;
@@ -43,6 +47,16 @@ export default class CommentComponent extends Vue {
 
   getAttachmentPath(path: string): string {
     return 'http://16ch.tk/api/attachment/' + path;
+  }
+
+  imgShow(attachment: IAttachment): void {
+    console.log(attachment.path)
+    this.$modal.show('preview-modal', {
+      srcPath: this.getAttachmentPath(attachment.path)
+    }, {
+      draggable: true,
+      resizable: true,
+    })
   }
 }
 </script>
