@@ -1,15 +1,22 @@
 <template>
   <div id="app">
     <div id="nav"></div>
-    <router-view/>
+    <router-view>
+    </router-view>
     <notifications group="foo" position="bottom right"/>
+    <preview-modal/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import PreviewModal from '@/components/PreviewModal.vue'
 
-@Component({})
+@Component({
+  components: {
+    PreviewModal
+  }
+})
 export default class App extends Vue {
   constructor() {
     super();

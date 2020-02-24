@@ -1,6 +1,5 @@
 <template>
   <div class="board-view">
-    <preview-modal/>
     <div class="board-name-description" v-if="requestBoardStatus == 1">
       <div class="board-name">/{{boardObj.name}}/</div> - <div class="board-description">{{boardObj.description}}</div>
     </div>
@@ -39,19 +38,15 @@ import { Dictionary } from 'vue-router/types/router';
 import { IComment } from '../models/responses/CommentViewModel';
 import { CommentService } from '../services/CommentService';
 import CommentComponent from '../components/CommentComponent.vue'
-import PreviewModal from '@/components/PreviewModal.vue'
 
 @Component({
   components: { 
     PostComponent,
     FooterComponent,
     CommentComponent,
-    PreviewModal
   }
 })
 export default class BoardView extends Vue {
-  @Prop() public srcPath: string = "";
-
   private requestBoardStatus: ResponseState = ResponseState.loading;
   private requestPostsStatus: ResponseState = ResponseState.loading;
   private currentBoardName: string = "";

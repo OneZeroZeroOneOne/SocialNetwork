@@ -50,7 +50,6 @@ export default class CommentComponent extends Vue {
   }
 
   imgShow(attachment: IAttachment): void {
-    console.log(attachment.path)
     this.$modal.show('preview-modal', {
       srcPath: this.getAttachmentPath(attachment.path)
     }, {
@@ -95,21 +94,22 @@ $text-color: #ccc;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: center; //flex end for images to bottom
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
-    border-bottom-color: $comment-header-border-color;
+    align-items: flex-start; //flex end for images to bottom
+  }
+
+  .comment-attachment:not(:first-child) {
+    margin-left: 5px;
   }
 
   .comment-attachment {
-    margin: 5px 5px;
+    margin: 5px 0px;
     grid-template-columns: 200px auto;
     align-items: center;
   }
 
   .comment-attachment img {
     border-radius: 5px;
-    width: 150px;
+    width: 200px;
     height: auto;
     vertical-align: middle;
   }
