@@ -1,4 +1,5 @@
 import { Guid } from "@/utilities/guid";
+import { IAttachment } from './Attachment';
 
 export interface IComment {
     id: number
@@ -6,6 +7,7 @@ export interface IComment {
     userId: Guid
     text: string
     postId: number
+    attachmentComment: IAttachment[]
 }
 
 export interface IComments {

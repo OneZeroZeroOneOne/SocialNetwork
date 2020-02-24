@@ -8,7 +8,14 @@
       </div>
     </div>
     <div class="comment-content">
-      {{commentObj.text}}
+      <div class=comment-content-header v-if="commentObj.attachmentComment.length > 0">
+        <div class="comment-attachment" v-for="attachment in commentObj.attachmentComment" v-bind:key="attachment.id">
+          <img v-bind:src="getAttachmentPath(attachment.path)" />
+        </div>
+      </div>
+      <div class=comment-content-body>
+        {{commentObj.text}}
+      </div>
     </div>
     <div class="comment-footer">
       Footer
@@ -32,6 +39,10 @@ export default class CommentComponent extends Vue {
 
   constructor() {
     super();
+  }
+
+  getAttachmentPath(path: string): string {
+    return 'http://16ch.tk/api/attachment/' + path;
   }
 }
 </script>
@@ -66,6 +77,34 @@ $text-color: #ccc;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
 
+  .comment-content-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center; //flex end for images to bottom
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: $comment-header-border-color;
+  }
+
+  .comment-attachment {
+    margin: 5px 5px;
+    grid-template-columns: 200px auto;
+    align-items: center;
+  }
+
+  .comment-attachment img {
+    border-radius: 5px;
+    width: 150px;
+    height: auto;
+    vertical-align: middle;
+  }
+
+  .comment-content-body {
+    margin-top: 10px;
+    min-height: 50px;
+  }
+
   .comment-header {
     max-width: 100%;
     min-height: $comment-header-height;
@@ -85,7 +124,6 @@ $text-color: #ccc;
     max-width: calc(100% - 10px);
     min-height: $comment-content-height;
     padding-left: 10px;
-    padding-top: 5px;
   }
   .comment-footer {
     padding-left: 10px;
