@@ -105,6 +105,7 @@ $text-color: #ccc;
     margin: 5px 0px;
     grid-template-columns: 200px auto;
     align-items: center;
+    cursor: pointer;
   }
 
   .comment-attachment img {

@@ -39,8 +39,16 @@ export default class PreviewModal extends Vue {
 
             second
             */
+
+            if (this.height >= window.innerHeight || this.width >= window.innerWidth)
+            {
+                this.height = this.height/2
+                this.width = this.width/2
+            }
+
             a.handleModalResize({size: {width: this.width, height: this.height}})
         });
+
         img.src = this.srcPath;
     }
 
