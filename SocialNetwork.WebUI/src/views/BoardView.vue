@@ -43,7 +43,7 @@ import CommentComponent from '../components/CommentComponent.vue'
   components: { 
     PostComponent,
     FooterComponent,
-    CommentComponent
+    CommentComponent,
   }
 })
 export default class BoardView extends Vue {
