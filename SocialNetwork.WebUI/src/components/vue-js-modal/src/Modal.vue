@@ -22,6 +22,7 @@
           @after-leave="afterTransitionLeave"
         >
           <div
+            @mouseover="hovered = true" @mouseleave="hovered = false" 
             v-if="visibility.modal"
             ref="modal"
             :class="modalClass"
@@ -159,6 +160,14 @@ export default {
   data () {
     return {
       visible: false,
+      hovered: false,
+
+      ratio: -1,
+
+      initialWidth: 0,
+      initialHeight: 0,
+
+      scrollPost: 0,
 
       visibility: {
         modal: false,
@@ -364,6 +373,10 @@ export default {
     }
   },
   watch: {
+    hovered(value) {
+      console.log(value)
+    },
+
     /**
      * Sets the visibility of overlay and modal.
      * Events 'opened' and 'closed' is called here
@@ -398,6 +411,55 @@ export default {
   },
 
   methods: {
+    handleScroll (event) {
+      // Any code to be executed when the window is scrolled
+      console.log(event)
+      if (this.hovered)
+      {
+        //event
+        //event.preventDefault();
+        //event.returnValue = false;
+        if (this.ratio === -1)
+          this.ratio = this.modal.width / this.modal.height;
+
+        console.log(this.ratio)
+        let direction = "up"
+        if ((document.body.getBoundingClientRect()).top > this.scrollPos)
+        {
+          direction = "up"
+        }
+        else
+        {
+          direction = "down"
+        }
+        this.scrollPos = (document.body.getBoundingClientRect()).top;
+        //this.width += 100
+        //this.height += 100
+        //this.handleModalResize({size: {width: this.width + 100, height: this.height + 100}})
+        
+        if (direction === "down")
+        {
+          this.modal.widthType = 'px'
+          this.modal.width -= (this.modal.width / this.ratio) / 20
+
+          this.modal.heightType = 'px'
+          this.modal.height -= (this.modal.height / this.ratio) / 20
+        }else{
+          this.modal.widthType = 'px'
+          this.modal.width += (this.modal.width / this.ratio) / 20
+
+          this.modal.heightType = 'px'
+          this.modal.height += (this.modal.height / this.ratio) / 20
+        }
+
+        const { size } = this.modal
+
+        this.$emit(
+          'resize',
+          this.createModalEvent({ size })
+        )
+      }
+    },
     handleToggleEvent (name, state, params) {
       if (this.name === name) {
         const nextState = typeof state === 'undefined'
@@ -485,6 +547,18 @@ export default {
          */
         blurActiveElement()
 
+        const handleScrollDiv = (e) => {
+          var e0 = e.originalEvent;
+          var delta = e0.wheelDelta || -e0.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          console.log(this)
+          e.preventDefault();  
+        }
+
+        window.addEventListener('scroll', this.handleScroll)
+
+
         if (reset) {
           this.setInitialSize()
 
@@ -496,6 +570,8 @@ export default {
           document.body.classList.add('v--modal-block-scroll')
         }
       } else {
+        
+        window.removeEventListener('scroll', this.handleScroll)
         if (scrollable) {
           document.body.classList.remove('v--modal-block-scroll')
         }
@@ -601,7 +677,6 @@ export default {
 
         const handleDraggableMousemove = event => {
           let { clientX, clientY } = getPosition(event)
-          console.log(clientX, clientY)
 
           this.shift.left = cachedShiftX + clientX - startX
           this.shift.top = cachedShiftY + clientY - startY
@@ -746,6 +821,12 @@ export default {
   border-radius: 3px;
   box-shadow: 0 20px 60px -2px rgba(27, 33, 58, 0.4);
   padding: 0;
+  flex-shrink: 0;
+}
+
+.v--modal img {
+  width: 100%;
+  height: 100%
 }
 
 .v--modal.v--modal-fullscreen {

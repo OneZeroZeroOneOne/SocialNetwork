@@ -61,4 +61,10 @@ export default class PreviewModal extends Vue {
 .v--modal-overlay {
     background: rgba(0, 0, 0, 0) !important;
 }
+
+.img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%
+}
 </style>
