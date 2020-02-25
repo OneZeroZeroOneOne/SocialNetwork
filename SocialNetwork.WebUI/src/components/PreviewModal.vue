@@ -61,9 +61,8 @@ export default class PreviewModal extends Vue {
     background: rgba(0, 0, 0, 0) !important;
 }
 
-.img {
-    flex-shrink: 0;
-    min-width: 100%;
-    min-height: 100%
+img {
+    width: 100%;
+    height: 100%;
 }
 </style>

@@ -666,7 +666,7 @@ export default {
       if (eventName == 'opened')
       {
         let elem = document.querySelector('.attachment-show')
-        console.log(elem)
+        //console.log(elem)
         elem.onwheel = this.handleWheel;
       }
       const event = this.createModalEvent({ state })
@@ -862,11 +862,6 @@ export default {
   box-shadow: 0 20px 60px -2px rgba(27, 33, 58, 0.4);
   padding: 0;
   flex-shrink: 0;
-}
-
-.v--modal img {
-  width: 100%;
-  height: 100%
 }
 
 .v--modal.v--modal-fullscreen {
