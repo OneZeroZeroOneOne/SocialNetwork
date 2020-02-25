@@ -14,7 +14,7 @@ import PreviewModal from '@/components/PreviewModal.vue'
 
 @Component({
   components: {
-    PreviewModal
+    PreviewModal,
   }
 })
 export default class App extends Vue {

@@ -5,9 +5,9 @@ import store from './store'
 import 'nprogress/nprogress.css';
 import Notifications from 'vue-notification'
 import checkView from 'vue-check-view'
-import vmodal from 'vue-js-modal'
+import Plugin from './components/vue-js-modal/src/index.js'
 
-Vue.use(vmodal, { dynamic: true, injectModalsContainer: true})
+Vue.use(Plugin, { dynamic: true, injectModalsContainer: true})
 
 Vue.use(checkView)
 
