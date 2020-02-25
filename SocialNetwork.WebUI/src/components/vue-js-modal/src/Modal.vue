@@ -409,8 +409,8 @@ export default {
   methods: {
     handleScroll (event) {
       // Any code to be executed when the window is scrolled
-      console.log(event)
-      if (this.hovered)
+      //console.log(event)
+      /*if (this.hovered)
       {
         //event
         //event.preventDefault();
@@ -418,7 +418,7 @@ export default {
         if (this.ratio === -1)
           this.ratio = this.modal.width / this.modal.height;
 
-        console.log(this.ratio)
+        //console.log(this.ratio)
         let direction = "up"
         if ((document.body.getBoundingClientRect()).top > this.scrollPos)
         {
@@ -454,7 +454,7 @@ export default {
           'resize',
           this.createModalEvent({ size })
         )
-      }
+      }*/
     },
     handleToggleEvent (name, state, params) {
       if (this.name === name) {
@@ -525,6 +525,54 @@ export default {
      * BeforeEvents: ('before-close' and 'before-open') are `$emit`ed here,
      * but AfterEvents ('opened' and 'closed') are moved to `watch.visible`.
      */
+    handleWheel(event) {
+      //console.log(event)
+      if (this.hovered)
+      {
+        //event
+        event.preventDefault();
+        //event.returnValue = false;
+        if (this.ratio === -1)
+          this.ratio = this.modal.width / this.modal.height;
+
+        //console.log(this.ratio)
+        let direction = "up"
+        if (event.deltaY < 0)
+        {
+          direction = "up"
+        }
+        else
+        {
+          direction = "down"
+        }
+        //this.scrollPos = (document.body.getBoundingClientRect()).top;
+        //this.width += 100
+        //this.height += 100
+        //this.handleModalResize({size: {width: this.width + 100, height: this.height + 100}})
+        
+        if (direction === "down")
+        {
+          this.modal.widthType = 'px'
+          this.modal.width -= (this.modal.width / this.ratio) / 10
+
+          this.modal.heightType = 'px'
+          this.modal.height -= (this.modal.height / this.ratio) / 10
+        }else{
+          this.modal.widthType = 'px'
+          this.modal.width += (this.modal.width / this.ratio) / 10
+
+          this.modal.heightType = 'px'
+          this.modal.height += (this.modal.height / this.ratio) / 10
+        }
+
+        const { size } = this.modal
+
+        this.$emit(
+          'resize',
+          this.createModalEvent({ size })
+        )
+      }
+    },
     toggle (nextState, params) {
       const { reset, scrollable, visible } = this
 
@@ -615,6 +663,12 @@ export default {
         this.disconnectObserver()
       }
       const eventName = state ? 'opened' : 'closed'
+      if (eventName == 'opened')
+      {
+        let elem = document.querySelector('.attachment-show')
+        console.log(elem)
+        elem.onwheel = this.handleWheel;
+      }
       const event = this.createModalEvent({ state })
       this.$emit(eventName, event)
     },

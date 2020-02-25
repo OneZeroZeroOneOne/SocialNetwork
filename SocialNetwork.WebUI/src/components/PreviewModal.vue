@@ -2,7 +2,6 @@
     <modal name="preview-modal" 
         :reset="true"
         :draggable="true"
-        :resizable="true"
         @before-open="beforeOpen"
         @before-close="beforeClose">
         <div class="attachment-show">
