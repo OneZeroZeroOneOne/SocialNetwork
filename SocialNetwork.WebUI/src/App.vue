@@ -20,13 +20,6 @@ import PreviewModal from '@/components/PreviewModal.vue'
 export default class App extends Vue {
   constructor() {
     super();
-    window.addEventListener('scroll', this.onScroll)
-  }
-
-  onScroll(event): void {
-    console.log(event)
-    event.stopPropagation();
-    event.preventDefault();
   }
 }
 </script>

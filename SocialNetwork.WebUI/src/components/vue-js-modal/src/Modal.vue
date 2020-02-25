@@ -373,10 +373,6 @@ export default {
     }
   },
   watch: {
-    hovered(value) {
-      console.log(value)
-    },
-
     /**
      * Sets the visibility of overlay and modal.
      * Events 'opened' and 'closed' is called here
@@ -547,17 +543,7 @@ export default {
          */
         blurActiveElement()
 
-        const handleScrollDiv = (e) => {
-          var e0 = e.originalEvent;
-          var delta = e0.wheelDelta || -e0.detail;
-
-          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
-          console.log(this)
-          e.preventDefault();  
-        }
-
         window.addEventListener('scroll', this.handleScroll)
-
 
         if (reset) {
           this.setInitialSize()
