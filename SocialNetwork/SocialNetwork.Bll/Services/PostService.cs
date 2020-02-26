@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -35,13 +36,18 @@ namespace SocialNetwork.Bll.Services
             return postInDb;
         }
 
-        public async Task<Post> CreateNewPost(Post postModel, Guid authorUser)
+        public async Task<Post> CreateNewPost(Post postModel, Guid authorUser, List<int> attachmentPost)
         {
             postModel.UserId = authorUser;
 
             var insertedPost = await _context.Post.AddAsync(postModel);
             await _context.SaveChangesAsync();
-
+            foreach (int attId in attachmentPost)
+            {
+                AttachmentPost attpost = new AttachmentPost { AttachmentId = attId, PostId = insertedPost.Entity.Id };
+                await _context.AttachmentPost.AddAsync(attpost);
+            }
+            await _context.SaveChangesAsync();
             return insertedPost.Entity;
         }
 

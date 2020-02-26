@@ -3,6 +3,8 @@ using SocialNetwork.Dal.ViewModels;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
 
 namespace SocialNetwork.Bll.Abstractions
 {
@@ -10,7 +12,7 @@ namespace SocialNetwork.Bll.Abstractions
     {
         Task<Post> EditPost(Post postModel, Guid editorUser);
 
-        Task<Post> CreateNewPost(Post postModel, Guid authorUser);
+        Task<Post> CreateNewPost(Post postModel, Guid authorUser, List<int> attachmentPosts);
 
         Task<Post> GetPost(Guid boardId, int postId);
 
