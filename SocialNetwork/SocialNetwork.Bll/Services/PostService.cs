@@ -55,7 +55,7 @@ namespace SocialNetwork.Bll.Services
             postModel.UserId = authorUser;
 
             var insertedPost = await _context.Post.AddAsync(postModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             foreach (var attachmentId in attachmentPostList)
             {

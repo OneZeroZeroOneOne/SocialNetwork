@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 
 namespace SocialNetwork.Dal.ViewModels.In
@@ -9,5 +10,7 @@ namespace SocialNetwork.Dal.ViewModels.In
         public string Text { get; set; }
         [Required]
         public int PostId { get; set; }
+
+        public List<int> AttachmentIdList { get; set; }
     }
 }
