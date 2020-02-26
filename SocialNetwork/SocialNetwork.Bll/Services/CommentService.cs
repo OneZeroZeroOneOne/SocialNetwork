@@ -4,11 +4,12 @@ using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Extensions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
-using System;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
+using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Utilities.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -21,21 +22,46 @@ namespace SocialNetwork.Bll.Services
             _context = publicContext;
         }
 
-        public async Task<Comment> AddComment(Comment commentModel, Guid authorUser)
+        public async Task<Comment> AddComment(CommentViewModel commentModel, Guid authorUser)
         {
-            var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == commentModel.PostId);
+            var insertedComment = await _context.Comment.AddAsync(new Comment()
+            {
+                UserId = authorUser,
+                Text = commentModel.Text,
+            });
 
-            if (post == null)
-                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {commentModel.PostId} doesn't exist");
-
-            commentModel.UserId = authorUser;
-
-            post.Comments.Add(commentModel);
-
-            _context.Update(post);
             await _context.SaveChangesAsync();
 
-            return commentModel;
+            var comments = _context.Comment.Where(x => commentModel.ToComment.Contains(x.Id));
+            var posts = _context.Post.Where(x => commentModel.ToPost.Contains(x.Id));
+
+            var linkedComments = new List<CommentComment>();
+            var linkedPost = new List<CommentPost>();
+
+            foreach (var comment in comments)
+            {
+                linkedComments.Add(new CommentComment()
+                {
+                    CommentId = insertedComment.Entity.Id,
+                    ReplyToCommentId = comment.Id,
+                });
+            }
+
+            foreach (var post in posts)
+            {
+                linkedPost.Add(new CommentPost()
+                {
+                    ReplyToPostId = post.Id,
+                    CommentId = insertedComment.Entity.Id,
+                });
+            }
+
+            await _context.AddRangeAsync(linkedComments);
+            await _context.AddRangeAsync(linkedPost);
+
+            await _context.SaveChangesAsync();
+
+            return insertedComment.Entity;
         }
 
         public async Task<Comment> EditComment(Comment commentModel, Guid editorUser)
@@ -71,10 +97,19 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
                     "inappropriate parameters page or quantity");
 
-            return await _context.Comment.Where(x => x.PostId == postId && x.IsArchived == false)
+            /*return await _context.Comment.Where(x => x.PostId == postId && x.IsArchived == false)
+                .Include(x => x.AttachmentComment)
+                    .ThenInclude(x => x.Attachment)
+                .AsQueryable().GetPaged(page, quantity);*/
+
+            var res = await _context.Comment.Where(x => x.CommentPost.Any(xx => xx.ReplyToPostId == postId))
+                .Include(x => x.CommentPost)
                 .Include(x => x.AttachmentComment)
                     .ThenInclude(x => x.Attachment)
                 .AsQueryable().GetPaged(page, quantity);
+
+
+            return res;
         }
         public async Task DeleteComment(int commentId, Guid currentUserId)
         {
