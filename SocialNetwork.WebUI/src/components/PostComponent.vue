@@ -5,7 +5,14 @@
         Header {{postObj.id}}
       </div>
       <div class="post-content" >
-        Post Text: {{postObj.text}}
+        <div class=post-content-header v-if="postObj.attachmentPost.length > 0">
+          <div class="post-attachment" v-for="attachment in postObj.attachmentPost" v-bind:key="attachment.id">
+            <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" />
+          </div>
+        </div>
+        <div class=post-content-body>
+          {{postObj.text}}
+        </div>
       </div>
       <div class="post-footer">
         <div v-on:click="goToPost" class="post-footer-enter button noselect" v-if="showEnterButton === true">
@@ -28,6 +35,7 @@ import { IPost } from "@/models/responses/PostViewModel";
 import { ResponseState } from "@/models/enum/ResponseState";
 import { IPagedResult } from '../models/responses/PagedResult';
 import { IComment } from '../models/responses/CommentViewModel';
+import {IAttachment} from '../models/responses/Attachment';
 import Nprogress from "nprogress"
 import _ from 'lodash'
 
@@ -39,7 +47,6 @@ export default class PostComponent extends Vue {
   
   constructor() {
     super();
-    console.log(this.showEnterButton)
   }
 
   boardName(): string {
@@ -48,6 +55,19 @@ export default class PostComponent extends Vue {
 
   goToPost(): void {
     this.$router.push({name: 'post', params: { board: this.boardName(), postid: this.postObj.id.toString()}})
+  }
+
+  getAttachmentPath(path: string): string {
+    return 'http://16ch.tk/api/attachment/' + path;
+  }
+
+  imgShow(attachment: IAttachment): void {
+    this.$modal.show('preview-modal', {
+      srcPath: this.getAttachmentPath(attachment.path)
+    }, {
+      draggable: true,
+      resizable: true,
+    })
   }
 }
 </script>
@@ -79,6 +99,29 @@ $text-color: #ccc;
   border-bottom-left-radius: 4px;
   float: left;
   margin: 20px;
+
+  .post-attachment:not(:first-child) {
+    margin-left: 5px;
+  }
+
+  .post-attachment {
+    margin: 5px 0px;
+    grid-template-columns: 200px auto;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .post-attachment img {
+    border-radius: 5px;
+    width: 200px;
+    height: auto;
+    vertical-align: middle;
+  }
+
+  .post-content-body {
+    margin-top: 10px;
+    min-height: 50px;
+  }
 
   .post-header {
     max-width: calc(100% - 50px);
