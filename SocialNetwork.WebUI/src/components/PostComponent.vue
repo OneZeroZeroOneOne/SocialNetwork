@@ -4,8 +4,8 @@
       <div class="post-header">
         Header {{postObj.id}}
       </div>
-      <div class="post-content" >
-        <div class=post-content-header v-if="postObj.attachmentPost.length > 0">
+      <div class="post-content" :style="stylesContent()">
+        <div class=post-content-header v-if="postObj.attachmentPost.length > 0" :style="stylesContentHeader()">
           <div class="post-attachment" v-for="attachment in postObj.attachmentPost" v-bind:key="attachment.id">
             <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" />
           </div>
@@ -47,6 +47,20 @@ export default class PostComponent extends Vue {
   
   constructor() {
     super();
+  }
+
+  stylesContent(): string {
+    if (this.postObj.attachmentPost.length === 1)
+      return "display: inline-flex;padding-right: 10px;"
+    
+    return ""
+  }
+
+  stylesContentHeader(): string {
+    if (this.postObj.attachmentPost.length === 1)
+      return "padding-right: 10px;align-items: center;"
+    
+    return ""
   }
 
   boardName(): string {
@@ -138,6 +152,7 @@ $text-color: #ccc;
     min-height: $post-content-height;
     padding-left: 10px;
     padding-top: 5px;
+    padding-bottom: 5px;
   }
   .post-footer {
     padding-left: 10px;

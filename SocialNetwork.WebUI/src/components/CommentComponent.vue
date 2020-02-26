@@ -7,8 +7,8 @@
         {{commentObj.date}}
       </div>
     </div>
-    <div class="comment-content">
-      <div class=comment-content-header v-if="commentObj.attachmentComment.length > 0">
+    <div class="comment-content" :style="stylesContent()">
+      <div class=comment-content-header v-if="commentObj.attachmentComment.length > 0" :style="stylesContentHeader()">
         <div class="comment-attachment" v-for="attachment in commentObj.attachmentComment" v-bind:key="attachment.id">
           <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" />
         </div>
@@ -43,6 +43,20 @@ export default class CommentComponent extends Vue {
 
   constructor() {
     super();
+  }
+
+  stylesContent(): string {
+    if (this.commentObj.attachmentComment.length === 1)
+      return "display: inline-flex;padding-right: 10px;"
+    
+    return ""
+  }
+
+  stylesContentHeader(): string {
+    if (this.commentObj.attachmentComment.length === 1)
+      return "padding-right: 10px;align-items: center;"
+    
+    return ""
   }
 
   getAttachmentPath(path: string): string {
@@ -139,6 +153,7 @@ $text-color: #ccc;
     max-width: calc(100% - 10px);
     min-height: $comment-content-height;
     padding-left: 10px;
+    padding-bottom: 10px;
   }
   .comment-footer {
     padding-left: 10px;
