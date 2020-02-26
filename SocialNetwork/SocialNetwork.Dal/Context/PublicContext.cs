@@ -32,7 +32,6 @@ namespace SocialNetwork.Dal.Context
         #region Reaction
         public virtual DbSet<ReactionComment> ReactionComment { get; set; }
         public virtual DbSet<ReactionPost> ReactionPost { get; set; }
-        public virtual DbSet<Reaction> Reaction { get; set; }
         public virtual DbSet<ReactionTypeComment> ReactionTypeComment { get; set; }
         public virtual DbSet<ReactionTypePost> ReactionTypePost { get; set; }
         #endregion
