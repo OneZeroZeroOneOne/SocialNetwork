@@ -41,11 +41,20 @@ namespace SocialNetwork.Bll.Services
             postModel.UserId = authorUser;
 
             var insertedPost = await _context.Post.AddAsync(postModel);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             foreach (int attId in attachmentPost)
             {
-                AttachmentPost attpost = new AttachmentPost { AttachmentId = attId, PostId = insertedPost.Entity.Id };
-                await _context.AttachmentPost.AddAsync(attpost);
+                
+                if(_context.Attachment.FirstOrDefault(x => x.Id == attId) != null)
+                {
+                    AttachmentPost attpost = new AttachmentPost { AttachmentId = attId, PostId = insertedPost.Entity.Id };
+                    await _context.AttachmentPost.AddAsync(attpost);
+                }
+                else
+                {
+                    throw ExceptionFactory.SoftException(ExceptionEnum.AttachmentNotFound, $"addtachment Id - {attId} doesn't exist");
+                }
+                
             }
             await _context.SaveChangesAsync();
             return insertedPost.Entity;
