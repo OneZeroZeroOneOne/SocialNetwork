@@ -3,7 +3,7 @@
 -- DROP TABLE public."Attachment";
 
 CREATE TABLE public."Attachment" (
-	"Id" uuid NOT NULL,
+	"Id" uuid NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"ContentType" text NOT NULL,
 	"Path" text NOT NULL,
 	"CreateDateTime" date NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE public."Board" (
 -- DROP TABLE public."Post";
 
 CREATE TABLE public."Post" (
-	"Id" uuid NOT NULL,
+	"Id" uuid NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"Text" text NOT NULL,
 	"Date" timestamp NOT NULL,
 	"UserId" uuid NOT NULL,
@@ -159,7 +159,7 @@ CREATE TABLE public."BoardPost" (
 -- DROP TABLE public."Comment";
 
 CREATE TABLE public."Comment" (
-	"Id" uuid NOT NULL,
+	"Id" uuid NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"Text" text NOT NULL,
 	"Date" timestamp NOT NULL,
 	"UserId" uuid NOT NULL,
