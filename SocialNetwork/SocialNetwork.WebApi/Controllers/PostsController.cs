@@ -45,10 +45,8 @@ namespace SocialNetwork.WebApi.Controllers
         public async Task<OutPostViewModel> Post([FromBody]PostViewModel post)
         {
             var currentUser = CurrentUser();
-
             var dataModel = _mapper.Map<PostViewModel, Post>(post);
-            var insertedPost = await _postService.CreateNewPost(dataModel, currentUser);
-
+            var insertedPost = await _postService.CreateNewPost(dataModel, currentUser, post.AttachmentIdList);
             return _mapper.Map<Post, OutPostViewModel>(insertedPost);
         }
 
