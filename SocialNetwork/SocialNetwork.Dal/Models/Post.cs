@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace SocialNetwork.Dal.Models
 {
@@ -7,7 +8,7 @@ namespace SocialNetwork.Dal.Models
     {
         public Post()
         {
-            CommentPost = new HashSet<CommentPost>();
+            Comments = new HashSet<Comment>();
             ReactionPost = new HashSet<ReactionPost>();
             AttachmentPost = new HashSet<AttachmentPost>();
         }
@@ -22,7 +23,7 @@ namespace SocialNetwork.Dal.Models
         public virtual Board Board { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<AttachmentPost> AttachmentPost { get; set; }
-        public virtual ICollection<CommentPost> CommentPost { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ReactionPost> ReactionPost { get; set; }
     }
 }

@@ -22,13 +22,11 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<CommentComment> CommentComment { get; set; }
-        public virtual DbSet<CommentPost> CommentPost { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
 
         #region Security
         public virtual DbSet<UserSecurity> UserSecurity { get; set; }
         public virtual DbSet<UserConfirmationToken> UserConfirmationToken { get; set; }
-        public virtual DbSet<Role> Role { get; set; }
         #endregion
 
         #region Reaction
@@ -117,47 +115,23 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<Comment>(entity =>
             {
-                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+                entity.HasKey(x => x.Id);
 
                 entity.Property(x => x.Date).HasValueGenerator<CurrentDateTimeGenerator>();
 
                 entity.Property(e => e.Text).IsRequired();
-            });
 
-            modelBuilder.Entity<CommentComment>(entity =>
-            {
-                entity.HasKey(e => new { e.CommentId, e.ReplyToCommentId })
-                    .HasName("CommentComment_pkey");
-
-                entity.HasOne(d => d.Comment)
-                    .WithMany(p => p.CommentComments)
-                    .HasForeignKey(d => d.CommentId)
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(d => d.PostId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("CommentComment_CommentId_fkey");
+                    .HasConstraintName("Comment_fk1");
 
-                entity.HasOne(d => d.ReplyToComment)
-                    .WithMany(p => p.ReplyToComment)
-                    .HasForeignKey(d => d.ReplyToCommentId)
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("CommentComment_ReplyToCommentId_fkey");
-            });
-
-            modelBuilder.Entity<CommentPost>(entity =>
-            {
-                entity.HasKey(e => new { e.CommentId, e.ReplyToPostId })
-                    .HasName("CommentPost_pkey");
-
-                entity.HasOne(d => d.Comment)
-                    .WithMany(p => p.CommentPost)
-                    .HasForeignKey(d => d.CommentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("CommentPost_CommentId_fkey");
-
-                entity.HasOne(d => d.ReplyToPost)
-                    .WithMany(p => p.CommentPost)
-                    .HasForeignKey(d => d.ReplyToPostId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("CommentPost_ReplyToPostId_fkey");
+                    .HasConstraintName("Comment_fk0");
             });
 
             modelBuilder.Entity<Post>(entity =>

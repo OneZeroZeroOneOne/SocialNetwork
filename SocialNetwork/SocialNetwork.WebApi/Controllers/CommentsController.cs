@@ -45,8 +45,8 @@ namespace SocialNetwork.WebApi.Controllers
         {
             var currentUser = CurrentUser();
 
-            //var dataModel = _mapper.Map<CommentViewModel, Comment>(comment);
-            var insertedComment = await _commentService.AddComment(comment, currentUser);
+            var dataModel = _mapper.Map<CommentViewModel, Comment>(comment);
+            var insertedComment = await _commentService.AddComment(dataModel, currentUser);
 
             return _mapper.Map<Comment, OutCommentViewModel>(insertedComment);
         }
