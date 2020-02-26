@@ -10,6 +10,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -36,28 +37,34 @@ namespace SocialNetwork.Bll.Services
             return postInDb;
         }
 
-        public async Task<Post> CreateNewPost(Post postModel, Guid authorUser, List<int> attachmentPost)
+        private async Task AttachFileToPost(int postId, int attachmentId)
+        {
+            if (await _context.Attachment.AnyAsync(x => x.Id == attachmentId))
+            {
+                var attachmentPost = new AttachmentPost
+                {
+                    AttachmentId = attachmentId, PostId = postId
+                };
+
+                await _context.AttachmentPost.AddAsync(attachmentPost);
+            }
+        }
+
+        public async Task<Post> CreateNewPost(Post postModel, Guid authorUser, List<int> attachmentPostList)
         {
             postModel.UserId = authorUser;
 
             var insertedPost = await _context.Post.AddAsync(postModel);
             _context.SaveChanges();
-            foreach (int attId in attachmentPost)
+
+            foreach (var attachmentId in attachmentPostList)
             {
-                
-                if(_context.Attachment.FirstOrDefault(x => x.Id == attId) != null)
-                {
-                    AttachmentPost attpost = new AttachmentPost { AttachmentId = attId, PostId = insertedPost.Entity.Id };
-                    await _context.AttachmentPost.AddAsync(attpost);
-                }
-                else
-                {
-                    throw ExceptionFactory.SoftException(ExceptionEnum.AttachmentNotFound, $"addtachment Id - {attId} doesn't exist");
-                }
-                
+                await AttachFileToPost(insertedPost.Entity.Id, attachmentId);
             }
+
             await _context.SaveChangesAsync();
-            return insertedPost.Entity;
+
+            return await GetPost(postModel.BoardId, postModel.Id);
         }
 
         public async Task<Post> GetPost(Guid boardId, int postId)
