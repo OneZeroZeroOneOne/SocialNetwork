@@ -4,11 +4,11 @@ using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Extensions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
-using System;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
 using SocialNetwork.Utilities.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -21,7 +21,22 @@ namespace SocialNetwork.Bll.Services
             _context = publicContext;
         }
 
-        public async Task<Comment> AddComment(Comment commentModel, Guid authorUser)
+
+        private async Task AttachFileToComment(int commentId, int attachmentId)
+        {
+            if (await _context.Attachment.AnyAsync(x => x.Id == attachmentId))
+            {
+                var attachmentComment = new AttachmentComment()
+                {
+                    AttachmentId = attachmentId,
+                    CommentId = commentId
+                };
+
+                await _context.AttachmentComment.AddAsync(attachmentComment);
+            }
+        }
+
+        public async Task<Comment> AddComment(Comment commentModel, Guid authorUser, List<int> attachmentIdList)
         {
             var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == commentModel.PostId);
 
@@ -32,10 +47,18 @@ namespace SocialNetwork.Bll.Services
 
             post.Comments.Add(commentModel);
 
-            _context.Update(post);
+            var insertedPost = _context.Update(post);
+
             await _context.SaveChangesAsync();
 
-            return commentModel;
+            foreach (var attachmentId in attachmentIdList)
+            {
+                await AttachFileToComment(insertedPost.Entity.Comments.First().Id, attachmentId);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return await GetComment(insertedPost.Entity.Comments.First().Id);
         }
 
         public async Task<Comment> EditComment(Comment commentModel, Guid editorUser)
