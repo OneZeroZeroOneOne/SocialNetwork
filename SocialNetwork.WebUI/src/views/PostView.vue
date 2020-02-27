@@ -1,5 +1,6 @@
 <template>
   <div class="post-view">
+    <BoardNameHeaderComponent :boardObj="boardObj"/>
     <PostComponent :postObj="postObj" v-if="requestPostStatus === 1"/>
     <ul id="comments">
       <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
@@ -27,12 +28,14 @@ import { IBoard } from "@/models/responses/Board";
 import { BoardService } from "@/services/BoardService";
 import Nprogress from "nprogress"
 import _ from 'lodash'
+import BoardNameHeaderComponent from '../components/BoardNameHeaderComponent.vue';
 
 @Component({
   components: { 
     CommentComponent,
     PostComponent,
-    FooterComponent
+    FooterComponent,
+    BoardNameHeaderComponent
   }
 })
 export default class PostView extends Vue {

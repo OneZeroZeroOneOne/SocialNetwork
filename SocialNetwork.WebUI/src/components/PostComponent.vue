@@ -10,8 +10,7 @@
             <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" />
           </div>
         </div>
-        <div class=post-content-body>
-          {{postObj.text}}
+        <div class=post-content-body v-html="postObj.text">
         </div>
       </div>
       <div class="post-footer">

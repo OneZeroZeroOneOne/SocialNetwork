@@ -13,8 +13,7 @@
           <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" />
         </div>
       </div>
-      <div class=comment-content-body>
-        {{commentObj.text}}
+      <div class=comment-content-body v-html="commentObj.text">
       </div>
     </div>
     <div class="comment-footer">
