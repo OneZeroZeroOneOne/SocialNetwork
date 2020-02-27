@@ -667,7 +667,8 @@ export default {
       {
         let elem = document.querySelector('.attachment-show')
         //console.log(elem)
-        elem.onwheel = this.handleWheel;
+        if (elem !== null)
+          elem.onwheel = this.handleWheel;
       }
       const event = this.createModalEvent({ state })
       this.$emit(eventName, event)

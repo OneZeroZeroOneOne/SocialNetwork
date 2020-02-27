@@ -17,7 +17,7 @@
         <div v-on:click="goToPost" class="post-footer-enter button noselect" v-if="showEnterButton === true">
           To thread
         </div>
-        <div class="post-footer-reply button noselect">
+        <div v-on:click="openEditor" class="post-footer-reply button noselect">
           Reply
         </div>
       </div>
@@ -46,6 +46,15 @@ export default class PostComponent extends Vue {
   
   constructor() {
     super();
+  }
+
+  openEditor(): void {
+    this.$modal.show('editor-modal', {
+      
+    }, {
+      draggable: true,
+      resizable: true,
+    })
   }
 
   stylesContent(): string {
