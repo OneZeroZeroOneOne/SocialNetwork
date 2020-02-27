@@ -44,7 +44,7 @@
                     >
                     <font-awesome-icon icon="quote-left" />
                     </button>
-                    
+
                     <button
                     class="menubar__button"
                     @click="commands.horizontal_rule"
@@ -213,6 +213,12 @@ export default class PreviewModal extends Vue {
 $color-black: #000000;
 $color-white: #ffffff;
 $color-grey: #dddddd;
+
+.menubar {
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+}
 
 .editor {
   position: relative;
