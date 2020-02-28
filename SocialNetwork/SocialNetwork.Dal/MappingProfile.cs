@@ -33,11 +33,13 @@ namespace SocialNetwork.Dal
 
             CreateMap<AttachmentComment, OutAttachmentViewModel>()
                 .ForMember(x => x.Id, y => y.MapFrom(x => x.Attachment.Id))
-                .ForMember(x => x.Path, y => y.MapFrom(x => x.Attachment.Path));
+                .ForMember(x => x.Path, y => y.MapFrom(x => x.Attachment.Path))
+                .ForMember(x => x.Preview, y => y.MapFrom(x => x.Attachment.Preview));
 
             CreateMap<AttachmentPost, OutAttachmentViewModel>()
                 .ForMember(x => x.Id, y => y.MapFrom(x => x.Attachment.Id))
-                .ForMember(x => x.Path, y => y.MapFrom(x => x.Attachment.Path));
+                .ForMember(x => x.Path, y => y.MapFrom(x => x.Attachment.Path))
+                .ForMember(x => x.Preview, y => y.MapFrom(x => x.Attachment.Preview));
 
             CreateMap<EditCommentViewModel, Comment>()
                 .ForMember(destinationMember => destinationMember.Id, sourceMember => sourceMember.MapFrom(x => x.CommentId));

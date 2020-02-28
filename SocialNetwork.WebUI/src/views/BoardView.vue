@@ -1,6 +1,6 @@
 <template>
   <div class="board-view">
-    <BoardNameHeaderComponent :boardObj="boardObj"/>
+    <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
     <ul id="posts" v-if="requestPostsStatus === 1">
       <li v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id">
         <PostComponent :postObj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
