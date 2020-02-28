@@ -11,5 +11,6 @@ namespace SocialNetwork.Dal.Models
         public string Path { get; set; }
         public string Preview { get; set; }
         public DateTime CreateDateTime { get; set; }
+        public Guid Hash { get; set; }
     }
 }

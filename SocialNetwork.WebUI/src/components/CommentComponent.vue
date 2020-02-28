@@ -10,7 +10,8 @@
     <div class="comment-content" :style="stylesContent()">
       <div class=comment-content-header v-if="commentObj.attachmentComment.length > 0" :style="stylesContentHeader()">
         <div class="comment-attachment" v-for="attachment in commentObj.attachmentComment" v-bind:key="attachment.id">
-          <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" />
+          <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" v-if="attachment.preview === null"/>
+          <img class="comment-attachment-video" v-on:click="videoShow(attachment)" v-bind:src="getAttachmentPath(attachment.preview)" v-else/>
         </div>
       </div>
       <div class=comment-content-body v-html="commentObj.text">
@@ -62,6 +63,17 @@ export default class CommentComponent extends Vue {
     return 'http://16ch.tk/api/attachment/' + path;
   }
 
+  videoShow(attachment: IAttachment): void {
+    console.log(this.getAttachmentPath(attachment.path));
+    this.$modal.show('preview-video-modal', {
+      srcPath: this.getAttachmentPath(attachment.path),
+      posterPath: this.getAttachmentPath(attachment.preview),
+    }, {
+      draggable: true,
+      resizable: true,
+    })
+  }
+
   imgShow(attachment: IAttachment): void {
     this.$modal.show('preview-modal', {
       srcPath: this.getAttachmentPath(attachment.path)
@@ -90,6 +102,13 @@ $comment-number-header-color: #cc2c11;
 
 $header-text-color: #6995c5;
 $text-color: #ccc;
+
+.comment-attachment-video {
+  border-color: darkgray;
+  border-style: dashed;
+  border-width: 2px;
+  box-sizing: border-box;
+}
 
 .comment {
   color: $text-color;

@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Dal.ViewModels.Out;
+using System.Collections.Generic;
 
 namespace SocialNetwork.Dal
 {

@@ -6,7 +6,7 @@
         @before-close="beforeClose">
         <div class="attachment-show">
             <video @mouseup.self="click" id="preview-video-modal" controls autoplay loop :width="width" :height="height">
-                <source :src="srcPath">
+                <source :poster="posterPath" :src="srcPath">
             </video>
         </div>
     </modal>
@@ -18,6 +18,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({})
 export default class PreviewVideoModal extends Vue {
     public srcPath: string = "";
+    public posterPath: string = "";
     public width: number = 1;
     public height: number = 1;
 
@@ -42,7 +43,6 @@ export default class PreviewVideoModal extends Vue {
             let elem: HTMLElement | null = document.getElementById("preview-video-modal")
             if (elem !== null)
             {
-                console.log(elem)
                 this.width = args.width
                 this.height = args.height
             }
@@ -54,7 +54,6 @@ export default class PreviewVideoModal extends Vue {
         this.srcPath = event.params.srcPath;
         this.videoElem=document.createElement("video");
         this.videoElem.oncanplay = (e: any) => {
-            console.log(e)
             e.src="about:blank";
             document.body.removeChild(this.videoElem);   
             this.width = e.srcElement.videoWidth;
@@ -71,12 +70,6 @@ export default class PreviewVideoModal extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-video {
-    //pointer-events:
-}
-</style>
 
 <style lang="scss">
 .v--modal-overlay {
