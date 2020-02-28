@@ -5,6 +5,7 @@
     </router-view>
     <notifications group="foo" position="bottom right"/>
     <preview-modal/>
+    <preview-video-modal/>
     <editor-modal/>
   </div>
 </template>
@@ -12,12 +13,14 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import PreviewModal from '@/components/PreviewModal.vue'
+import PreviewVideoModal from '@/components/PreviewVideoModal.vue';
 import EditorModal from '@/components/EditorModal.vue'
 
 @Component({
   components: {
     PreviewModal,
     EditorModal,
+    PreviewVideoModal,
   }
 })
 export default class App extends Vue {

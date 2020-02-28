@@ -7,7 +7,8 @@
       <div class="post-content" :style="stylesContent()">
         <div class=post-content-header v-if="postObj.attachmentPost.length > 0" :style="stylesContentHeader()">
           <div class="post-attachment" v-for="attachment in postObj.attachmentPost" v-bind:key="attachment.id">
-            <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" />
+            <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" v-if="attachment.preview === null"/>
+            <img class="post-attachment-video" v-on:click="videoShow(attachment)" v-bind:src="getAttachmentPath(attachment.preview)" v-else/>
           </div>
         </div>
         <div class=post-content-body v-html="postObj.text">
@@ -83,6 +84,16 @@ export default class PostComponent extends Vue {
     return 'http://16ch.tk/api/attachment/' + path;
   }
 
+  videoShow(attachment: IAttachment): void {
+    console.log(this.getAttachmentPath(attachment.path));
+    this.$modal.show('preview-video-modal', {
+      srcPath: this.getAttachmentPath(attachment.path)
+    }, {
+      draggable: true,
+      resizable: true,
+    })
+  }
+
   imgShow(attachment: IAttachment): void {
     this.$modal.show('preview-modal', {
       srcPath: this.getAttachmentPath(attachment.path)
@@ -106,6 +117,17 @@ $post-header-border-color: cornflowerblue;
 
 $header-text-color: #6995c5;
 $text-color: #ccc;
+
+.post-content-header {
+  display: flex;
+}
+
+.post-attachment-video {
+  border-color: darkgray;
+  border-style: dashed;
+  border-width: 2px;
+  box-sizing: border-box;
+}
 
 .post-body {
   position: relative;

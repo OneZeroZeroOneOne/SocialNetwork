@@ -9,6 +9,9 @@ import Plugin from './components/vue-js-modal/src/index.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import setup from './utilities/math_round_extensions.js'
+
+setup()
 
 library.add({faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines})
 

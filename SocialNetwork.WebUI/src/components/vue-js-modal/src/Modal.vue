@@ -533,9 +533,9 @@ export default {
         event.preventDefault();
         //event.returnValue = false;
         if (this.ratio === -1)
-          this.ratio = this.modal.width / this.modal.height;
+          this.ratio = Math.round(this.modal.width / this.modal.height);
 
-        //console.log(this.ratio)
+        console.log(this.ratio)
         let direction = "up"
         if (event.deltaY < 0)
         {
@@ -553,16 +553,16 @@ export default {
         if (direction === "down")
         {
           this.modal.widthType = 'px'
-          this.modal.width -= (this.modal.width / this.ratio) / 10
+          this.modal.width -= (this.modal.width / this.ratio) / 5
 
           this.modal.heightType = 'px'
-          this.modal.height -= (this.modal.height / this.ratio) / 10
+          this.modal.height -= (this.modal.height / this.ratio) / 5
         }else{
           this.modal.widthType = 'px'
-          this.modal.width += (this.modal.width / this.ratio) / 10
+          this.modal.width += (this.modal.width / this.ratio) / 5
 
           this.modal.heightType = 'px'
-          this.modal.height += (this.modal.height / this.ratio) / 10
+          this.modal.height += (this.modal.height / this.ratio) / 5
         }
 
         const { size } = this.modal
@@ -570,6 +570,11 @@ export default {
         this.$emit(
           'resize',
           this.createModalEvent({ size })
+        )
+
+        this.$root.$emit(
+          'resize',
+          {width: this.modal.width, height: this.modal.height}
         )
       }
     },
@@ -672,6 +677,7 @@ export default {
       }
       const event = this.createModalEvent({ state })
       this.$emit(eventName, event)
+      this.$root.$emit(eventName, event)
     },
 
     addDraggableListeners () {
