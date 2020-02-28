@@ -75,6 +75,7 @@ namespace SocialNetwork.WebApi.Attachment
             });
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IPreviewGeneratorService, PreviewGeneratorService>();
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
@@ -157,6 +158,7 @@ namespace SocialNetwork.WebApi.Attachment
                 FileProvider = new PhysicalFileProvider(Path.Combine(attachmentPathProvider.GetPath(), "Files")),
                 RequestPath = new PathString("/Files")
             });
+
 
             app.UseRouting();
 

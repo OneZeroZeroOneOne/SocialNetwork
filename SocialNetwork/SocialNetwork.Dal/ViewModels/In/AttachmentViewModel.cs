@@ -28,7 +28,7 @@ namespace SocialNetwork.Dal.ViewModels.In
         [Required(ErrorMessage = "Please provide a file.")]
         [DataType(DataType.Upload)]
         [MaxFileSize(5 * 1024 * 1024)]
-        [AllowedExtensions(new[] { ".jpg", ".png", ".gif" })]
+        [AllowedExtensions(new[] { ".jpg", ".png", ".gif", ".mp4", ".webm" })]
         public IFormFile UploadFile { get; set; }
     }
 }

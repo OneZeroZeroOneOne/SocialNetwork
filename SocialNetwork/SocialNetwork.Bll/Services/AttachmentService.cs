@@ -14,11 +14,13 @@ namespace SocialNetwork.Bll.Services
     {
         private readonly PublicContext _publicContext;
         private readonly IAttachmentPathProvider _attachmentPathProvider;
+        private readonly IPreviewGeneratorService _previewGeneratorService;
 
-        public AttachmentService(PublicContext publicContext, IAttachmentPathProvider attachmentPathProvider)
+        public AttachmentService(PublicContext publicContext, IAttachmentPathProvider attachmentPathProvider, IPreviewGeneratorService previewGeneratorService)
         {
             _publicContext = publicContext;
             _attachmentPathProvider = attachmentPathProvider;
+            _previewGeneratorService = previewGeneratorService;
         }
 
         public async Task<Attachment> SaveAttachment(AttachmentViewModel attachment)
@@ -31,11 +33,14 @@ namespace SocialNetwork.Bll.Services
                 await attachment.UploadFile.CopyToAsync(fileStream);
             }
 
-            var attachmentDb = new Attachment()
+            var attachmentDb = new Attachment
             {
                 ContentType = attachment.UploadFile.ContentType,
                 Path = "Files/" + fileName + ext,
             };
+
+            if (attachment.UploadFile.ContentType.Contains("video"))
+                await _previewGeneratorService.GeneratePreview(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), fileName.ToString(), ext);
 
             await _publicContext.Attachment.AddAsync(attachmentDb);
             await _publicContext.SaveChangesAsync();
