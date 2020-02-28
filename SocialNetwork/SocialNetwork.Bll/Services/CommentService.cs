@@ -16,9 +16,12 @@ namespace SocialNetwork.Bll.Services
     public class CommentService : ICommentService
     {
         private readonly PublicContext _context;
-        public CommentService(PublicContext publicContext)
+        private readonly IUserInputSanitizeService _userInputSanitizeService;
+
+        public CommentService(PublicContext publicContext, IUserInputSanitizeService userInputSanitizeService)
         {
             _context = publicContext;
+            _userInputSanitizeService = userInputSanitizeService;
         }
 
 
@@ -44,6 +47,7 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {commentModel.PostId} doesn't exist");
 
             commentModel.UserId = authorUser;
+            commentModel.Text = await _userInputSanitizeService.SanitizeHtml(commentModel.Text);
 
             post.Comments.Add(commentModel);
 
@@ -68,7 +72,7 @@ namespace SocialNetwork.Bll.Services
             if (comment == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, $"Comment {commentModel.Id} doesn't exist");
 
-            comment.Text = commentModel.Text;
+            comment.Text = await _userInputSanitizeService.SanitizeHtml(commentModel.Text);
 
             _context.Comment.Update(comment);
             await _context.SaveChangesAsync();

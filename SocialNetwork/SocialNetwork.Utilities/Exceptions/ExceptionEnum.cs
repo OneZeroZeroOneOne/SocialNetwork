@@ -19,5 +19,6 @@
         BoardDoesntExist = 15,
         ProvideFile = 16,
         AttachmentNotFound = 17,
+        BoardNotFound = 18,
     }
 }

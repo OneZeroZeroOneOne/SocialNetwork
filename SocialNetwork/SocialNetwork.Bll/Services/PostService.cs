@@ -6,20 +6,21 @@ using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
 using SocialNetwork.Utilities.Exceptions;
 using System;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Internal;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Services
 {
     public class PostService : IPostService
     {
         private readonly PublicContext _context;
-        public PostService(PublicContext publicContext)
+        private readonly IUserInputSanitizeService _userInputSanitizeService;
+
+        public PostService(PublicContext publicContext, IUserInputSanitizeService userInputSanitizeService)
         {
             _context = publicContext;
+            _userInputSanitizeService = userInputSanitizeService;
         }
 
         public async Task<Post> EditPost(Post postModel, Guid editorUser)
@@ -29,7 +30,7 @@ namespace SocialNetwork.Bll.Services
             if (postInDb == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {postModel.Id} not found");
 
-            postInDb.Text = postModel.Text;
+            postInDb.Text = await _userInputSanitizeService.SanitizeHtml(postModel.Text);
 
             _context.Update(postInDb);
             await _context.SaveChangesAsync();
@@ -51,8 +52,12 @@ namespace SocialNetwork.Bll.Services
         }
 
         public async Task<Post> CreateNewPost(Post postModel, Guid authorUser, List<int> attachmentPostList)
-        {
+        { 
+            if (!_context.Board.Any(x => x.Id == postModel.BoardId))
+                throw ExceptionFactory.SoftException(ExceptionEnum.BoardNotFound, $"Board {postModel.BoardId} not found");
+
             postModel.UserId = authorUser;
+            postModel.Text = await _userInputSanitizeService.SanitizeHtml(postModel.Text);
 
             var insertedPost = await _context.Post.AddAsync(postModel);
             await _context.SaveChangesAsync();

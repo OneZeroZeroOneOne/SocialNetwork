@@ -23,6 +23,7 @@ using SocialNetwork.Utilities.Controllers;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
+using Ganss.XSS;
 using SocialNetwork.ConfigSetting.Bll.Abstractions;
 using SocialNetwork.ConfigSetting.Bll.Services;
 using SocialNetwork.ConfigSetting.Dal.Context;
@@ -78,6 +79,9 @@ namespace SocialNetwork.WebApi
                 var configService = x.GetService<IConfigService>();
                 return new ConfigSettingContext(configService.GetSetting("connectionString", ""));
             });
+
+            services.AddSingleton<IHtmlSanitizer, HtmlSanitizer>();
+            services.AddSingleton<IUserInputSanitizeService, UserInputSanitizeService>();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
