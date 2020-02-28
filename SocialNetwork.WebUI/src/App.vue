@@ -34,22 +34,36 @@ $color-white: #ffffff;
 $color-grey: #dddddd;
 
 $reply-color: rgb(19, 154, 11);
+$header-height: 20px;
+
+.header-draggable {
+  height: $header-height;
+  background-color: black;
+}
 
 .menubar {
   display: flex;
   /* align-items: center; */
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .editor {
   position: relative;
-  max-width: 30rem;
-  margin: 0 auto 5rem auto;
+  //max-width: 30rem;
+  margin: 1rem 0rem 0rem 1rem;
+  display: flex;
+  flex-direction: row;
 
   &__content {
+    margin-left: 1rem;
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-word;
+    overflow-y: scroll;
+    height: calc(calc(300px - 20px) - 1rem);
+    width: -webkit-fill-available;
 
     * {
       caret-color: currentColor;
@@ -80,7 +94,7 @@ $reply-color: rgb(19, 154, 11);
 
     ul,
     ol {
-      padding-left: 1rem;
+      padding-left: 1.5rem;
     }
 
     li > p,
@@ -164,10 +178,6 @@ $reply-color: rgb(19, 154, 11);
     }
   }
 }
-.header-draggable {
-    height: 20px;
-    background-color: black;
-}
 
 .menububble {
   position: absolute;
@@ -225,7 +235,6 @@ $reply-color: rgb(19, 154, 11);
 </style>
 
 <style lang="scss">
-
 .v--modal-overlay {
     background: rgba(0, 0, 0, 0) !important;
 }
