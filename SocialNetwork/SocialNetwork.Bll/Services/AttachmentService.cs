@@ -27,20 +27,26 @@ namespace SocialNetwork.Bll.Services
         {
             var ext = Path.GetExtension(attachment.UploadFile.FileName);
             var fileName = DateTime.UtcNow.ToFileTimeUtc();
+            var havePreview = false;
 
             await using (var fileStream = new FileStream(Path.Combine(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), fileName + ext), FileMode.Create))
             {
                 await attachment.UploadFile.CopyToAsync(fileStream);
             }
 
+            if (attachment.UploadFile.ContentType.Contains("video"))
+            {
+                havePreview = true;
+                await _previewGeneratorService.GeneratePreview(Path.Combine(_attachmentPathProvider.GetPath(), "Files"),
+                    fileName.ToString(), ext);
+            }
+
             var attachmentDb = new Attachment
             {
                 ContentType = attachment.UploadFile.ContentType,
                 Path = "Files/" + fileName + ext,
+                Preview = havePreview ? "Files/" + fileName + "_preview.png" : null,
             };
-
-            if (attachment.UploadFile.ContentType.Contains("video"))
-                await _previewGeneratorService.GeneratePreview(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), fileName.ToString(), ext);
 
             await _publicContext.Attachment.AddAsync(attachmentDb);
             await _publicContext.SaveChangesAsync();
