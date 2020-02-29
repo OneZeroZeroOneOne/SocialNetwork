@@ -6,6 +6,7 @@ using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Utilities.Exceptions;
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Services
@@ -28,11 +29,25 @@ namespace SocialNetwork.Bll.Services
             var ext = Path.GetExtension(attachment.UploadFile.FileName);
             var fileName = DateTime.UtcNow.ToFileTimeUtc();
             var havePreview = false;
+            Guid hash;
 
-            await using (var fileStream = new FileStream(Path.Combine(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), fileName + ext), FileMode.Create))
+            await using (var memoryStream = new MemoryStream())
             {
-                await attachment.UploadFile.CopyToAsync(fileStream);
+                await attachment.UploadFile.CopyToAsync(memoryStream);
+                hash = new Guid(new MD5CryptoServiceProvider().ComputeHash(memoryStream.GetBuffer()));
+
+                var storedAttachment = await _publicContext.Attachment.FirstOrDefaultAsync(s => s.Hash == hash);
+                if (storedAttachment != null)
+                    return storedAttachment;
+
+                await using (var fileStream = new FileStream(
+                    Path.Combine(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), fileName + ext),
+                    FileMode.Create))
+                {
+                    await fileStream.WriteAsync(memoryStream.GetBuffer());
+                }
             }
+
 
             if (attachment.UploadFile.ContentType.Contains("video"))
             {
@@ -46,6 +61,7 @@ namespace SocialNetwork.Bll.Services
                 ContentType = attachment.UploadFile.ContentType,
                 Path = "Files/" + fileName + ext,
                 Preview = havePreview ? "Files/" + fileName + "_preview.png" : null,
+                Hash = hash,
             };
 
             await _publicContext.Attachment.AddAsync(attachmentDb);
