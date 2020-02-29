@@ -6,10 +6,7 @@
       </div>
       <div class="post-content" :style="stylesContent()">
         <div class=post-content-header v-if="postObj.attachmentPost.length > 0" :style="stylesContentHeader()">
-          <div class="post-attachment" v-for="attachment in postObj.attachmentPost" v-bind:key="attachment.id">
-            <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" v-if="attachment.preview === null"/>
-            <img class="post-attachment-video" v-on:click="videoShow(attachment)" v-bind:src="getAttachmentPath(attachment.preview)" v-else/>
-          </div>
+          <attachment-component :attachmentObjs="postObj.attachmentPost"/>
         </div>
         <div class=post-content-body v-html="postObj.text">
         </div>
@@ -36,10 +33,15 @@ import { ResponseState } from "@/models/enum/ResponseState";
 import { IPagedResult } from '../models/responses/PagedResult';
 import { IComment } from '../models/responses/CommentViewModel';
 import {IAttachment} from '../models/responses/Attachment';
+import AttachmentComponent from '../components/AttachmentComponent.vue';
 import Nprogress from "nprogress"
 import _ from 'lodash'
 
-@Component({})
+@Component({
+  components: {
+    AttachmentComponent,
+  }
+})
 export default class PostComponent extends Vue {
   @Prop() public postObj!: IPost; 
   @Prop() public postNum!: number;
@@ -79,30 +81,6 @@ export default class PostComponent extends Vue {
   goToPost(): void {
     this.$router.push({name: 'post', params: { board: this.boardName(), postid: this.postObj.id.toString()}})
   }
-
-  getAttachmentPath(path: string): string {
-    return 'http://16ch.tk/api/attachment/' + path;
-  }
-
-  videoShow(attachment: IAttachment): void {
-    console.log(this.getAttachmentPath(attachment.path));
-    this.$modal.show('preview-video-modal', {
-      srcPath: this.getAttachmentPath(attachment.path),
-      posterPath: this.getAttachmentPath(attachment.preview),
-    }, {
-      draggable: true,
-      resizable: true,
-    })
-  }
-
-  imgShow(attachment: IAttachment): void {
-    this.$modal.show('preview-modal', {
-      srcPath: this.getAttachmentPath(attachment.path)
-    }, {
-      draggable: true,
-      resizable: true,
-    })
-  }
 }
 </script>
 
@@ -119,17 +97,6 @@ $post-header-border-color: cornflowerblue;
 $header-text-color: #6995c5;
 $text-color: #ccc;
 
-.post-content-header {
-  display: flex;
-}
-
-.post-attachment-video {
-  border-color: darkgray;
-  border-style: dashed;
-  border-width: 2px;
-  box-sizing: border-box;
-}
-
 .post-body {
   position: relative;
   color: $text-color;
@@ -144,24 +111,6 @@ $text-color: #ccc;
   border-bottom-left-radius: 4px;
   float: left;
   margin: 20px;
-
-  .post-attachment:not(:first-child) {
-    margin-left: 5px;
-  }
-
-  .post-attachment {
-    margin: 5px 0px;
-    grid-template-columns: 200px auto;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .post-attachment img {
-    border-radius: 5px;
-    width: 200px;
-    height: auto;
-    vertical-align: middle;
-  }
 
   .post-content-body {
     margin-top: 10px;

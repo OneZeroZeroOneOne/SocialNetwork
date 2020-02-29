@@ -3,7 +3,8 @@
         :reset="true"
         :draggable="true"
         @before-open="beforeOpen"
-        @before-close="beforeClose">
+        @before-close="beforeClose"
+        @not-hovered-close="notHoveredClose">
         <div class="attachment-show">
             <video @mouseup.self="click" id="preview-video-modal" controls autoplay loop :width="width" :height="height">
                 <source :poster="posterPath" :src="srcPath">
@@ -26,6 +27,10 @@ export default class PreviewVideoModal extends Vue {
 
     constructor() {
         super();
+    }
+
+    notHoveredClose() {
+        this.$modal.hide('preview-video-modal')//toggle(false)
     }
 
     click(event: any): void {

@@ -578,6 +578,13 @@ export default {
         )
       }
     },
+    closeOnClickNotHovered() {
+      if (!this.hovered)
+      {
+        this.$emit("not-hovered-close")
+      }
+      //  this.toggle(false);
+    },
     toggle (nextState, params) {
       const { reset, scrollable, visible } = this
 
@@ -609,6 +616,7 @@ export default {
           document.body.classList.add('v--modal-block-scroll')
         }
       } else {
+        window.removeEventListener('click', this.closeOnClickNotHovered)
         
         window.removeEventListener('scroll', this.handleScroll)
         if (scrollable) {
@@ -674,6 +682,10 @@ export default {
         //console.log(elem)
         if (elem !== null)
           elem.onwheel = this.handleWheel;
+        
+        window.addEventListener('click', this.closeOnClickNotHovered)
+      } else {
+        //
       }
       const event = this.createModalEvent({ state })
       this.$emit(eventName, event)
@@ -832,8 +844,8 @@ export default {
   box-sizing: border-box;
   left: 0;
   top: 0;
-  width: 100%;
-  height: 100vh;
+  width: 0px;
+  height: 0px;
   background: rgba(0, 0, 0, 0.2);
   z-index: 999;
   opacity: 1;

@@ -3,7 +3,8 @@
         :reset="true"
         :draggable="true"
         @before-open="beforeOpen"
-        @before-close="beforeClose">
+        @before-close="beforeClose"
+        @not-hovered-close="notHoveredClose">
         <div class="attachment-show">
             <img :src="srcPath" :width="width">
         </div>
@@ -21,6 +22,10 @@ export default class PreviewModal extends Vue {
 
     constructor() {
         super();
+    }
+
+    notHoveredClose() {
+        this.$modal.hide('preview-modal')//toggle(false)
     }
 
     beforeOpen(event): void {

@@ -9,10 +9,7 @@
     </div>
     <div class="comment-content" :style="stylesContent()">
       <div class=comment-content-header v-if="commentObj.attachmentComment.length > 0" :style="stylesContentHeader()">
-        <div class="comment-attachment" v-for="attachment in commentObj.attachmentComment" v-bind:key="attachment.id">
-          <img v-on:click="imgShow(attachment)" v-bind:src="getAttachmentPath(attachment.path)" v-if="attachment.preview === null"/>
-          <img class="comment-attachment-video" v-on:click="videoShow(attachment)" v-bind:src="getAttachmentPath(attachment.preview)" v-else/>
-        </div>
+       <attachment-component :attachmentObjs="commentObj.attachmentComment"/>
       </div>
       <div class=comment-content-body v-html="commentObj.text">
       </div>
@@ -33,9 +30,12 @@ import { ResponseState } from "@/models/enum/ResponseState";
 import { IComment } from '../models/responses/CommentViewModel';
 import { IAttachment } from '../models/responses/Attachment';
 import PreviewModal from '@/components/PreviewModal.vue';
+import AttachmentComponent from '../components/AttachmentComponent.vue';
 
 @Component({
-  components: {}
+  components: {
+    AttachmentComponent,
+  }
 })
 export default class CommentComponent extends Vue {
   @Prop() public commentObj!: IComment;
@@ -57,30 +57,6 @@ export default class CommentComponent extends Vue {
       return "padding-right: 10px;align-items: center;"
     
     return ""
-  }
-
-  getAttachmentPath(path: string): string {
-    return 'http://16ch.tk/api/attachment/' + path;
-  }
-
-  videoShow(attachment: IAttachment): void {
-    console.log(this.getAttachmentPath(attachment.path));
-    this.$modal.show('preview-video-modal', {
-      srcPath: this.getAttachmentPath(attachment.path),
-      posterPath: this.getAttachmentPath(attachment.preview),
-    }, {
-      draggable: true,
-      resizable: true,
-    })
-  }
-
-  imgShow(attachment: IAttachment): void {
-    this.$modal.show('preview-modal', {
-      srcPath: this.getAttachmentPath(attachment.path)
-    }, {
-      draggable: true,
-      resizable: true,
-    })
   }
 }
 </script>

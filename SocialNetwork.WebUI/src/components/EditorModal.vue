@@ -3,45 +3,13 @@
         :reset="true"
         draggable=".header-draggable"
         :clickToClose="false"
-        :resizable="true"
-        :scrollable="true"
         :maxHeight="300"
         @before-open="beforeOpen"
         @before-close="beforeClose">
         <div class="header-draggable"/>
         <div class="editor-modal-show">
             <div class="editor">
-                <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-                <div class="menubar">
-
-                    <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.bullet_list() }"
-                    @click="commands.bullet_list"
-                    >
-                    <font-awesome-icon icon="list-ul" />
-                    </button>
-
-                    <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.ordered_list() }"
-                    @click="commands.ordered_list"
-                    >
-                    <font-awesome-icon icon="list-ol" />
-                    </button>
-
-                    <button
-                    class="menubar__button"
-                    @click="commands.horizontal_rule"
-                    >
-                    <font-awesome-icon icon="grip-lines" />
-                    </button>
-
-                </div>
-                </editor-menu-bar>
                 <editor-menu-bubble :editor="editor" :keep-in-bounds="keepInBounds" v-slot="{ commands, isActive, menu }">
-
-                  
                   <div
                     class="menububble"
                     :class="{ 'is-active': menu.isActive }"
@@ -111,14 +79,6 @@ import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble  } from 'tiptap'
 import {
   Blockquote,
   CodeBlock,
-  HardBreak,
-  Heading,
-  HorizontalRule,
-  OrderedList,
-  BulletList,
-  ListItem,
-  TodoItem,
-  TodoList,
   Bold,
   Code,
   Italic,
@@ -149,15 +109,7 @@ export default class PreviewModal extends Vue {
         this.editor = new Editor({
             extensions: [
                 new Blockquote(),
-                new BulletList(),
                 new CodeBlock(),
-                new HardBreak(),
-                new Heading({ levels: [1, 2, 3] }),
-                new HorizontalRule(),
-                new ListItem(),
-                new OrderedList(),
-                new TodoItem(),
-                new TodoList(),
                 new Link(),
                 new Bold(),
                 new Code(),
@@ -188,5 +140,18 @@ export default class PreviewModal extends Vue {
 </script>
 
 <style lang="scss">
+.editor__content {
+  -moz-appearance: textfield-multiline;
+  -webkit-appearance: textarea;
+  border: 1px solid gray;
+  font: medium -moz-fixed;
+  font: -webkit-small-control;
+  overflow: auto;
+  padding: 2px;
+  resize: both;
 
+  p {
+    margin: 0px;
+  }
+}
 </style>

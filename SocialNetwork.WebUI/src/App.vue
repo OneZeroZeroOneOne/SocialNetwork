@@ -115,7 +115,7 @@ $header-height: 20px;
       color: $reply-color;
       font-style: italic;
       ::before {
-        content: ">>";
+        content: ">";
       }
       p {
         margin: 0;
