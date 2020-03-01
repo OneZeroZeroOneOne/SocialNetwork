@@ -2,6 +2,7 @@ import axios, { AxiosStatic, AxiosResponse } from 'axios';
 import { IPost } from '@/models/responses/PostViewModel';
 import { IPagedResult } from '@/models/responses/PagedResult';
 import { Guid } from '@/utilities/guid';
+import { IComment } from '@/models/responses/CommentViewModel';
 
 export class PostService {
     private static postsAxios = axios.create();

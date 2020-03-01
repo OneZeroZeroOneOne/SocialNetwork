@@ -53,7 +53,7 @@ export default class PostComponent extends Vue {
 
   openEditor(): void {
     this.$modal.show('editor-modal', {
-      
+      replyToPost: this.postObj,
     }, {
       draggable: true,
       resizable: true,

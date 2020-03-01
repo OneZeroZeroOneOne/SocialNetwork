@@ -10,6 +10,7 @@
         @onwheeleditor="onwheel">
         <div class="header-draggable">
           <span class="close-button" v-on:click="$modal.hide('editor-modal')"></span>
+          <button class="send-button" v-on:click="submit">Send!</button>
         </div>
         <div class="editor-modal-show">
             <div class="editor">
@@ -20,6 +21,7 @@
                             @focus="onEditorFocus($event)"
                             @ready="onEditorReady($event)">
               </quill-editor>
+              <div id="counter">0</div>
             </div>
         </div>
         <div @mouseover="hovered = true" @mouseleave="hovered = false" 
@@ -37,21 +39,42 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Quill from 'quill'
 import AttachmentDropComponent from '../components/AttachmentDropComponent.vue';
 import { IAttachment } from '../models/responses/Attachment';
+import Button from 'vue-progress-button'
+import { IPost } from '../models/responses/PostViewModel';
+import { IComment } from '../models/responses/CommentViewModel';
+import { PostService } from '../services/PostService';
+import { CommentService } from '../services/CommentService';
+
+Quill.register('modules/counter', function(quill, options) {
+  let container: any = document.querySelector('#counter');
+  quill.on('text-change', function() {
+    let text = quill.getText();
+    
+    container.innerText = 20001 - text.length;
+  });
+})
 
 @Component({
     components: {
         Quill,
         AttachmentDropComponent,
+        'progress-button': Button,
     }
 })
 export default class PreviewModal extends Vue {
     public srcPath: string = "";
+
     public width: number = 20;
     public height: number = 630;
-    //public editor!: Editor;
+
     public keepInBounds: boolean = true;
+
     public content: string = "test";
     public hovered: boolean = false;
+
+    public replyToPost!: IPost;
+    public replyToComment!: IComment;
+
     public editorOption: any = {
       modules: {
         toolbar: [
@@ -59,8 +82,10 @@ export default class PreviewModal extends Vue {
           ['blockquote', 'code-block'],
           [{ 'script': 'sub' }, { 'script': 'super' }],
           [{ 'color': [] }, { 'background': [] }],
-          ['link']
+          ['link'],
+          ['clean']
         ],
+        counter: true,
       }
     };
 
@@ -82,6 +107,27 @@ export default class PreviewModal extends Vue {
             ],
             content: 'This is just a boring paragraph',
         })*/
+    }
+
+    async submit(event) {
+      if (this.replyToPost !== undefined)
+      {
+        let commentToSend = {
+          text: this.content,
+          postId: this.replyToPost.id,
+        }
+        let attachmentList: number[] = [];
+        this.attachmentList.forEach(x => {
+          attachmentList.push(x.id);
+        })
+        await CommentService.sendComment(commentToSend, attachmentList)
+          .then(x => {
+            console.log(x)
+          })
+          .catch(x => {
+            console.log(x)
+          })
+      }
     }
 
     @Watch('hovered')
@@ -133,6 +179,9 @@ export default class PreviewModal extends Vue {
     }
 
     beforeOpen(event): void {
+      this.replyToPost = event.params.replyToPost;
+      this.replyToComment = event.params.replyToComment;
+      console.log(this.replyToPost, this.replyToComment)
     }
 
     beforeClose (event) {
@@ -143,8 +192,22 @@ export default class PreviewModal extends Vue {
 
 <style lang="scss" scoped>
 $blue: #1ebcc5;
+/*
+#counter {
+  border: 1px solid #ccc;
+  border-width: 0px 1px 1px 1px;
+  color: #aaa;
+  padding: 5px 15px;
+  text-align: right;
+}*/
+
+.send-button {
+  height: 26px;
+  margin: 2px;
+}
 
 .close-button {
+  cursor: pointer;
   float: right;
   width: 26px;
   height: 26px;
@@ -206,11 +269,22 @@ $blue: #1ebcc5;
 .header-draggable {
   background-image: linear-gradient(135deg, #588bae 25%, #4c516d 25%, #4c516d 50%, #588bae 50%, #588bae 75%, #4c516d 75%, #4c516d 100%);
   background-size: 40.00px 40.00px;
+  cursor: move;
 }
 </style>
 
 <style lang="scss">
 $header-height: 30px;
+
+.editor {
+  display: flow-root !important;
+  flex-direction: column;
+}
+
+#counter {
+  text-align: right;
+  padding-right: 5px;
+}
 
 .header-draggable {
   height: $header-height;
