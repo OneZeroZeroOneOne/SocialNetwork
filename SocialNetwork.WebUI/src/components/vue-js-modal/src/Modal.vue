@@ -373,6 +373,9 @@ export default {
     }
   },
   watch: {
+    hovered (value) {
+      //console.log(value)
+    },
     /**
      * Sets the visibility of overlay and modal.
      * Events 'opened' and 'closed' is called here
@@ -682,6 +685,19 @@ export default {
         //console.log(elem)
         if (elem !== null)
           elem.onwheel = this.handleWheel;
+        else{
+          let editorWindow = document.querySelector(".editor-modal")
+          console.log(editorWindow)
+          if (editorWindow !== null)
+          {
+            editorWindow.onwheel = (event) => {
+              //if (this.hovered)
+              //  event.preventDefault()
+              this.$emit('onwheeleditor', event)
+            }
+          }
+        }
+        
         
         window.addEventListener('click', this.closeOnClickNotHovered)
       } else {
@@ -866,7 +882,7 @@ export default {
 
 .v--modal-overlay .v--modal-box {
   position: relative;
-  overflow: hidden;
+  height: auto;
   box-sizing: border-box;
 }
 

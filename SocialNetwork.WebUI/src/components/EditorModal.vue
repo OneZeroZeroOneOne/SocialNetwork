@@ -1,11 +1,13 @@
 <template>
-    <modal name="editor-modal" 
+    <modal class="editor-modal"
+        name="editor-modal" 
         :reset="true"
         draggable=".header-draggable"
         :clickToClose="false"
-        :height="440"
+        height="auto"
         @before-open="beforeOpen"
-        @before-close="beforeClose">
+        @before-close="beforeClose"
+        @onwheeleditor="onwheel">
         <div class="header-draggable"/>
         <div class="editor-modal-show">
             <div class="editor">
@@ -18,18 +20,21 @@
               </quill-editor>
             </div>
         </div>
-        <div class="editor-footer-modal">
+        <div @mouseover="hovered = true" @mouseleave="hovered = false" 
+        class="editor-footer-modal">
           <div class="editor-attachment">
-            <AttachmentDropComponent/>
+            <attachment-drop-component
+            @uploaded-succesfully="uploaded"/>
           </div>
         </div>
     </modal>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Quill from 'quill'
 import AttachmentDropComponent from '../components/AttachmentDropComponent.vue';
+import { IAttachment } from '../models/responses/Attachment';
 
 @Component({
     components: {
@@ -40,10 +45,11 @@ import AttachmentDropComponent from '../components/AttachmentDropComponent.vue';
 export default class PreviewModal extends Vue {
     public srcPath: string = "";
     public width: number = 20;
-    public height: number = 20;
+    public height: number = 630;
     //public editor!: Editor;
     public keepInBounds: boolean = true;
     public content: string = "test";
+    public hovered: boolean = false;
     public editorOption: any = {
       modules: {
         toolbar: [
@@ -55,6 +61,8 @@ export default class PreviewModal extends Vue {
         ],
       }
     };
+
+    public attachmentList: IAttachment[] = [];
 
     constructor() {
         super();
@@ -72,6 +80,29 @@ export default class PreviewModal extends Vue {
             ],
             content: 'This is just a boring paragraph',
         })*/
+    }
+
+    @Watch('hovered')
+    hov(value) {
+      //console.log(value)
+    }
+
+    onwheel(event) {
+      //console.log(event)
+      //if (this.hovered === true)
+      //  event.preventDefault()
+      if (event.toElement.className === "filepond--image-preview-wrapper" 
+          || event.toElement.className === "ql-editor"
+          || event.toElement.isContentEditable === true)
+        return true
+
+      event.preventDefault()
+    }
+
+    uploaded(attachment) {
+      let atObj: IAttachment = attachment.data
+      console.log(atObj)
+      this.attachmentList.push(atObj);
     }
 
     onEditorBlur(quill) {
@@ -117,7 +148,7 @@ $header-height: 30px;
 }
 
 .editor-attachment {
-  height: 130px;
+  //height: 130px;
   background-color: gray;
 }
 
