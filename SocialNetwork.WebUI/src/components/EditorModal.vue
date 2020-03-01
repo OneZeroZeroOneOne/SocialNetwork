@@ -8,7 +8,9 @@
         @before-open="beforeOpen"
         @before-close="beforeClose"
         @onwheeleditor="onwheel">
-        <div class="header-draggable"/>
+        <div class="header-draggable">
+          <span class="close-button" v-on:click="$modal.hide('editor-modal')"></span>
+        </div>
         <div class="editor-modal-show">
             <div class="editor">
                <quill-editor v-model="content"
@@ -138,6 +140,74 @@ export default class PreviewModal extends Vue {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+$blue: #1ebcc5;
+
+.close-button {
+  float: right;
+  width: 26px;
+  height: 26px;
+  margin-top: 2px;
+  margin-right: 2px;
+  box-shadow: 0px 10 10px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background: #000;
+  position: relative;
+  display: block;
+  z-index: 200;
+  text-indent: -9999px;
+}
+.close-button:before,
+.close-button:after {
+  content: '';
+  width: 55%;
+  height: 2px;
+  background: #fff;
+  position: absolute;
+  top: 48%;
+  left: 22%;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+.close-button:after {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+.close-button:hover:before,
+.close-button:hover:after {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+
+</style>
+
+<style lang="scss" scoped>
+.header-draggable {
+  background-image: linear-gradient(135deg, #588bae 25%, #4c516d 25%, #4c516d 50%, #588bae 50%, #588bae 75%, #4c516d 75%, #4c516d 100%);
+  background-size: 40.00px 40.00px;
+}
+</style>
 
 <style lang="scss">
 $header-height: 30px;

@@ -7,7 +7,7 @@
             v-on:click="imgShow(attachment)" 
             v-bind:src="getAttachmentPath(attachment.path)" />
         <img v-else
-            class="clickable attachment-video" 
+            class="clickable attachment-video gradient-border" 
             v-on:click="videoShow(attachment)" 
             v-bind:src="getAttachmentPath(attachment.preview)" />
     </div>
