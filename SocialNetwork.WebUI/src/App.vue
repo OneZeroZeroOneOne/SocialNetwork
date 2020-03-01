@@ -37,12 +37,6 @@ $color-white: #ffffff;
 $color-grey: #dddddd;
 
 $reply-color: rgb(19, 154, 11);
-$header-height: 20px;
-
-.header-draggable {
-  height: $header-height;
-  background-color: black;
-}
 
 .menubar {
   display: flex;
@@ -55,7 +49,7 @@ $header-height: 20px;
 .editor {
   position: relative;
   //max-width: 30rem;
-  margin: 1rem 0rem 0rem 1rem;
+  margin: 0rem 0rem 0rem 0rem;
   display: flex;
   flex-direction: row;
 

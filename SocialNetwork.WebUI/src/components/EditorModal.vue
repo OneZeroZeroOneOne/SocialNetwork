@@ -3,110 +3,62 @@
         :reset="true"
         draggable=".header-draggable"
         :clickToClose="false"
-        :maxHeight="300"
+        :height="440"
         @before-open="beforeOpen"
         @before-close="beforeClose">
         <div class="header-draggable"/>
         <div class="editor-modal-show">
             <div class="editor">
-                <editor-menu-bubble :editor="editor" :keep-in-bounds="keepInBounds" v-slot="{ commands, isActive, menu }">
-                  <div
-                    class="menububble"
-                    :class="{ 'is-active': menu.isActive }"
-                    :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
-                  >
-                    
-                    <button
-                      class="menububble__button"
-                      :class="{ 'is-active': isActive.blockquote() }"
-                      @click="commands.blockquote"
-                    >
-                      <font-awesome-icon icon="quote-left" />
-                    </button>
-
-                    <button
-                      class="menububble__button"
-                      :class="{ 'is-active': isActive.strike() }"
-                      @click="commands.strike"
-                    >
-                      <font-awesome-icon icon="strikethrough" />
-                    </button>
-
-                    <button
-                      class="menububble__button"
-                      :class="{ 'is-active': isActive.underline() }"
-                      @click="commands.underline"
-                    >
-                      <font-awesome-icon icon="underline" />
-                    </button>
-
-                    <button
-                      class="menububble__button"
-                      :class="{ 'is-active': isActive.bold() }"
-                      @click="commands.bold"
-                    >
-                      <font-awesome-icon icon="bold" />
-                    </button>
-
-                    <button
-                      class="menububble__button"
-                      :class="{ 'is-active': isActive.italic() }"
-                      @click="commands.italic"
-                    >
-                      <font-awesome-icon icon="italic" />
-                    </button>
-
-                    <button
-                      class="menububble__button"
-                      :class="{ 'is-active': isActive.code() }"
-                      @click="commands.code"
-                    >
-                      <font-awesome-icon icon="code" />
-                    </button>
-
-                  </div>
-                </editor-menu-bubble>
-                <editor-content class="editor__content" :editor="editor" />
+               <quill-editor v-model="content"
+                            ref="myQuillEditor"
+                            :options="editorOption"
+                            @blur="onEditorBlur($event)"
+                            @focus="onEditorFocus($event)"
+                            @ready="onEditorReady($event)">
+              </quill-editor>
             </div>
+        </div>
+        <div class="editor-footer-modal">
+          <div class="editor-attachment">
+            <AttachmentDropComponent/>
+          </div>
         </div>
     </modal>
 </template>
 
 <script lang="ts">
-import Icon from '../components/Icon.vue'
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble  } from 'tiptap'
-import {
-  Blockquote,
-  CodeBlock,
-  Bold,
-  Code,
-  Italic,
-  Link,
-  Strike,
-  Underline,
-  History,
-} from 'tiptap-extensions'
+import Quill from 'quill'
+import AttachmentDropComponent from '../components/AttachmentDropComponent.vue';
 
 @Component({
     components: {
-        EditorContent,
-        Editor,
-        EditorMenuBar,
-        Icon,
-        EditorMenuBubble,
+        Quill,
+        AttachmentDropComponent,
     }
 })
 export default class PreviewModal extends Vue {
     public srcPath: string = "";
     public width: number = 20;
     public height: number = 20;
-    public editor!: Editor;
+    //public editor!: Editor;
     public keepInBounds: boolean = true;
+    public content: string = "test";
+    public editorOption: any = {
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline', 'strike'],
+          ['blockquote', 'code-block'],
+          [{ 'script': 'sub' }, { 'script': 'super' }],
+          [{ 'color': [] }, { 'background': [] }],
+          ['link']
+        ],
+      }
+    };
 
     constructor() {
         super();
-        this.editor = new Editor({
+        /*this.editor = new Editor({
             extensions: [
                 new Blockquote(),
                 new CodeBlock(),
@@ -119,7 +71,24 @@ export default class PreviewModal extends Vue {
                 new History(),
             ],
             content: 'This is just a boring paragraph',
-        })
+        })*/
+    }
+
+    onEditorBlur(quill) {
+      console.log('editor blur!', quill)
+    }
+
+    onEditorFocus(quill) {
+      console.log('editor focus!', quill)
+    }
+
+    onEditorReady(quill) {
+      console.log('editor ready!', quill)
+    }
+
+    onEditorChange({ quill, html, text }) {
+      console.log('editor change!', quill, html, text)
+      this.content = html
     }
 
     created(): void {
@@ -127,7 +96,7 @@ export default class PreviewModal extends Vue {
     }
 
     mounted(): void {
-        
+      
     }
 
     beforeOpen(event): void {
@@ -140,18 +109,38 @@ export default class PreviewModal extends Vue {
 </script>
 
 <style lang="scss">
-.editor__content {
-  -moz-appearance: textfield-multiline;
-  -webkit-appearance: textarea;
-  border: 1px solid gray;
-  font: medium -moz-fixed;
-  font: -webkit-small-control;
-  overflow: auto;
-  padding: 2px;
-  resize: both;
+$header-height: 30px;
 
-  p {
-    margin: 0px;
+.header-draggable {
+  height: $header-height;
+  background-color: black;
+}
+
+.editor-attachment {
+  height: 130px;
+  background-color: gray;
+}
+
+.quill-editor {
+  width: -webkit-fill-available;
+}
+.quill-code {
+  border: none;
+  height: auto;
+  > code {
+    width: 100%;
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0;
+    height: 10rem;
+    overflow-y: auto;
+    resize: vertical;
   }
+}
+
+.ql-container.ql-snow {
+  height: calc(300px - 60px);
 }
 </style>
