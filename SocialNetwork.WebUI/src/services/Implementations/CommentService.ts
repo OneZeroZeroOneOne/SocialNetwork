@@ -1,24 +1,27 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { IComment } from '@/models/responses/CommentViewModel';
 import { IPagedResult } from '@/models/responses/PagedResult';
 import { ICommentService } from '../Abstractions/ICommentService';
+import apiClient from '@/services/Implementations/ApiClient';
 
 export class CommentService implements ICommentService {
-    private commentAxios = axios.create();
+    private commentAxios = apiClient;
     
     async sendComment(comment: any, attachmentList: number[]): Promise<AxiosResponse<IComment>> {
-        let url = 'http://16ch.tk/api/social/Comments';
-        
-        return (await this.commentAxios.post<IComment>(url, {
+        return this.commentAxios.post<IComment>(`social/Comments`, {
             text: comment.text,
             postId: comment.postId,
             attachmentList: attachmentList,
-        }))
+        })
     }
 
     async getCommentForPost(link_to_post: string, page: number = 1, quantity: number = 5): Promise<AxiosResponse<IPagedResult<IComment>>> {
-        let url = 'http://16ch.tk/api/social/Comments/Page/' + link_to_post + "?page=" + page.toString() + "&quantity=" + quantity.toString();
-        return (await this.commentAxios.get<IPagedResult<IComment>>(url));
+        return this.commentAxios.get<IPagedResult<IComment>>(`social/Comments/Page/${link_to_post.toString()}`, {
+            params: {
+                page: page.toString(),
+                quantity: quantity.toString(),
+            }
+        });
     }
 }
 

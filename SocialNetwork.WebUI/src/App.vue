@@ -15,6 +15,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import PreviewModal from '@/components/PreviewModal.vue'
 import PreviewVideoModal from '@/components/PreviewVideoModal.vue';
 import EditorModal from '@/components/EditorModal.vue'
+import apiClient from '@/services/Implementations/ApiClient';
 
 @Component({
   components: {
@@ -26,6 +27,7 @@ import EditorModal from '@/components/EditorModal.vue'
 export default class App extends Vue {
   constructor() {
     super();
+    apiClient.updateToken()
   }
 }
 </script>

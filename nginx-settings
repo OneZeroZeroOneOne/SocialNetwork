@@ -14,17 +14,20 @@
 server {
     listen        80;
     server_name   example.com *.example.com;
+    client_max_body_size 100M;
 
     charset utf-8;
     root    /var/www/socapp;
     index   index.html index.htm;
+    add_header 'Access-Control-Allow-Origin' '*';
+    add_header 'Access-Control-Allow-Headers' '*';
     # Always serve index.html for any request
     location / {
         root /var/www/socapp/SocialNetwork.WebUI/dist;
         try_files $uri /index.html;
     }
 
-    location /social/ {
+    location /api/social/ {
         proxy_pass         http://localhost:8000/;
         proxy_http_version 1.1;
         proxy_set_header   Upgrade $http_upgrade;
@@ -33,9 +36,10 @@ server {
         proxy_cache_bypass $http_upgrade;
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
+	proxy_hide_header 'Access-Control-Allow-Origin';
     }
 
-    location /auth/ {
+    location /api/auth/ {
         proxy_pass         http://localhost:8001/;
         proxy_http_version 1.1;
         proxy_set_header   Upgrade $http_upgrade;
@@ -44,9 +48,10 @@ server {
         proxy_cache_bypass $http_upgrade;
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
+	proxy_hide_header 'Access-Control-Allow-Origin';
     }
 
-    location /board/ {
+    location /api/board/ {
         proxy_pass         http://localhost:8002/;
         proxy_http_version 1.1;
         proxy_set_header   Upgrade $http_upgrade;
@@ -55,9 +60,10 @@ server {
         proxy_cache_bypass $http_upgrade;
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
+	proxy_hide_header 'Access-Control-Allow-Origin';
     }
 
-    location /attachment/ {
+    location /api/attachment/ {
         proxy_pass         http://localhost:8003/;
         proxy_http_version 1.1;
         proxy_set_header   Upgrade $http_upgrade;
@@ -66,6 +72,8 @@ server {
         proxy_cache_bypass $http_upgrade;
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
+	add_header	   Cache-Control 'max-age=86400';	
+	proxy_hide_header 'Access-Control-Allow-Origin';
    }
     
 }
