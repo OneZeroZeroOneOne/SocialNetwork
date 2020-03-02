@@ -77,7 +77,7 @@
                 request.send(formData);*/
                 let source = axios.CancelToken;
                 let cancel;
-                let request = axios.post('http://194.99.21.140:8003/Attachment', formData, {
+                let request = axios.post('http://16ch.tk/api/attachment/Attachment', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },

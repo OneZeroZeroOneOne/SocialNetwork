@@ -13,14 +13,15 @@
 
 server {
     listen        80;
-    server_name   example.com *.example.com;
+    server_name   16ch.tk;
     client_max_body_size 100M;
 
     charset utf-8;
     root    /var/www/socapp;
     index   index.html index.htm;
-    add_header 'Access-Control-Allow-Origin' '*';
-    add_header 'Access-Control-Allow-Headers' '*';
+    # add_header 'Access-Control-Allow-Origin' '*';
+    # add_header 'Access-Control-Allow-Headers' '*';
+    # add_header "Access-Control-Allow-Methods" '*';
     # Always serve index.html for any request
     location / {
         root /var/www/socapp/SocialNetwork.WebUI/dist;
@@ -36,7 +37,7 @@ server {
         proxy_cache_bypass $http_upgrade;
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
-	proxy_hide_header 'Access-Control-Allow-Origin';
+	# proxy_hide_header 'Access-Control-Allow-Origin';
     }
 
     location /api/auth/ {
@@ -49,6 +50,16 @@ server {
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
 	proxy_hide_header 'Access-Control-Allow-Origin';
+	if ($request_method = 'OPTIONS') {
+           add_header 'Access-Control-Allow-Origin' '*';
+           add_header 'Access-Control-Allow-Credentials' 'true';
+           add_header 'Access-Control-Allow-Headers' '*'
+           add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS,PUT,DELETE,PATCH';
+           add_header 'Access-Control-Max-Age' 1728000;
+           add_header 'Content-Type' 'text/plain charset=UTF-8';
+           add_header 'Content-Length' 0;
+           return 204;
+       }
     }
 
     location /api/board/ {
@@ -61,6 +72,16 @@ server {
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
 	proxy_hide_header 'Access-Control-Allow-Origin';
+	if ($request_method = 'OPTIONS') {
+           add_header 'Access-Control-Allow-Origin' '*';
+           add_header 'Access-Control-Allow-Credentials' 'true';
+           add_header 'Access-Control-Allow-Headers' 'Authorization,Accept,Origin,DNT,X-CustomHeader,Keep-Alive,User-Age$
+           add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS,PUT,DELETE,PATCH';
+           add_header 'Access-Control-Max-Age' 1728000;
+           add_header 'Content-Type' 'text/plain charset=UTF-8';
+           add_header 'Content-Length' 0;
+           return 204;
+       }
     }
 
     location /api/attachment/ {
@@ -73,7 +94,21 @@ server {
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
 	add_header	   Cache-Control 'max-age=86400';	
-	proxy_hide_header 'Access-Control-Allow-Origin';
+	# proxy_hide_header 'Access-Control-Allow-Origin';
+        # add_header 'Access-Control-Allow-Origin' '*';
+        # add_header 'Access-Control-Allow-Credentials' 'true';
+        # add_header 'Access-Control-Allow-Headers' 'Authorization,Accept,Origin,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
+        # add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS,PUT,DELETE,PATCH';
+	if ($request_method = 'OPTIONS') {
+           add_header 'Access-Control-Allow-Origin' '*';
+           add_header 'Access-Control-Allow-Credentials' 'true';
+           add_header 'Access-Control-Allow-Headers' 'Authorization,Accept,Origin,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
+           add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS,PUT,DELETE,PATCH';
+           add_header 'Access-Control-Max-Age' 1728000;
+           add_header 'Content-Type' 'text/plain charset=UTF-8';
+           add_header 'Content-Length' 0;
+           return 204;
+       }
    }
     
 }
