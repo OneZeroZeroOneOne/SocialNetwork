@@ -1,24 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SocialNetwork.Dal.Context;
-using SocialNetwork.Dal.Models;
 using System;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using SocialNetwork.Utilities.Abstractions;
-using SocialNetwork.Utilities.Exceptions;
 
 namespace SocialNetwork.WebApi.Controllers
 {
     public class SocialNetworkBaseApiController : ControllerBase
     {
+        public static readonly Guid AnonimUser = new Guid("37f56076-4eff-400d-8ba0-0c8b37491182");
+
         [ApiExplorerSettings(IgnoreApi = true)]
         public Guid CurrentUser()
         {
             if (Guid.TryParse(User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value, out Guid currentUserId))
                 return currentUserId;
 
-            throw ExceptionFactory.SoftException(ExceptionEnum.UserNotFound, "User not found while getting currentUser");
+            return AnonimUser;
         }
     }
 }
