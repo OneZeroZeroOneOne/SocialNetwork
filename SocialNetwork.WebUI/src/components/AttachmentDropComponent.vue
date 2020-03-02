@@ -8,7 +8,6 @@
         accepted-file-types="video/gif, image/gif, image/jpeg, image/png, video/mp4, video/webm"
         v-bind:files="myFiles"
         v-on:init="handleFilePondInit"
-        v-on:onaddfile="onaddfilestart"
         :server="myServer"
     />
   </div>
