@@ -69,9 +69,12 @@ export default class BoardView extends Vue {
         })*/
       })
     
-    this.$root.$on('footerInView', () => {
-      this.throttleLoadPosts();
-    })
+    this.$root.$on('footerInView', this.throttleLoadPosts)
+    //this.$root.$off('once:')
+  }
+
+  beforeDestroy() {
+    this.$root.$off('footerInView', this.throttleLoadPosts)
   }
 
   throttleLoadPosts = _.throttle(() => this.loadPagePosts(), 2000);
