@@ -47,7 +47,7 @@ class ApiClient {
     }
 
     async post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R> {
-        return this._axiosClient.post<T, R>(url, config);
+        return this._axiosClient.post<T, R>(url, data, config);
     }
 }
 

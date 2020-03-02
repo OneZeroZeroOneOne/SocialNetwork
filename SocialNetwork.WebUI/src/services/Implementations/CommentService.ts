@@ -12,6 +12,8 @@ export class CommentService implements ICommentService {
             text: comment.text,
             postId: comment.postId,
             attachmentList: attachmentList,
+        }, {
+            headers: {}
         })
     }
 
