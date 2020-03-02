@@ -1,6 +1,6 @@
 <template>
   <div class="post-view">
-    <BoardNameHeaderComponent :boardObj="boardObj"/>
+    <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
     <PostComponent :postObj="postObj" v-if="requestPostStatus === 1"/>
     <ul id="comments">
       <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
@@ -14,21 +14,30 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { ResponseState } from "@/models/enum/ResponseState";
+
+import { Guid } from "@/utilities/guid";
+import { IBoard } from "@/models/responses/Board";
+import { IPagedResult } from '@/models/responses/PagedResult';
+import { IComment } from '@/models/responses/CommentViewModel';
+import { IPost } from "@/models/responses/PostViewModel";
+
+import BoardNameHeaderComponent from '@/components/BoardNameHeaderComponent.vue';
 import PostComponent from '@/components/PostComponent.vue'
 import CommentComponent from "@/components/CommentComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
-import { ResponseState } from "@/models/enum/ResponseState";
-import { IPagedResult } from '../models/responses/PagedResult';
-import { IComment } from '../models/responses/CommentViewModel';
-import { IPost } from "@/models/responses/PostViewModel";
-import { Guid } from "@/utilities/guid";
-import { PostService } from "@/services/PostService";
-import { CommentService } from "@/services/CommentService";
-import { IBoard } from "@/models/responses/Board";
-import { BoardService } from "@/services/BoardService";
+
+import { IBoardService } from '@/services/Abstractions/IBoardService';
+import { ICommentService }from '@/services/Abstractions/ICommentService';
+import { IPostService } from '../services/Abstractions/IPostService';
+
+import { BoardService } from '../services/Implementations/BoardService';
+import { CommentService } from '../services/Implementations/CommentService';
+import { PostService } from '../services/Implementations/PostService';
+
 import Nprogress from "nprogress"
 import _ from 'lodash'
-import BoardNameHeaderComponent from '../components/BoardNameHeaderComponent.vue';
+
 
 @Component({
   components: { 
@@ -51,6 +60,10 @@ export default class PostView extends Vue {
   private boardObj!: IBoard;
 
   private refreshInterval!: number;
+  
+  private _commentService!: ICommentService;
+  private _postService!: IPostService;
+  private _boardService!: IBoardService;
 
   constructor() {
     super();
@@ -67,6 +80,12 @@ export default class PostView extends Vue {
     })*/
   }
 
+  beforeCreate() {
+    this._boardService = new BoardService();
+    this._commentService = new CommentService();
+    this._postService = new PostService();
+  }
+
   @Watch('$route',{ immediate: true}) 
   onRouteChange(obj): void {
     //console.log(obj)
@@ -80,36 +99,35 @@ export default class PostView extends Vue {
   }
 
   boardName(): string {
-    console.log(this.$route)
     return this.$route.params.boardname;
   }
 
   async loadBoardByName(name: string): Promise<void> {
-      await BoardService.getBoardByName(name)
-        .then(response => {
-            if (response.status == 200)
-            {
-              this.boardObj = response.data;
-              this.requestBoardStatus = ResponseState.success;
-            } else {
-              this.requestBoardStatus = ResponseState.fail;
-              this.$router.push({name: "notfound"})
-            }
-        })
-        .catch(error => {
-          this.requestBoardStatus = ResponseState.fail;
-          this.$router.push({name: "notfound"})
-        });
+    this.requestBoardStatus = ResponseState.loading;
+    await this._boardService.getBoardByName(name)
+      .then(response => {
+          if (response.status == 200)
+          {
+            this.boardObj = response.data;
+            this.requestBoardStatus = ResponseState.success;
+          } else {
+            this.requestBoardStatus = ResponseState.fail;
+            this.$router.push({name: "notfound"})
+          }
+      })
+      .catch(error => {
+        this.requestBoardStatus = ResponseState.fail;
+        this.$router.push({name: "notfound"})
+      });
   }
 
   async loadPost(): Promise<void> {
     this.requestPostStatus = ResponseState.loading;
 
-    await PostService.getPost(this.boardObj.id, this.postId())
+    await this._postService.getPost(this.boardObj.id, this.postId())
       .then(response => {
         this.postObj = response.data;
         this.requestPostStatus = ResponseState.success;
-        console.log(response)
       })
       .catch(error => {
         this.requestPostStatus = ResponseState.fail;
@@ -126,30 +144,34 @@ export default class PostView extends Vue {
     this.requestCommentsStatus = ResponseState.loading;
     Nprogress.start()
 
-    await CommentService.getCommentForPost(this.postId(), this.currentPage, 1000)
+    await this._commentService.getCommentForPost(this.postId(), this.currentPage, 1000)
       .then(response => {
-        if (response.currentPage < response.pageCount)
+        if (response.status === 200)
         {
-          this.currentPage += 1;
-        }
-        this.requestCommentsStatus = ResponseState.success;
-        let newComCount: number = 0;
-        response.results.forEach(x => {
-          if (this.commentIds.indexOf(x.id) === -1)
+
+          if (response.data.currentPage < response.data.pageCount)
           {
-            this.commentIds.push(x.id);
-            this.commentObjs.push(x);
-            newComCount += 1;
+            this.currentPage += 1;
           }
-        })
-        Nprogress.done();
-        this.$notify({
-          group: 'foo',
-          title: 'Loaded comments',
-          text: newComCount === 0 ? 
-            'No new comments' : 
-            'Loaded ' + newComCount.toString() + " comments",
-        });
+          this.requestCommentsStatus = ResponseState.success;
+          let newComCount: number = 0;
+          response.data.results.forEach(x => {
+            if (this.commentIds.indexOf(x.id) === -1)
+            {
+              this.commentIds.push(x.id);
+              this.commentObjs.push(x);
+              newComCount += 1;
+            }
+          })
+          Nprogress.done();
+          this.$notify({
+            group: 'foo',
+            title: 'Loaded comments',
+            text: newComCount === 0 ? 
+              'No new comments' : 
+              'Loaded ' + newComCount.toString() + " comments",
+          });
+        }
       })
       .catch(error => {
         this.requestCommentsStatus = ResponseState.fail;

@@ -37,13 +37,16 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Quill from 'quill'
-import AttachmentDropComponent from '../components/AttachmentDropComponent.vue';
+
 import { IAttachment } from '../models/responses/Attachment';
-import Button from 'vue-progress-button'
 import { IPost } from '../models/responses/PostViewModel';
 import { IComment } from '../models/responses/CommentViewModel';
-import { PostService } from '../services/PostService';
-import { CommentService } from '../services/CommentService';
+
+import AttachmentDropComponent from '../components/AttachmentDropComponent.vue';
+
+import { IBoardService } from '@/services/Abstractions/IBoardService';
+import { ICommentService }from '@/services/Abstractions/ICommentService';
+import { CommentService } from '../services/Implementations/CommentService';
 
 Quill.register('modules/counter', function(quill, options) {
   let container: any = document.querySelector('#counter');
@@ -58,135 +61,140 @@ Quill.register('modules/counter', function(quill, options) {
     components: {
         Quill,
         AttachmentDropComponent,
-        'progress-button': Button,
     }
 })
 export default class PreviewModal extends Vue {
-    public srcPath: string = "";
+  public srcPath: string = "";
 
-    public width: number = 20;
-    public height: number = 630;
+  public width: number = 20;
+  public height: number = 630;
 
-    public keepInBounds: boolean = true;
+  public keepInBounds: boolean = true;
 
-    public content: string = "test";
-    public hovered: boolean = false;
+  public content: string = "test";
+  public hovered: boolean = false;
 
-    public replyToPost!: IPost;
-    public replyToComment!: IComment;
+  public replyToPost!: IPost;
+  public replyToComment!: IComment;
 
-    public editorOption: any = {
-      modules: {
-        toolbar: [
-          ['bold', 'italic', 'underline', 'strike'],
-          ['blockquote', 'code-block'],
-          [{ 'script': 'sub' }, { 'script': 'super' }],
-          [{ 'color': [] }, { 'background': [] }],
-          ['link'],
-          ['clean']
-        ],
-        counter: true,
-      }
-    };
-
-    public attachmentList: IAttachment[] = [];
-
-    constructor() {
-        super();
-        /*this.editor = new Editor({
-            extensions: [
-                new Blockquote(),
-                new CodeBlock(),
-                new Link(),
-                new Bold(),
-                new Code(),
-                new Italic(),
-                new Strike(),
-                new Underline(),
-                new History(),
-            ],
-            content: 'This is just a boring paragraph',
-        })*/
+  public editorOption: any = {
+    modules: {
+      toolbar: [
+        ['bold', 'italic', 'underline', 'strike'],
+        ['blockquote', 'code-block'],
+        [{ 'script': 'sub' }, { 'script': 'super' }],
+        [{ 'color': [] }, { 'background': [] }],
+        ['link'],
+        ['clean']
+      ],
+      counter: true,
     }
+  };
 
-    async submit(event) {
-      if (this.replyToPost !== undefined)
-      {
-        let commentToSend = {
-          text: this.content,
-          postId: this.replyToPost.id,
-        }
-        let attachmentList: number[] = [];
-        this.attachmentList.forEach(x => {
-          attachmentList.push(x.id);
+  public attachmentList: IAttachment[] = [];
+
+  private _commentService!: ICommentService;
+
+  constructor() {
+      super();
+      /*this.editor = new Editor({
+          extensions: [
+              new Blockquote(),
+              new CodeBlock(),
+              new Link(),
+              new Bold(),
+              new Code(),
+              new Italic(),
+              new Strike(),
+              new Underline(),
+              new History(),
+          ],
+          content: 'This is just a boring paragraph',
+      })*/
+  }
+
+  beforeCreate() {
+    this._commentService = new CommentService();
+  }
+
+  async submit(event) {
+    if (this.replyToPost !== undefined)
+    {
+      let commentToSend = {
+        text: this.content,
+        postId: this.replyToPost.id,
+      }
+      let attachmentList: number[] = [];
+      this.attachmentList.forEach(x => {
+        attachmentList.push(x.id);
+      })
+
+      await this._commentService.sendComment(commentToSend, attachmentList)
+        .then(x => {
+          console.log(x)
         })
-        await CommentService.sendComment(commentToSend, attachmentList)
-          .then(x => {
-            console.log(x)
-          })
-          .catch(x => {
-            console.log(x)
-          })
-      }
+        .catch(x => {
+          console.log(x)
+        })
     }
+  }
 
-    @Watch('hovered')
-    hov(value) {
-      //console.log(value)
-    }
+  @Watch('hovered')
+  hov(value) {
+    //console.log(value)
+  }
 
-    onwheel(event) {
-      //console.log(event)
-      //if (this.hovered === true)
-      //  event.preventDefault()
-      if (event.toElement.className === "filepond--image-preview-wrapper" 
-          || event.toElement.className === "ql-editor"
-          || event.toElement.isContentEditable === true)
-        return true
+  onwheel(event) {
+    //console.log(event)
+    //if (this.hovered === true)
+    //  event.preventDefault()
+    if (event.toElement.className === "filepond--image-preview-wrapper" 
+        || event.toElement.className === "ql-editor"
+        || event.toElement.isContentEditable === true)
+      return true
 
-      event.preventDefault()
-    }
+    event.preventDefault()
+  }
 
-    uploaded(attachment) {
-      let atObj: IAttachment = attachment.data
-      console.log(atObj)
-      this.attachmentList.push(atObj);
-    }
+  uploaded(attachment) {
+    let atObj: IAttachment = attachment.data
+    this.attachmentList.push(atObj);
+  }
 
-    onEditorBlur(quill) {
-      console.log('editor blur!', quill)
-    }
+  onEditorBlur(quill) {
+    console.log('editor blur!', quill)
+  }
 
-    onEditorFocus(quill) {
-      console.log('editor focus!', quill)
-    }
+  onEditorFocus(quill) {
+    console.log('editor focus!', quill)
+  }
 
-    onEditorReady(quill) {
-      console.log('editor ready!', quill)
-    }
+  onEditorReady(quill) {
+    console.log('editor ready!', quill)
+  }
 
-    onEditorChange({ quill, html, text }) {
-      console.log('editor change!', quill, html, text)
-      this.content = html
-    }
+  onEditorChange({ quill, html, text }) {
+    console.log('editor change!', quill, html, text)
+    this.content = html
+  }
 
-    created(): void {
-        
-    }
-
-    mounted(): void {
+  created(): void {
       
-    }
+  }
 
-    beforeOpen(event): void {
-      this.replyToPost = event.params.replyToPost;
-      this.replyToComment = event.params.replyToComment;
-      console.log(this.replyToPost, this.replyToComment)
-    }
+  mounted(): void {
+    
+  }
 
-    beforeClose (event) {
-        //this.editor.destroy()
-    }
+  beforeOpen(event): void {
+    this.replyToPost = event.params.replyToPost;
+    this.replyToComment = event.params.replyToComment;
+    console.log(this.replyToPost, this.replyToComment)
+  }
+
+  beforeClose (event) {
+      //this.editor.destroy()
+  }
 }
 </script>
 

@@ -57,6 +57,7 @@ export default class PreviewModal extends Vue {
     }
 
     beforeClose (event) {
+        //
     }
 }
 </script>

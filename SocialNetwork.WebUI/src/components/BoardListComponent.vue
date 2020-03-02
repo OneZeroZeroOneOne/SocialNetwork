@@ -13,12 +13,16 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { ResponseState } from "@/models/enum/ResponseState";
-import { IBoard } from "@/models/responses/Board";
 import { Guid } from "@/utilities/guid";
-import { BoardService } from "@/services/BoardService";
+
+import { IBoard } from "@/models/responses/Board";
+
+import { IBoardService } from '@/services/Abstractions/IBoardService';
+
+import { BoardService } from '../services/Implementations/BoardService';
+
 import Nprogress from "nprogress"
 import _ from 'lodash'
-
 
 @Component({})
 export default class BoardListComponent extends Vue {
@@ -26,17 +30,23 @@ export default class BoardListComponent extends Vue {
 
   private boards: IBoard[] = [];
 
+  private _boardService!: IBoardService;
+
   constructor() {
     super();
     this.loadBoards();
   }
 
+  beforeCreate() {
+    this._boardService = new BoardService();
+  }
+
   async loadBoards(): Promise<void> {
     this.boardRequestStatus = ResponseState.loading;
 
-    BoardService.getBoards()
+    this._boardService.getBoards()
       .then(response => {
-        this.boards = response;
+        this.boards = response.data;
         this.boardRequestStatus = ResponseState.success;
       })
       .catch(error => {

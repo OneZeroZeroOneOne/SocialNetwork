@@ -23,14 +23,15 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { PostService } from "@/services/PostService";
-import { CommentService } from "@/services/CommentService";
+
 import { IPost } from "@/models/responses/PostViewModel";
+import { IComment } from '@/models/responses/CommentViewModel';
+import { IAttachment } from '@/models/responses/Attachment';
+
 import { ResponseState } from "@/models/enum/ResponseState";
-import { IComment } from '../models/responses/CommentViewModel';
-import { IAttachment } from '../models/responses/Attachment';
+
 import PreviewModal from '@/components/PreviewModal.vue';
-import AttachmentComponent from '../components/AttachmentComponent.vue';
+import AttachmentComponent from '@/components/AttachmentComponent.vue';
 
 @Component({
   components: {

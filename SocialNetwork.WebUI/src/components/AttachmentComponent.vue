@@ -38,7 +38,6 @@ export default class AttachmentComponent extends Vue {
   }
 
   videoShow(attachment: IAttachment): void {
-    console.log(this.getAttachmentPath(attachment.path));
     this.$modal.show('preview-video-modal', {
       srcPath: this.getAttachmentPath(attachment.path),
       posterPath: this.getAttachmentPath(attachment.preview),

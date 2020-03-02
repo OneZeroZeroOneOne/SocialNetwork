@@ -26,14 +26,16 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { Guid } from "@/utilities/guid";
-import CommentComponent from "./CommentComponent.vue";
-import { PostService } from "@/services/PostService";
-import { IPost } from "@/models/responses/PostViewModel";
+
 import { ResponseState } from "@/models/enum/ResponseState";
 import { IPagedResult } from '../models/responses/PagedResult';
 import { IComment } from '../models/responses/CommentViewModel';
-import {IAttachment} from '../models/responses/Attachment';
+import { IAttachment } from '../models/responses/Attachment';
+import { IPost } from "@/models/responses/PostViewModel";
+
 import AttachmentComponent from '../components/AttachmentComponent.vue';
+import CommentComponent from "./CommentComponent.vue";
+
 import Nprogress from "nprogress"
 import _ from 'lodash'
 
@@ -115,6 +117,7 @@ $text-color: #ccc;
   .post-content-body {
     margin-top: 10px;
     min-height: 50px;
+    word-break: break-all;
   }
 
   .post-header {

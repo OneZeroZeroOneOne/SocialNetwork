@@ -22,21 +22,26 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Getter } from 'vuex'
-import { IBoard } from '../models/responses/Board';
-import { Guid } from '../utilities/guid';
-import { BoardService } from '../services/BoardService';
+
+import { IBoard } from '@/models/responses/Board';
+import { IComment } from '@/models/responses/CommentViewModel';
+import { IPost } from '@/models/responses/PostViewModel';
+
+import { Guid } from '@/utilities/guid';
 import { ResponseState } from "@/models/enum/ResponseState";
-import { IPost } from '../models/responses/PostViewModel';
-import PostComponent from '../components/PostComponent.vue'
+
+import PostComponent from '@/components/PostComponent.vue'
 import FooterComponent from "@/components/FooterComponent.vue";
+import CommentComponent from '@/components/CommentComponent.vue'
+import BoardNameHeaderComponent from '@/components/BoardNameHeaderComponent.vue';
+
+import { IBoardService } from '@/services/Abstractions/IBoardService';
+import { ICommentService }from '@/services/Abstractions/ICommentService';
+
 import Nprogress from "nprogress"
 import _ from 'lodash'
-import { Dictionary } from 'vue-router/types/router';
-import { IComment } from '../models/responses/CommentViewModel';
-import { CommentService } from '../services/CommentService';
-import CommentComponent from '../components/CommentComponent.vue'
-import BoardNameHeaderComponent from '../components/BoardNameHeaderComponent.vue';
+import { CommentService } from '../services/Implementations/CommentService';
+import { BoardService } from '../services/Implementations/BoardService';
 
 @Component({
   components: { 
@@ -58,19 +63,23 @@ export default class BoardView extends Vue {
 
   private preloadedComments: IComment[] = [];
 
+  private _commentService!: ICommentService
+  private _boardService!: IBoardService
+
   constructor() {
     super();
+
     this.currentBoardName = this.boardName();
     this.loadBoardByName(this.currentBoardName)
       .then(x => {
         this.loadPagePosts()
-        /*.then(xx => {
-          this.preloadComments()
-        })*/
+        this.$root.$on('footerInView', this.throttleLoadPosts)
       })
-    
-    this.$root.$on('footerInView', this.throttleLoadPosts)
-    //this.$root.$off('once:')
+  }
+
+  beforeCreate() {
+    this._commentService =  new CommentService();
+    this._boardService = new BoardService();
   }
 
   beforeDestroy() {
@@ -79,13 +88,8 @@ export default class BoardView extends Vue {
 
   throttleLoadPosts = _.throttle(() => this.loadPagePosts(), 2000);
 
-  thisPostId(postId: number) {
-
-  }
-
   get getPreloadedCommentForPost(): IComment[] {
     //let comments = this.preloadedComments.get(postId)
-    console.log(this.preloadedComments)
     return this.preloadedComments === undefined ? [] : this.preloadedComments;
   }
 
@@ -93,14 +97,8 @@ export default class BoardView extends Vue {
     return this.$route.params.boardname;
   }
 
-  async preloadComments(): Promise<void> {
-    this.postIds.forEach(x => {
-      let resp = CommentService.getCommentForPost(x.toString(), 1, 5);
-    })
-  }
-
   async loadBoardByName(name: string): Promise<void> {
-    await BoardService.getBoardByName(name)
+    return this._boardService.getBoardByName(name)
       .then(response => {
         if (response.status == 200)
         {
@@ -119,7 +117,7 @@ export default class BoardView extends Vue {
 
   async loadPagePosts(): Promise<void> {
     Nprogress.start()
-    await BoardService.getPostsOnBoard(this.boardObj.id, this.currentPage, 10)
+    await this._boardService.getPostsOnBoard(this.boardObj.id, this.currentPage, 10)
       .then(response => {
         if (response.status == 200)
         {
@@ -129,7 +127,6 @@ export default class BoardView extends Vue {
           }
 
           let newPostCount: number = 0;
-          console.log(response.data)
 
           let newPostIds: number[] = []
           response.data.results.forEach(x => {
@@ -145,13 +142,12 @@ export default class BoardView extends Vue {
           /*
           preload comments
           */
-          console.log(newPostIds)
           newPostIds.forEach(x => {
-            let resp = CommentService.getCommentForPost(x.toString(), 1, 5).then(resp => {
-              this.preloadedComments.push(...resp.results)//.set(x, resp.results)
+            let resp = this._commentService.getCommentForPost(x.toString(), 1, 5)
+            .then(resp => {
+              this.preloadedComments.push(...resp.data.results)
             })
           })
-          console.log(this.preloadedComments)
           /* 
           */
           this.$notify({

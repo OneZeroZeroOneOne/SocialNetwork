@@ -46,7 +46,6 @@
         myServer: {
             url: 'http://194.99.21.140:8003',
             process:(fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
-                console.log("new file")
                 // fieldName is the name of the input field
                 // file is the actual file object to send
                 const formData = new FormData();
@@ -89,7 +88,6 @@
                     }),
                     onUploadProgress: (progressEvent) => {
                         //const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
-                        console.log("onUploadProgress", progressEvent.lengthComputable, progressEvent.loaded, progressEvent.total);
                         progress(progressEvent.lengthComputable, progressEvent.loaded, progressEvent.total);
                         /*if (totalLength !== null) {
                             this.progressData = Math.round( (progressEvent.loaded * 100) / totalLength );
@@ -97,7 +95,6 @@
                     },
                 })
                 .then(x => {
-                    console.log(x)
                     if (x.status === 200)
                     {
                         load(Date.now());
@@ -108,7 +105,6 @@
                     }
                 })
                 .catch(x => {
-                    console.log(x)
                     error(x);
                 })
                 
@@ -126,26 +122,18 @@
             },
             load: (source, load) => {
               // simulates loading a file from the server
-              console.log(source, load)
+              //console.log(source, load)
               //fetch(source).then(res => res.blob()).then(load);
             }
           } 
-        }
-    },
-    watch: {
-        myFiles (value) {
-            console.log(value)
         }
     },
     components: {
       FilePond
     },
     methods: {
-        onaddfilestart: function(value) {
-            console.log(value)
-        },
         handleFilePondInit: function() {
-            console.log(this.$refs.pond)
+            //console.log(this.$refs.pond)
         }
     }
   }

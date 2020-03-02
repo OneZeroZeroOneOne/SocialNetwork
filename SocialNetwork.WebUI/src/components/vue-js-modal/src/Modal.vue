@@ -538,7 +538,6 @@ export default {
         if (this.ratio === -1)
           this.ratio = Math.round(this.modal.width / this.modal.height);
 
-        console.log(this.ratio)
         let direction = "up"
         if (event.deltaY < 0)
         {
@@ -687,7 +686,7 @@ export default {
           elem.onwheel = this.handleWheel;
         else{
           let editorWindow = document.querySelector(".editor-modal")
-          console.log(editorWindow)
+          
           if (editorWindow !== null)
           {
             editorWindow.onwheel = (event) => {
