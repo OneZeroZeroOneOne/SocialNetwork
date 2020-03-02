@@ -11,7 +11,7 @@ export class CommentService implements ICommentService {
         return this.commentAxios.post<IComment>(`social/Comments`, {
             text: comment.text,
             postId: comment.postId,
-            attachmentList: attachmentList,
+            AttachmentIdList: attachmentList,
         }, {
             headers: {}
         })
