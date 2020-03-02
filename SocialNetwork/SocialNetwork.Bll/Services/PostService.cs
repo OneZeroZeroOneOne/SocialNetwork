@@ -62,10 +62,11 @@ namespace SocialNetwork.Bll.Services
             var insertedPost = await _context.Post.AddAsync(postModel);
             await _context.SaveChangesAsync();
 
-            foreach (var attachmentId in attachmentPostList)
-            {
-                await AttachFileToPost(insertedPost.Entity.Id, attachmentId);
-            }
+            if (attachmentPostList != null)
+                foreach (var attachmentId in attachmentPostList)
+                {
+                    await AttachFileToPost(insertedPost.Entity.Id, attachmentId);
+                }
 
             await _context.SaveChangesAsync();
 

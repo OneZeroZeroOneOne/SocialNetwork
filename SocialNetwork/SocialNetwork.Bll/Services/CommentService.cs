@@ -55,10 +55,11 @@ namespace SocialNetwork.Bll.Services
 
             await _context.SaveChangesAsync();
 
-            foreach (var attachmentId in attachmentIdList)
-            {
-                await AttachFileToComment(insertedPost.Entity.Comments.First().Id, attachmentId);
-            }
+            if (attachmentIdList != null)
+                foreach (var attachmentId in attachmentIdList)
+                {
+                    await AttachFileToComment(insertedPost.Entity.Comments.First().Id, attachmentId);
+                }
 
             await _context.SaveChangesAsync();
 
