@@ -5,6 +5,8 @@
         draggable=".header-draggable"
         :clickToClose="false"
         height="auto"
+        overlayTransition="overlay-fade"
+        transition="overlay-fade"
         @before-open="beforeOpen"
         @before-close="beforeClose"
         @onwheeleditor="onwheel">
