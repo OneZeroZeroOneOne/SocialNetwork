@@ -293,7 +293,7 @@ export default {
 
       const left = shift.left + pivotX * maxLeft
       const top = shift.top + pivotY * maxTop
-
+      console.log(left,top)
       return {
         left: parseInt(left),
         top: parseInt(top)
@@ -410,6 +410,17 @@ export default {
   },
 
   methods: {
+    savePositionToLocalStorage() {
+      localStorage.setItem(this.name +'-x', this.shift.left)
+      localStorage.setItem(this.name +'-y', this.shift.top)
+    },
+    setPositionFromLocalStorage() {
+      let shiftX = localStorage.getItem(this.name +'-x')
+      let shiftY = localStorage.getItem(this.name +'-y')
+      console.log(shiftX, shiftY)
+      this.shift.left = parseInt(shiftX) ? parseInt(shiftX) : 0
+      this.shift.top = parseInt(shiftY) ? parseInt(shiftY) : 0
+    },
     handleScroll (event) {
       // Any code to be executed when the window is scrolled
       //console.log(event)

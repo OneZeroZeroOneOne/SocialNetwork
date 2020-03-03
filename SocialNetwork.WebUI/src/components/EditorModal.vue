@@ -193,9 +193,15 @@ export default class PreviewModal extends Vue {
     this.replyToPost = event.params.replyToPost;
     this.replyToComment = event.params.replyToComment;
     console.log(this.replyToPost, this.replyToComment)
+    let a: any = this.$children[0];
+    console.log(a)
+    a.setPositionFromLocalStorage();
   }
 
   beforeClose (event) {
+    let a: any = this.$children[0];
+    console.log(a)
+    a.savePositionToLocalStorage()
       //this.editor.destroy()
   }
 }
