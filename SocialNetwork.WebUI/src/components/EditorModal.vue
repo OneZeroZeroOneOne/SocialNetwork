@@ -8,7 +8,7 @@
         @before-open="beforeOpen"
         @before-close="beforeClose"
         @onwheeleditor="onwheel">
-        <div class="header-draggable">
+        <div :class="'header-draggable '+isLoading()">
           <span class="close-button" v-on:click="$modal.hide('editor-modal')"></span>
           <button class="send-button" v-on:click="submit">Send!</button>
         </div>
@@ -47,6 +47,7 @@ import AttachmentDropComponent from '../components/AttachmentDropComponent.vue';
 import { IBoardService } from '@/services/Abstractions/IBoardService';
 import { ICommentService }from '@/services/Abstractions/ICommentService';
 import { CommentService } from '../services/Implementations/CommentService';
+import { ResponseState } from '../models/enum/ResponseState';
 
 Quill.register('modules/counter', function(quill, options) {
   let container: any = document.querySelector('#counter');
@@ -64,6 +65,8 @@ Quill.register('modules/counter', function(quill, options) {
     }
 })
 export default class PreviewModal extends Vue {
+  private submitProgress: ResponseState = ResponseState.success;
+
   public srcPath: string = "";
 
   public width: number = 20;
@@ -97,24 +100,16 @@ export default class PreviewModal extends Vue {
 
   constructor() {
       super();
-      /*this.editor = new Editor({
-          extensions: [
-              new Blockquote(),
-              new CodeBlock(),
-              new Link(),
-              new Bold(),
-              new Code(),
-              new Italic(),
-              new Strike(),
-              new Underline(),
-              new History(),
-          ],
-          content: 'This is just a boring paragraph',
-      })*/
   }
 
   beforeCreate() {
     this._commentService = new CommentService();
+  }
+
+  isLoading(): string {
+    if (this.submitProgress === ResponseState.loading)
+      return 'header-loading'
+    return ''
   }
 
   async submit(event) {
@@ -128,14 +123,20 @@ export default class PreviewModal extends Vue {
       this.attachmentList.forEach(x => {
         attachmentList.push(x.id);
       })
-
-      await this._commentService.sendComment(commentToSend, attachmentList)
-        .then(x => {
-          console.log(x)
+      
+      this.$awn.async(this._commentService.sendComment(commentToSend, attachmentList), ok => {
+        this.$root.$emit('comment-sent-success', ok)
+        this.$awn.success('Comment sent!', {
+          duration: {
+            success: 1500
+          }
         })
-        .catch(x => {
-          console.log(x)
-        })
+        this.$modal.hide('editor-modal')
+      }, error => {
+        console.log(error)
+        this.$root.$emit('comment-sent-error', error)
+        this.$awn.error("Can't send comment", {})
+      }, 'Sending comment')
     }
   }
 
@@ -274,10 +275,39 @@ $blue: #1ebcc5;
 </style>
 
 <style lang="scss" scoped>
+@-webkit-keyframes MOVE-BG {
+	from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px 0px;
+  }
+}
+
+@keyframes MOVE-BG {
+	from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px 0px;
+  }
+}
+
 .header-draggable {
   background-image: linear-gradient(135deg, #588bae 25%, #4c516d 25%, #4c516d 50%, #588bae 50%, #588bae 75%, #4c516d 75%, #4c516d 100%);
   background-size: 40.00px 40.00px;
   cursor: move;
+  &.header-loading {
+    -webkit-animation-name: MOVE-BG;
+    -webkit-animation-duration: .6s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    
+    animation-name: MOVE-BG;
+    animation-duration: .6s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
 }
 </style>
 

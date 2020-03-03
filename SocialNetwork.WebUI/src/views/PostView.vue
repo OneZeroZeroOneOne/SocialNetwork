@@ -1,7 +1,7 @@
 <template>
   <div class="post-view">
     <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
-    <PostComponent :postObj="postObj" v-if="requestPostStatus === 1"/>
+    <post-component :postObj="postObj" v-if="requestPostStatus === 1"/>
     <ul id="comments">
       <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
         <CommentComponent :commentObj="item" :commentNum="index+1"/>
@@ -15,6 +15,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { ResponseState } from "@/models/enum/ResponseState";
+import { AxiosResponse } from 'axios';
 
 import { Guid } from "@/utilities/guid";
 import { IBoard } from "@/models/responses/Board";
@@ -69,6 +70,7 @@ export default class PostView extends Vue {
     super();
 
     //this.refreshInterval = setInterval(() => this.loadComments(), 1000 * 30); //every 30 sec update
+    this.$root.$on('comment-sent-success', this.commentSentSuccess);
 
     this.loadBoardByName(this.boardName())
     .then(x => {
@@ -78,6 +80,17 @@ export default class PostView extends Vue {
     /*this.$root.$on('footerInView', () => {
       this.throttleLoadComments();
     })*/
+  }
+
+  beforeDestroy() {
+    this.$root.$off('comment-sent-success', this.commentSentSuccess)
+  }
+
+  async commentSentSuccess(comment: AxiosResponse<IComment>): Promise<void> {
+    if (this.commentIds.indexOf(comment.data.id) === -1) {
+      this.commentIds.push(comment.data.id);
+      this.commentObjs.push(comment.data);
+    }
   }
 
   beforeCreate() {
@@ -164,13 +177,16 @@ export default class PostView extends Vue {
             }
           })
           Nprogress.done();
-          this.$notify({
-            group: 'foo',
-            title: 'Loaded comments',
-            text: newComCount === 0 ? 
-              'No new comments' : 
-              'Loaded ' + newComCount.toString() + " comments",
-          });
+          this.$awn.info(
+            newComCount === 0 ? 
+            'No new comments' : 
+            'Loaded ' + newComCount.toString() + " comments",
+            {
+              durations: {
+                info: 1500
+              }
+            }
+          )
         }
       })
       .catch(error => {

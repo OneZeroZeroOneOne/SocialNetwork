@@ -3,7 +3,6 @@
     <div id="nav"></div>
     <router-view>
     </router-view>
-    <notifications group="foo" position="bottom right"/>
     <preview-modal/>
     <preview-video-modal/>
     <editor-modal/>
@@ -33,6 +32,7 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
+@import '~vue-awesome-notifications/dist/styles/style.css';
 //editor and text styles
 $color-black: #000000;
 $color-white: #ffffff;

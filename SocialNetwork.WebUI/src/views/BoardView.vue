@@ -150,13 +150,14 @@ export default class BoardView extends Vue {
           })
           /* 
           */
-          this.$notify({
-            group: 'foo',
-            title: 'Loaded posts',
-            text: newPostCount === 0 ? 
-              'No new posts' : 
-              'Loaded ' + newPostCount.toString() + " posts",
-          });
+          this.$awn.info(
+            newPostCount === 0 ? 
+            'No new posts' : 
+            'Loaded ' + newPostCount.toString() + " posts", {
+              duration: {
+                info: 1500
+              }
+            })
 
           this.requestPostsStatus = ResponseState.success
         } else {

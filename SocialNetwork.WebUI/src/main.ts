@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import 'nprogress/nprogress.css';
-import Notifications from 'vue-notification'
 import checkView from 'vue-check-view'
 import Plugin from './components/vue-js-modal/src/index.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -11,12 +10,18 @@ import { faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, f
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import setup from './utilities/math_round_extensions.js'
 import VueQuillEditor from 'vue-quill-editor'
+import { VueNotification } from '@/types/AwnTypes';
 
 // require styles
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import VueAWN from "vue-awesome-notifications"
 
+// Your custom options
+let options = {}
+
+Vue.use(VueAWN, options)
 Vue.use(VueQuillEditor, /* { default global options } */)
 
 setup()
@@ -29,7 +34,6 @@ Vue.use(Plugin, { dynamic: true, injectModalsContainer: true})
 
 Vue.use(checkView)
 
-Vue.use(Notifications)
 Vue.config.productionTip = false
 
 new Vue({
