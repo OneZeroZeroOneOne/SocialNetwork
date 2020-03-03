@@ -598,12 +598,12 @@ export default {
       {
         console.log(event)
         this.$emit("not-hovered-close")
-        console.log(event.toElement.className)
-        if (event.toElement.className.indexOf('clickable') !== -1)
+        //console.log(event.toElement.className)
+        /*if (event.toElement.className.indexOf('clickable') !== -1)
         {
           console.log('clickable')
           this.$nextTick(() => event.toElement.click())
-        }
+        }*/
       }
       //  this.toggle(false);
     },
