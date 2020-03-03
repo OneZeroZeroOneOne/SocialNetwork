@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div id="nav"></div>
+    <new-modal/>
     <router-view>
     </router-view>
     <preview-modal/>
@@ -15,12 +16,14 @@ import PreviewModal from '@/components/PreviewModal.vue'
 import PreviewVideoModal from '@/components/PreviewVideoModal.vue';
 import EditorModal from '@/components/EditorModal.vue'
 import apiClient from '@/services/Implementations/ApiClient';
+import NewModal from "@/components/NewModal.vue";
 
 @Component({
   components: {
     PreviewModal,
     EditorModal,
     PreviewVideoModal,
+    NewModal,
   }
 })
 export default class App extends Vue {

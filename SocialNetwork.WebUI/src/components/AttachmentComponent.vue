@@ -48,12 +48,13 @@ export default class AttachmentComponent extends Vue {
   }
 
   imgShow(attachment: IAttachment): void {
-    this.$modal.show('preview-modal', {
+    /*this.$modal.show('preview-modal', {
       srcPath: this.getAttachmentPath(attachment.path)
     }, {
       draggable: true,
       resizable: true,
-    })
+    })*/
+    this.$root.$emit('show-attachment-image', attachment)
   }
 }
 </script>

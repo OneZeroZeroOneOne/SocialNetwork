@@ -11,12 +11,17 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import setup from './utilities/math_round_extensions.js'
 import VueQuillEditor from 'vue-quill-editor'
 import { VueNotification } from '@/types/AwnTypes';
+import VueDraggableResizable from 'vue-draggable-resizable'
+import VueAWN from "vue-awesome-notifications"
 
+// optionally import default styles
+import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
+
+Vue.component('vue-draggable-resizable', VueDraggableResizable)
 // require styles
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-import VueAWN from "vue-awesome-notifications"
 
 // Your custom options
 let options = {}
