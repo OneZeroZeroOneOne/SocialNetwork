@@ -293,7 +293,7 @@ export default {
 
       const left = shift.left + pivotX * maxLeft
       const top = shift.top + pivotY * maxTop
-      console.log(left,top)
+
       return {
         left: parseInt(left),
         top: parseInt(top)
@@ -472,6 +472,8 @@ export default {
     },
     handleToggleEvent (name, state, params) {
       if (this.name === name) {
+        if (state && this.visible)
+          this.$emit('already-open-click')
         const nextState = typeof state === 'undefined'
           ? !this.visible
           : state

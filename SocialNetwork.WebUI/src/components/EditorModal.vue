@@ -9,7 +9,8 @@
         transition="overlay-fade"
         @before-open="beforeOpen"
         @before-close="beforeClose"
-        @onwheeleditor="onwheel">
+        @onwheeleditor="onwheel"
+        @already-open-click="alreadyOpen">
         <div :class="'header-draggable '+isLoading()">
           <span class="close-button" v-on:click="$modal.hide('editor-modal')"></span>
           <button class="send-button" v-on:click="submit">Send!</button>
@@ -102,6 +103,12 @@ export default class PreviewModal extends Vue {
 
   constructor() {
       super();
+  }
+
+  alreadyOpen() {
+    console.log('already open')
+    let modal = document.getElementsByClassName('v--modal-box')[0]
+    //this.$el.classList.add('opened')
   }
 
   beforeCreate() {
@@ -209,14 +216,6 @@ export default class PreviewModal extends Vue {
 
 <style lang="scss" scoped>
 $blue: #1ebcc5;
-/*
-#counter {
-  border: 1px solid #ccc;
-  border-width: 0px 1px 1px 1px;
-  color: #aaa;
-  padding: 5px 15px;
-  text-align: right;
-}*/
 
 .send-button {
   height: 26px;
