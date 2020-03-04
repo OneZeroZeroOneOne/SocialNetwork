@@ -39,7 +39,7 @@ namespace SocialNetwork.Bll.Services
             var havePreview = false;
             Guid hash;
             _httpContext.HttpContext.Request.Headers.TryGetValue("X-Width", out var width);
-            _httpContext.HttpContext.Request.Headers.TryGetValue("X-Width", out var height);
+            _httpContext.HttpContext.Request.Headers.TryGetValue("X-Height", out var height);
 
             int.TryParse(width, out int widthVal);
             int.TryParse(height, out int heightVal);
