@@ -8,6 +8,9 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -30,11 +33,14 @@ namespace SocialNetwork.Bll.Services
             var fileName = DateTime.UtcNow.ToFileTimeUtc();
             var havePreview = false;
             Guid hash;
+            int width = 0;
+            var height = 0;
 
             await using (var memoryStream = new MemoryStream())
             {
                 await attachment.UploadFile.CopyToAsync(memoryStream);
-                hash = new Guid(new MD5CryptoServiceProvider().ComputeHash(memoryStream.GetBuffer()));
+                using(var hasher = new MD5CryptoServiceProvider())
+                    hash = new Guid(hasher.ComputeHash(memoryStream.GetBuffer()));
 
                 var storedAttachment = await _publicContext.Attachment.FirstOrDefaultAsync(s => s.Hash == hash);
                 if (storedAttachment != null)
@@ -46,8 +52,16 @@ namespace SocialNetwork.Bll.Services
                 {
                     await fileStream.WriteAsync(memoryStream.GetBuffer());
                 }
-            }
 
+                if (attachment.UploadFile.ContentType.Contains("image"))
+                {
+                    using (Image image = Image.Load(memoryStream))
+                    {
+                        width = image.Width;
+                        height = image.Height;
+                    }
+                }
+            }
 
             if (attachment.UploadFile.ContentType.Contains("video"))
             {
@@ -56,12 +70,17 @@ namespace SocialNetwork.Bll.Services
                     fileName.ToString(), ext);
             }
 
+            
+
             var attachmentDb = new Attachment
             {
                 ContentType = attachment.UploadFile.ContentType,
                 Path = "Files/" + fileName + ext,
                 Preview = havePreview ? "Files/" + fileName + "_preview.png" : null,
                 Hash = hash,
+                DisplayName = attachment.UploadFile.FileName,
+                Width = width,
+                Height = height,
             };
 
             await _publicContext.Attachment.AddAsync(attachmentDb);

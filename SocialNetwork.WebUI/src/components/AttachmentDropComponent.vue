@@ -48,7 +48,101 @@
                 // fieldName is the name of the input field
                 // file is the actual file object to send
                 const formData = new FormData();
+                let width, height;
+                let cancel;
                 formData.append(fieldName, file, file.name);
+
+                var reader = new FileReader(); // CREATE AN NEW INSTANCE.
+
+                reader.onload = (e) => {
+                    let type = e.target.result.split(';')[0];
+                    type = type.split(":")[1];
+                    let srcEl;
+                    let source = axios.CancelToken;
+                    if (type.split('/')[0] === 'image')
+                    {
+                        srcEl = new Image();
+                        srcEl.src = e.target.result;
+
+                        srcEl.onload = (ee) => {
+                            console.log(ee)
+                            width = ee.path[0].width;
+                            height = ee.path[0].height;
+                            let request = axios.post('http://16ch.tk/api/attachment/Attachment', formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data',
+                                    'X-Width': width,
+                                    'X-Height': height,
+                                },
+                                cancelToken: new source(function executor(c) {
+                                    // An executor function receives a cancel function as a parameter
+                                    cancel = c;
+                                }),
+                                onUploadProgress: (progressEvent) => {
+                                    //const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+                                    progress(progressEvent.lengthComputable, progressEvent.loaded, progressEvent.total);
+                                    /*if (totalLength !== null) {
+                                        this.progressData = Math.round( (progressEvent.loaded * 100) / totalLength );
+                                    }*/
+                                },
+                            })
+                            .then(x => {
+                                if (x.status === 200)
+                                {
+                                    load(Date.now());
+                                    this.$emit('uploaded-succesfully', x)
+                                } else {
+                                    error(x.data.errors.UploadFile[0]);
+                                    this.$emit('uploaded-error', x)
+                                }
+                            })
+                            .catch(x => {
+                                error(x);
+                            })
+                        }
+                    } else {
+                        srcEl = document.createElement('video');
+                        srcEl.preload = 'metadata';
+                        srcEl.onloadedmetadata = () => {
+                            console.log(srcEl.videoWidth, srcEl.videoHeight)
+                            let request = axios.post('http://16ch.tk/api/attachment/Attachment', formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data',
+                                    'X-Width': srcEl.videoWidth,
+                                    'X-Height': srcEl.videoHeight,
+                                },
+                                cancelToken: new source(function executor(c) {
+                                    // An executor function receives a cancel function as a parameter
+                                    cancel = c;
+                                }),
+                                onUploadProgress: (progressEvent) => {
+                                    //const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+                                    progress(progressEvent.lengthComputable, progressEvent.loaded, progressEvent.total);
+                                    /*if (totalLength !== null) {
+                                        this.progressData = Math.round( (progressEvent.loaded * 100) / totalLength );
+                                    }*/
+                                },
+                            })
+                            .then(x => {
+                                if (x.status === 200)
+                                {
+                                    load(Date.now());
+                                    this.$emit('uploaded-succesfully', x)
+                                } else {
+                                    error(x.data.errors.UploadFile[0]);
+                                    this.$emit('uploaded-error', x)
+                                }
+                            })
+                            .catch(x => {
+                                error(x);
+                            })
+                        }
+
+                        srcEl.src = e.target.result
+                    }
+                };
+
+                reader.readAsDataURL(file);
 
                 /*const request = new XMLHttpRequest();
                 request.open('POST', 'http://194.99.21.140:8003/Attachment');
@@ -75,37 +169,7 @@
                 };
 
                 request.send(formData);*/
-                let source = axios.CancelToken;
-                let cancel;
-                let request = axios.post('http://16ch.tk/api/attachment/Attachment', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    },
-                    cancelToken: new source(function executor(c) {
-                        // An executor function receives a cancel function as a parameter
-                        cancel = c;
-                    }),
-                    onUploadProgress: (progressEvent) => {
-                        //const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
-                        progress(progressEvent.lengthComputable, progressEvent.loaded, progressEvent.total);
-                        /*if (totalLength !== null) {
-                            this.progressData = Math.round( (progressEvent.loaded * 100) / totalLength );
-                        }*/
-                    },
-                })
-                .then(x => {
-                    if (x.status === 200)
-                    {
-                        load(Date.now());
-                        this.$emit('uploaded-succesfully', x)
-                    }else{
-                        error(x.data.errors.UploadFile[0]);
-                        this.$emit('uploaded-error', x)
-                    }
-                })
-                .catch(x => {
-                    error(x);
-                })
+                
                 
                 // Should expose an abort method so the request can be cancelled
                 return {

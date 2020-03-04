@@ -15,5 +15,9 @@ namespace SocialNetwork.Bll.Services
             IConversionResult result = await Conversion.Snapshot(Path.Combine(videoDirectory, videoName + extension), Path.Combine(videoDirectory, videoName + "_preview.png"), TimeSpan.FromSeconds(0))
                 .Start();
         }
+
+        public async Task GetDimensions()
+        {
+        }
     }
 }

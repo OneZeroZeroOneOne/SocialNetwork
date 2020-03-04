@@ -43,6 +43,15 @@ export default class NewModal extends Vue {
         super();
         this.$root.$on('show-attachment-image', this.showImage)
         document.addEventListener('mousedown', this.eventClick);
+        window.addEventListener("wheel", this.handleWheel)
+    }
+
+    handleWheel(event: any): void {
+        if (this.hovered) {
+            console.log(event)
+            this.width += 100
+            this.height += 100
+        }
     }
 
     @Watch('active',{ immediate: true}) 
@@ -110,5 +119,6 @@ export default class NewModal extends Vue {
 <style lang="scss">
 .draggable-class {
     z-index: 999 !important;
+    position: fixed !important;
 }
 </style>
