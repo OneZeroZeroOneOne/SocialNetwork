@@ -29,8 +29,16 @@ export default class AttachmentComponent extends Vue {
   }
 
   getName(att: IAttachment): string {
-      let splitted = att.path.split("/");
-      return splitted[splitted.length - 1]
+      if (att.displayName === undefined || att.displayName === null)
+        return att.path;
+
+      if (att.displayName.length - 20 >= 20)
+      {
+        let ext = att.displayName.slice(att.displayName.length - 7, att.displayName.length)//splitted[splitted.length - 1]
+        return att.displayName.slice(0, att.displayName.length - 20) + "[...]" + ext;
+      }
+
+      return att.displayName;
   }
 
   getAttachmentPath(path: string): string {
@@ -38,13 +46,14 @@ export default class AttachmentComponent extends Vue {
   }
 
   videoShow(attachment: IAttachment): void {
-    this.$modal.show('preview-video-modal', {
+    /*this.$modal.show('preview-video-modal', {
       srcPath: this.getAttachmentPath(attachment.path),
       posterPath: this.getAttachmentPath(attachment.preview),
     }, {
       draggable: true,
       resizable: true,
-    })
+    })*/
+    this.$root.$emit('show-attachment-video', attachment)
   }
 
   imgShow(attachment: IAttachment): void {
