@@ -77,6 +77,7 @@ namespace SocialNetwork.WebApi.Attachment
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IPreviewGeneratorService, PreviewGeneratorService>();
 
+
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 

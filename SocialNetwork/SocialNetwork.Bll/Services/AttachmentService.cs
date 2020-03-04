@@ -6,8 +6,11 @@ using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Utilities.Exceptions;
 using System;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using AngleSharp.Network.Default;
+using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.PixelFormats;
@@ -19,12 +22,14 @@ namespace SocialNetwork.Bll.Services
         private readonly PublicContext _publicContext;
         private readonly IAttachmentPathProvider _attachmentPathProvider;
         private readonly IPreviewGeneratorService _previewGeneratorService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public AttachmentService(PublicContext publicContext, IAttachmentPathProvider attachmentPathProvider, IPreviewGeneratorService previewGeneratorService)
+        public AttachmentService(PublicContext publicContext, IAttachmentPathProvider attachmentPathProvider, IPreviewGeneratorService previewGeneratorService, IHttpContextAccessor httpContext)
         {
             _publicContext = publicContext;
             _attachmentPathProvider = attachmentPathProvider;
             _previewGeneratorService = previewGeneratorService;
+            _httpContext = httpContext;
         }
 
         public async Task<Attachment> SaveAttachment(AttachmentViewModel attachment)
@@ -33,8 +38,11 @@ namespace SocialNetwork.Bll.Services
             var fileName = DateTime.UtcNow.ToFileTimeUtc();
             var havePreview = false;
             Guid hash;
-            int width = 0;
-            var height = 0;
+            _httpContext.HttpContext.Request.Headers.TryGetValue("X-Width", out var width);
+            _httpContext.HttpContext.Request.Headers.TryGetValue("X-Width", out var height);
+
+            int.TryParse(width, out int widthVal);
+            int.TryParse(height, out int heightVal);
 
             await using (var memoryStream = new MemoryStream())
             {
@@ -52,15 +60,7 @@ namespace SocialNetwork.Bll.Services
                 {
                     await fileStream.WriteAsync(memoryStream.GetBuffer());
                 }
-
-                if (attachment.UploadFile.ContentType.Contains("image"))
-                {
-                    using (Image image = Image.Load(memoryStream))
-                    {
-                        width = image.Width;
-                        height = image.Height;
-                    }
-                }
+                
             }
 
             if (attachment.UploadFile.ContentType.Contains("video"))
@@ -70,8 +70,6 @@ namespace SocialNetwork.Bll.Services
                     fileName.ToString(), ext);
             }
 
-            
-
             var attachmentDb = new Attachment
             {
                 ContentType = attachment.UploadFile.ContentType,
@@ -79,8 +77,8 @@ namespace SocialNetwork.Bll.Services
                 Preview = havePreview ? "Files/" + fileName + "_preview.png" : null,
                 Hash = hash,
                 DisplayName = attachment.UploadFile.FileName,
-                Width = width,
-                Height = height,
+                Width = widthVal,
+                Height = heightVal,
             };
 
             await _publicContext.Attachment.AddAsync(attachmentDb);
