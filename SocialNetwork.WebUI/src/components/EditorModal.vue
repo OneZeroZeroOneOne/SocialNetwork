@@ -83,6 +83,8 @@ export default class PreviewModal extends Vue {
   public replyToPost!: IPost;
   public replyToComment!: IComment;
 
+  public quill: any;
+
   public editorOption: any = {
     modules: {
       toolbar: [
@@ -103,6 +105,15 @@ export default class PreviewModal extends Vue {
 
   constructor() {
       super();
+      this.$root.$on('comment-header-link-click', this.addTextToEditor)
+  }
+
+  addTextToEditor(text: string): void {
+    this.$modal.show('editor-modal')
+    this.$nextTick().then(x => {
+      let selection = this.quill.getSelection(true);
+      this.quill.insertText(selection.index, text + '\n');
+    })
   }
 
   alreadyOpen() {
@@ -140,9 +151,11 @@ export default class PreviewModal extends Vue {
             success: 1500
           }
         })
+        this.attachmentList = []
         this.$modal.hide('editor-modal')
       }, error => {
         console.log(error)
+        this.attachmentList = []
         this.$root.$emit('comment-sent-error', error)
         this.$awn.error("Can't send comment", {})
       }, 'Sending comment')
@@ -180,6 +193,7 @@ export default class PreviewModal extends Vue {
   }
 
   onEditorReady(quill) {
+    this.quill = quill;
     console.log('editor ready!', quill)
   }
 

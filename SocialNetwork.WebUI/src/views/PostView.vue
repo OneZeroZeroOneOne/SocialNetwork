@@ -1,5 +1,6 @@
 <template>
   <div class="post-view">
+    <top-bottom-buttons/>
     <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
     <post-component :postObj="postObj" v-if="requestPostStatus === 1"/>
     <ul id="comments">
@@ -27,6 +28,7 @@ import BoardNameHeaderComponent from '@/components/BoardNameHeaderComponent.vue'
 import PostComponent from '@/components/PostComponent.vue'
 import CommentComponent from "@/components/CommentComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
+import TopBottomButtons from "@/components/TopBottomButtons.vue";
 
 import { IBoardService } from '@/services/Abstractions/IBoardService';
 import { ICommentService }from '@/services/Abstractions/ICommentService';
@@ -45,7 +47,8 @@ import _ from 'lodash'
     CommentComponent,
     PostComponent,
     FooterComponent,
-    BoardNameHeaderComponent
+    BoardNameHeaderComponent,
+    TopBottomButtons,
   }
 })
 export default class PostView extends Vue {

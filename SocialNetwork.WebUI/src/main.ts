@@ -6,7 +6,7 @@ import 'nprogress/nprogress.css';
 import checkView from 'vue-check-view'
 import Plugin from './components/vue-js-modal/src/index.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import setup from './utilities/math_round_extensions.js'
 import VueQuillEditor from 'vue-quill-editor'
@@ -22,7 +22,13 @@ Vue.component('vue-draggable-resizable', VueDraggableResizable)
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import moment from 'moment'
 
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('DD-MM-YYYY hh:mm:ss')
+  }
+})
 // Your custom options
 let options = {}
 
@@ -31,7 +37,7 @@ Vue.use(VueQuillEditor, /* { default global options } */)
 
 setup()
 
-library.add({faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines})
+library.add({faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines})
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

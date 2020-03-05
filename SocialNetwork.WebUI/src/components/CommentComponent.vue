@@ -1,10 +1,13 @@
 <template>
 <div class="comment">
   <div class="comment-body">
-    <div class="comment-header"> 
-      #{{commentNum}}
+    <div class="comment-header">
+      <div class="comment-header-link"
+          @click.self="linkHeaderClick()">
+        >>{{commentObj.id}}
+      </div>
       <div class="comment-header-time">
-        {{commentObj.date}}
+        {{commentObj.date | formatDate}}
       </div>
     </div>
     <div class="comment-content" :style="stylesContent()">
@@ -44,6 +47,10 @@ export default class CommentComponent extends Vue {
 
   constructor() {
     super();
+  }
+
+  linkHeaderClick(): void {
+    this.$root.$emit('comment-header-link-click', '>>'+this.commentObj.id)
   }
 
   stylesContent(): string {
@@ -142,6 +149,16 @@ $text-color: #ccc;
       color: $text-color;
       float: right;
       margin-right: 10px;
+    }
+    .comment-header-link {
+      color: $text-color;
+      float: left;
+      //margin-right: 10px;
+      color: orange;
+      &:hover {
+        cursor: pointer;
+        color: orangered;
+      }
     }
   }
   .comment-content {
