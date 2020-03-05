@@ -5,10 +5,11 @@ import { Guid } from '@/utilities/guid';
 import { IPost } from '@/models/responses/PostViewModel';
 import { IBoardService } from '@/services/Abstractions/IBoardService';
 import apiClient from '@/services/Implementations/ApiClient';
+import { IApiClient } from '../Abstractions/IApiClient';
 
 
 export class BoardService implements IBoardService {
-    private boardAxios = apiClient;
+    private boardAxios: IApiClient = apiClient;
 
     async getBoards(): Promise<AxiosResponse<IBoard[]>> {
         return this.boardAxios.get<IBoard[]>('board/Board')
@@ -27,3 +28,5 @@ export class BoardService implements IBoardService {
         });
     }
 }
+
+export default new BoardService();

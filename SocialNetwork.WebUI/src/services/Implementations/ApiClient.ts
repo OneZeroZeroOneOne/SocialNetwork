@@ -11,7 +11,7 @@ class ApiClient {
         this._axiosClient.interceptors.response.use((response) => this.authTokenExpiredInterceptor(response))
     }
 
-    authTokenExpiredInterceptor(response: AxiosResponse<any>): AxiosResponse<any> {
+    private authTokenExpiredInterceptor(response: AxiosResponse<any>): AxiosResponse<any> {
         if (response.status === 401)
             console.log('unathorized')
 

@@ -3,9 +3,10 @@ import { IComment } from '@/models/responses/CommentViewModel';
 import { IPagedResult } from '@/models/responses/PagedResult';
 import { ICommentService } from '../Abstractions/ICommentService';
 import apiClient from '@/services/Implementations/ApiClient';
+import { IApiClient } from '../Abstractions/IApiClient';
 
 export class CommentService implements ICommentService {
-    private commentAxios = apiClient;
+    private commentAxios: IApiClient = apiClient;
     
     async sendComment(comment: any, attachmentList: number[]): Promise<AxiosResponse<IComment>> {
         return this.commentAxios.post<IComment>(`social/Comments`, {
