@@ -147,7 +147,7 @@ export default class PreviewModal extends Vue {
       this.$awn.async(this._commentService.sendComment(commentToSend, attachmentList), ok => {
         this.$root.$emit('comment-sent-success', ok)
         this.$awn.success('Comment sent!', {
-          duration: {
+          durations: {
             success: 1500
           }
         })

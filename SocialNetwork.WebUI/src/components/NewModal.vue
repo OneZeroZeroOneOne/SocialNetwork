@@ -1,7 +1,7 @@
 <template>
     <div v-if="active">
         <vue-draggable-resizable
-            :w="width" 
+            :w="width + 10" 
             :h="height" 
             :x="x"
             :y="y"
@@ -13,8 +13,11 @@
             class-name="draggable-class">
             <div class="attachment-show"
             @mouseover="hovered = true" @mouseleave="hovered = false">
-                <img class="attachment-content" :src="srcPath" v-if="loaded === true && showType === 0">
-                <video class="attachment-content dont-pause"
+                <div class="attachment-modal-description noselect">
+                    {{attachment.displayName}} ({{attachment.width}}×{{attachment.height}})
+                </div>
+                <img class="attachment-modal-content" :src="srcPath" v-if="loaded === true && showType === 0">
+                <video class="attachment-modal-content dont-pause"
                 id="attachment-player"
                 :width="width"
                 :height="height"
@@ -45,6 +48,8 @@ enum ShowType {
   components: {}
 })
 export default class NewModal extends Vue {
+    private attachment!: IAttachment;
+
     public width: number = 200;
     public height: number = 200;
     public initialWidth: number = 200;
@@ -168,7 +173,8 @@ export default class NewModal extends Vue {
     }
 
     showVideo(attachment: IAttachment) {
-        console.log(attachment)
+        this.attachment = attachment;
+
         this.showType = ShowType.video;
         this.active = true;
         this.posterPath = attachment.preview;
@@ -195,6 +201,8 @@ export default class NewModal extends Vue {
     }
 
     showImage(attachment: IAttachment) {
+        this.attachment = attachment;
+
         this.showType = ShowType.img;
         this.active = true;
 
@@ -247,8 +255,22 @@ export default class NewModal extends Vue {
     position: fixed !important;
 }
 
+.attachment-modal-content {
+    border-color: silver;
+    border-style: solid;
+    border-width: 5px;
+    box-sizing: content-box;
+    border-top-width: 20px;
+}
 
-.attachment-content:focus {
+.attachment-modal-description {
+    position: relative !important;
+    top: 20px;
+    text-align: center;
+    color: indigo;
+}
+
+.attachment-modal-content:focus {
     outline: 0 !important;
 }
 </style>

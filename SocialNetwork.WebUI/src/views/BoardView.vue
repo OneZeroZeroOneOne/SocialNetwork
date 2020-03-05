@@ -154,7 +154,7 @@ export default class BoardView extends Vue {
             newPostCount === 0 ? 
             'No new posts' : 
             'Loaded ' + newPostCount.toString() + " posts", {
-              duration: {
+              durations: {
                 info: 1500
               }
             })

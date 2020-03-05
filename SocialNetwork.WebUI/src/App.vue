@@ -4,25 +4,19 @@
     <new-modal/>
     <router-view>
     </router-view>
-    <preview-modal/>
-    <preview-video-modal/>
     <editor-modal/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import PreviewModal from '@/components/PreviewModal.vue'
-import PreviewVideoModal from '@/components/PreviewVideoModal.vue';
 import EditorModal from '@/components/EditorModal.vue'
 import apiClient from '@/services/Implementations/ApiClient';
 import NewModal from "@/components/NewModal.vue";
 
 @Component({
   components: {
-    PreviewModal,
     EditorModal,
-    PreviewVideoModal,
     NewModal,
   }
 })
