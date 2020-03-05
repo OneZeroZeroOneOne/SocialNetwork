@@ -69,6 +69,17 @@ export default class CommentComponent extends Vue {
 }
 </script>
 
+<style lang="scss" scoped>
+/*
+.comment {
+  transition: border-left 300ms ease-in-out, padding-left 300ms ease-in-out;
+  &:hover {
+    padding-left: 0.5rem;
+    border-left: 0.5rem solid #00ff99;
+  }
+}*/
+</style>
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 $comment-header-height: 25px;
