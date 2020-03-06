@@ -2,8 +2,11 @@
 
 -- DROP TABLE public."Attachment";
 
+CREATE SEQUENCE attachment_id_seq;
+CREATE SEQUENCE post_comment_id_seq;
+
 CREATE TABLE public."Attachment" (
-	"Id" int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	"Id" int8 NOT NULL default NEXTVAL('attachment_id_seq'),
 	"ContentType" text NOT NULL,
 	"Path" text NOT NULL,
 	"CreateDateTime" date NOT NULL,
@@ -110,7 +113,7 @@ CREATE TABLE public."Board" (
 -- DROP TABLE public."Post";
 
 CREATE TABLE public."Post" (
-	"Id" int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	"Id" int8 NOT NULL default NEXTVAL('post_comment_id_seq'),
 	"BoardId" uuid NOT NULL,
 	"UserId" uuid NOT NULL,
 	"Text" text NOT NULL,
@@ -179,7 +182,7 @@ CREATE TABLE public."AttachmentPost" (
 -- DROP TABLE public."Comment";
 
 CREATE TABLE public."Comment" (
-	"Id" int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	"Id" int8 NOT NULL default NEXTVAL('post_comment_id_seq'),
 	"UserId" uuid NOT NULL,
 	"PostId" int8 NOT NULL,
 	"Text" text NOT NULL,

@@ -18,3 +18,7 @@ INSERT INTO public."BoardType" ("Id","Description") VALUES
 INSERT INTO public."Board" ("Id","BoardTypeId","Name","Description","CreateDateTime","IsArchived") VALUES 
 ('bcf58d82-d9e7-4c11-8645-a564b8ee6f7b','20ca5862-9a97-4e09-afac-dae577ae0eb0','b','Бред','2020-02-26 15:29:10.000',false)
 ,('91213a0a-c3ca-4804-8432-fd5202c24705','20ca5862-9a97-4e09-afac-dae577ae0eb0','a','Аниме','2020-02-26 15:29:10.000',false);
+
+INSERT INTO public."SettingText" ("Key","Value","CreateDateTime") VALUES 
+('AllowedHtmlTags','p,h3,i,br,blockquote,b,center,code,col,em,li,ol,pre,ul,tr,table,strike,span','2020-02-28')
+;
