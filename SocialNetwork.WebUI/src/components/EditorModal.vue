@@ -124,6 +124,8 @@ export default class PreviewModal extends Vue {
     {
       this.setPositionFromStorage();
       this.active = true;
+    } else {
+      console.log('already open')
     }
   }
 

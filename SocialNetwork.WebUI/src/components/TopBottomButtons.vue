@@ -1,10 +1,14 @@
 <template>
 <div class="button-actions">
-    <div class="to-top clickable" v-if="canUp" @click="toTop()">
-        <font-awesome-icon class="svg-icon" icon="angle-double-up" />
+    <div v-if="canUp">
+        <div class="to-top clickable" @click="toTop()">
+            <font-awesome-icon class="svg-icon" icon="angle-double-up" />
+        </div>
     </div>
-    <div class="to-down clickable" v-if="canDown" @click="toBottom()">
-        <font-awesome-icon class="svg-icon" icon="angle-double-down" />
+    <div v-if="canDown">
+        <div class="to-down clickable" @click="toBottom()">
+            <font-awesome-icon class="svg-icon" icon="angle-double-down" />
+        </div>
     </div>
 </div>
 </template>
