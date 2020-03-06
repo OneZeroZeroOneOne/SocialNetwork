@@ -5,11 +5,11 @@
         <img v-if="attachment.preview === null"
             class="clickable"
             v-on:click="imgShow(attachment)" 
-            v-bind:src="getAttachmentPath(attachment.path)" />
+            v-lazy="getAttachmentPath(attachment.path)" />
         <img v-else
             class="clickable attachment-video gradient-border" 
             v-on:click="videoShow(attachment)" 
-            v-bind:src="getAttachmentPath(attachment.preview)" />
+            v-lazy="getAttachmentPath(attachment.preview)" />
     </div>
     </div>
 </template>
@@ -42,7 +42,7 @@ export default class AttachmentComponent extends Vue {
   }
 
   getAttachmentPath(path: string): string {
-    return 'http://16ch.tk/api/attachment/' + path;
+    return 'http://deelay.me/1000/http://16ch.tk/api/attachment/' + path;
   }
 
   videoShow(attachment: IAttachment): void {
@@ -67,6 +67,18 @@ export default class AttachmentComponent extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+img[lazy=loading] {
+  background: url('../assets/Ripple-1s-200px.svg');
+}
+img[lazy=error] {
+  /*your style here*/
+}
+img[lazy=loaded] {
+  /*your style here*/
+}
+</style>
 
 <style lang="scss" scoped>
 .attachment-content {
@@ -106,7 +118,6 @@ export default class AttachmentComponent extends Vue {
 }
 
 .attachment img {
-    border-radius: 5px;
     width: 200px;
     height: auto;
     vertical-align: middle;

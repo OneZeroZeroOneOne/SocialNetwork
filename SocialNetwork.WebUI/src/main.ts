@@ -23,6 +23,18 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import moment from 'moment'
+import VueLazyload from 'vue-lazyload'
+
+Vue.use(VueLazyload)
+
+// or with options
+Vue.use(VueLazyload, {
+  preLoad: 1.5,
+  error: 'dist/error.png',
+  loading: 'dist/loading.gif',
+  attempt: 1,
+  silent: false,
+})
 
 Vue.filter('formatDate', function(value) {
   if (value) {
