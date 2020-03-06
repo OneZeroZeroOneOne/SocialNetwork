@@ -87,7 +87,7 @@ export default class PreviewModal extends Vue {
 
   public keepInBounds: boolean = true;
 
-  public content: string = "test";
+  public content: string = "";
   public hovered: boolean = false;
 
   public replyToPost!: IPost;
@@ -117,16 +117,27 @@ export default class PreviewModal extends Vue {
       super();
       this.$root.$on('comment-header-link-click', this.addTextToEditor)
       this.$root.$on('show-editor-modal-from-post', this.showEditorFromPost)
+      this.$root.$on('show-editor-modal-from-comment', this.showEditorFromComment)
   }
 
-  showEditorFromPost(post: IPost): void {
+  showEditorFromComment(com: IComment): void {
+    this.addTextToEditor(">>" + com.id)
     if (this.active === false)
     {
       this.setPositionFromStorage();
       this.active = true;
-    } else {
-      console.log('already open')
     }
+  }
+
+  showEditorFromPost(post: IPost): void {
+    this.addTextToEditor(">>" + post.id)
+    if (this.active === false)
+    {
+      this.setPositionFromStorage();
+      this.active = true;
+    } /*else {
+      this.addTextToEditor(">>" + post.id)
+    }*/
   }
 
   onDrag(x, y) {
@@ -186,7 +197,7 @@ export default class PreviewModal extends Vue {
   }
 
   addTextToEditor(text: string): void {
-    this.$modal.show('editor-modal')
+    //this.$modal.show('editor-modal')
     this.$nextTick().then(x => {
       let selection = this.quill.getSelection(true);
       this.quill.insertText(selection.index, text + '\n');

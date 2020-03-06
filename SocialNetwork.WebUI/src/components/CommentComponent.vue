@@ -18,7 +18,9 @@
       </div>
     </div>
     <div class="comment-footer">
-      Footer
+      <div v-on:click="openEditor" class="comment-footer-reply button noselect">
+        Reply
+      </div>
     </div>
   </div>
 </div>
@@ -47,6 +49,10 @@ export default class CommentComponent extends Vue {
 
   constructor() {
     super();
+  }
+
+  openEditor(): void {
+    this.$root.$emit('show-editor-modal-from-comment', this.commentObj)
   }
 
   linkHeaderClick(): void {
@@ -84,7 +90,7 @@ export default class CommentComponent extends Vue {
 <style scoped lang="scss">
 $comment-header-height: 25px;
 $comment-content-height: 75px;
-$comment-footer-height: 25px;
+$comment-footer-height: 45px;
 
 $comment-offset-left: 10px;
 $comment-offset-between: 6px;
@@ -184,6 +190,13 @@ $text-color: #ccc;
     border-top-style: solid;
     border-top-width: 2px;
     border-top-color: $comment-footer-border-color;
+    
+    .comment-footer-reply {
+      float: right;
+      margin: 6px;
+      margin-right: 10px;
+    }
   }
+
 }
 </style>
