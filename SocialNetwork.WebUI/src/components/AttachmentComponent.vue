@@ -89,41 +89,41 @@ img[lazy=loaded] {
 }
 
 .attachment-video {
-    border-color: darkgray;
-    border-style: dashed;
-    border-width: 2px;
-    box-sizing: border-box;
+  border-color: darkgray;
+  border-style: dashed;
+  border-width: 2px;
+  box-sizing: border-box;
 }
 
 .attachment {
-    margin: 5px 0px;
-    grid-template-columns: 200px auto;
-    align-items: center;
-    display: inline;
-    font-size: 0.8em;
-    text-align: center;
-    color: #d89315;
-    
-    .clickable {
-        cursor: pointer;
-    }
+  margin: 5px 0px;
+  grid-template-columns: 200px auto;
+  align-items: center;
+  display: inline;
+  font-size: 0.8em;
+  text-align: center;
+  color: #d89315;
+  
+  .clickable {
+    cursor: pointer;
+  }
 
-    .attachment-name {
-        margin-bottom: 2px;
-    }
+  .attachment-name {
+    margin-bottom: 2px;
+  }
 
-    &:hover {
-        color: #906310;
-    }
+  &:hover {
+    color: #906310;
+  }
 }
 
 .attachment img {
-    width: 200px;
-    height: auto;
-    vertical-align: middle;
+  width: 200px;
+  height: auto;
+  vertical-align: middle;
 }
 
 .attachment:not(:first-child) {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 </style>

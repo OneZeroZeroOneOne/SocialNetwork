@@ -1,19 +1,21 @@
 <template>
-    <modal class="editor-modal"
-        name="editor-modal" 
-        :reset="true"
-        draggable=".header-draggable"
-        :clickToClose="false"
-        height="auto"
-        overlayTransition="overlay-fade"
-        transition="overlay-fade"
-        @before-open="beforeOpen"
-        @before-close="beforeClose"
-        @onwheeleditor="onwheel"
-        @already-open-click="alreadyOpen">
+  <div v-if="active">
+    <vue-draggable-resizable
+            :w="width + 10" 
+            :h="height" 
+            :x="x"
+            :y="y"
+            @dragging="onDrag" 
+            @resizing="onResize"
+            @dragstop="dragstop"
+            :disable-user-select="false"
+            :resizable="false"
+            class-name="editor-modal"
+            :drag-handle="'.header-draggable'"
+            :drag-cancel="'.cant-drag'">
         <div :class="'header-draggable '+isLoading()">
-          <span class="close-button" v-on:click="$modal.hide('editor-modal')"></span>
-          <button class="send-button" v-on:click="submit">Send!</button>
+          <span class="cant-drag close-button" v-on:click="hide"></span>
+          <button class="cant-drag send-button" v-on:click="submit">Send!</button>
         </div>
         <div class="editor-modal-show">
             <div class="editor">
@@ -34,11 +36,13 @@
             @uploaded-succesfully="uploaded"/>
           </div>
         </div>
-    </modal>
+    </vue-draggable-resizable>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import VueDraggableResizable from 'vue-draggable-resizable'
 import Quill from 'quill'
 
 import { IAttachment } from '../models/responses/Attachment';
@@ -51,6 +55,7 @@ import { IBoardService } from '@/services/Abstractions/IBoardService';
 import { ICommentService }from '@/services/Abstractions/ICommentService';
 import { CommentService } from '../services/Implementations/CommentService';
 import { ResponseState } from '../models/enum/ResponseState';
+import { parseNumber } from './vue-js-modal/src/parser';
 
 Quill.register('modules/counter', function(quill, options) {
   let container: any = document.querySelector('#counter');
@@ -70,10 +75,15 @@ Quill.register('modules/counter', function(quill, options) {
 export default class PreviewModal extends Vue {
   private submitProgress: ResponseState = ResponseState.success;
 
+  public x: number = 0;
+  public y: number = 0;
+
+  public active: boolean = false;
+
   public srcPath: string = "";
 
-  public width: number = 20;
-  public height: number = 630;
+  public width: number = 450;
+  public height: number = 333;
 
   public keepInBounds: boolean = true;
 
@@ -106,6 +116,71 @@ export default class PreviewModal extends Vue {
   constructor() {
       super();
       this.$root.$on('comment-header-link-click', this.addTextToEditor)
+      this.$root.$on('show-editor-modal-from-post', this.showEditorFromPost)
+  }
+
+  showEditorFromPost(post: IPost): void {
+    if (this.active === false)
+    {
+      this.setPositionFromStorage();
+      this.active = true;
+    }
+  }
+
+  onDrag(x, y) {
+    if (x + this.width < window.innerWidth
+      && x >= 0)
+    {
+      localStorage.setItem('modal-editor-x', x)
+      this.x = x
+    }else{
+      this.x = window.innerWidth - this.width;
+    }
+
+    if (y + this.height < window.innerHeight
+      && y >= 0)
+    {
+      localStorage.setItem('modal-editor-y', y)
+      this.y = y
+    }else{
+      this.y = window.innerHeight - this.height;
+    }
+
+  }
+
+  onResize(x, y, width, height) {
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+  }
+
+  getX() {
+    return this.x - this.width / 2;
+  }
+
+  getY() {
+    return this.y - this.height / 2;
+  }
+
+  dragstop(left, top) {
+    this.setPositionFromStorage()
+  }
+
+  setPositionFromStorage(): void {
+    this.x = localStorage.getItem('modal-editor-x') === undefined ? window.innerWidth / 2 - this.width / 2 : parseNumber(localStorage.getItem('modal-editor-x')).value
+    this.y = localStorage.getItem('modal-editor-y') === undefined ? window.innerHeight / 2 - this.height / 2 : parseNumber(localStorage.getItem('modal-editor-y')).value
+    if (this.x + this.width > window.innerWidth
+      || this.x < 0)
+      this.x = window.innerWidth / 2 - this.width / 2
+    
+    if (this.y + this.height > window.innerHeight
+      || this.y < 0)
+      this.y = window.innerHeight / 2 - this.height / 2
+  }
+
+  hide(): void {
+    this.active = !this.active
   }
 
   addTextToEditor(text: string): void {
@@ -335,6 +410,15 @@ $blue: #1ebcc5;
 <style lang="scss">
 $header-height: 30px;
 
+.editor-modal {
+  z-index: 999 !important;
+  position: fixed !important;
+}
+
+.quill-editor {
+  background-color: white;
+}
+
 .editor {
   display: flow-root !important;
   flex-direction: column;
@@ -343,10 +427,12 @@ $header-height: 30px;
 #counter {
   text-align: right;
   padding-right: 5px;
+  background-color: white;
 }
 
 .header-draggable {
   height: $header-height;
+  max-height: $header-height;
   background-color: black;
 }
 
