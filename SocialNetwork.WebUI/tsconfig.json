@@ -16,7 +16,6 @@
     "baseUrl": ".",
     "types": [
       "webpack-env",
-      "reflect-metadata",
     ],
     "paths": {
       "@/*": [
@@ -29,6 +28,7 @@
       "dom.iterable",
       "scripthost",
       "es6",
+      "es2020.string",
     ]
   },
   "include": [

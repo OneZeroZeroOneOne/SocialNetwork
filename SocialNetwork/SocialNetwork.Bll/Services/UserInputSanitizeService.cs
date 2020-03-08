@@ -23,8 +23,10 @@ namespace SocialNetwork.Bll.Services
         private async Task UpdateSettings()
         {
             _htmlSanitizer.AllowedTags.Clear();
+            _htmlSanitizer.AllowedAttributes.Clear();
 
             _htmlSanitizer.AllowedTags.UnionWith((await _settingService.GetSetting<string>("AllowedHtmlTags")).Value.Split(',').AsEnumerable());
+            _htmlSanitizer.AllowedAttributes.UnionWith((await _settingService.GetSetting<string>("AllowedHtmlAttributes")).Value.Split(',').AsEnumerable());
         }
 
         public async Task<string> SanitizeHtml(string rawHtml)

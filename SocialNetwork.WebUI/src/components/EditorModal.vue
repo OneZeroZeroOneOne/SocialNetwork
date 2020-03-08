@@ -199,12 +199,30 @@ export default class PreviewModal extends Vue {
     return ''
   }
 
+
+
   parseMarkdown(textContent: string): string {
     let md = textContent;
 
+    let mentionList: string[] = [];
+
     //green text
     //need to be first because of '>'
-    md = md.replace(/(>){1}(.*)/g, '<green>$2</green>');
+    Array.from(md['matchAll'](/(>>{1}(\d+))/g), (x: any) => {
+      let mention: string = x[2]
+      mentionList.push(mention)
+    })
+    
+    //link to post/comment
+    //need to be first because of '>>'
+    md = md.replace(/(>>{1}(\d+))/g, '<link-to source=$2 post>$2</link-to>');
+    
+    //green text
+    //need to be first because of '>'
+    md = md.replace(/[^link-to](>)(.*)/g, '\n<green>$2</green>');
+    
+    //preformatted text
+    md = md.replace(/(```\n)(.*\n)(```)/g, '<code>\n$2</code>');
     //b
     md = md.replace(/(\[b\])(.*)(\[\/b\])/g, '<b>$2</b>');
     //i
@@ -213,9 +231,6 @@ export default class PreviewModal extends Vue {
     md = md.replace(/(\[s\])(.*)(\[\/s\])/g, '<strike>$2</strike>');
     //spoiler
     md = md.replace(/(\[sp\])(.*)(\[\/sp\])/g, '<sp>$2</sp>');
-
-    //replacing 'return character = ↵' with newline
-    md = md.replace(/(\r\n|\n|\r)/gm, "<br />");
 
     return md;
   }
