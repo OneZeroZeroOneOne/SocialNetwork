@@ -3,7 +3,7 @@
   <div class="comment-body">
     <div class="comment-header">
       <div class="comment-header-link"
-          @click.self="linkHeaderClick()">
+          @click.self="openEditor()">
         >>{{commentObj.id}}
       </div>
       <div class="comment-header-time">
@@ -45,6 +45,7 @@ import AttachmentComponent from '@/components/AttachmentComponent.vue';
 })
 export default class CommentComponent extends Vue {
   @Prop() public commentObj!: IComment;
+  @Prop() public fatherPost!: IPost;
   @Prop() public commentNum!: number;
 
   constructor() {
@@ -52,11 +53,7 @@ export default class CommentComponent extends Vue {
   }
 
   openEditor(): void {
-    this.$root.$emit('show-editor-modal-from-comment', this.commentObj)
-  }
-
-  linkHeaderClick(): void {
-    this.$root.$emit('comment-header-link-click', '>>'+this.commentObj.id)
+    this.$root.$emit('show-editor-modal-from-comment', this.commentObj, this.fatherPost)
   }
 
   stylesContent(): string {

@@ -5,7 +5,7 @@
     <post-component :postObj="postObj" v-if="requestPostStatus === 1"/>
     <ul id="comments">
       <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
-        <CommentComponent :commentObj="item" :commentNum="index+1"/>
+        <CommentComponent :commentObj="item" :commentNum="index+1" :fatherPost="postObj"/>
       </li>
     </ul>
     <FooterComponent/>

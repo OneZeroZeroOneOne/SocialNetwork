@@ -1,5 +1,5 @@
 <template>
-  <div v-if="active">
+  <div v-if="active" :class="{shakeit: shake, 'editor-modal': true}">
     <vue-draggable-resizable
             :w="width + 10" 
             :h="height" 
@@ -10,23 +10,16 @@
             @dragstop="dragstop"
             :disable-user-select="false"
             :resizable="false"
-            class-name="editor-modal"
             :drag-handle="'.header-draggable'"
             :drag-cancel="'.cant-drag'">
         <div :class="'header-draggable '+isLoading()">
           <span class="cant-drag close-button" v-on:click="hide"></span>
-          <button class="cant-drag send-button" v-on:click="submit">Send!</button>
         </div>
         <div class="editor-modal-show">
             <div class="editor">
-               <quill-editor v-model="content"
-                            ref="myQuillEditor"
-                            :options="editorOption"
-                            @blur="onEditorBlur($event)"
-                            @focus="onEditorFocus($event)"
-                            @ready="onEditorReady($event)">
-              </quill-editor>
-              <div id="counter">0</div>
+               <editor-text 
+                @editor-text-submit="submit"
+               />
             </div>
         </div>
         <div @mouseover="hovered = true" @mouseleave="hovered = false" 
@@ -43,11 +36,11 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import VueDraggableResizable from 'vue-draggable-resizable'
-import Quill from 'quill'
 
 import { IAttachment } from '../models/responses/Attachment';
 import { IPost } from '../models/responses/PostViewModel';
 import { IComment } from '../models/responses/CommentViewModel';
+import EditorText from '@/components/EditorText.vue';
 
 import AttachmentDropComponent from '../components/AttachmentDropComponent.vue';
 
@@ -57,19 +50,10 @@ import { CommentService } from '../services/Implementations/CommentService';
 import { ResponseState } from '../models/enum/ResponseState';
 import { parseNumber } from './vue-js-modal/src/parser';
 
-Quill.register('modules/counter', function(quill, options) {
-  let container: any = document.querySelector('#counter');
-  quill.on('text-change', function() {
-    let text = quill.getText();
-    
-    container.innerText = 20001 - text.length;
-  });
-})
-
 @Component({
     components: {
-        Quill,
         AttachmentDropComponent,
+        EditorText,
     }
 })
 export default class PreviewModal extends Vue {
@@ -83,31 +67,16 @@ export default class PreviewModal extends Vue {
   public srcPath: string = "";
 
   public width: number = 450;
-  public height: number = 333;
+  public height: number = 300;
 
   public keepInBounds: boolean = true;
 
-  public content: string = "";
   public hovered: boolean = false;
 
   public replyToPost!: IPost;
   public replyToComment!: IComment;
 
-  public quill: any;
-
-  public editorOption: any = {
-    modules: {
-      toolbar: [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
-        [{ 'script': 'sub' }, { 'script': 'super' }],
-        [{ 'color': [] }, { 'background': [] }],
-        ['link'],
-        ['clean']
-      ],
-      counter: true,
-    }
-  };
+  public shake: boolean = false;
 
   public attachmentList: IAttachment[] = [];
 
@@ -115,29 +84,44 @@ export default class PreviewModal extends Vue {
 
   constructor() {
       super();
-      this.$root.$on('comment-header-link-click', this.addTextToEditor)
       this.$root.$on('show-editor-modal-from-post', this.showEditorFromPost)
       this.$root.$on('show-editor-modal-from-comment', this.showEditorFromComment)
   }
 
-  showEditorFromComment(com: IComment): void {
+  toggleShakeAnimation(): void {
+    if (this.shake === false)
+    {
+      this.shake = true;
+      setTimeout(x => { 
+        this.shake = false;
+      }, 1000)
+    }
+  }
+
+
+  showEditorFromComment(com: IComment, fatherPost: IPost): void {
     this.addTextToEditor(">>" + com.id)
+    this.replyToPost = fatherPost;
+    this.replyToComment = com;
     if (this.active === false)
     {
       this.setPositionFromStorage();
       this.active = true;
+    } else {  //already open
+      this.toggleShakeAnimation()
     }
   }
 
   showEditorFromPost(post: IPost): void {
     this.addTextToEditor(">>" + post.id)
+    this.replyToPost = post;
     if (this.active === false)
     {
       this.setPositionFromStorage();
       this.active = true;
-    } /*else {
-      this.addTextToEditor(">>" + post.id)
-    }*/
+    } else {  //already open
+      this.toggleShakeAnimation()
+    }
   }
 
   onDrag(x, y) {
@@ -198,16 +182,11 @@ export default class PreviewModal extends Vue {
 
   addTextToEditor(text: string): void {
     //this.$modal.show('editor-modal')
-    this.$nextTick().then(x => {
+    /*this.$nextTick().then(x => {
       let selection = this.quill.getSelection(true);
       this.quill.insertText(selection.index, text + '\n');
-    })
-  }
-
-  alreadyOpen() {
-    console.log('already open')
-    let modal = document.getElementsByClassName('v--modal-box')[0]
-    //this.$el.classList.add('opened')
+    })*/
+    this.$root.$emit('add-text-to-editor', text + '\n');
   }
 
   beforeCreate() {
@@ -220,18 +199,44 @@ export default class PreviewModal extends Vue {
     return ''
   }
 
-  async submit(event) {
+  parseMarkdown(textContent: string): string {
+    let md = textContent;
+
+    //green text
+    //need to be first because of '>'
+    md = md.replace(/(>){1}(.*)/g, '<green>$2</green>');
+    //b
+    md = md.replace(/(\[b\])(.*)(\[\/b\])/g, '<b>$2</b>');
+    //i
+    md = md.replace(/(\[i\])(.*)(\[\/i\])/g, '<i>$2</i>');
+    //strike
+    md = md.replace(/(\[s\])(.*)(\[\/s\])/g, '<strike>$2</strike>');
+    //spoiler
+    md = md.replace(/(\[sp\])(.*)(\[\/sp\])/g, '<sp>$2</sp>');
+
+    //replacing 'return character = ↵' with newline
+    md = md.replace(/(\r\n|\n|\r)/gm, "<br />");
+
+    return md;
+  }
+
+  async submit(textContent: string, textTitle: string) {
+    console.log(textContent, textTitle)
+    console.log('submit', this.replyToPost)
     if (this.replyToPost !== undefined)
     {
+      textContent = this.parseMarkdown(textContent);
+
       let commentToSend = {
-        text: this.content,
+        //title: title,
+        text: textContent,
         postId: this.replyToPost.id,
       }
       let attachmentList: number[] = [];
       this.attachmentList.forEach(x => {
         attachmentList.push(x.id);
       })
-      
+
       this.$awn.async(this._commentService.sendComment(commentToSend, attachmentList), ok => {
         this.$root.$emit('comment-sent-success', ok)
         this.$awn.success('Comment sent!', {
@@ -240,13 +245,19 @@ export default class PreviewModal extends Vue {
           }
         })
         this.attachmentList = []
-        this.$modal.hide('editor-modal')
-      }, error => {
-        console.log(error)
-        this.attachmentList = []
-        this.$root.$emit('comment-sent-error', error)
-        this.$awn.error("Can't send comment", {})
-      }, 'Sending comment')
+        this.active = false;
+        //this.content = "";
+        }, error => {
+          console.log(error)
+          this.attachmentList = []
+          this.$root.$emit('comment-sent-error', error)
+          console.log(this.$awn)
+          this.$awn.warning("Cant send comment", {
+            durations: {
+              error: 1500
+            }
+          })
+        }, 'Sending comment')
     }
   }
 
@@ -270,24 +281,6 @@ export default class PreviewModal extends Vue {
   uploaded(attachment) {
     let atObj: IAttachment = attachment.data
     this.attachmentList.push(atObj);
-  }
-
-  onEditorBlur(quill) {
-    console.log('editor blur!', quill)
-  }
-
-  onEditorFocus(quill) {
-    console.log('editor focus!', quill)
-  }
-
-  onEditorReady(quill) {
-    this.quill = quill;
-    console.log('editor ready!', quill)
-  }
-
-  onEditorChange({ quill, html, text }) {
-    console.log('editor change!', quill, html, text)
-    this.content = html
   }
 
   created(): void {
@@ -317,7 +310,35 @@ export default class PreviewModal extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.shakeit {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+</style>
+
+<style lang="scss" scoped>
 $blue: #1ebcc5;
+
+.vdr {
+  border: none;
+}
 
 .send-button {
   height: 26px;
@@ -428,19 +449,9 @@ $header-height: 30px;
   position: fixed !important;
 }
 
-.quill-editor {
-  background-color: white;
-}
-
 .editor {
   display: flow-root !important;
   flex-direction: column;
-}
-
-#counter {
-  text-align: right;
-  padding-right: 5px;
-  background-color: white;
 }
 
 .header-draggable {
@@ -452,28 +463,5 @@ $header-height: 30px;
 .editor-attachment {
   //height: 130px;
   background-color: gray;
-}
-
-.quill-editor {
-  width: -webkit-fill-available;
-}
-.quill-code {
-  border: none;
-  height: auto;
-  > code {
-    width: 100%;
-    margin: 0;
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-top: none;
-    border-radius: 0;
-    height: 10rem;
-    overflow-y: auto;
-    resize: vertical;
-  }
-}
-
-.ql-container.ql-snow {
-  height: calc(300px - 60px);
 }
 </style>

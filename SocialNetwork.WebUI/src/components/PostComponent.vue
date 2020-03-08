@@ -2,7 +2,13 @@
   <div class="post">
     <div class="post-body">
       <div class="post-header">
-        Header {{postObj.id}}
+        <div class="post-header-link"
+          @click.self="openEditor()">
+        >>{{postObj.id}}
+        </div>
+        <div class="post-header-time">
+          {{postObj.date | formatDate}}
+        </div>
       </div>
       <div class="post-content" :style="stylesContent()">
         <div class=post-content-header v-if="postObj.attachmentPost.length > 0" :style="stylesContentHeader()">
@@ -116,7 +122,6 @@ $text-color: #ccc;
   }
 
   .post-header {
-    max-width: calc(100% - 50px);
     min-height: $post-header-height;
     color: $header-text-color;
     border-bottom-style: solid;
@@ -124,6 +129,21 @@ $text-color: #ccc;
     border-bottom-color: $post-header-border-color;
     padding-left: 10px;
     padding-top: 5px;
+    .post-header-time {
+      color: $text-color;
+      float: right;
+      margin-right: 10px;
+    }
+    .post-header-link {
+      color: $text-color;
+      float: left;
+      //margin-right: 10px;
+      color: orange;
+      &:hover {
+        cursor: pointer;
+        color: orangered;
+      }
+    }
   }
   .post-content {
     max-width: calc(100% - 10px);

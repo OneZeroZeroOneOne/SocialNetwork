@@ -26,6 +26,7 @@ export default class TopBottomButtons extends Vue {
     constructor() {
         super();
         window.addEventListener('scroll', this.catchScroll)
+        this.catchScroll({});
     }
 
     toTop(): void {
