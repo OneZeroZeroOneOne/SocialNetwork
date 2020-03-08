@@ -50,6 +50,7 @@ import { CommentService } from '../services/Implementations/CommentService';
 import { ResponseState } from '../models/enum/ResponseState';
 import { parseNumber } from './vue-js-modal/src/parser';
 
+
 @Component({
     components: {
         AttachmentDropComponent,
@@ -79,6 +80,7 @@ export default class PreviewModal extends Vue {
   public shake: boolean = false;
 
   public attachmentList: IAttachment[] = [];
+  public mentionList: string[] = [];
 
   private _commentService!: ICommentService;
 
@@ -204,22 +206,27 @@ export default class PreviewModal extends Vue {
   parseMarkdown(textContent: string): string {
     let md = textContent;
 
-    let mentionList: string[] = [];
+    console.log(md)
+
+    this.mentionList = [];
 
     //green text
     //need to be first because of '>'
     Array.from(md['matchAll'](/(>>{1}(\d+))/g), (x: any) => {
       let mention: string = x[2]
-      mentionList.push(mention)
+      this.mentionList.push(mention)
     })
+
+    console.log(this.mentionList)
     
     //link to post/comment
     //need to be first because of '>>'
-    md = md.replace(/(>>{1}(\d+))/g, '<link-to source=$2 post>$2</link-to>');
+    md = md.replace(/(>>{1}(\d+))/g, '<link-to comment=$2 post=$2[sign-bigger]$2</link-to[sign-bigger]');
+      
     
     //green text
     //need to be first because of '>'
-    md = md.replace(/[^link-to](>)(.*)/g, '\n<green>$2</green>');
+    md = md.replace(/(>)(.*)/g, '<green>$2</green>');
     
     //preformatted text
     md = md.replace(/(```\n)(.*\n)(```)/g, '<code>\n$2</code>');
@@ -231,6 +238,13 @@ export default class PreviewModal extends Vue {
     md = md.replace(/(\[s\])(.*)(\[\/s\])/g, '<strike>$2</strike>');
     //spoiler
     md = md.replace(/(\[sp\])(.*)(\[\/sp\])/g, '<sp>$2</sp>');
+    
+    md = md.replace(/\[sign-bigger\]/g, '>');
+
+    console.log(md)
+  
+    //replacing 'return character = ↵' with newline
+    md = md.replace(/(\r\n|\n|\r)/gm, "<br/>");
 
     return md;
   }
@@ -243,10 +257,12 @@ export default class PreviewModal extends Vue {
       textContent = this.parseMarkdown(textContent);
 
       let commentToSend = {
-        //title: title,
+        title: textTitle,
         text: textContent,
         postId: this.replyToPost.id,
+        mentionList: this.mentionList,
       }
+
       let attachmentList: number[] = [];
       this.attachmentList.forEach(x => {
         attachmentList.push(x.id);

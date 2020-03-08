@@ -29,28 +29,6 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-//markdown for comment/posts
-
-sp {
-  color: black; 
-  background-color: black;
-  &:hover {
-    color: inherit;
-    background-color: inherit; 
-  }
-}
-
-green {
-  color: green;
-  font-style: italic;
-  &:before {
-    content: ">";
-  }
-}
-
-</style>
-
-<style lang="scss">
 @import '~vue-awesome-notifications/dist/styles/style.css';
 
 img {

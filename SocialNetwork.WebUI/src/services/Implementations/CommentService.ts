@@ -10,6 +10,8 @@ export class CommentService implements ICommentService {
     
     async sendComment(comment: any, attachmentList: number[]): Promise<AxiosResponse<IComment>> {
         return this.commentAxios.post<IComment>(`social/Comments`, {
+            title: comment.textTitle,
+            mentionList: comment.mentionList,
             text: comment.text,
             postId: comment.postId,
             AttachmentIdList: attachmentList,

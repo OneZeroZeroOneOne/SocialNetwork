@@ -14,7 +14,9 @@
       <div class=comment-content-header v-if="commentObj.attachmentComment.length > 0" :style="stylesContentHeader()">
        <attachment-component :attachmentObjs="commentObj.attachmentComment"/>
       </div>
-      <div class=comment-content-body v-html="commentObj.text">
+      <div class="comment-content-body" >
+        <v-runtime-template :template="wrap(commentObj.text)">
+        </v-runtime-template>
       </div>
     </div>
     <div class="comment-footer">
@@ -37,10 +39,12 @@ import { ResponseState } from "@/models/enum/ResponseState";
 
 import PreviewModal from '@/components/PreviewModal.vue';
 import AttachmentComponent from '@/components/AttachmentComponent.vue';
+import VRuntimeTemplate from "v-runtime-template";
 
 @Component({
   components: {
     AttachmentComponent,
+    VRuntimeTemplate,
   }
 })
 export default class CommentComponent extends Vue {
@@ -50,6 +54,10 @@ export default class CommentComponent extends Vue {
 
   constructor() {
     super();
+  }
+
+  wrap(text: string): string {
+    return "<div>"+text+"</div>"
   }
 
   openEditor(): void {
@@ -146,6 +154,7 @@ $text-color: #ccc;
   }
 
   .comment-content-body {
+    word-break: break-word;
     margin-top: 10px;
     min-height: 50px;
   }
@@ -175,6 +184,7 @@ $text-color: #ccc;
       }
     }
   }
+
   .comment-content {
     max-width: calc(100% - 10px);
     min-height: $comment-content-height;

@@ -10,7 +10,7 @@
             id="editorText"
             class="editor-text-area"
             v-model="textContent" 
-            placeholder="Ну давай, че хотел то">
+            placeholder="Ну давай, давай, нападай">
         </textarea>
         <div class="word-counter">
             {{ wordCount }}

@@ -24,6 +24,9 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import moment from 'moment'
 import VueLazyload from 'vue-lazyload'
+import LinkToComponent from '../src/components/MarkdownComponents/LinkToComponent.vue';
+import GreenComponent from '../src/components/MarkdownComponents/GreenComponent.vue';
+import SpoilerComponent from '../src/components/MarkdownComponents/SpoilerComponent.vue';
 
 Vue.use(VueLazyload)
 
@@ -62,5 +65,17 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')
+
+var getChildrenTextContent = function (children) {
+  return children.map(function (node) {
+    return node.children
+      ? getChildrenTextContent(node.children)
+      : node.text
+  }).join('')
+}
+
+Vue.component('link-to', LinkToComponent)
+Vue.component('green', GreenComponent)
+Vue.component('sp', SpoilerComponent)
