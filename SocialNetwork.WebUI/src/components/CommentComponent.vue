@@ -52,8 +52,18 @@ export default class CommentComponent extends Vue {
   @Prop() public fatherPost!: IPost;
   @Prop() public commentNum!: number;
 
+  @Prop() public isModal!: boolean;
+  public timer: number = -1;
+
   constructor() {
     super();
+  }
+
+  mounted() {
+    if (this.isModal !== undefined && this.isModal !== false) {
+      //console.log(this.isModal)
+      //this.timer = setInterval()
+    }
   }
 
   wrap(text: string): string {

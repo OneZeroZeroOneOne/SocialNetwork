@@ -25,6 +25,11 @@ export default class App extends Vue {
     super();
     apiClient.updateToken()
   }
+
+  created() {
+    this.$refs.container = this;
+    console.log(this.$refs)
+  }
 }
 </script>
 
