@@ -8,7 +8,6 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import setup from './utilities/math_round_extensions.js'
-import VueQuillEditor from 'vue-quill-editor'
 import { VueNotification } from '@/types/AwnTypes';
 import VueDraggableResizable from 'vue-draggable-resizable'
 import VueAWN from "vue-awesome-notifications"
@@ -18,9 +17,6 @@ import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 // require styles
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
 import moment from 'moment'
 import VueLazyload from 'vue-lazyload'
 import LinkToComponent from '../src/components/MarkdownComponents/LinkToComponent.vue';
@@ -47,7 +43,6 @@ Vue.filter('formatDate', function(value) {
 let options = {}
 
 Vue.use(VueAWN, options)
-Vue.use(VueQuillEditor, /* { default global options } */)
 
 setup()
 
