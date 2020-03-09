@@ -2,6 +2,7 @@
   <div id="app">
     <div id="nav"></div>
     <new-modal/>
+    <show-post-comment-container/>
     <router-view>
     </router-view>
     <editor-modal/>
@@ -13,17 +14,25 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import EditorModal from '@/components/EditorModal.vue'
 import apiClient from '@/services/Implementations/ApiClient';
 import NewModal from "@/components/NewModal.vue";
+import ShowPostCommentContainer from '@/components/ShowPostCommentContainer.vue';
 
 @Component({
   components: {
     EditorModal,
     NewModal,
+    ShowPostCommentContainer
   }
 })
 export default class App extends Vue {
+  public listModal: Vue[] = [] 
+
   constructor() {
     super();
     apiClient.updateToken()
+  }
+
+  mounted(): void {
+    //
   }
 
   created() {

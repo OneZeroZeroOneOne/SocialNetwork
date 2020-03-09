@@ -60,14 +60,6 @@ new Vue({
   render: h => h(App),
 }).$mount('#app')
 
-var getChildrenTextContent = function (children) {
-  return children.map(function (node) {
-    return node.children
-      ? getChildrenTextContent(node.children)
-      : node.text
-  }).join('')
-}
-
 Vue.component('link-to', LinkToComponent)
 Vue.component('green', GreenComponent)
 Vue.component('sp', SpoilerComponent)

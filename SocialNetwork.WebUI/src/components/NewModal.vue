@@ -37,7 +37,7 @@
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import VueDraggableResizable from 'vue-draggable-resizable'
 import { IAttachment } from '../models/responses/Attachment';
-import { parseNumber } from './vue-js-modal/src/parser';
+import { parseNumber } from '@/utilities/parser';
 
 enum ShowType {
     img,

@@ -61,8 +61,10 @@ export default class CommentComponent extends Vue {
 
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
-      //console.log(this.isModal)
+      console.log(this.isModal)
       //this.timer = setInterval()
+      //setTimeout(x => this.$root.$el.removeChild(this.$el), 1000)
+      this.$root.$emit('showed-link-to', this)
     }
   }
 

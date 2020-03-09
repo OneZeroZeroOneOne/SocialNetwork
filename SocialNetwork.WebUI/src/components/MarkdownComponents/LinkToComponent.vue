@@ -34,29 +34,16 @@ export default class LinkToComponent extends Vue {
   }
 
   makeHovered(event: any) {
-    console.log(event)
-    var ComponentClass = Vue.extend(CommentComponent)
-    var instance = new ComponentClass({
-      propsData: {
-        commentObj: {
-          id: 1,
-          date: new Date(),
-          attachmentComment: [],
-          text: "qweqweqweqwe"
-        },
-        isModal: true,
-      }
-    });
+    this.hovered = true;
 
-    instance.$mount() // pass nothing
-    console.log(instance)
-    let el = instance.$el as any;
-    el.attributeStyleMap.set('position', 'absolute')
-    el.attributeStyleMap.set('left', event.pageX + "px")
-    el.attributeStyleMap.set('top', event.pageY + "px")
-    el.attributeStyleMap.set('width', '80%')
-    this.$root.$el.appendChild(instance.$el)
-    setTimeout(x => this.$root.$el.removeChild(instance.$el), 1000)
+    let commentObj = {
+      id: 1,
+      date: new Date(),
+      attachmentComment: [],
+      text: "qweqweqweqwe"
+    }
+
+    this.$root.$emit('show-link-component', this.post, commentObj, event.pageX, event.pageY)
   }
 
   @Watch('hovered', {immediate: true})

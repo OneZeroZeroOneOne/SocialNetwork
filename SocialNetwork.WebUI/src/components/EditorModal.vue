@@ -48,7 +48,7 @@ import { IBoardService } from '@/services/Abstractions/IBoardService';
 import { ICommentService }from '@/services/Abstractions/ICommentService';
 import { CommentService } from '../services/Implementations/CommentService';
 import { ResponseState } from '../models/enum/ResponseState';
-import { parseNumber } from './vue-js-modal/src/parser';
+import { parseNumber } from '@/utilities/parser';
 
 
 @Component({
