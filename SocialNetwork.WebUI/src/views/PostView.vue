@@ -143,6 +143,7 @@ export default class PostView extends Vue {
     await this._postService.getPost(this.boardObj.id, this.postId())
       .then(response => {
         this.postObj = response.data;
+        this.postObj.boardId = this.boardObj.id;
         this.requestPostStatus = ResponseState.success;
       })
       .catch(error => {

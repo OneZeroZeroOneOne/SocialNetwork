@@ -1,9 +1,9 @@
 <template>
   <span 
-    class="link-to"
+    :class="{'link-to': true, 'is-exist': isExist}"
     @mouseover="makeHovered"
     @mouseleave="hovered = false"
-  >{{getSource()}}</span>
+  >>><slot></slot></span>
 </template>
 
 <script lang="ts">
@@ -24,26 +24,42 @@ export default class LinkToComponent extends Vue {
   @Prop() public post!: string;
 
   public hovered: boolean = false;
+  public showing: boolean = false;
+  public isExist: boolean = true;
   
   constructor() {
     super();
   }
 
-  getSource(): string {
-    return this.comment === null ? this.post : this.comment;
+  mounted(): void {
+    if (this.comment === '0')
+    {
+      if (this.post === '0')
+      {
+        this.isExist = false;
+      }
+    }
   }
 
   makeHovered(event: any) {
-    this.hovered = true;
+    if (this.isExist)
+    {
+      if (!this.showing)
+      {
+        console.log(this.comment, this.post)
+        this.hovered = true;
 
-    let commentObj = {
-      id: 1,
-      date: new Date(),
-      attachmentComment: [],
-      text: "qweqweqweqwe"
+        let commentObj = {
+          id: 1,
+          date: new Date(),
+          attachmentComment: [],
+          text: "qweqweqweqwe"
+        }
+
+        this.$root.$emit('show-link-component', this.post, commentObj, event.pageX, event.pageY)
+        this.showing = true;
+      }
     }
-
-    this.$root.$emit('show-link-component', this.post, commentObj, event.pageX, event.pageY)
   }
 
   @Watch('hovered', {immediate: true})
@@ -59,16 +75,14 @@ export default class LinkToComponent extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .link-to {
-  width: fit-content;
-  color: orange;
-  
-  &:before {
-    content: ">>";
-  }
-
-  &:hover {
-    color: orangered;
-    cursor: pointer;
+  &.is-exist {
+    width: fit-content;
+    color: orange;
+    
+    &:hover {
+      color: orangered;
+      cursor: pointer;
+    }
   }
 }
 </style>

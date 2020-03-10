@@ -132,6 +132,7 @@ export default class BoardView extends Vue {
           response.data.results.forEach(x => {
             if (this.postIds.indexOf(x.id) === -1)
             {
+              x.boardId = this.boardObj.id;
               this.postIds.push(x.id);
               this.postObjs.push(x);
               newPostIds.push(x.id);

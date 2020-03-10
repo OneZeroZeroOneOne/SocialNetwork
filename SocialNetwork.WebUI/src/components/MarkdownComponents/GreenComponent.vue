@@ -1,5 +1,5 @@
 <template>
-  <span class="green"><slot></slot></span>
+  <span class="green">><slot></slot></span>
 </template>
 
 <script lang="ts">
@@ -28,8 +28,5 @@ export default class GreenComponent extends Vue {
   width: fit-content;
   color: green;
   font-style: italic;
-  &:before {
-    content: ">";
-  }
 }
 </style>

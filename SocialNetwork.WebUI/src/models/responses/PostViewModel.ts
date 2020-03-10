@@ -8,6 +8,7 @@ export interface IPost {
     date: string
     userId: string
     attachmentPost: IAttachment[]
+    boardId: Guid
 }
 
 export interface IPosts {

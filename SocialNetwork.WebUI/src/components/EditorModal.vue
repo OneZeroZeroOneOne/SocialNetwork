@@ -49,6 +49,8 @@ import { ICommentService }from '@/services/Abstractions/ICommentService';
 import { CommentService } from '../services/Implementations/CommentService';
 import { ResponseState } from '../models/enum/ResponseState';
 import { parseNumber } from '@/utilities/parser';
+import { IPostService } from '../services/Abstractions/IPostService';
+import { PostService } from '../services/Implementations/PostService';
 
 
 @Component({
@@ -83,6 +85,7 @@ export default class PreviewModal extends Vue {
   public mentionList: string[] = [];
 
   private _commentService!: ICommentService;
+  private _postService!: IPostService;
 
   constructor() {
       super();
@@ -193,6 +196,7 @@ export default class PreviewModal extends Vue {
 
   beforeCreate() {
     this._commentService = new CommentService();
+    this._postService = new PostService();
   }
 
   isLoading(): string {
@@ -203,7 +207,7 @@ export default class PreviewModal extends Vue {
 
 
 
-  parseMarkdown(textContent: string): string {
+  async parseMarkdown(textContent: string): Promise<string> {
     let md = textContent;
 
     console.log(md)
@@ -214,16 +218,59 @@ export default class PreviewModal extends Vue {
     //need to be first because of '>'
     Array.from(md['matchAll'](/(>>{1}(\d+))/g), (x: any) => {
       let mention: string = x[2]
-      this.mentionList.push(mention)
+      if (this.mentionList.indexOf(mention) === -1)
+      {
+        this.mentionList.push(mention)
+      }
     })
 
-    console.log(this.mentionList)
+    let commentList: string[] = []
+    let postList: string[] = []
+    let unresolvedList: string[] = []
+
+    for (let index = 0; index < this.mentionList.length; index++) {
+      await this._commentService.getCommentById(this.mentionList[index])
+        .then(ok => {
+          console.log(ok)
+          commentList.push(this.mentionList[index])
+        }).catch(async x => {
+          await this._postService.getPost(this.replyToPost.boardId, this.mentionList[index])
+            .then(ok => {
+              postList.push(this.mentionList[index])
+            }).catch(x => {
+              unresolvedList.push(this.mentionList[index])
+            })
+        })
+    }
     
     //link to post/comment
     //need to be first because of '>>'
-    md = md.replace(/(>>{1}(\d+))/g, '<link-to comment=$2 post=$2[sign-bigger]$2</link-to[sign-bigger]');
-      
-    
+    md = md.replace(/(>>{1}(\d+))/g, '<link-to comment={{_comment_link_$2_}} post={{_post_link_$2_}}[sign-bigger]$2</link-to[sign-bigger]');
+     
+    console.log(commentList, postList, unresolvedList, md)
+
+    commentList.forEach(element => {
+      let toReplaceCom = `{{_comment_link_${element}_}}`
+      md = md.split(toReplaceCom).join(element)//md.replace(toReplaceCom, element)
+      let toReplacePost = `{{_post_link_${element}_}}`
+      md = md.split(toReplacePost).join('0')//.replace(toReplacePost, '0')
+    });
+
+    postList.forEach(element => {
+      let toReplacePost = `{{_post_link_${element}_}}`
+      md = md.split(toReplacePost).join(element)//.replace(toReplacePost, element)
+      let toReplaceCom = `{{_comment_link_${element}_}}`
+      md = md.split(toReplaceCom).join("0")//.replace(toReplaceCom, "0")
+    });
+
+    unresolvedList.forEach(element => {
+      let toReplacePost = `{{_post_link_${element}_}}`
+      md = md.replace(toReplacePost, "0")
+      let toReplaceCom = `{{_comment_link_${element}_}}`
+      console.log(toReplaceCom)
+      md = md.replace(toReplaceCom, "0")
+    });
+
     //green text
     //need to be first because of '>'
     md = md.replace(/(>)(.*)/g, '<green>$2</green>');
@@ -254,7 +301,7 @@ export default class PreviewModal extends Vue {
     console.log('submit', this.replyToPost)
     if (this.replyToPost !== undefined)
     {
-      textContent = this.parseMarkdown(textContent);
+      textContent = await this.parseMarkdown(textContent);
 
       let commentToSend = {
         title: textTitle,

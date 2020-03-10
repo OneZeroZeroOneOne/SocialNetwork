@@ -20,6 +20,10 @@ export class CommentService implements ICommentService {
         })
     }
 
+    async getCommentById(commentid: string | number): Promise<AxiosResponse<IComment>> {
+        return this.commentAxios.get<IComment>(`social/Comments/${commentid.toString()}`, {});
+    }
+
     async getCommentForPost(link_to_post: string, page: number = 1, quantity: number = 5): Promise<AxiosResponse<IPagedResult<IComment>>> {
         return this.commentAxios.get<IPagedResult<IComment>>(`social/Comments/Page/${link_to_post.toString()}`, {
             params: {
