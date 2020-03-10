@@ -243,6 +243,9 @@ export default class PreviewModal extends Vue {
         })
     }
     
+    let realMention: string[] = [...postList, ...commentList]
+    console.log(realMention)
+    this.mentionList = realMention;
     //link to post/comment
     //need to be first because of '>>'
     md = md.replace(/(>>{1}(\d+))/g, '<link-to comment={{_comment_link_$2_}} post={{_post_link_$2_}}[sign-bigger]$2</link-to[sign-bigger]');
