@@ -2,6 +2,7 @@
   <div class="post-view">
     <top-bottom-buttons/>
     <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
+    
     <post-component :postObj="postObj" v-if="requestPostStatus === 1"/>
     <ul id="comments">
       <li v-for="(item, index) in commentObjs" v-bind:key="item.id">

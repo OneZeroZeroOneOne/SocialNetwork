@@ -22,7 +22,11 @@ import VueLazyload from 'vue-lazyload'
 import LinkToComponent from '../src/components/MarkdownComponents/LinkToComponent.vue';
 import GreenComponent from '../src/components/MarkdownComponents/GreenComponent.vue';
 import SpoilerComponent from '../src/components/MarkdownComponents/SpoilerComponent.vue';
+import VueCountdown from '@chenfengyuan/vue-countdown';
+import eventBus from "@/utilities/EventBus";
 
+
+Vue.component(VueCountdown.name, VueCountdown);
 Vue.use(VueLazyload)
 
 // or with options

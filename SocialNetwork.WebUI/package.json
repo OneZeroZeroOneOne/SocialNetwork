@@ -9,6 +9,7 @@
     "build-report": "vue-cli-service build --report"
   },
   "dependencies": {
+    "@chenfengyuan/vue-countdown": "^1.1.5",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",

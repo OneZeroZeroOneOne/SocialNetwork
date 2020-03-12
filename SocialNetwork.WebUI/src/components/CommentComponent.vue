@@ -1,5 +1,6 @@
 <template>
-<div class="comment">
+<div class="comment" @mouseover="hovered = true" @mouseleave="hovered = false">
+  <countdown :time="4 * 1000" ref="countdown" :auto-start="false" @end="end"/>
   <div class="comment-body">
     <div class="comment-header">
       <div class="comment-header-link"
@@ -29,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 import { IPost } from "@/models/responses/PostViewModel";
 import { IComment } from '@/models/responses/CommentViewModel';
@@ -40,6 +41,8 @@ import { ResponseState } from "@/models/enum/ResponseState";
 import PreviewModal from '@/components/PreviewModal.vue';
 import AttachmentComponent from '@/components/AttachmentComponent.vue';
 import VRuntimeTemplate from "v-runtime-template";
+
+import eventBus from "@/utilities/EventBus";
 
 @Component({
   components: {
@@ -54,17 +57,45 @@ export default class CommentComponent extends Vue {
 
   @Prop() public isModal!: boolean;
   public timer: number = -1;
+  public hovered: boolean = true;
+  public countdown!: any; 
 
   constructor() {
     super();
   }
 
+  @Watch('hovered', {immediate: true})
+  change(value) {
+    if (this.isModal)
+    {
+      console.log(value)
+      if (value === true)
+      {
+        if (this.countdown !== undefined)
+          this.countdown.pause()
+      }else {
+        if (this.countdown !== undefined)
+          this.countdown.continue()
+      }
+    }
+  } 
+
+  end() {
+    /*console.log(data.seconds);
+    if (data.seconds === 1)
+    {*/
+      console.log('hide')
+      eventBus.emit('hide-link-component', this)
+    //}
+  }
+
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
       console.log(this.isModal)
-      //this.timer = setInterval()
-      //setTimeout(x => this.$root.$el.removeChild(this.$el), 1000)
-      this.$root.$emit('showed-link-to', this)
+      this.countdown = this.$refs.countdown;
+      this.countdown.start();
+      this.countdown.pause();
+      eventBus.emit('showed-link-to', this)
     }
   }
 

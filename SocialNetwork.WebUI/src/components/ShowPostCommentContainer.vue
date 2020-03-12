@@ -45,19 +45,27 @@ export default class ShowPostCommentContainer extends Vue {
 
     let el = instance.$el as any;
     el.attributeStyleMap.set('position', 'absolute')
-    el.attributeStyleMap.set('left', x + "px")
+    el.attributeStyleMap.set('left', (x - 20) + "px")
     el.attributeStyleMap.set('top', y + "px")
     el.attributeStyleMap.set('width', '80%')
+  }
+
+  hideComponent(component: Vue) {
+    console.log(component)
+    this.$root.$el.removeChild(component.$el)
   }
 
   mounted(): void {
     console.log(this.$on)
 
     this.$root.$on('show-link-component', this.showComponent)
+    this.$root.$on('hide-link-component', this.hideComponent)
+
     this.$root.$on('showed-link-to', this.showLinkTo)
   }
 
   created() {
+    console.log(this.$root)
       //
   }
 }

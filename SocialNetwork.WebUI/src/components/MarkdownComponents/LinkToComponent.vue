@@ -24,7 +24,7 @@ export default class LinkToComponent extends Vue {
   @Prop() public post!: string;
 
   public hovered: boolean = false;
-  public showing: boolean = false;
+  public showing: boolean = true;
   public isExist: boolean = true;
   
   constructor() {
@@ -42,12 +42,14 @@ export default class LinkToComponent extends Vue {
   }
 
   makeHovered(event: any) {
+    console.log(this.showing)
     if (this.isExist)
     {
-      if (!this.showing)
+      if (this.showing)
       {
         console.log(this.comment, this.post)
         this.hovered = true;
+        this.showing = false;
 
         let commentObj = {
           id: 1,
@@ -57,7 +59,6 @@ export default class LinkToComponent extends Vue {
         }
 
         this.$root.$emit('show-link-component', this.post, commentObj, event.pageX, event.pageY)
-        this.showing = true;
       }
     }
   }

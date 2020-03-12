@@ -2,9 +2,9 @@
   <div id="app">
     <div id="nav"></div>
     <new-modal/>
-    <show-post-comment-container/>
     <router-view>
     </router-view>
+    <show-post-comment-container/>
     <editor-modal/>
   </div>
 </template>
