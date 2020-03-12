@@ -89,9 +89,9 @@ img[lazy=loaded] {
 }
 
 .attachment-video {
-  border-color: darkgray;
+  border-color: #7d7d7d;
   border-style: dashed;
-  border-width: 2px;
+  border-width: 1px;
   box-sizing: border-box;
 }
 
