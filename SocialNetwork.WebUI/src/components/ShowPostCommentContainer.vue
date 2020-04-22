@@ -19,12 +19,6 @@ export default class ShowPostCommentContainer extends Vue {
     super();
   }
 
-  showLinkTo(el: any): void {
-    console.log(el)
-    this.listModal.push(el);
-    console.log(this.listModal);
-  }
-
   showComponent(post: IPost, comment: IComment, x: number, y: number) {
     let ComponentClass;
 
@@ -32,10 +26,10 @@ export default class ShowPostCommentContainer extends Vue {
         ComponentClass = Vue.extend(CommentComponent)
 
     var instance = new ComponentClass({
-        propsData: {
-            commentObj: comment,
-            isModal: true,
-        }
+      propsData: {
+        commentObj: comment,
+        isModal: true,
+      }
     });
 
     instance.$mount() // pass nothing
@@ -55,18 +49,18 @@ export default class ShowPostCommentContainer extends Vue {
     this.$root.$el.removeChild(component.$el)
   }
 
-  mounted(): void {
-    console.log(this.$on)
+  beforeDestroy() {
+    this.$root.$off('show-link-component', this.showComponent)
+    this.$root.$off('hide-link-component', this.hideComponent)
+  }
 
+  mounted(): void {
     this.$root.$on('show-link-component', this.showComponent)
     this.$root.$on('hide-link-component', this.hideComponent)
-
-    this.$root.$on('showed-link-to', this.showLinkTo)
   }
 
   created() {
-    console.log(this.$root)
-      //
+    //
   }
 }
 </script>

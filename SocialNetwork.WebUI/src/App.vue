@@ -16,6 +16,8 @@ import apiClient from '@/services/Implementations/ApiClient';
 import NewModal from "@/components/NewModal.vue";
 import ShowPostCommentContainer from '@/components/ShowPostCommentContainer.vue';
 
+import eventBus from "@/utilities/EventBus";
+
 @Component({
   components: {
     EditorModal,
@@ -33,6 +35,16 @@ export default class App extends Vue {
 
   mounted(): void {
     //
+    this.$root.$on('new-link-to-component', this.new_link_to)
+    this.$root.$on('destroy-link-to-component', this.destroy_link_to)
+  }
+
+  destroy_link_to(): void {
+    console.log('destroy link to')
+  }
+
+  new_link_to(): void {
+    console.log('new link to')
   }
 
   created() {

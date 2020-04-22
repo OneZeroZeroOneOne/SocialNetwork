@@ -16,6 +16,8 @@ import { IPost } from "@/models/responses/PostViewModel";
 import AttachmentComponent from '../components/AttachmentComponent.vue';
 import CommentComponent from "@/components/CommentComponent.vue";
 
+import eventBus from "@/utilities/EventBus";
+
 @Component({
   components: {}
 })
@@ -39,13 +41,18 @@ export default class LinkToComponent extends Vue {
         this.isExist = false;
       }
     }
+    eventBus.emit('new-link-to-component', this)
+  }
+
+  destroy(): void {
+    eventBus.emit('destroy-link-to-component', this)
   }
 
   makeHovered(event: any) {
-    console.log(this.showing)
+    console.log('Can show '+this.showing)
     if (this.isExist)
     {
-      if (this.showing)
+      if (this.showing === true)
       {
         console.log(this.comment, this.post)
         this.hovered = true;
@@ -61,6 +68,12 @@ export default class LinkToComponent extends Vue {
         this.$root.$emit('show-link-component', this.post, commentObj, event.pageX, event.pageY)
       }
     }
+  }
+
+  @Watch('showing', {immediate: true})
+  changedshowing(value: boolean): void {
+    console.log('SHOWING ' + value)
+    console.log(this)
   }
 
   @Watch('hovered', {immediate: true})

@@ -119,6 +119,7 @@ CREATE TABLE public."Post" (
 	"Text" text NOT NULL,
 	"Date" timestamp NOT NULL,
 	"IsArchived" bool NOT NULL DEFAULT false,
+	"Title" text NULL,
 	CONSTRAINT "Post_pkey" PRIMARY KEY ("Id"),
 	CONSTRAINT "Post_BoardId_fkey" FOREIGN KEY ("BoardId") REFERENCES "Board"("Id"),
 	CONSTRAINT "Post_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "User"("Id")

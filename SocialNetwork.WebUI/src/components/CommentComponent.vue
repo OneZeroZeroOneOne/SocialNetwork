@@ -16,8 +16,7 @@
        <attachment-component :attachmentObjs="commentObj.attachmentComment"/>
       </div>
       <div class="comment-content-body" >
-        <v-runtime-template :template="wrap(commentObj.text)">
-        </v-runtime-template>
+        <component :is="LinkToComponent" v-bind="{comment: '1', post: '0'}">1</component>
       </div>
     </div>
     <div class="comment-footer">
@@ -41,6 +40,7 @@ import { ResponseState } from "@/models/enum/ResponseState";
 import PreviewModal from '@/components/PreviewModal.vue';
 import AttachmentComponent from '@/components/AttachmentComponent.vue';
 import VRuntimeTemplate from "v-runtime-template";
+import LinkToComponent from '@/components/MarkdownComponents/LinkToComponent.vue';
 
 import eventBus from "@/utilities/EventBus";
 
@@ -48,6 +48,7 @@ import eventBus from "@/utilities/EventBus";
   components: {
     AttachmentComponent,
     VRuntimeTemplate,
+    LinkToComponent,
   }
 })
 export default class CommentComponent extends Vue {
@@ -57,8 +58,15 @@ export default class CommentComponent extends Vue {
 
   @Prop() public isModal!: boolean;
   public timer: number = -1;
+  public counter: number = 5;
   public hovered: boolean = true;
   public countdown!: any; 
+
+  public LinkToComponent: string = "LinkToComponent";
+
+  public testString: string = 'hello {0} im test {1}';
+
+  public testData: 
 
   constructor() {
     super();
@@ -66,7 +74,7 @@ export default class CommentComponent extends Vue {
 
   @Watch('hovered', {immediate: true})
   change(value) {
-    if (this.isModal)
+    /*if (this.isModal)
     {
       console.log(value)
       if (value === true)
@@ -77,7 +85,7 @@ export default class CommentComponent extends Vue {
         if (this.countdown !== undefined)
           this.countdown.continue()
       }
-    }
+    }*/
   } 
 
   end() {
@@ -91,11 +99,20 @@ export default class CommentComponent extends Vue {
 
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
-      console.log(this.isModal)
+      /*console.log(this.isModal)
       this.countdown = this.$refs.countdown;
       this.countdown.start();
-      this.countdown.pause();
-      eventBus.emit('showed-link-to', this)
+      this.countdown.pause();*/
+      this.counter = 3 * 10;
+      this.timer = setInterval(() => {
+        this.counter = this.counter - 1;
+        console.log(this.counter)
+        if(this.counter === 0) 
+        {
+          clearInterval(this.timer)
+          this.end()
+        }
+      }, 100);
     }
   }
 

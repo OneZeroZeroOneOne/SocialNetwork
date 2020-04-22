@@ -30,6 +30,7 @@ namespace SocialNetwork.Bll.Services
             if (postInDb == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {postModel.Id} not found");
 
+            postInDb.Title = await _userInputSanitizeService.SanitizeHtml(postModel.Title);
             postInDb.Text = await _userInputSanitizeService.SanitizeHtml(postModel.Text);
 
             _context.Update(postInDb);
@@ -58,6 +59,7 @@ namespace SocialNetwork.Bll.Services
 
             postModel.UserId = authorUser;
             postModel.Text = await _userInputSanitizeService.SanitizeHtml(postModel.Text);
+            postModel.Title = await _userInputSanitizeService.SanitizeHtml(postModel.Title);
 
             var insertedPost = await _context.Post.AddAsync(postModel);
             await _context.SaveChangesAsync();
@@ -90,7 +92,7 @@ namespace SocialNetwork.Bll.Services
         {
             if (page <= 0 || quantity <= 0)
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
-                    $"inappropriate parameters page or quantity");
+                    $"Inappropriate parameters page or quantity");
 
             return await _context.Post.Where(x => x.IsArchived == false && x.BoardId == boardId)
                 .Include(x => x.AttachmentPost)

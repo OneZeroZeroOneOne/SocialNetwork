@@ -4,6 +4,7 @@ import { IAttachment } from './Attachment';
 export interface IPost {
     id:	number
     text: string
+    title: string
     nullable: boolean
     date: string
     userId: string
