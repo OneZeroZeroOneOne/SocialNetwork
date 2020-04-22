@@ -1,9 +1,9 @@
 <template>
-  <span 
+  <span v-html="'>>' + text"
     :class="{'link-to': true, 'is-exist': isExist}"
     @mouseover="makeHovered"
     @mouseleave="hovered = false"
-  >>><slot></slot></span>
+  ></span>
 </template>
 
 <script lang="ts">
@@ -24,6 +24,8 @@ import eventBus from "@/utilities/EventBus";
 export default class LinkToComponent extends Vue {
   @Prop() public comment!: string;
   @Prop() public post!: string;
+
+  @Prop() public text!: string;
 
   public hovered: boolean = false;
   public showing: boolean = true;

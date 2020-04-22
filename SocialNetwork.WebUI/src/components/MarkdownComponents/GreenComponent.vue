@@ -1,5 +1,5 @@
 <template>
-  <span class="green">><slot></slot></span>
+  <span v-html="'>' + text" class="green"></span>
 </template>
 
 <script lang="ts">
@@ -16,6 +16,8 @@ import CommentComponent from "./CommentComponent.vue";
   components: {}
 })
 export default class GreenComponent extends Vue {
+  @Prop() public text!: string;
+
   constructor() {
     super();
   }

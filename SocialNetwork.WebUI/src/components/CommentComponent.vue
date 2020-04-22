@@ -16,7 +16,9 @@
        <attachment-component :attachmentObjs="commentObj.attachmentComment"/>
       </div>
       <div class="comment-content-body" >
-        <component :is="LinkToComponent" v-bind="{comment: '1', post: '0'}">1</component>
+        <template v-for="block in testData">
+          <component :is="block.entityType" :key="block.position" v-bind:text="block.text">{{wrap(block.text)}}</component>
+        </template>
       </div>
     </div>
     <div class="comment-footer">
@@ -41,6 +43,10 @@ import PreviewModal from '@/components/PreviewModal.vue';
 import AttachmentComponent from '@/components/AttachmentComponent.vue';
 import VRuntimeTemplate from "v-runtime-template";
 import LinkToComponent from '@/components/MarkdownComponents/LinkToComponent.vue';
+import GreenComponent from '@/components/MarkdownComponents/GreenComponent.vue';
+import TextComponent from '@/components/MarkdownComponents/TextComponent.vue';
+import SpoilerComponent from '@/components/MarkdownComponents/SpoilerComponent.vue';
+
 
 import eventBus from "@/utilities/EventBus";
 
@@ -49,6 +55,9 @@ import eventBus from "@/utilities/EventBus";
     AttachmentComponent,
     VRuntimeTemplate,
     LinkToComponent,
+    TextComponent, 
+    GreenComponent,
+    SpoilerComponent,
   }
 })
 export default class CommentComponent extends Vue {
@@ -61,12 +70,41 @@ export default class CommentComponent extends Vue {
   public counter: number = 5;
   public hovered: boolean = true;
   public countdown!: any; 
-
+  //<component :is="LinkToComponent" v-bind="{comment: '1', post: '0'}">1</component>
   public LinkToComponent: string = "LinkToComponent";
 
-  public testString: string = 'hello {0} im test {1}';
+  public testString: string = 'hello im test';
 
-  public testData: 
+  public testData = [
+    {
+      entityType: "TextComponent",
+      position: 0,
+      post: 0,
+      comment: 0,
+      text: "qwer\n",
+    },
+    {
+      entityType: "SpoilerComponent",
+      position: 2,
+      post: 0,
+      comment: 0,
+      text: "spoiler",
+    },
+    {
+      entityType: "LinkToComponent",
+      position: 5,
+      post: 12,
+      comment: 0,
+      text: "12",
+    },
+    {
+      entityType: "GreenComponent",
+      position: 7,
+      post: 0,
+      comment: 0,
+      text: "qwerqwer",
+    },
+  ]
 
   constructor() {
     super();
@@ -117,7 +155,7 @@ export default class CommentComponent extends Vue {
   }
 
   wrap(text: string): string {
-    return "<div>"+text+"</div>"
+    return text.replace(/(\r\n|\n|\r)/gm, "<br/>");
   }
 
   openEditor(): void {

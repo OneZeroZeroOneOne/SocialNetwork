@@ -1,5 +1,5 @@
 <template>
-  <span class="spoiler"><slot></slot></span>
+  <span v-html="text" class="spoiler"></span>
 </template>
 
 <script lang="ts">
@@ -16,6 +16,8 @@ import CommentComponent from "./CommentComponent.vue";
   components: {}
 })
 export default class SpoilerComponent extends Vue {
+  @Prop() public text!: string;
+
   constructor() {
     super();
   }
