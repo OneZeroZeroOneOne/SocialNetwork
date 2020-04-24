@@ -2,7 +2,7 @@
 
 namespace SocialNetwork.Bll.Abstractions
 {
-    public interface IUserInputSanitizeService
+    public interface IUserInputService
     {
         Task<string> SanitizeHtml(string rawHtml);
     }

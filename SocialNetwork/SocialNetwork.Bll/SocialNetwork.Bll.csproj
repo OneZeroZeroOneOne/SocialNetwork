@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SocialNetwork.Dal\SocialNetwork.Dal.csproj" />
+    <ProjectReference Include="..\SocialNetwork.Markdown\SocialNetwork.Markdown.csproj" />
     <ProjectReference Include="..\SocialNetwork.Utilities\SocialNetwork.Utilities.csproj" />
   </ItemGroup>
 

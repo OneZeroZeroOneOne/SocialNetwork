@@ -44,7 +44,7 @@ export default class App extends Vue {
   }
 
   new_link_to(): void {
-    console.log('new link to')
+    //console.log('new link to')
   }
 
   created() {

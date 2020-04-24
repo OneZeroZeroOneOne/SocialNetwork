@@ -81,7 +81,7 @@ namespace SocialNetwork.WebApi
             });
 
             services.AddSingleton<IHtmlSanitizer, HtmlSanitizer>();
-            services.AddSingleton<IUserInputSanitizeService, UserInputSanitizeService>();
+            services.AddSingleton<IUserInputService, UserInputService>();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

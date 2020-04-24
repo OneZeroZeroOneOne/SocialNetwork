@@ -16,8 +16,8 @@
        <attachment-component :attachmentObjs="commentObj.attachmentComment"/>
       </div>
       <div class="comment-content-body" >
-        <template v-for="block in testData">
-          <component :is="block.entityType" :key="block.position" v-bind:text="block.text">{{wrap(block.text)}}</component>
+        <template v-for="block in mockMarkdown().child">
+          <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
         </template>
       </div>
     </div>
@@ -36,6 +36,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { IPost } from "@/models/responses/PostViewModel";
 import { IComment } from '@/models/responses/CommentViewModel';
 import { IAttachment } from '@/models/responses/Attachment';
+import { IMarkdownNode } from '@/models/responses/MarkdownNode';
 
 import { ResponseState } from "@/models/enum/ResponseState";
 
@@ -47,6 +48,7 @@ import GreenComponent from '@/components/MarkdownComponents/GreenComponent.vue';
 import TextComponent from '@/components/MarkdownComponents/TextComponent.vue';
 import SpoilerComponent from '@/components/MarkdownComponents/SpoilerComponent.vue';
 
+import tagToEntity from '@/utilities/MarkdownUtilities';
 
 import eventBus from "@/utilities/EventBus";
 
@@ -106,10 +108,20 @@ export default class CommentComponent extends Vue {
     },
   ]
 
+  public newData = '{ "node_id": 1, "parent_id": 0, "node": "Element", "tag": "p", "child": [ { "node_id": 2, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 3, "parent_id": 2, "node": "Text", "text": "there is bold" } ] }, { "node_id": 5, "parent_id": 1, "node": "Element", "tag": "ins", "child": [ { "node_id": 6, "parent_id": 5, "node": "Text", "text": "bol " }, { "node_id": 7, "parent_id": 5, "node": "Element", "tag": "ins", "child": [ { "node_id": 8, "parent_id": 7, "node": "Text", "text": "in  " }, { "node_id": 9, "parent_id": 7, "node": "Element", "tag": "del", "child": [ { "node_id": 10, "parent_id": 9, "node": "Text", "text": "qwe" } ] }, { "node_id": 11, "parent_id": 7, "node": "Text", "text": " side" } ] }, { "node_id": 12, "parent_id": 5, "node": "Text", "text": " d" } ] }, { "node_id": 13, "parent_id": 1, "node": "Text", "text": " inside " }, { "node_id": 14, "parent_id": 1, "node": "Element", "tag": "linktocomponent", "attr": { "id": "34" } }, { "node_id": 15, "parent_id": 1, "node": "Text", "text": "qwe " }, { "node_id": 16, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 17, "parent_id": 16, "node": "Text", "text": "there is bold" } ] } ] }'
+
+  public flattenedData: IMarkdownNode[] = []
+
   constructor() {
     super();
   }
 
+  getEntityDependOnTag(tag: string): string {
+    if (tag === undefined)
+      return "TextComponent"
+    return tagToEntity[tag];
+  }
+  
   @Watch('hovered', {immediate: true})
   change(value) {
     /*if (this.isModal)
@@ -135,7 +147,41 @@ export default class CommentComponent extends Vue {
     //}
   }
 
+  mockMarkdown(): IMarkdownNode {
+    var d: IMarkdownNode = JSON.parse(this.newData)
+    console.log(d)
+    this.flattenedData = this.flatten(d)
+    console.log(this.flattenedData)
+
+    return d
+  }
+
+  flatten(input: IMarkdownNode) {
+    const stack = [...input.child];
+    const res: IMarkdownNode[] = [];
+    res.push(input);
+    while(stack.length) {
+      const next: IMarkdownNode|undefined = stack.pop();
+        if (next !== undefined)
+        {
+          stack.push(...next.child);
+          res.push(next);
+        }
+    }
+
+    return res;
+}
+
+  parseMarkdownToTree() {
+    /*let data = this.mockMarkdown()
+
+    data.child.forEach(element => {
+      console.log(element)
+    });*/
+  }
+
   mounted() {
+    this.parseMarkdownToTree()
     if (this.isModal !== undefined && this.isModal !== false) {
       /*console.log(this.isModal)
       this.countdown = this.$refs.countdown;

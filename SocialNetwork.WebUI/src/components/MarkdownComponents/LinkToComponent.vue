@@ -1,5 +1,5 @@
 <template>
-  <span v-html="'>>' + text"
+  <span v-html="'>>' + block_data.attr.id"
     :class="{'link-to': true, 'is-exist': isExist}"
     @mouseover="makeHovered"
     @mouseleave="hovered = false"
@@ -17,6 +17,7 @@ import AttachmentComponent from '../components/AttachmentComponent.vue';
 import CommentComponent from "@/components/CommentComponent.vue";
 
 import eventBus from "@/utilities/EventBus";
+import { IMarkdownNode } from '../../models/responses/MarkdownNode';
 
 @Component({
   components: {}
@@ -24,8 +25,11 @@ import eventBus from "@/utilities/EventBus";
 export default class LinkToComponent extends Vue {
   @Prop() public comment!: string;
   @Prop() public post!: string;
+  @Prop() public all_blocks!: IMarkdownNode[];
 
-  @Prop() public text!: string;
+  //@Prop() public text!: string;
+
+  @Prop() public block_data!: IMarkdownNode;
 
   public hovered: boolean = false;
   public showing: boolean = true;
@@ -74,8 +78,8 @@ export default class LinkToComponent extends Vue {
 
   @Watch('showing', {immediate: true})
   changedshowing(value: boolean): void {
-    console.log('SHOWING ' + value)
-    console.log(this)
+    //console.log('SHOWING ' + value)
+    //console.log(this)
   }
 
   @Watch('hovered', {immediate: true})

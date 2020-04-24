@@ -20,5 +20,6 @@
         ProvideFile = 16,
         AttachmentNotFound = 17,
         BoardNotFound = 18,
+        GlobalSettingNotFound = 19,
     }
 }

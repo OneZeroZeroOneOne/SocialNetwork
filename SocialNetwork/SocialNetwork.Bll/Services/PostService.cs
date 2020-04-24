@@ -15,9 +15,9 @@ namespace SocialNetwork.Bll.Services
     public class PostService : IPostService
     {
         private readonly PublicContext _context;
-        private readonly IUserInputSanitizeService _userInputSanitizeService;
+        private readonly IUserInputService _userInputSanitizeService;
 
-        public PostService(PublicContext publicContext, IUserInputSanitizeService userInputSanitizeService)
+        public PostService(PublicContext publicContext, IUserInputService userInputSanitizeService)
         {
             _context = publicContext;
             _userInputSanitizeService = userInputSanitizeService;

@@ -16,9 +16,9 @@ namespace SocialNetwork.Bll.Services
     public class CommentService : ICommentService
     {
         private readonly PublicContext _context;
-        private readonly IUserInputSanitizeService _userInputSanitizeService;
+        private readonly IUserInputService _userInputSanitizeService;
 
-        public CommentService(PublicContext publicContext, IUserInputSanitizeService userInputSanitizeService)
+        public CommentService(PublicContext publicContext, IUserInputService userInputSanitizeService)
         {
             _context = publicContext;
             _userInputSanitizeService = userInputSanitizeService;

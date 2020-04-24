@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.WebApi.Board"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.ConfigSetting.Bll", "SocialNetwork.ConfigSettingBll\SocialNetwork.ConfigSetting.Bll.csproj", "{3D825F91-DA53-4CC1-A568-0F78A5896A18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.ConfigSetting.Dal", "SocialNetwork.ConfigSetting.Dal\SocialNetwork.ConfigSetting.Dal.csproj", "{893D2DAD-569F-4E41-8E58-E011A436A12D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.ConfigSetting.Dal", "SocialNetwork.ConfigSetting.Dal\SocialNetwork.ConfigSetting.Dal.csproj", "{893D2DAD-569F-4E41-8E58-E011A436A12D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetwork.Markdown", "SocialNetwork.Markdown\SocialNetwork.Markdown.csproj", "{46B5FB4E-1C9D-40AD-9BFE-B42721980A5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +113,14 @@ Global
 		{893D2DAD-569F-4E41-8E58-E011A436A12D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{893D2DAD-569F-4E41-8E58-E011A436A12D}.Release|x86.ActiveCfg = Release|Any CPU
 		{893D2DAD-569F-4E41-8E58-E011A436A12D}.Release|x86.Build.0 = Release|Any CPU
+		{46B5FB4E-1C9D-40AD-9BFE-B42721980A5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46B5FB4E-1C9D-40AD-9BFE-B42721980A5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46B5FB4E-1C9D-40AD-9BFE-B42721980A5E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{46B5FB4E-1C9D-40AD-9BFE-B42721980A5E}.Debug|x86.Build.0 = Debug|Any CPU
+		{46B5FB4E-1C9D-40AD-9BFE-B42721980A5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46B5FB4E-1C9D-40AD-9BFE-B42721980A5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46B5FB4E-1C9D-40AD-9BFE-B42721980A5E}.Release|x86.ActiveCfg = Release|Any CPU
+		{46B5FB4E-1C9D-40AD-9BFE-B42721980A5E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
