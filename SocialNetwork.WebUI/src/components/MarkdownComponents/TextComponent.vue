@@ -53,14 +53,14 @@ export default class TextComponent extends Vue {
     //console.log(this.all_blocks)
     let tag = "";
 
-    let parent: IMarkdownNode|null = this.block_parent
+    let parent: IMarkdownNode|null|undefined = this.block_parent
 
-    while(parent !== undefined && parent !== null)
+    while(parent !== null && parent !== undefined)
     {
       if (parent.tag !== undefined)
         if (tag.indexOf(parent.tag) == -1)
-          tag += parent.tag  + " ";
-      // ignore  
+          tag += " " + parent.tag;
+      // @ts-ignore: Object is possibly 'null' or 'undefined'
       parent = this.all_blocks.find(x => x.node_id == parent.parent_id)
     }
 
