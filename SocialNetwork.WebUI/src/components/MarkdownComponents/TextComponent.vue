@@ -62,11 +62,19 @@ export default class TextComponent extends Vue {
       }
       
       if (el.text === undefined)
-        el.text = "";
+        el.text = " ";
 
       console.log(results)
       //{ props: {text: el.text, block_data: this.block_data, block_parent: this.block_parent, all_blocks: this.all_blocks} }
-      results.push(createElement("span", {class: this.getTags(el)}, el.text))
+      let tag = el.tag;
+      if (tag === undefined || tag === null)
+      {
+        let parent: IMarkdownNode|null|undefined = this.all_blocks.find(x => x.node_id == el.parent_id)//element.
+
+        if (parent !== undefined && parent !== null)
+          tag = parent.tag;
+      }
+      results.push(createElement(this.getEntityDependOnTag(tag), {class: this.getTags(el), props: {block_data: el}}, el.text))
       return results;
     }
 
@@ -125,9 +133,20 @@ export default class TextComponent extends Vue {
 
   getEntityDependOnTag(tag: string): string {
     console.log('in TextComponent_' + tag)
-    let ent = tagToEntity[tag]
+
+    let newTagToEntity = {
+      b: "span",
+      p: "span",
+      ins: "span",
+      del: "span",
+      linktocomponent: "LinkToComponent",
+      null: "span",
+      undefined: "span"
+    }
+
+    let ent = newTagToEntity[tag]
     if (tag === undefined)
-      ent = "TextComponent"
+      ent = "span"
     console.log(ent)
     //return "LinkToComponent";
     return ent;

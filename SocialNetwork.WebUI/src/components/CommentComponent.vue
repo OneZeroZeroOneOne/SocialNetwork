@@ -16,7 +16,7 @@
        <attachment-component :attachmentObjs="commentObj.attachmentComment"/>
       </div>
       <div class="comment-content-body" >
-        <span v-for="block in mockMarkdown().child" :key="block.node_id">
+        <span v-for="block in parseMarkdownToTree().child" :key="block.node_id">
           <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
         </span>
       </div>
@@ -72,43 +72,10 @@ export default class CommentComponent extends Vue {
   public counter: number = 5;
   public hovered: boolean = true;
   public countdown!: any; 
-  //<component :is="LinkToComponent" v-bind="{comment: '1', post: '0'}">1</component>
+  
   public LinkToComponent: string = "LinkToComponent";
 
-  public testString: string = 'hello im test';
-
-  public testData = [
-    {
-      entityType: "TextComponent",
-      position: 0,
-      post: 0,
-      comment: 0,
-      text: "qwer\n",
-    },
-    {
-      entityType: "SpoilerComponent",
-      position: 2,
-      post: 0,
-      comment: 0,
-      text: "spoiler",
-    },
-    {
-      entityType: "LinkToComponent",
-      position: 5,
-      post: 12,
-      comment: 0,
-      text: "12",
-    },
-    {
-      entityType: "GreenComponent",
-      position: 7,
-      post: 0,
-      comment: 0,
-      text: "qwerqwer",
-    },
-  ]
-
-  public newData = '{ "node_id": 1, "parent_id": 0, "node": "Element", "tag": "p", "child": [ { "node_id": 2, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 3, "parent_id": 2, "node": "Text", "text": "there is bold" } ] }, { "node_id": 5, "parent_id": 1, "node": "Element", "tag": "ins", "child": [ { "node_id": 6, "parent_id": 5, "node": "Text", "text": "bol " }, { "node_id": 7, "parent_id": 5, "node": "Element", "tag": "ins", "child": [ { "node_id": 8, "parent_id": 7, "node": "Text", "text": "in  " }, { "node_id": 9, "parent_id": 7, "node": "Element", "tag": "linktocomponent", "attr": { "id": "999" } }, { "node_id": 10, "parent_id": 7, "node": "Element", "tag": "del", "child": [ { "node_id": 11, "parent_id": 10, "node": "Text", "text": "qwe" } ] }, { "node_id": 12, "parent_id": 7, "node": "Text", "text": " side" } ] }, { "node_id": 13, "parent_id": 5, "node": "Text", "text": " d" } ] }, { "node_id": 14, "parent_id": 1, "node": "Text", "text": " inside " }, { "node_id": 15, "parent_id": 1, "node": "Element", "tag": "linktocomponent", "attr": { "id": "34" } }, { "node_id": 16, "parent_id": 1, "node": "Text", "text": "qwe " }, { "node_id": 17, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 18, "parent_id": 17, "node": "Text", "text": "there is bold" } ] } ] }'
+  //public newData = '{ "node_id": 1, "parent_id": 0, "node": "Element", "tag": "p", "child": [ { "node_id": 2, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 3, "parent_id": 2, "node": "Text", "text": "there is bold" } ] }, { "node_id": 5, "parent_id": 1, "node": "Element", "tag": "ins", "child": [ { "node_id": 6, "parent_id": 5, "node": "Text", "text": "bol " }, { "node_id": 7, "parent_id": 5, "node": "Element", "tag": "ins", "child": [ { "node_id": 8, "parent_id": 7, "node": "Text", "text": "in  " }, { "node_id": 9, "parent_id": 7, "node": "Element", "tag": "linktocomponent", "attr": { "id": "999" } }, { "node_id": 11, "parent_id": 7, "node": "Element", "tag": "del", "child": [ { "node_id": 12, "parent_id": 11, "node": "Text", "text": "qwe" } ] }, { "node_id": 13, "parent_id": 7, "node": "Text", "text": " side" } ] }, { "node_id": 14, "parent_id": 5, "node": "Text", "text": " d" } ] }, { "node_id": 15, "parent_id": 1, "node": "Text", "text": " inside " }, { "node_id": 16, "parent_id": 1, "node": "Element", "tag": "linktocomponent", "attr": { "id": "34" } }, { "node_id": 17, "parent_id": 1, "node": "Text", "text": " qwe " }, { "node_id": 18, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 19, "parent_id": 18, "node": "Text", "text": "there is bold" } ] } ] }'
 
   public flattenedData: IMarkdownNode[] = []
 
@@ -147,15 +114,6 @@ export default class CommentComponent extends Vue {
     //}
   }
 
-  mockMarkdown(): IMarkdownNode {
-    var d: IMarkdownNode = JSON.parse(this.newData)
-    console.log(d)
-    this.flattenedData = this.flatten(d)
-    console.log(this.flattenedData)
-
-    return d
-  }
-
   flatten(input: IMarkdownNode) {
     const stack = [...input.child];
     const res: IMarkdownNode[] = [];
@@ -173,11 +131,12 @@ export default class CommentComponent extends Vue {
 }
 
   parseMarkdownToTree() {
-    /*let data = this.mockMarkdown()
+    var d: IMarkdownNode = JSON.parse(this.commentObj.text);
+    console.log(d)
+    this.flattenedData = this.flatten(d)
+    console.log(this.flattenedData)
 
-    data.child.forEach(element => {
-      console.log(element)
-    });*/
+    return d
   }
 
   mounted() {
