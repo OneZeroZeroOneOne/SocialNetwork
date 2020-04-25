@@ -49,7 +49,7 @@ export default class TextComponent extends Vue {
     super();
   }
 
-  buildElementBlocks(el: IMarkdownNode, createElement): any {
+  buildElementBlocks(el: IMarkdownNode, createElement, rendered_blocks: number[]): any {
       console.log(el)
       let results: any = []
 
@@ -57,32 +57,39 @@ export default class TextComponent extends Vue {
 
       if (el.child !== undefined && el.child !== null) {
         el.child.forEach(element => {
-          results.push(this.buildElementBlocks(element, createElement))
+          results.push(this.buildElementBlocks(element, createElement, rendered_blocks))
         });
       }
       
-      if (el.text === undefined)
-        el.text = " ";
-
-      console.log(results)
-      //{ props: {text: el.text, block_data: this.block_data, block_parent: this.block_parent, all_blocks: this.all_blocks} }
-      let tag = el.tag;
-      if (tag === undefined || tag === null)
+      console.log(rendered_blocks)
+      if (rendered_blocks.indexOf(el.node_id) === -1)
       {
-        let parent: IMarkdownNode|null|undefined = this.all_blocks.find(x => x.node_id == el.parent_id)//element.
+        if (el.text === undefined)
+          el.text = " ";
 
-        if (parent !== undefined && parent !== null)
-          tag = parent.tag;
+        console.log(results)
+        //{ props: {text: el.text, block_data: this.block_data, block_parent: this.block_parent, all_blocks: this.all_blocks} }
+        let tag = el.tag;
+        if (tag === undefined || tag === null)
+        {
+          let parent: IMarkdownNode|null|undefined = this.all_blocks.find(x => x.node_id == el.parent_id)//element.
+
+          if (parent !== undefined && parent !== null)
+            tag = parent.tag;
+        }
+
+        rendered_blocks.push(el.node_id)
+        results.push(createElement(this.getEntityDependOnTag(tag), {class: this.getTags(el), props: {block_data: el}}, el.text))
       }
-      results.push(createElement(this.getEntityDependOnTag(tag), {class: this.getTags(el), props: {block_data: el}}, el.text))
       return results;
     }
 
   render(createElement) {
     console.log('render')
     let els: IMarkdownNode[] = []
+    let rendered_blocks: number[] = []
     let result = null
-    let root = this.buildElementBlocks(this.block_data, createElement)
+    let root = this.buildElementBlocks(this.block_data, createElement, rendered_blocks)
     return createElement('span', {}, [root])
   }
 
@@ -116,7 +123,7 @@ export default class TextComponent extends Vue {
   }
 
   get_wrapped_text(): string {
-    console.log(this.block_data.text)
+    //console.log(this.block_data.text)
     let tag = "";
 
     if (this.block_parent !== undefined)

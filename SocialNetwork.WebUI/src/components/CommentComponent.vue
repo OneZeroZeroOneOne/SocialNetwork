@@ -141,7 +141,7 @@ export default class CommentComponent extends Vue {
   }
 
   mounted() {
-    this.parseMarkdownToTree()
+    //this.parseMarkdownToTree()
     if (this.isModal !== undefined && this.isModal !== false) {
       /*console.log(this.isModal)
       this.countdown = this.$refs.countdown;
