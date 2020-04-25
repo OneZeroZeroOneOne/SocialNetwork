@@ -304,7 +304,7 @@ export default class PreviewModal extends Vue {
     console.log('submit', this.replyToPost)
     if (this.replyToPost !== undefined)
     {
-      textContent = await this.parseMarkdown(textContent);
+      //textContent = await this.parseMarkdown(textContent);
 
       let commentToSend = {
         title: textTitle,
