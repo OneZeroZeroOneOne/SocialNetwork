@@ -4,9 +4,9 @@
   :class="getTags()"
   v-if="block_data.text !== undefined && block_data.text !== null && block_data.text !== ''">{{block_data.text}}</span>
   {{' '}}
-  <template v-for="block in block_data.child">
-    <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :all_blocks="all_blocks" :block_data="block" :block_parent="block_data"/>
-  </template>
+  <span v-for="block in block_data.child" :key="block.node_id">
+    <component :is="getEntityDependOnTag(block.tag)" :key="block.node_id" :all_blocks="all_blocks" :block_data="block" :block_parent="block_data"/>
+  </span>
 </span>
 </template>
 
