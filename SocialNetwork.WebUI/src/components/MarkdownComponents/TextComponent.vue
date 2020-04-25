@@ -1,16 +1,8 @@
-<template>
-<span class="inline">
-  <span 
-  :class="getTags()"
-  v-if="block_data.text !== undefined && block_data.text !== null && block_data.text !== ''">{{block_data.text}}</span>
-  {{' '}}
-  <span v-for="block in block_data.child" :key="block.node_id">
-    <component :is="getEntityDependOnTag(block.tag)" :key="block.node_id" :all_blocks="all_blocks" :block_data="block" :block_parent="block_data"/>
-  </span>
-</span>
-</template>
-
 <script lang="ts">
+/*
+
+
+*/
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { IMarkdownNode } from '../../models/responses/MarkdownNode';
 
@@ -18,14 +10,33 @@ import LinkToComponent from '@/components/MarkdownComponents/LinkToComponent.vue
 import GreenComponent from '@/components/MarkdownComponents/GreenComponent.vue';
 import SpoilerComponent from '@/components/MarkdownComponents/SpoilerComponent.vue';
 
+//import TextComponentHtml from '@/components/MarkdownComponents/TextComponentHtml.vue';
+
 import tagToEntity from '@/utilities/MarkdownUtilities';
+
+//Vue.component("TextComponentHtml", TextComponentHtml)
+
+/*Vue.component('TextComponentHtml', {
+  render: function (createElement) {
+    return createElement(
+      'span',   // имя тега
+      this.text // массив дочерних элементов
+    )
+  },
+  props: {
+    text: {
+      type: String,
+      required: true
+    }
+  }
+})*/
 
 @Component({
   components: { 
     LinkToComponent,
     GreenComponent,
     SpoilerComponent,
-    TextComponent,
+    TextComponent
   }
 })
 export default class TextComponent extends Vue {
@@ -36,6 +47,35 @@ export default class TextComponent extends Vue {
 
   constructor() {
     super();
+  }
+
+  buildElementBlocks(el: IMarkdownNode, createElement): any {
+      console.log(el)
+      let results: any = []
+
+      if (el === undefined) return;
+
+      if (el.child !== undefined && el.child !== null) {
+        el.child.forEach(element => {
+          results.push(this.buildElementBlocks(element, createElement))
+        });
+      }
+      
+      if (el.text === undefined)
+        el.text = "";
+
+      console.log(results)
+      //{ props: {text: el.text, block_data: this.block_data, block_parent: this.block_parent, all_blocks: this.all_blocks} }
+      results.push(createElement("span", {class: this.getTags(el)}, el.text))
+      return results;
+    }
+
+  render(createElement) {
+    console.log('render')
+    let els: IMarkdownNode[] = []
+    let result = null
+    let root = this.buildElementBlocks(this.block_data, createElement)
+    return createElement('span', {}, [root])
   }
 
   getSpaces(): string {
@@ -49,11 +89,11 @@ export default class TextComponent extends Vue {
     return sp;
   }
 
-  getTags(): string {
+  getTags(element: IMarkdownNode): string {
     //console.log(this.all_blocks)
     let tag = "";
 
-    let parent: IMarkdownNode|null|undefined = this.block_parent
+    let parent: IMarkdownNode|null|undefined = this.all_blocks.find(x => x.node_id == element.parent_id)//element.
 
     while(parent !== null && parent !== undefined)
     {
