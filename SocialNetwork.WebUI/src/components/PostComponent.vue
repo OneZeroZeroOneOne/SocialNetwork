@@ -6,6 +6,9 @@
           @click.self="openEditor()">
         >>{{postObj.id}}
         </div>
+        <div class="post-header-title">
+          {{postObj.title}}
+        </div>
         <div class="post-header-time">
           {{postObj.date | formatDate}}
         </div>
@@ -143,6 +146,10 @@ $text-color: #ccc;
         cursor: pointer;
         color: orangered;
       }
+    }
+    .post-header-title {
+      float: left;
+      padding-left: 10px;
     }
   }
   .post-content {

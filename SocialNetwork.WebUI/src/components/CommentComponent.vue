@@ -128,9 +128,10 @@ export default class CommentComponent extends Vue {
     }
 
     return res;
-}
+  }
 
   parseMarkdownToTree() {
+    console.log(this.commentObj.text)
     var d: IMarkdownNode = JSON.parse(this.commentObj.text);
     console.log(d)
     this.flattenedData = this.flatten(d)
@@ -156,6 +157,8 @@ export default class CommentComponent extends Vue {
           this.end()
         }
       }, 100);
+    }else{
+      //this is not modal so...
     }
   }
 

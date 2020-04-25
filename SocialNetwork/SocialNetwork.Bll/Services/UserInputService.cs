@@ -6,6 +6,7 @@ using SocialNetwork.Markdown;
 using SocialNetwork.Utilities.Exceptions;
 using System.Linq;
 using System.Threading.Tasks;
+using Markdig.Parsers;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -25,6 +26,10 @@ namespace SocialNetwork.Bll.Services
             _htmlSanitizer.AllowedCssClasses.Clear();
 
             var pipeline = new MarkdownPipelineBuilder();
+
+            var blockQuoteParser = pipeline.BlockParsers.Find<QuoteBlockParser>();
+            if (blockQuoteParser != null) 
+                pipeline.BlockParsers.Remove(blockQuoteParser);
 
             _pipeline = pipeline
                 .UseEmphasisExtras()
@@ -66,10 +71,11 @@ namespace SocialNetwork.Bll.Services
             await UpdateSettings();
 
             var sanitizedUserInput = _htmlSanitizer.Sanitize(rawHtml);
+            sanitizedUserInput = sanitizedUserInput.Replace("&gt;", ">");
 
             var result = Markdig.Markdown.ToHtml(sanitizedUserInput, _pipeline);
 
-            return HtmlToJsonService.HtmlToJson(result);
+            return HtmlToJsonService.HtmlToJson(result).Replace("\r\n","");
         }
     }
 }
