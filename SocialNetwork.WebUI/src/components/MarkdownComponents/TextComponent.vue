@@ -25,7 +25,7 @@ import tagToEntity from '@/utilities/MarkdownUtilities';
     LinkToComponent,
     GreenComponent,
     SpoilerComponent,
-    //TextComponent,
+    TextComponent,
   }
 })
 export default class TextComponent extends Vue {
