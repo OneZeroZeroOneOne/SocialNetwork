@@ -9,6 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SocialNetwork.Markdown.Jsonize;
+using SocialNetwork.Markdown.Jsonize.Models;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -17,11 +21,17 @@ namespace SocialNetwork.Bll.Services
     {
         private readonly PublicContext _context;
         private readonly IUserInputService _userInputSanitizeService;
+        private readonly JsonSerializer _jsonWriter;
 
         public CommentService(PublicContext publicContext, IUserInputService userInputSanitizeService)
         {
             _context = publicContext;
             _userInputSanitizeService = userInputSanitizeService;
+
+            _jsonWriter = new JsonSerializer
+            {
+                NullValueHandling = (NullValueHandling)1
+            };
         }
 
 
@@ -39,6 +49,26 @@ namespace SocialNetwork.Bll.Services
             }
         }
 
+        private List<JsonizeNode> FlatNodes(JsonizeNode rootNode)
+        {
+            var stack = new List<JsonizeNode>();
+            stack.AddRange(rootNode.Children);
+            var result = new List<JsonizeNode>();
+
+            while (stack.Count > 0)
+            {
+                var node = stack.PopAt(0);
+                if (node.Children != null)
+                {
+                    stack.AddRange(node.Children);
+                }
+
+                result.Add(node);
+            }
+
+            return result;
+        }
+
         public async Task<Comment> AddComment(Comment commentModel, Guid authorUser, List<int> attachmentIdList)
         {
             var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == commentModel.PostId);
@@ -47,7 +77,45 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {commentModel.PostId} doesn't exist");
 
             commentModel.UserId = authorUser;
-            commentModel.Text = await _userInputSanitizeService.SanitizeHtml(commentModel.Text);
+
+            var markdownText = await _userInputSanitizeService.SanitizeHtml(commentModel.Text);
+            var nodes = new Jsonize(markdownText).ParseHtmlToTypedJson().Children.FirstOrDefault();//HtmlToJsonService.HtmlToJson(markdownText).Replace("\r\n", "");
+
+            var flattenedNode = FlatNodes(nodes);
+
+            foreach (var node in flattenedNode)
+            {
+                // ReSharper disable once StringLiteralTypo
+                if (node.Tag == "linktocomponent")
+                {
+                    var (_, idValue) = node.Attributes.FirstOrDefault(x => x.Key == "id");
+                    if (idValue != null)
+                    {
+                        var linkTo = 0; //0 if idk, 1 to post, 2 to comment;
+
+                        if (!int.TryParse((string) idValue, out var intId))
+                            throw ExceptionFactory.SoftException(ExceptionEnum.SomethingWentWrong,
+                                "Something went wrong");
+
+                        var linkToComment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == intId);
+                        if (linkToComment == null) //first i check is it link to comment because link to comment have bigger chance to appear
+                        {
+                            var linkToPost = await _context.Post.FirstOrDefaultAsync(x => x.Id == intId);
+                            if (linkToPost != null)
+                            {
+                                node.Attributes.TryAdd("isPost", "true");
+                                continue;
+                            }
+
+                            node.Attributes.TryAdd("isExist", "false");
+                            continue;
+                        }
+                        node.Attributes.TryAdd("isComment", "true");
+                    }
+                }
+            }
+
+            commentModel.Text = JObject.FromObject(nodes, _jsonWriter).ToString().Replace("\r\n", "");
 
             post.Comments.Add(commentModel);
 
@@ -58,12 +126,12 @@ namespace SocialNetwork.Bll.Services
             if (attachmentIdList != null)
                 foreach (var attachmentId in attachmentIdList)
                 {
-                    await AttachFileToComment(insertedPost.Entity.Comments.First().Id, attachmentId);
+                    await AttachFileToComment(insertedPost.Entity.Comments.Last().Id, attachmentId);
                 }
 
             await _context.SaveChangesAsync();
 
-            return await GetComment(insertedPost.Entity.Comments.First().Id);
+            return await GetComment(insertedPost.Entity.Comments.Last().Id);
         }
 
         public async Task<Comment> EditComment(Comment commentModel, Guid editorUser)

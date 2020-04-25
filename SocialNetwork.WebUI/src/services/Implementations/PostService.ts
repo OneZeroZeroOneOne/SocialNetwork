@@ -11,4 +11,8 @@ export class PostService implements IPostService {
     async getPost(board_id: Guid, post_id: string): Promise<AxiosResponse<IPost>> {
         return this.postsAxios.get<IPost>(`social/Posts/${board_id.toString()}/${post_id.toString()}/`)
     }
+
+    async getPostGlobal(post_id: string|number): Promise<AxiosResponse<IPost>> {
+        return this.postsAxios.get<IPost>(`social/Posts/${post_id.toString()}/`)
+    }
 }

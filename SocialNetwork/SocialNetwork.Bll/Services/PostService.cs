@@ -75,6 +75,19 @@ namespace SocialNetwork.Bll.Services
             return await GetPost(postModel.BoardId, postModel.Id);
         }
 
+        public async Task<Post> GetPostGlobal(int postId)
+        {
+            var post = await _context.Post
+                .Include(x => x.AttachmentPost)
+                .ThenInclude(x => x.Attachment)
+                .FirstOrDefaultAsync(x => x.Id == postId && x.IsArchived == false);
+
+            if (post == null)
+                throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {postId} not found");
+
+            return post;
+        }
+
         public async Task<Post> GetPost(Guid boardId, int postId)
         {
             var post = await _context.Post

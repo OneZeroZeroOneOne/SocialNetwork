@@ -21,5 +21,6 @@
         AttachmentNotFound = 17,
         BoardNotFound = 18,
         GlobalSettingNotFound = 19,
+        SomethingWentWrong = 20,
     }
 }

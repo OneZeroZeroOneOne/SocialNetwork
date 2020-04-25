@@ -5,4 +5,5 @@ import { Guid } from '@/utilities/guid';
 
 export interface IPostService {
     getPost(board_id: Guid, post_id: string): Promise<AxiosResponse<IPost>>;
+    getPostGlobal(post_id: string|number): Promise<AxiosResponse<IPost>>;
 }

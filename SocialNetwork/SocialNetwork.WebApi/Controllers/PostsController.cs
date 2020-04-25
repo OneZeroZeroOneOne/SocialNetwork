@@ -10,7 +10,6 @@ using SocialNetwork.Dal.ViewModels.Out;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.WebApi.Controllers
@@ -30,6 +29,14 @@ namespace SocialNetwork.WebApi.Controllers
             _mapper = mapper;
             _reactionService = reactionService;
             _postService = postService;
+        }
+
+        [HttpGet, Route("{postId}", Name = "postIdGlobal")]
+        public async Task<OutPostViewModel> GetGlobal([FromRoute]int postId)
+        {
+            var post = await _postService.GetPostGlobal(postId);
+
+            return _mapper.Map<Post, OutPostViewModel>(post);
         }
 
         [HttpGet, Route("{boardId}/{postId}", Name = "postId")]

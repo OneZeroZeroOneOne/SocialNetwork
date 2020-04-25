@@ -73,9 +73,7 @@ namespace SocialNetwork.Bll.Services
             var sanitizedUserInput = _htmlSanitizer.Sanitize(rawHtml);
             sanitizedUserInput = sanitizedUserInput.Replace("&gt;", ">");
 
-            var result = Markdig.Markdown.ToHtml(sanitizedUserInput, _pipeline);
-
-            return HtmlToJsonService.HtmlToJson(result).Replace("\r\n","");
+            return Markdig.Markdown.ToHtml(sanitizedUserInput, _pipeline);
         }
     }
 }

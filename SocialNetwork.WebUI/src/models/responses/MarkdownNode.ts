@@ -4,6 +4,6 @@ export interface IMarkdownNode {
     node: string;
     tag: string;
     text: string;
-    attr: number;
+    attr: any;
     child: IMarkdownNode[]
 }

@@ -18,6 +18,10 @@ import CommentComponent from "@/components/CommentComponent.vue";
 
 import eventBus from "@/utilities/EventBus";
 import { IMarkdownNode } from '../../models/responses/MarkdownNode';
+import { ICommentService } from '../../services/Abstractions/ICommentService';
+import { IPostService } from '../../services/Abstractions/IPostService';
+import { CommentService } from '../../services/Implementations/CommentService';
+import { PostService } from '../../services/Implementations/PostService';
 
 @Component({
   components: {}
@@ -35,16 +39,44 @@ export default class LinkToComponent extends Vue {
   public showing: boolean = true;
   public isExist: boolean = true;
   
+  public id: number = 0;
+  public isPost: boolean = false;
+  public isComment: boolean = false;
+
+  private _commentService!: ICommentService;
+  private _postService!: IPostService;
+
   constructor() {
     super();
   }
 
+  beforeCreate() {
+    this._commentService = new CommentService();
+    this._postService = new PostService();
+  }
+
   mounted(): void {
-    if (this.comment === '0')
+    /*if (this.comment === '0')
     {
       if (this.post === '0')
       {
         this.isExist = false;
+      }
+    }*/
+    if (this.block_data.attr.id !== undefined)
+    {
+      this.id = this.block_data.attr.id;
+
+      if (this.block_data.attr.isPost !== undefined && this.block_data.attr.isPost === "true")
+      {
+        this.isPost = true;
+        this.isExist = true;
+      }
+
+      if (this.block_data.attr.isComment !== undefined && this.block_data.attr.isComment === "true")
+      {
+        this.isComment = true;
+        this.isExist = true;
       }
     }
     eventBus.emit('new-link-to-component', this)
@@ -56,22 +88,48 @@ export default class LinkToComponent extends Vue {
 
   makeHovered(event: any) {
     console.log('Can show '+this.showing)
+    console.log('BLOCK DATA')
+    console.log(this.block_data)
     if (this.isExist)
     {
       if (this.showing === true)
       {
-        console.log(this.comment, this.post)
         this.hovered = true;
         this.showing = false;
 
-        let commentObj = {
-          id: 1,
-          date: new Date(),
-          attachmentComment: [],
-          text: '{ "node_id": 1, "parent_id": 0, "node": "Element", "tag": "p", "child": [ { "node_id": 2, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 3, "parent_id": 2, "node": "Text", "text": "there is bold" } ] }, { "node_id": 5, "parent_id": 1, "node": "Element", "tag": "ins", "child": [ { "node_id": 6, "parent_id": 5, "node": "Text", "text": "bol " }, { "node_id": 7, "parent_id": 5, "node": "Element", "tag": "ins", "child": [ { "node_id": 8, "parent_id": 7, "node": "Text", "text": "in  " }, { "node_id": 9, "parent_id": 7, "node": "Element", "tag": "linktocomponent", "attr": { "id": "999" } }, { "node_id": 11, "parent_id": 7, "node": "Element", "tag": "del", "child": [ { "node_id": 12, "parent_id": 11, "node": "Text", "text": "qwe" } ] }, { "node_id": 13, "parent_id": 7, "node": "Text", "text": " side" } ] }, { "node_id": 14, "parent_id": 5, "node": "Text", "text": " d" } ] }, { "node_id": 15, "parent_id": 1, "node": "Text", "text": " inside " }, { "node_id": 16, "parent_id": 1, "node": "Element", "tag": "linktocomponent", "attr": { "id": "34" } }, { "node_id": 17, "parent_id": 1, "node": "Text", "text": " qwe " }, { "node_id": 18, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 19, "parent_id": 18, "node": "Text", "text": "there is bold" } ] } ] }'
+        if (this.isComment)
+        {
+          this._commentService.getCommentById(this.id).then(x => {
+            console.log(x);
+
+            let commentObj = {
+              id: 1,
+              date: new Date(),
+              attachmentComment: [],
+              text: '{ "node_id": 1, "parent_id": 0, "node": "Element", "tag": "p", "child": [ { "node_id": 2, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 3, "parent_id": 2, "node": "Text", "text": "there is bold" } ] }, { "node_id": 5, "parent_id": 1, "node": "Element", "tag": "ins", "child": [ { "node_id": 6, "parent_id": 5, "node": "Text", "text": "bol " }, { "node_id": 7, "parent_id": 5, "node": "Element", "tag": "ins", "child": [ { "node_id": 8, "parent_id": 7, "node": "Text", "text": "in  " }, { "node_id": 9, "parent_id": 7, "node": "Element", "tag": "linktocomponent", "attr": { "id": "999" } }, { "node_id": 11, "parent_id": 7, "node": "Element", "tag": "del", "child": [ { "node_id": 12, "parent_id": 11, "node": "Text", "text": "qwe" } ] }, { "node_id": 13, "parent_id": 7, "node": "Text", "text": " side" } ] }, { "node_id": 14, "parent_id": 5, "node": "Text", "text": " d" } ] }, { "node_id": 15, "parent_id": 1, "node": "Text", "text": " inside " }, { "node_id": 16, "parent_id": 1, "node": "Element", "tag": "linktocomponent", "attr": { "id": "34" } }, { "node_id": 17, "parent_id": 1, "node": "Text", "text": " qwe " }, { "node_id": 18, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 19, "parent_id": 18, "node": "Text", "text": "there is bold" } ] } ] }'
+            }
+
+            this.$root.$emit('show-link-component', this.post, commentObj, event.pageX, event.pageY)
+          })
+          return;
         }
 
-        this.$root.$emit('show-link-component', this.post, commentObj, event.pageX, event.pageY)
+        if (this.isPost)
+        {
+          this._postService.getPostGlobal(this.id).then(x => {
+            console.log(x);
+
+            let commentObj = {
+              id: 1,
+              date: new Date(),
+              attachmentComment: [],
+              text: '{ "node_id": 1, "parent_id": 0, "node": "Element", "tag": "p", "child": [ { "node_id": 2, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 3, "parent_id": 2, "node": "Text", "text": "there is bold" } ] }, { "node_id": 5, "parent_id": 1, "node": "Element", "tag": "ins", "child": [ { "node_id": 6, "parent_id": 5, "node": "Text", "text": "bol " }, { "node_id": 7, "parent_id": 5, "node": "Element", "tag": "ins", "child": [ { "node_id": 8, "parent_id": 7, "node": "Text", "text": "in  " }, { "node_id": 9, "parent_id": 7, "node": "Element", "tag": "linktocomponent", "attr": { "id": "999" } }, { "node_id": 11, "parent_id": 7, "node": "Element", "tag": "del", "child": [ { "node_id": 12, "parent_id": 11, "node": "Text", "text": "qwe" } ] }, { "node_id": 13, "parent_id": 7, "node": "Text", "text": " side" } ] }, { "node_id": 14, "parent_id": 5, "node": "Text", "text": " d" } ] }, { "node_id": 15, "parent_id": 1, "node": "Text", "text": " inside " }, { "node_id": 16, "parent_id": 1, "node": "Element", "tag": "linktocomponent", "attr": { "id": "34" } }, { "node_id": 17, "parent_id": 1, "node": "Text", "text": " qwe " }, { "node_id": 18, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 19, "parent_id": 18, "node": "Text", "text": "there is bold" } ] } ] }'
+            }
+
+            this.$root.$emit('show-link-component', this.post, commentObj, event.pageX, event.pageY)
+          })
+          return;
+        }
       }
     }
   }
