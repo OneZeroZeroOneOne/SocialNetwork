@@ -24,7 +24,9 @@ import GreenComponent from '../src/components/MarkdownComponents/GreenComponent.
 import SpoilerComponent from '../src/components/MarkdownComponents/SpoilerComponent.vue';
 import VueCountdown from '@chenfengyuan/vue-countdown';
 import eventBus from "@/utilities/EventBus";
+import TextComponent from "@/components/MarkdownComponents/TextComponent.vue";
 
+Vue.component('textcomponent', TextComponent);
 
 Vue.component(VueCountdown.name, VueCountdown);
 Vue.use(VueLazyload)
