@@ -16,9 +16,9 @@
        <attachment-component :attachmentObjs="commentObj.attachmentComment"/>
       </div>
       <div class="comment-content-body" >
-        <template v-for="block in mockMarkdown().child">
+        <span v-for="block in mockMarkdown().child" :key="block.node_id">
           <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
-        </template>
+        </span>
       </div>
     </div>
     <div class="comment-footer">
