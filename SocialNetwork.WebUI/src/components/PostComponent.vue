@@ -77,6 +77,7 @@ export default class PostComponent extends Vue {
   @Prop() public showEnterButton!: boolean;
   
   @Prop() public isModal!: boolean;
+  @Prop() public linkToFather!: Vue;
   public timer: number = -1;
   public counter: number = 5;
   public hovered: boolean = true;
@@ -92,7 +93,8 @@ export default class PostComponent extends Vue {
     /*console.log(data.seconds);
     if (data.seconds === 1)
     {*/
-      console.log('hide')
+      // @ts-ignore
+      this.linkToFather.showing = true;
       eventBus.emit('hide-link-component', this)
     //}
   }
@@ -104,7 +106,7 @@ export default class PostComponent extends Vue {
       this.countdown = this.$refs.countdown;
       this.countdown.start();
       this.countdown.pause();*/
-      this.counter = 3 * 10;
+      this.counter = 6 * 10;
       this.timer = setInterval(() => {
         this.counter = this.counter - 1;
         console.log(this.counter)

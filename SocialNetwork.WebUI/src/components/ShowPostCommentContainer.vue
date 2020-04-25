@@ -21,7 +21,7 @@ export default class ShowPostCommentContainer extends Vue {
     super();
   }
 
-  showComponent(isComment: boolean, object: IComment|IPostService, x: number, y: number) {
+  showComponent(isComment: boolean, object: IComment|IPost, x: number, y: number, linkToComponentFather: Vue) {
     let ComponentClass;
 
     if (isComment === true)
@@ -33,6 +33,7 @@ export default class ShowPostCommentContainer extends Vue {
       propsData: {
         obj: object,
         isModal: true,
+        linkToFather: linkToComponentFather,
       }
     });
 

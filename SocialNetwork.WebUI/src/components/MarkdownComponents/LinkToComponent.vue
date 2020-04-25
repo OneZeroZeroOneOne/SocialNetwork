@@ -17,11 +17,14 @@ import AttachmentComponent from '../components/AttachmentComponent.vue';
 import CommentComponent from "@/components/CommentComponent.vue";
 
 import eventBus from "@/utilities/EventBus";
+
 import { IMarkdownNode } from '../../models/responses/MarkdownNode';
 import { ICommentService } from '../../services/Abstractions/ICommentService';
 import { IPostService } from '../../services/Abstractions/IPostService';
 import { CommentService } from '../../services/Implementations/CommentService';
 import { PostService } from '../../services/Implementations/PostService';
+import { IComment } from '../../models/responses/CommentViewModel';
+
 
 @Component({
   components: {}
@@ -53,6 +56,13 @@ export default class LinkToComponent extends Vue {
   beforeCreate() {
     this._commentService = new CommentService();
     this._postService = new PostService();
+
+    //this.$root.$on('hide-link-component', this.hiding)
+  }
+
+  hiding(component: Vue)
+  {
+    console.log(component)
   }
 
   mounted(): void {
@@ -101,7 +111,7 @@ export default class LinkToComponent extends Vue {
         {
           this._commentService.getCommentById(this.id).then(x => {
             
-            this.$root.$emit('show-link-component', true, x.data, event.pageX, event.pageY)
+            this.$root.$emit('show-link-component', true, x.data, event.pageX, event.pageY, this)
           })
           return;
         }
@@ -110,7 +120,7 @@ export default class LinkToComponent extends Vue {
         {
           this._postService.getPostGlobal(this.id).then(x => {
 
-            this.$root.$emit('show-link-component', false, x.data, event.pageX, event.pageY)
+            this.$root.$emit('show-link-component', false, x.data, event.pageX, event.pageY, this)
           })
           return;
         }

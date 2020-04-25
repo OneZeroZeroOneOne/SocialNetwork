@@ -68,6 +68,7 @@ export default class CommentComponent extends Vue {
   @Prop() public commentNum!: number;
 
   @Prop() public isModal!: boolean;
+  @Prop() public linkToFather!: Vue;
   public timer: number = -1;
   public counter: number = 5;
   public hovered: boolean = true;
@@ -109,7 +110,8 @@ export default class CommentComponent extends Vue {
     /*console.log(data.seconds);
     if (data.seconds === 1)
     {*/
-      console.log('hide')
+      // @ts-ignore
+      this.linkToFather.showing = true;
       eventBus.emit('hide-link-component', this)
     //}
   }
