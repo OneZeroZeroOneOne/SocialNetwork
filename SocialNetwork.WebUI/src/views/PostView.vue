@@ -3,10 +3,10 @@
     <top-bottom-buttons/>
     <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
     
-    <post-component :postObj="postObj" v-if="requestPostStatus === 1"/>
+    <post-component :obj="postObj" v-if="requestPostStatus === 1"/>
     <ul id="comments">
       <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
-        <CommentComponent :commentObj="item" :commentNum="index+1" :fatherPost="postObj"/>
+        <CommentComponent :obj="item" :commentNum="index+1" :fatherPost="postObj"/>
       </li>
     </ul>
     <FooterComponent/>

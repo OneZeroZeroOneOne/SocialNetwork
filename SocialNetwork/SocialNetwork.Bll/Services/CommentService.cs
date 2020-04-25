@@ -9,10 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SocialNetwork.Markdown.Jsonize;
-using SocialNetwork.Markdown.Jsonize.Models;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -20,18 +16,12 @@ namespace SocialNetwork.Bll.Services
     public class CommentService : ICommentService
     {
         private readonly PublicContext _context;
-        private readonly IUserInputService _userInputSanitizeService;
-        private readonly JsonSerializer _jsonWriter;
+        private readonly IUserInputService _userInputService;
 
-        public CommentService(PublicContext publicContext, IUserInputService userInputSanitizeService)
+        public CommentService(PublicContext publicContext, IUserInputService userInputService)
         {
             _context = publicContext;
-            _userInputSanitizeService = userInputSanitizeService;
-
-            _jsonWriter = new JsonSerializer
-            {
-                NullValueHandling = (NullValueHandling)1
-            };
+            _userInputService = userInputService;
         }
 
 
@@ -49,26 +39,6 @@ namespace SocialNetwork.Bll.Services
             }
         }
 
-        private List<JsonizeNode> FlatNodes(JsonizeNode rootNode)
-        {
-            var stack = new List<JsonizeNode>();
-            stack.AddRange(rootNode.Children);
-            var result = new List<JsonizeNode>();
-
-            while (stack.Count > 0)
-            {
-                var node = stack.PopAt(0);
-                if (node.Children != null)
-                {
-                    stack.AddRange(node.Children);
-                }
-
-                result.Add(node);
-            }
-
-            return result;
-        }
-
         public async Task<Comment> AddComment(Comment commentModel, Guid authorUser, List<int> attachmentIdList)
         {
             var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == commentModel.PostId);
@@ -78,44 +48,7 @@ namespace SocialNetwork.Bll.Services
 
             commentModel.UserId = authorUser;
 
-            var markdownText = await _userInputSanitizeService.SanitizeHtml(commentModel.Text);
-            var nodes = new Jsonize(markdownText).ParseHtmlToTypedJson().Children.FirstOrDefault();//HtmlToJsonService.HtmlToJson(markdownText).Replace("\r\n", "");
-
-            var flattenedNode = FlatNodes(nodes);
-
-            foreach (var node in flattenedNode)
-            {
-                // ReSharper disable once StringLiteralTypo
-                if (node.Tag == "linktocomponent")
-                {
-                    var (_, idValue) = node.Attributes.FirstOrDefault(x => x.Key == "id");
-                    if (idValue != null)
-                    {
-                        var linkTo = 0; //0 if idk, 1 to post, 2 to comment;
-
-                        if (!int.TryParse((string) idValue, out var intId))
-                            throw ExceptionFactory.SoftException(ExceptionEnum.SomethingWentWrong,
-                                "Something went wrong");
-
-                        var linkToComment = await _context.Comment.FirstOrDefaultAsync(x => x.Id == intId);
-                        if (linkToComment == null) //first i check is it link to comment because link to comment have bigger chance to appear
-                        {
-                            var linkToPost = await _context.Post.FirstOrDefaultAsync(x => x.Id == intId);
-                            if (linkToPost != null)
-                            {
-                                node.Attributes.TryAdd("isPost", "true");
-                                continue;
-                            }
-
-                            node.Attributes.TryAdd("isExist", "false");
-                            continue;
-                        }
-                        node.Attributes.TryAdd("isComment", "true");
-                    }
-                }
-            }
-
-            commentModel.Text = JObject.FromObject(nodes, _jsonWriter).ToString().Replace("\r\n", "");
+            commentModel.Text = await _userInputService.Markdown(commentModel.Text);
 
             post.Comments.Add(commentModel);
 
@@ -141,7 +74,7 @@ namespace SocialNetwork.Bll.Services
             if (comment == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.CommentNotFound, $"Comment {commentModel.Id} doesn't exist");
 
-            comment.Text = await _userInputSanitizeService.SanitizeHtml(commentModel.Text);
+            comment.Text = await _userInputService.Markdown(commentModel.Text);
 
             _context.Comment.Update(comment);
             await _context.SaveChangesAsync();

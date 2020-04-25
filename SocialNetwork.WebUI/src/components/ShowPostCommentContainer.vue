@@ -8,6 +8,8 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { IPost } from '../models/responses/PostViewModel';
 import { IComment } from '../models/responses/CommentViewModel';
 import CommentComponent from "@/components/CommentComponent.vue";
+import { IPostService } from '../services/Abstractions/IPostService';
+import PostComponent from './PostComponent.vue';
 
 @Component({
   components: {}
@@ -19,15 +21,17 @@ export default class ShowPostCommentContainer extends Vue {
     super();
   }
 
-  showComponent(post: IPost, comment: IComment, x: number, y: number) {
+  showComponent(isComment: boolean, object: IComment|IPostService, x: number, y: number) {
     let ComponentClass;
 
-    if (comment !== null)
-        ComponentClass = Vue.extend(CommentComponent)
+    if (isComment === true)
+      ComponentClass = Vue.extend(CommentComponent)
+    else
+      ComponentClass = Vue.extend(PostComponent)
 
     var instance = new ComponentClass({
       propsData: {
-        commentObj: comment,
+        obj: object,
         isModal: true,
       }
     });

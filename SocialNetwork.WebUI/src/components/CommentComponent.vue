@@ -5,15 +5,15 @@
     <div class="comment-header">
       <div class="comment-header-link"
           @click.self="openEditor()">
-        >>{{commentObj.id}}
+        >>{{obj.id}}
       </div>
       <div class="comment-header-time">
-        {{commentObj.date | formatDate}}
+        {{obj.date | formatDate}}
       </div>
     </div>
     <div class="comment-content" :style="stylesContent()">
-      <div class=comment-content-header v-if="commentObj.attachmentComment.length > 0" :style="stylesContentHeader()">
-       <attachment-component :attachmentObjs="commentObj.attachmentComment"/>
+      <div class=comment-content-header v-if="obj.attachmentComment.length > 0" :style="stylesContentHeader()">
+       <attachment-component :attachmentObjs="obj.attachmentComment"/>
       </div>
       <div class="comment-content-body" >
         <span v-for="block in parseMarkdownToTree().child" :key="block.node_id">
@@ -63,7 +63,7 @@ import eventBus from "@/utilities/EventBus";
   }
 })
 export default class CommentComponent extends Vue {
-  @Prop() public commentObj!: IComment;
+  @Prop() public obj!: IComment;
   @Prop() public fatherPost!: IPost;
   @Prop() public commentNum!: number;
 
@@ -131,11 +131,8 @@ export default class CommentComponent extends Vue {
   }
 
   parseMarkdownToTree() {
-    console.log(this.commentObj.text)
-    var d: IMarkdownNode = JSON.parse(this.commentObj.text);
-    console.log(d)
+    var d: IMarkdownNode = JSON.parse(this.obj.text);
     this.flattenedData = this.flatten(d)
-    console.log(this.flattenedData)
 
     return d
   }
@@ -167,18 +164,18 @@ export default class CommentComponent extends Vue {
   }
 
   openEditor(): void {
-    this.$root.$emit('show-editor-modal-from-comment', this.commentObj, this.fatherPost)
+    this.$root.$emit('show-editor-modal-from-comment', this.obj, this.fatherPost)
   }
 
   stylesContent(): string {
-    if (this.commentObj.attachmentComment.length === 1)
+    if (this.obj.attachmentComment.length === 1)
       return "display: inline-flex;padding-right: 10px;"
     
     return ""
   }
 
   stylesContentHeader(): string {
-    if (this.commentObj.attachmentComment.length === 1)
+    if (this.obj.attachmentComment.length === 1)
       return "padding-right: 10px;align-items: center;"
     
     return ""

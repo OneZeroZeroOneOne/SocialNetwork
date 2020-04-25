@@ -4,20 +4,23 @@
       <div class="post-header">
         <div class="post-header-link"
           @click.self="openEditor()">
-        >>{{postObj.id}}
+        >>{{obj.id}}
         </div>
         <div class="post-header-title">
-          {{postObj.title}}
+          {{obj.title}}
         </div>
         <div class="post-header-time">
-          {{postObj.date | formatDate}}
+          {{obj.date | formatDate}}
         </div>
       </div>
       <div class="post-content" :style="stylesContent()">
-        <div class=post-content-header v-if="postObj.attachmentPost.length > 0" :style="stylesContentHeader()">
-          <attachment-component :attachmentObjs="postObj.attachmentPost"/>
+        <div class=post-content-header v-if="obj.attachmentPost.length > 0" :style="stylesContentHeader()">
+          <attachment-component :attachmentObjs="obj.attachmentPost"/>
         </div>
-        <div class=post-content-body v-html="postObj.text">
+        <div class=post-content-body>
+          <span v-for="block in parseMarkdownToTree().child" :key="block.node_id">
+            <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
+          </span>
         </div>
       </div>
       <div class="post-footer">
@@ -44,40 +47,124 @@ import { IPost } from "@/models/responses/PostViewModel";
 
 import AttachmentComponent from '../components/AttachmentComponent.vue';
 import CommentComponent from "./CommentComponent.vue";
+import VRuntimeTemplate from "v-runtime-template";
+import LinkToComponent from '@/components/MarkdownComponents/LinkToComponent.vue';
+import GreenComponent from '@/components/MarkdownComponents/GreenComponent.vue';
+import TextComponent from '@/components/MarkdownComponents/TextComponent.vue';
+import SpoilerComponent from '@/components/MarkdownComponents/SpoilerComponent.vue';
+
+import tagToEntity from '@/utilities/MarkdownUtilities';
 
 import Nprogress from "nprogress"
 import _ from 'lodash'
+import { IMarkdownNode } from '../models/responses/MarkdownNode';
+
+import eventBus from "@/utilities/EventBus";
 
 @Component({
   components: {
     AttachmentComponent,
+    VRuntimeTemplate,
+    LinkToComponent,
+    TextComponent, 
+    GreenComponent,
+    SpoilerComponent,
   }
 })
 export default class PostComponent extends Vue {
-  @Prop() public postObj!: IPost; 
+  @Prop() public obj!: IPost; 
   @Prop() public postNum!: number;
   @Prop() public showEnterButton!: boolean;
+  
+  @Prop() public isModal!: boolean;
+  public timer: number = -1;
+  public counter: number = 5;
+  public hovered: boolean = true;
+  public countdown!: any; 
+
+  public flattenedData: IMarkdownNode[] = []
   
   constructor() {
     super();
   }
 
+  end() {
+    /*console.log(data.seconds);
+    if (data.seconds === 1)
+    {*/
+      console.log('hide')
+      eventBus.emit('hide-link-component', this)
+    //}
+  }
+
+  mounted() {
+    //this.parseMarkdownToTree()
+    if (this.isModal !== undefined && this.isModal !== false) {
+      /*console.log(this.isModal)
+      this.countdown = this.$refs.countdown;
+      this.countdown.start();
+      this.countdown.pause();*/
+      this.counter = 3 * 10;
+      this.timer = setInterval(() => {
+        this.counter = this.counter - 1;
+        console.log(this.counter)
+        if(this.counter === 0) 
+        {
+          clearInterval(this.timer)
+          this.end()
+        }
+      }, 100);
+    }else{
+      //this is not modal so...
+    }
+  }
+
   openEditor(): void {
-    this.$root.$emit('show-editor-modal-from-post', this.postObj)
+    this.$root.$emit('show-editor-modal-from-post', this.obj)
   }
 
   stylesContent(): string {
-    if (this.postObj.attachmentPost.length === 1)
+    if (this.obj.attachmentPost.length === 1)
       return "display: inline-flex;padding-right: 10px;"
     
     return ""
   }
 
   stylesContentHeader(): string {
-    if (this.postObj.attachmentPost.length === 1)
+    if (this.obj.attachmentPost.length === 1)
       return "padding-right: 10px;align-items: center;"
     
     return ""
+  }
+
+  flatten(input: IMarkdownNode) {
+    const stack = [...input.child];
+    const res: IMarkdownNode[] = [];
+    res.push(input);
+    while(stack.length) {
+      const next: IMarkdownNode|undefined = stack.pop();
+        if (next !== undefined)
+        {
+          stack.push(...next.child);
+          res.push(next);
+        }
+    }
+
+    return res;
+  }
+
+  parseMarkdownToTree() {
+    var d: IMarkdownNode = JSON.parse(this.obj.text);
+    this.flattenedData = this.flatten(d)
+    console.log(this.flattenedData)
+
+    return d
+  }
+
+  getEntityDependOnTag(tag: string): string {
+    if (tag === undefined)
+      return "TextComponent"
+    return tagToEntity[tag];
   }
 
   boardName(): string {
@@ -85,7 +172,7 @@ export default class PostComponent extends Vue {
   }
 
   goToPost(): void {
-    this.$router.push({name: 'post', params: { board: this.boardName(), postid: this.postObj.id.toString()}})
+    this.$router.push({name: 'post', params: { board: this.boardName(), postid: this.obj.id.toString()}})
   }
 }
 </script>

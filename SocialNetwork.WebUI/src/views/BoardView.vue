@@ -3,10 +3,10 @@
     <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
     <ul id="posts" v-if="requestPostsStatus === 1">
       <li v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id">
-        <PostComponent :postObj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
+        <PostComponent :obj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
         <ul id="comments">
           <li v-for="(commentO, indexComment) in getPreloadedCommentForPost.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
-            <CommentComponent :commentObj="commentO" :commentNum="indexComment+1" :fatherPost="postO"/>
+            <CommentComponent :obj="commentO" :commentNum="indexComment+1" :fatherPost="postO"/>
           </li>
         </ul>
       </li>

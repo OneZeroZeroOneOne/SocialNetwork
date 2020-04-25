@@ -9,18 +9,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SocialNetwork.Markdown.Jsonize;
+using SocialNetwork.Markdown.Jsonize.Models;
 
 namespace SocialNetwork.Bll.Services
 {
     public class PostService : IPostService
     {
         private readonly PublicContext _context;
-        private readonly IUserInputService _userInputSanitizeService;
+        private readonly IUserInputService _userInputService;
+        private readonly JsonSerializer _jsonWriter;
 
         public PostService(PublicContext publicContext, IUserInputService userInputSanitizeService)
         {
             _context = publicContext;
-            _userInputSanitizeService = userInputSanitizeService;
+            _userInputService = userInputSanitizeService;
+
+            _jsonWriter = new JsonSerializer
+            {
+                NullValueHandling = (NullValueHandling)1
+            };
         }
 
         public async Task<Post> EditPost(Post postModel, Guid editorUser)
@@ -30,8 +40,8 @@ namespace SocialNetwork.Bll.Services
             if (postInDb == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {postModel.Id} not found");
 
-            postInDb.Title = await _userInputSanitizeService.SanitizeHtml(postModel.Title);
-            postInDb.Text = await _userInputSanitizeService.SanitizeHtml(postModel.Text);
+            postInDb.Title = await _userInputService.SanitizeHtml(postModel.Title);
+            postInDb.Text = await _userInputService.Markdown(postModel.Text);
 
             _context.Update(postInDb);
             await _context.SaveChangesAsync();
@@ -58,8 +68,10 @@ namespace SocialNetwork.Bll.Services
                 throw ExceptionFactory.SoftException(ExceptionEnum.BoardNotFound, $"Board {postModel.BoardId} not found");
 
             postModel.UserId = authorUser;
-            postModel.Text = await _userInputSanitizeService.SanitizeHtml(postModel.Text);
-            postModel.Title = await _userInputSanitizeService.SanitizeHtml(postModel.Title);
+
+            postModel.Text = await _userInputService.Markdown(postModel.Text);
+
+            postModel.Title = await _userInputService.SanitizeHtml(postModel.Title);
 
             var insertedPost = await _context.Post.AddAsync(postModel);
             await _context.SaveChangesAsync();
