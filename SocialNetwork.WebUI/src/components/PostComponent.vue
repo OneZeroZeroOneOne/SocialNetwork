@@ -18,7 +18,7 @@
           <attachment-component :attachmentObjs="obj.attachmentPost"/>
         </div>
         <div class=post-content-body>
-          <span v-for="block in parseMarkdownToTree().child" :key="block.node_id">
+          <span v-for="block in parsedData.child" :key="block.node_id">
             <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
           </span>
         </div>
@@ -94,6 +94,8 @@ export default class PostComponent extends Vue {
   public countdown!: any; 
 
   public flattenedData: IMarkdownNode[] = []
+  // @ts-ignore
+  public parsedData: IMarkdownNode = {child: []};
   
   constructor() {
     super();
@@ -118,6 +120,14 @@ export default class PostComponent extends Vue {
 
   mounted() {
     //this.parseMarkdownToTree()
+
+    console.log(this.obj.text)
+    this.parsedData = JSON.parse(this.obj.text);
+    this.flattenedData = this.flatten(this.parsedData)
+    console.log(this)
+    console.log(this.parsedData)
+    console.log(this.flattenedData)
+
     if (this.isModal !== undefined && this.isModal !== false) {
       /*console.log(this.isModal)
       this.countdown = this.$refs.countdown;
@@ -128,7 +138,7 @@ export default class PostComponent extends Vue {
       this.counter = 6 * 10;
       this.timer = setInterval(() => {
         this.counter = this.counter - 1;
-        console.log(this.counter)
+        //console.log(this.counter)
         if(this.counter === 0) 
         {
           clearInterval(this.timer)

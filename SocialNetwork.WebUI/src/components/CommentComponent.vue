@@ -1,6 +1,5 @@
 <template>
 <div class="comment" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
-  <countdown :time="4 * 1000" ref="countdown" :auto-start="false" @end="end"/>
   <div class="comment-body">
     <div class="comment-header">
       <div class="comment-header-link"
@@ -16,7 +15,7 @@
        <attachment-component :attachmentObjs="obj.attachmentComment"/>
       </div>
       <div class="comment-content-body" >
-        <span v-for="block in parseMarkdownToTree().child" :key="block.node_id">
+        <span v-for="block in parsedData.child" :key="block.node_id">
           <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
         </span>
       </div>
@@ -89,6 +88,8 @@ export default class CommentComponent extends Vue {
   //public newData = '{ "node_id": 1, "parent_id": 0, "node": "Element", "tag": "p", "child": [ { "node_id": 2, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 3, "parent_id": 2, "node": "Text", "text": "there is bold" } ] }, { "node_id": 5, "parent_id": 1, "node": "Element", "tag": "ins", "child": [ { "node_id": 6, "parent_id": 5, "node": "Text", "text": "bol " }, { "node_id": 7, "parent_id": 5, "node": "Element", "tag": "ins", "child": [ { "node_id": 8, "parent_id": 7, "node": "Text", "text": "in  " }, { "node_id": 9, "parent_id": 7, "node": "Element", "tag": "linktocomponent", "attr": { "id": "999" } }, { "node_id": 11, "parent_id": 7, "node": "Element", "tag": "del", "child": [ { "node_id": 12, "parent_id": 11, "node": "Text", "text": "qwe" } ] }, { "node_id": 13, "parent_id": 7, "node": "Text", "text": " side" } ] }, { "node_id": 14, "parent_id": 5, "node": "Text", "text": " d" } ] }, { "node_id": 15, "parent_id": 1, "node": "Text", "text": " inside " }, { "node_id": 16, "parent_id": 1, "node": "Element", "tag": "linktocomponent", "attr": { "id": "34" } }, { "node_id": 17, "parent_id": 1, "node": "Text", "text": " qwe " }, { "node_id": 18, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 19, "parent_id": 18, "node": "Text", "text": "there is bold" } ] } ] }'
 
   public flattenedData: IMarkdownNode[] = []
+  // @ts-ignore
+  public parsedData: IMarkdownNode = {child: []};
 
   constructor() {
     super();
@@ -141,14 +142,7 @@ export default class CommentComponent extends Vue {
 
     return res;
   }
-
-  parseMarkdownToTree() {
-    var d: IMarkdownNode = JSON.parse(this.obj.text);
-    this.flattenedData = this.flatten(d)
-
-    return d
-  }
-
+  
   modalStylesCalc() {
     if (this.isModal !== undefined && this.isModal !== false) {
       return this.modalStyles;
@@ -157,7 +151,16 @@ export default class CommentComponent extends Vue {
   }
 
   mounted() {
-    //this.parseMarkdownToTree()
+    console.log('mount')
+
+
+    console.log(this.obj.text)
+    this.parsedData = JSON.parse(this.obj.text);
+    this.flattenedData = this.flatten(this.parsedData)
+    console.log(this)
+    console.log(this.parsedData)
+    console.log(this.flattenedData)
+
     if (this.isModal !== undefined && this.isModal !== false) {
       this.modalStyles.left = this.position.x + 'px';
       this.modalStyles.top = this.position.y + 'px';
@@ -168,7 +171,7 @@ export default class CommentComponent extends Vue {
       this.counter = 3 * 10;
       this.timer = setInterval(() => {
         this.counter = this.counter - 1;
-        console.log(this.counter)
+        //console.log(this.counter)
         if(this.counter === 0) 
         {
           clearInterval(this.timer)

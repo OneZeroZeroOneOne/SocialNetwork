@@ -78,8 +78,13 @@ export default class ShowPostCommentContainer extends Vue {
   }
 
   hideComponent(component: Vue) {
-    console.log(component)
-    this.$root.$el.removeChild(component.$el)
+    // @ts-ignore
+
+    //let comp = this.listModal.find(x => x.keyId == component.modalId)
+    // @ts-ignore
+    this.listModal = this.listModal.filter(obj => obj.keyId !== component.modalId);
+    /*console.log(component)
+    this.$root.$el.removeChild(component.$el)*/
   }
 
   beforeDestroy() {
