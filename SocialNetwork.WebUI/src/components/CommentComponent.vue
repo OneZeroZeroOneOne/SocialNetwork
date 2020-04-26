@@ -1,11 +1,11 @@
 <template>
-<div class="comment" @mouseover="hovered = true" @mouseleave="hovered = false">
+<div class="comment" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
   <countdown :time="4 * 1000" ref="countdown" :auto-start="false" @end="end"/>
   <div class="comment-body">
     <div class="comment-header">
       <div class="comment-header-link"
           @click.self="openEditor()">
-        >>{{obj.id}}
+        {{obj.id}}
       </div>
       <div class="comment-header-time">
         {{obj.date | formatDate}}
@@ -69,12 +69,22 @@ export default class CommentComponent extends Vue {
 
   @Prop() public isModal!: boolean;
   @Prop() public linkToFather!: Vue;
+  @Prop() public modalId!: number;
+  @Prop() public position!: any;
+
   public timer: number = -1;
   public counter: number = 5;
   public hovered: boolean = true;
   public countdown!: any; 
   
   public LinkToComponent: string = "LinkToComponent";
+
+  public modalStyles = {
+    'position': 'absolute',
+    'left':'0px',
+    'top':'0px',
+    'width':'80%',
+  }
 
   //public newData = '{ "node_id": 1, "parent_id": 0, "node": "Element", "tag": "p", "child": [ { "node_id": 2, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 3, "parent_id": 2, "node": "Text", "text": "there is bold" } ] }, { "node_id": 5, "parent_id": 1, "node": "Element", "tag": "ins", "child": [ { "node_id": 6, "parent_id": 5, "node": "Text", "text": "bol " }, { "node_id": 7, "parent_id": 5, "node": "Element", "tag": "ins", "child": [ { "node_id": 8, "parent_id": 7, "node": "Text", "text": "in  " }, { "node_id": 9, "parent_id": 7, "node": "Element", "tag": "linktocomponent", "attr": { "id": "999" } }, { "node_id": 11, "parent_id": 7, "node": "Element", "tag": "del", "child": [ { "node_id": 12, "parent_id": 11, "node": "Text", "text": "qwe" } ] }, { "node_id": 13, "parent_id": 7, "node": "Text", "text": " side" } ] }, { "node_id": 14, "parent_id": 5, "node": "Text", "text": " d" } ] }, { "node_id": 15, "parent_id": 1, "node": "Text", "text": " inside " }, { "node_id": 16, "parent_id": 1, "node": "Element", "tag": "linktocomponent", "attr": { "id": "34" } }, { "node_id": 17, "parent_id": 1, "node": "Text", "text": " qwe " }, { "node_id": 18, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 19, "parent_id": 18, "node": "Text", "text": "there is bold" } ] } ] }'
 
@@ -139,9 +149,18 @@ export default class CommentComponent extends Vue {
     return d
   }
 
+  modalStylesCalc() {
+    if (this.isModal !== undefined && this.isModal !== false) {
+      return this.modalStyles;
+    }
+    return {};
+  }
+
   mounted() {
     //this.parseMarkdownToTree()
     if (this.isModal !== undefined && this.isModal !== false) {
+      this.modalStyles.left = this.position.x + 'px';
+      this.modalStyles.top = this.position.y + 'px';
       /*console.log(this.isModal)
       this.countdown = this.$refs.countdown;
       this.countdown.start();

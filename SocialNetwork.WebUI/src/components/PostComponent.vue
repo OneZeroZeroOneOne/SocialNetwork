@@ -1,10 +1,10 @@
 <template>
-  <div class="post">
+  <div class="post" v-bind:style="modalStylesCalc()">
     <div class="post-body">
       <div class="post-header">
         <div class="post-header-link"
           @click.self="openEditor()">
-        >>{{obj.id}}
+        {{obj.id}}
         </div>
         <div class="post-header-title">
           {{obj.title}}
@@ -78,6 +78,16 @@ export default class PostComponent extends Vue {
   
   @Prop() public isModal!: boolean;
   @Prop() public linkToFather!: Vue;
+  @Prop() public modalId!: number;
+  @Prop() public position!: any;
+
+  public modalStyles = {
+    'position': 'absolute',
+    'left':'0px',
+    'top':'0px',
+    'width':'80%',
+  }
+
   public timer: number = -1;
   public counter: number = 5;
   public hovered: boolean = true;
@@ -99,6 +109,13 @@ export default class PostComponent extends Vue {
     //}
   }
 
+  modalStylesCalc() {
+    if (this.isModal !== undefined && this.isModal !== false) {
+      return this.modalStyles;
+    }
+    return {};
+  }
+
   mounted() {
     //this.parseMarkdownToTree()
     if (this.isModal !== undefined && this.isModal !== false) {
@@ -106,6 +123,8 @@ export default class PostComponent extends Vue {
       this.countdown = this.$refs.countdown;
       this.countdown.start();
       this.countdown.pause();*/
+      this.modalStyles.left = this.position.x + 'px';
+      this.modalStyles.top = this.position.y + 'px';
       this.counter = 6 * 10;
       this.timer = setInterval(() => {
         this.counter = this.counter - 1;
