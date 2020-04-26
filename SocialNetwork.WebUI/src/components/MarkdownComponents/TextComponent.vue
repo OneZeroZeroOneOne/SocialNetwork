@@ -166,6 +166,10 @@ export default class TextComponent extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+span {
+  white-space: pre-wrap;
+}
+
 .b {
   font-weight: bold;
 }

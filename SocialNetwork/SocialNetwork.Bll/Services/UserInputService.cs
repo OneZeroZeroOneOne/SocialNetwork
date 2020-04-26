@@ -132,8 +132,6 @@ namespace SocialNetwork.Bll.Services
                     var (_, idValue) = node.Attributes.FirstOrDefault(x => x.Key == "id");
                     if (idValue != null)
                     {
-                        var linkTo = 0; //0 if idk, 1 to post, 2 to comment;
-
                         if (!int.TryParse((string)idValue, out var intId))
                             throw ExceptionFactory.SoftException(ExceptionEnum.SomethingWentWrong,
                                 "Something went wrong");
@@ -156,7 +154,7 @@ namespace SocialNetwork.Bll.Services
                 }
             }
 
-            return JObject.FromObject(nodes, _jsonWriter).ToString().Replace("\r\n", "");
+            return JObject.FromObject(nodes, _jsonWriter).ToString(); //.Replace("\r\n", "");
         }
 
         public async Task<string> Markdown(string userInput)
