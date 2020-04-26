@@ -4,7 +4,7 @@
       <div class="post-header">
         <div class="post-header-link"
           @click.self="openEditor()">
-        {{obj.id}}
+        #{{obj.id}}
         </div>
         <div class="post-header-title">
           {{obj.title}}

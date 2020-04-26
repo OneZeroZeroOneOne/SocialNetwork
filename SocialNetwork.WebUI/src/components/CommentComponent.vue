@@ -4,7 +4,7 @@
     <div class="comment-header">
       <div class="comment-header-link"
           @click.self="openEditor()">
-        {{obj.id}}
+        #{{obj.id}}
       </div>
       <div class="comment-header-time">
         {{obj.date | formatDate}}
@@ -142,7 +142,7 @@ export default class CommentComponent extends Vue {
 
     return res;
   }
-  
+
   modalStylesCalc() {
     if (this.isModal !== undefined && this.isModal !== false) {
       return this.modalStyles;
