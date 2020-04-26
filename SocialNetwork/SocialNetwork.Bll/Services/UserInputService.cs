@@ -43,6 +43,10 @@ namespace SocialNetwork.Bll.Services
                 pipeline.BlockParsers.Remove(blockQuoteParser);
 
             _pipeline = pipeline
+                .UseMediaLinks()
+                .UseEmojiAndSmiley()
+                .UseAutoLinks()
+                .UseGreenText()
                 .UseEmphasisExtras()
                 .UseLinkTo()
                 .UseMyEmphasis()

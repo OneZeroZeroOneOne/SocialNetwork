@@ -6,6 +6,20 @@ namespace SocialNetwork.Markdown
 {
     public static class Markdown
     {
+        public static MarkdownPipelineBuilder UseGreenText(this MarkdownPipelineBuilder pipeline)
+        {
+            OrderedList<IMarkdownExtension> extensions;
+
+            extensions = pipeline.Extensions;
+
+            if (!extensions.Contains<GreenTextExtension>())
+            {
+                extensions.Add(new GreenTextExtension());
+            }
+
+            return pipeline;
+        }
+
         public static MarkdownPipelineBuilder UseMyEmphasis(this MarkdownPipelineBuilder pipeline)
         {
             OrderedList<IMarkdownExtension> extensions;
