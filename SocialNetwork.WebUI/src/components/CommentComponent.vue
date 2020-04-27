@@ -2,12 +2,15 @@
 <div class="comment" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
   <div class="comment-body">
     <div class="comment-header">
+      <div class="comment-header-time">
+        {{obj.date | formatDate}}
+      </div>
       <div class="comment-header-link"
           @click.self="openEditor()">
         #{{obj.id}}
       </div>
-      <div class="comment-header-time">
-        {{obj.date | formatDate}}
+      <div class="comment-header-number">
+        {{commentNum + 1}}
       </div>
     </div>
     <div class="comment-content" :style="stylesContent()">
@@ -296,9 +299,14 @@ $text-color: #ccc;
     padding-left: 10px;
     padding-top: 5px;
     color: $comment-number-header-color;
+    .comment-header-number {
+      padding-right: 10px;
+      float: right;
+      color: #789922;
+    }
     .comment-header-time {
       color: $text-color;
-      float: right;
+      float: left;
       margin-right: 10px;
     }
     .comment-header-link {

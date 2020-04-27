@@ -2,15 +2,18 @@
   <div class="post" v-bind:style="modalStylesCalc()">
     <div class="post-body">
       <div class="post-header">
-        <div class="post-header-link"
-          @click.self="openEditor()">
-        #{{obj.id}}
-        </div>
         <div class="post-header-title">
           {{obj.title}}
         </div>
         <div class="post-header-time">
           {{obj.date | formatDate}}
+        </div>
+        <div class="post-header-link"
+          @click.self="openEditor()">
+        #{{obj.id}}
+        </div>
+        <div class="post-header-number">
+          1
         </div>
       </div>
       <div class="post-content" :style="stylesContent()">
@@ -254,9 +257,16 @@ $text-color: #ccc;
     border-bottom-color: $post-header-border-color;
     padding-left: 10px;
     padding-top: 5px;
+    .post-header-number {
+      padding-right: 10px;
+      float: right;
+      color: #789922;
+    }
+
     .post-header-time {
       color: $text-color;
-      float: right;
+      float: left;
+      margin-left: 10px;
       margin-right: 10px;
     }
     .post-header-link {
@@ -271,7 +281,6 @@ $text-color: #ccc;
     }
     .post-header-title {
       float: left;
-      padding-left: 10px;
     }
   }
   .post-content {
