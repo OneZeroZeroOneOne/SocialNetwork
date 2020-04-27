@@ -96,7 +96,7 @@ img[lazy=loaded] {
 }
 
 .attachment {
-  margin: 5px 0px;
+  margin: 5px;
   grid-template-columns: 200px auto;
   align-items: center;
   display: inline;

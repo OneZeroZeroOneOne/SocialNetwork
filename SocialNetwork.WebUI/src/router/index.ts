@@ -14,6 +14,11 @@ const routes = [
     props: true
   },
   {
+    path: '/poll',
+    name: 'poll',
+    component: () => import('../components/PollComponent.vue'),
+  },
+  {
     path: '/:boardname',
     name: 'board',
     component: BoardView

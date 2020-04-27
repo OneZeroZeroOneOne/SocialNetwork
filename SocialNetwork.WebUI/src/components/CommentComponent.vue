@@ -283,7 +283,8 @@ $text-color: #ccc;
   .comment-content-body {
     word-break: break-word;
     margin-top: 10px;
-    min-height: 50px;
+    margin-bottom: 10px;
+    //min-height: 50px;
   }
 
   .comment-header {
@@ -314,7 +315,7 @@ $text-color: #ccc;
 
   .comment-content {
     max-width: calc(100% - 10px);
-    min-height: $comment-content-height;
+    padding-right: 10px;
     padding-left: 10px;
     padding-bottom: 10px;
   }

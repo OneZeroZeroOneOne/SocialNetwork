@@ -234,7 +234,10 @@ $text-color: #ccc;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
   float: left;
-  margin: 20px;
+  margin-top: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  margin-left: 0px;
 
   .post-content-body {
     margin-top: 10px;
@@ -273,7 +276,7 @@ $text-color: #ccc;
   .post-content {
     max-width: calc(100% - 10px);
     min-height: $post-content-height;
-    padding-left: 10px;
+    padding-left: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
   }

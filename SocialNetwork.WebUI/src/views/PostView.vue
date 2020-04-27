@@ -4,11 +4,11 @@
     <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
     
     <post-component :obj="postObj" v-if="requestPostStatus === 1"/>
-    <ul id="comments">
-      <li v-for="(item, index) in commentObjs" v-bind:key="item.id">
+    <div id="comments">
+      <div class="comment-wrapper" v-for="(item, index) in commentObjs" v-bind:key="item.id" style="">
         <CommentComponent :obj="item" :commentNum="index+1" :fatherPost="postObj"/>
-      </li>
-    </ul>
+      </div>
+    </div>
     <FooterComponent/>
   </div>
 
@@ -206,9 +206,17 @@ export default class PostView extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 #comments {
-  width: 80%;
+  display: inline-flex;
+  flex-direction: column;
+  //width: 80%;
   float: left;
-  margin-left: 40px;
+  //margin-left: 40px;
   padding-bottom: 2.5rem;
+}
+
+.comment-wrapper {
+  display: inline-flex;
+  width: fit-content; 
+  min-width: 30vw;
 }
 </style>

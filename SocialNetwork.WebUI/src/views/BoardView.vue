@@ -1,16 +1,16 @@
 <template>
   <div class="board-view">
     <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
-    <ul id="posts" v-if="requestPostsStatus === 1">
-      <li v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id">
+    <div id="posts" v-if="requestPostsStatus === 1">
+      <div v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id">
         <PostComponent :obj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
-        <ul id="comments">
-          <li v-for="(commentO, indexComment) in getPreloadedCommentForPost.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
+        <div id="comments">
+          <div class="comment-wrapper" v-for="(commentO, indexComment) in getPreloadedCommentForPost.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
             <CommentComponent :obj="commentO" :commentNum="indexComment+1" :fatherPost="postO"/>
-          </li>
-        </ul>
-      </li>
-    </ul>
+          </div>
+        </div>
+      </div>
+    </div>
     <li v-if="postObjs.length > 0">
       <FooterComponent/>
     </li>
@@ -185,10 +185,18 @@ export default class BoardView extends Vue {
 }
 
 #comments {
-  width: 80%;
+  display: inline-flex;
+  flex-direction: column;
+  //width: 80%;
   float: left;
-  margin-left: 40px;
+  //margin-left: 40px;
   padding-bottom: 2.5rem;
+}
+
+.comment-wrapper {
+  display: inline-flex;
+  width: fit-content; 
+  min-width: 30vw;
 }
 
 </style>
