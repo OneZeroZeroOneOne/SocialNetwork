@@ -1,18 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SocialNetwork.Bll.Abstractions;
-using SocialNetwork.Dal.Context;
-using SocialNetwork.Dal.Extensions;
-using SocialNetwork.Dal.Models;
-using SocialNetwork.Dal.ViewModels;
-using SocialNetwork.Utilities.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SocialNetwork.Markdown.Jsonize;
-using SocialNetwork.Markdown.Jsonize.Models;
+using Microsoft.EntityFrameworkCore;
+using SocialNetwork.Bll.Abstractions;
+using SocialNetwork.Dal.Context;
+using SocialNetwork.Dal.Models;
+using SocialNetwork.Dal.ViewModels;
+using SocialNetwork.Utilities.Exceptions;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -20,17 +15,12 @@ namespace SocialNetwork.Bll.Services
     {
         private readonly PublicContext _context;
         private readonly IUserInputService _userInputService;
-        private readonly JsonSerializer _jsonWriter;
 
         public PostService(PublicContext publicContext, IUserInputService userInputSanitizeService)
         {
             _context = publicContext;
-            _userInputService = userInputSanitizeService;
 
-            _jsonWriter = new JsonSerializer
-            {
-                NullValueHandling = (NullValueHandling)1
-            };
+            _userInputService = userInputSanitizeService;
         }
 
         public async Task<Post> EditPost(Post postModel, Guid editorUser)
@@ -84,6 +74,20 @@ namespace SocialNetwork.Bll.Services
 
             await _context.SaveChangesAsync();
 
+            /*await _noSqlContext.Collection<PostTop>().InsertOneAsync(new PostTop
+            {
+                PostId = postModel.Id,
+                Score = 50,
+                BoardId = postModel.BoardId,
+            });*/
+
+            await _context.PostTop.AddAsync(new PostTop
+            {
+                PostId = postModel.Id,
+                Score = 50,
+                BoardId = postModel.BoardId
+            });
+
             return await GetPost(postModel.BoardId, postModel.Id);
         }
 
@@ -117,12 +121,67 @@ namespace SocialNetwork.Bll.Services
         {
             if (page <= 0 || quantity <= 0)
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
-                    $"Inappropriate parameters page or quantity");
+                    "Post and quantity must be real numbers");
 
-            return await _context.Post.Where(x => x.IsArchived == false && x.BoardId == boardId)
+            /*var builder = new FilterDefinitionBuilder<PostTop>();
+            var filter = builder.Empty; // select all documents
+            filter &= builder.Where(x => x.BoardId == boardId);
+
+            var posts = await _noSqlContext.Collection<PostTop>()
+                .Find(filter)
+                .Limit(quantity)
+                .Skip((page - 1) * quantity)
+                .SortByDescending(x => x.Score)
+                .Project(x => new List<int>()
+                {
+                    x.PostId,
+                })
+                .FirstOrDefaultAsync();*/
+
+            var query = _context.Post
                 .Include(x => x.AttachmentPost)
                     .ThenInclude(x => x.Attachment)
-                .AsQueryable().GetPaged(page, quantity);
+                .Join(_context.PostTop, post => post.Id, top => top.PostId, (post, top) =>
+                    new
+                    {
+                        post.Id,
+                        post.Date,
+                        post.Text,
+                        post.Title,
+                        post.UserId,
+                        post.BoardId,
+                        post.IsArchived,
+                        post.AttachmentPost,
+                        top.Score,
+                    })
+                .OrderByDescending(x => x.Score)
+                .Select(x => new Post
+                {
+                    Id = x.Id,
+                    BoardId = x.BoardId,
+                    Date = x.Date,
+                    Title = x.Title,
+                    Text = x.Text,
+                    IsArchived = x.IsArchived,
+                    UserId = x.UserId,
+                    AttachmentPost = x.AttachmentPost,
+                });
+
+            var postCount = await query.CountAsync();
+
+            var thisPage = new PagedResult<Post>
+            {
+                CurrentPage = page,
+                PageSize = quantity,
+                RowCount = postCount,
+                Results = await query.ToListAsync(),
+                PageCount = (int)Math.Ceiling((double)postCount / quantity),
+            };
+
+            return thisPage; /*Where(x => x.IsArchived == false && x.BoardId == boardId)
+                .Include(x => x.AttachmentPost)
+                    .ThenInclude(x => x.Attachment)
+                .AsQueryable().GetPaged(page, quantity);*/
         }
 
         public async Task DeletePost(Guid boardId, int postId, Guid currentUserId)

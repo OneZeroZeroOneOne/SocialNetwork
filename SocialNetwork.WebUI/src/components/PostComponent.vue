@@ -241,6 +241,7 @@ $text-color: #ccc;
 
   .post-content-body {
     margin-top: 10px;
+    padding-left: 5px;
     min-height: 50px;
     word-break: break-all;
   }

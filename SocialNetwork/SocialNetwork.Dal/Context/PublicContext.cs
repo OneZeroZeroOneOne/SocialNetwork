@@ -23,6 +23,7 @@ namespace SocialNetwork.Dal.Context
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<PostTop> PostTop { get; set; }
 
         #region Security
         public virtual DbSet<UserSecurity> UserSecurity { get; set; }
@@ -58,6 +59,8 @@ namespace SocialNetwork.Dal.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("uuid-ossp");
+
+            modelBuilder.Entity<PostTop>(entity => { entity.HasKey(x => x.PostId); });
 
             modelBuilder.Entity<Attachment>(entity =>
             {
