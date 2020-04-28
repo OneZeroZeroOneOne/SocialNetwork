@@ -219,3 +219,29 @@ CREATE TABLE public."AttachmentComment" (
 	CONSTRAINT "AttachmentComment_AttachmentId_fkey" FOREIGN KEY ("AttachmentId") REFERENCES "Attachment"("Id"),
 	CONSTRAINT "AttachmentComment_CommentId_fkey" FOREIGN KEY ("CommentId") REFERENCES "Comment"("Id")
 );
+
+
+-- Drop table
+
+-- DROP TABLE public."Mention";
+
+CREATE TABLE public."Mention" (
+	"MentionerId" int8 NOT NULL,
+	"MentionId" int8 NOT NULL,
+	"IsComment" bool NOT NULL,
+	CONSTRAINT "Mention_pkey" PRIMARY KEY ("MentionerId", "MentionId")
+);
+
+-- Drop table
+
+-- DROP TABLE public."PostTop";
+
+CREATE TABLE public."PostTop" (
+	"PostId" int8 NOT NULL,
+	"BoardId" uuid NOT NULL,
+	"Score" int4 NOT NULL,
+	CONSTRAINT "PostTop_pkey" PRIMARY KEY ("PostId")
+);
+
+ALTER TABLE public."PostTop" ADD CONSTRAINT "PostTop_BoardId_fkey" FOREIGN KEY ("BoardId") REFERENCES "Board"("Id");
+ALTER TABLE public."PostTop" ADD CONSTRAINT "PostTop_PostId_fkey" FOREIGN KEY ("PostId") REFERENCES "Post"("Id");
