@@ -258,6 +258,7 @@ $text-color: #ccc;
   border-color: $comment-body-border-color;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
+  max-width: 70vw;
 
   .comment-content-header {
     display: flex;
@@ -289,6 +290,8 @@ $text-color: #ccc;
     margin-top: 10px;
     margin-bottom: 10px;
     //min-height: 50px;
+    max-height: 60vh;
+    overflow: auto;
   }
 
   .comment-header {
