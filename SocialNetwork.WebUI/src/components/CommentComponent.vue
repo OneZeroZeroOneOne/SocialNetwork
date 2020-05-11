@@ -19,7 +19,8 @@
       </div>
       <div class="comment-content-body" >
         <span v-for="block in parsedData.child" :key="block.node_id">
-          <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
+          <component v-if="getEntityDependOnTag(block.tag) !== 'br'" :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
+          <component v-else :is="getEntityDependOnTag(block.tag)" :key="block.position"/>
         </span>
       </div>
     </div>

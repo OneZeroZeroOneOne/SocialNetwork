@@ -124,7 +124,7 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<string> ParseStructure(string markdownText)
         {
-            var nodes = new Jsonize(markdownText).ParseHtmlToTypedJson().Children.FirstOrDefault();//HtmlToJsonService.HtmlToJson(markdownText).Replace("\r\n", "");
+            var nodes = new Jsonize(markdownText).ParseHtmlToTypedJson();//.Children.FirstOrDefault();//HtmlToJsonService.HtmlToJson(markdownText).Replace("\r\n", "");
 
             var flattenedNode = FlatNodes(nodes);
 
@@ -166,6 +166,8 @@ namespace SocialNetwork.Bll.Services
             var sanitized = await SanitizeHtml(userInput);
 
             var markdown = ToMarkdown(sanitized);
+
+            markdown = markdown.Replace("\n", "<br>");
 
             return await ParseStructure(markdown);
         }

@@ -61,11 +61,11 @@ export default class TextComponent extends Vue {
         });
       }
       
-      console.log(rendered_blocks)
+      console.log(JSON.stringify(rendered_blocks))
       if (rendered_blocks.indexOf(el.node_id) === -1)
       {
         if (el.text === undefined)
-          el.text = " ";
+          el.text = "";
 
         console.log(results)
         //{ props: {text: el.text, block_data: this.block_data, block_parent: this.block_parent, all_blocks: this.all_blocks} }
@@ -79,13 +79,17 @@ export default class TextComponent extends Vue {
         }
 
         rendered_blocks.push(el.node_id)
-        results.push(createElement(this.getEntityDependOnTag(tag), {class: this.getTags(el), props: {block_data: el}}, el.text))
+        let entity = this.getEntityDependOnTag(tag);
+        if (entity !== 'br')
+          results.push(createElement(entity, {class: this.getTags(el), props: {block_data: el}}, el.text))
+        else
+          results.push(createElement(entity))
       }
       return results;
     }
 
   render(createElement) {
-    console.log('render')
+    console.log('render', this.block_data.tag)
     let els: IMarkdownNode[] = []
     let rendered_blocks: number[] = []
     let result = null
@@ -139,13 +143,14 @@ export default class TextComponent extends Vue {
   }
 
   getEntityDependOnTag(tag: string): string {
-    console.log('in TextComponent_' + tag)
+    //console.log('in TextComponent_' + tag)
 
     let newTagToEntity = {
       b: "span",
       p: "span",
       ins: "span",
       del: "span",
+      br: 'br',
       linktocomponent: "LinkToComponent",
       null: "span",
       undefined: "span"

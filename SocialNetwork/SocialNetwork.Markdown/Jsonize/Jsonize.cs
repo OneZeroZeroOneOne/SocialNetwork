@@ -121,6 +121,7 @@ namespace SocialNetwork.Markdown.Jsonize
 
             parentJsonizeNode.Node = parentHtmlNode.NodeType.ToString();
             parentJsonizeNode.NodeId = counter.Next();
+            parentJsonizeNode.ParentId = -1;
 
             GetChildren(parentJsonizeNode, parentHtmlNode, counter);
 
@@ -140,6 +141,7 @@ namespace SocialNetwork.Markdown.Jsonize
 
             parentJsonizeNode.Node = parentHtmlNode.NodeType.ToString();
             parentJsonizeNode.NodeId = counter.Next();
+            parentJsonizeNode.ParentId = -1;
 
             GetChildren(parentJsonizeNode, parentHtmlNode, counter);
 
@@ -158,6 +160,7 @@ namespace SocialNetwork.Markdown.Jsonize
 
             parentJsonizeNode.Node = parentHtmlNode.NodeType.ToString();
             parentJsonizeNode.NodeId = counter.Next();
+            parentJsonizeNode.ParentId = -1;
 
             GetChildren(parentJsonizeNode, parentHtmlNode, counter);
 

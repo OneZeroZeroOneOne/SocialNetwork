@@ -5,7 +5,8 @@ let tagToEntity = {
     del: "TextComponent",
     linktocomponent: "LinkToComponent",
     null: "TextComponent",
-    undefined: "TextComponent"
+    undefined: "TextComponent",
+    br: 'br',
 }
 
 export default tagToEntity;
