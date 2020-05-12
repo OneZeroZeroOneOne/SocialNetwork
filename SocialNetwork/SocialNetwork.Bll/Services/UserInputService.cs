@@ -51,7 +51,7 @@ namespace SocialNetwork.Bll.Services
                 .UseLinkTo()
                 .UseMyEmphasis()
                 .UseSoftlineBreakAsHardlineBreak()
-                .DisableHtml()
+                //.DisableHtml()
                 .Build();
 
             //pipeline.BlockParsers.Remove(QuoteBlockParser)
@@ -167,9 +167,9 @@ namespace SocialNetwork.Bll.Services
         {
             var sanitized = await SanitizeHtml(userInput);
 
-            var markdown = ToMarkdown(sanitized);
+            sanitized = sanitized.Replace("\n", "<br>");
 
-            markdown = markdown.Replace("\n", "<br>");
+            var markdown = ToMarkdown(sanitized);
 
             return await ParseStructure(markdown);
         }
