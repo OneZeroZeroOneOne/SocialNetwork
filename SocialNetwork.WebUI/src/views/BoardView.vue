@@ -11,12 +11,7 @@
         </div>
       </div>
     </div>
-    <li v-if="postObjs.length > 0">
-      <FooterComponent/>
-    </li>
-    <li v-else>
-      <FooterComponent class="foo"/>
-    </li>
+    <FooterComponent/>
   </div>
 </template>
 
