@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav"></div>
     <new-modal/>
     <router-view>
     </router-view>
