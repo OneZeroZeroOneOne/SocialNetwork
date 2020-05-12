@@ -31,6 +31,9 @@ Vue.component('textcomponent', TextComponent);
 Vue.component(VueCountdown.name, VueCountdown);
 Vue.use(VueLazyload)
 
+import Vuebar from 'vuebar';
+Vue.use(Vuebar);
+
 // or with options
 Vue.use(VueLazyload, {
   preLoad: 1.5,
