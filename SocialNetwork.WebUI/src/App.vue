@@ -102,8 +102,9 @@ html {
 </style>
 
 <style>
-.vb-dragger {
-  padding-top: 10px;
+.vb {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .vb > .vb-dragger {

@@ -18,7 +18,7 @@
        <attachment-component :attachmentObjs="obj.attachmentComment"/>
       </div>
       <div v-bar>
-        <div class="comment-content-body" >
+        <div class="comment-content-body">
           <span v-for="block in parsedData.child" :key="block.node_id" style="cursor: text;">
             <component v-if="getEntityDependOnTag(block.tag) !== 'br'" :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
             <component v-else :is="getEntityDependOnTag(block.tag)" :key="block.position"/>
@@ -289,8 +289,8 @@ $text-color: #ccc;
 
   .comment-content-body {
     word-break: break-word;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    //margin-top: 10px;
+    //margin-bottom: 10px;
     //min-height: 50px;
     max-height: 60vh;
     overflow: auto;
