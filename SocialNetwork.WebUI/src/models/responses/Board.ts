@@ -6,8 +6,14 @@ export interface IBoard {
     isArchived: boolean
     name: string
     description: string
+    settings: IBoardSetting[]
 }
 
 export interface IBoards {
     boards: IBoard[]
+}
+
+export interface IBoardSetting {
+    name: string
+    value: string
 }

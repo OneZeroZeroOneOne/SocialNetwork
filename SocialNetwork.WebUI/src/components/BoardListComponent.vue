@@ -4,7 +4,7 @@
       <card v-for="item in boards" 
       v-bind:key="item.id"
       :link-to="item.name"
-      :data-images="['http://img0.joyreactor.cc/pics/post/art-%D0%BE%D0%BB%D0%B4%D1%84%D0%B0%D0%B3-2ch-4699278.jpeg', 'https://2ch.hk/char/src/2777/14717699796150.jpg']">
+      :data-images="getBoardPreview(item)">
         <h1 slot="header">/{{item.name}}/</h1>
         <p slot="content">{{item.description}}</p>
       </card>
@@ -42,6 +42,10 @@ export default class BoardListComponent extends Vue {
   constructor() {
     super();
     this.loadBoards();
+  }
+
+  getBoardPreview(board: IBoard) {
+    return board.settings.filter(x => x.name === "ImagePreview").map(x => x.value);
   }
 
   beforeCreate() {

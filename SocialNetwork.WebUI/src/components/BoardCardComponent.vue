@@ -24,6 +24,9 @@ export default Vue.component('card', {
     this.width = this.$refs.card.offsetWidth;
     this.height = this.$refs.card.offsetHeight;
   },
+  beforeDestroy() {
+    clearInterval(this.imgChangeInterval);
+  },
   props: ['dataImages', 'linkTo'],
   data: () => ({
     width: 0,
