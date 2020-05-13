@@ -4,6 +4,7 @@
 
 CREATE SEQUENCE attachment_id_seq;
 CREATE SEQUENCE post_comment_id_seq;
+CREATE SEQUENCE board_setting_id_seq;
 
 CREATE TABLE public."Attachment" (
 	"Id" int8 NOT NULL default NEXTVAL('attachment_id_seq'),
@@ -245,3 +246,13 @@ CREATE TABLE public."PostTop" (
 
 ALTER TABLE public."PostTop" ADD CONSTRAINT "PostTop_BoardId_fkey" FOREIGN KEY ("BoardId") REFERENCES "Board"("Id");
 ALTER TABLE public."PostTop" ADD CONSTRAINT "PostTop_PostId_fkey" FOREIGN KEY ("PostId") REFERENCES "Post"("Id");
+
+CREATE TABLE public."BoardSetting" (
+  "SettingId" int8 NOT NULL default NEXTVAL('board_setting_id_seq'),
+  "BoardId" uuid NOT NULL,
+  "Name" text NOT NULL,
+  "Value" text NOT NULL
+);
+
+
+ALTER TABLE public."BoardSetting" ADD FOREIGN KEY ("BoardId") REFERENCES "Board" ("Id");

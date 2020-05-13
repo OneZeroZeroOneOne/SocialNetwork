@@ -62,6 +62,8 @@ namespace SocialNetwork.Dal.Context
 
             modelBuilder.Entity<PostTop>(entity => { entity.HasKey(x => x.PostId); });
 
+            modelBuilder.Entity<BoardSetting>(entity => { entity.HasKey(x => x.SettingId); });
+
             modelBuilder.Entity<Attachment>(entity =>
             {
                 entity.HasKey(x => x.Id);
@@ -106,6 +108,10 @@ namespace SocialNetwork.Dal.Context
                     .HasForeignKey(d => d.BoardTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Board_BoardTypeId_fkey");
+
+                entity.HasMany(x => x.BoardSettings)
+                    .WithOne(x => x.Board)
+                    .HasForeignKey(x => x.BoardId);
             });
 
             modelBuilder.Entity<BoardType>(entity =>

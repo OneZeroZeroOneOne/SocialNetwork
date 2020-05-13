@@ -30,6 +30,13 @@ namespace SocialNetwork.Dal
             CreateMap<List<AttachmentComment>, List<OutAttachmentViewModel>>();
             CreateMap<List<AttachmentPost>, List<OutAttachmentViewModel>>();
 
+            CreateMap<Board, OutBoardViewModel>()
+                .ForMember(x => x.Settings, y => y.MapFrom(x => x.BoardSettings));
+
+            CreateMap<BoardSetting, OutBoardSettingViewModel>()
+                .ForMember(x => x.Name, y => y.MapFrom(x => x.Name))
+                .ForMember(x => x.Value, y => y.MapFrom(x => x.Value));
+
             CreateMap<AttachmentComment, OutAttachmentViewModel>()
                 .ForMember(x => x.Id, y => y.MapFrom(x => x.Attachment.Id))
                 .ForMember(x => x.Path, y => y.MapFrom(x => x.Attachment.Path))

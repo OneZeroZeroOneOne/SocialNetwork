@@ -11,5 +11,7 @@ namespace SocialNetwork.Dal.ViewModels.Out
 
         public string Name { get; set; }
         public string Description { get; set; }
+
+        public List<OutBoardSettingViewModel> Settings { get; set; }
     }
 }

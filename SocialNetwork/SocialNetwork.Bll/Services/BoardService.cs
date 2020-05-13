@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
@@ -24,7 +25,7 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<List<Board>> GetBoardsAsync()
         {
-            return await _publicContext.Board.ToListAsync();
+            return await _publicContext.Board.Include(x => x.BoardSettings).ToListAsync();
         }
 
         public async Task<Board> GetBoardAsync(string name)

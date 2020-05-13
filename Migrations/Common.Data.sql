@@ -28,6 +28,20 @@ INSERT INTO public."SettingText" ("Key","Value","CreateDateTime") VALUES
 ('AllowedHtmlTags','p,i,blockquote,b,code,col,em,pre,tr,strike,span,green,sp,br','2020-02-28')
 ;
 
+INSERT INTO public."BoardSetting"
+("SettingId", "BoardId", "Name", "Value")
+VALUES(1, 'bcf58d82-d9e7-4c11-8645-a564b8ee6f7b', 'ImagePreview', 'http://img0.joyreactor.cc/pics/post/art-%D0%BE%D0%BB%D0%B4%D1%84%D0%B0%D0%B3-2ch-4699278.jpeg');
+INSERT INTO public."BoardSetting"
+("SettingId", "BoardId", "Name", "Value")
+VALUES(2, 'bcf58d82-d9e7-4c11-8645-a564b8ee6f7b', 'ImagePreview', 'https://2ch.hk/char/src/2777/14717699796150.jpg');
+INSERT INTO public."BoardSetting"
+("SettingId", "BoardId", "Name", "Value")
+VALUES(3, '91213a0a-c3ca-4804-8432-fd5202c24705', 'ImagePreview', 'https://anime-chan.me/uploads/posts/2020-01/1578479313_78768467_p0.png');
+INSERT INTO public."BoardSetting"
+("SettingId", "BoardId", "Name", "Value")
+VALUES(4, '91213a0a-c3ca-4804-8432-fd5202c24705', 'ImagePreview', 'https://image.winudf.com/v2/image/Y29tLmtpbmdrdXN0dXIuYXJ0bmFydXRvd2FsbHBhcGVyX3NjcmVlbl8wXzE1MTc2NzUxNzZfMDY3/screen-0.jpg?fakeurl=1&type=.jpg');
+
+
 
 
 
