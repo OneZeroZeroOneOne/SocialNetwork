@@ -154,6 +154,7 @@ namespace SocialNetwork.Bll.Services
                         post.AttachmentPost,
                         top.Score,
                     })
+                .Where(x => x.BoardId == boardId)
                 .OrderByDescending(x => x.Score)
                 .Select(x => new Post
                 {
