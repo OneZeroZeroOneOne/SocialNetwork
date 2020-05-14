@@ -379,10 +379,10 @@ export default class PreviewModal extends Vue {
           })
           this.attachmentList = []
           this.active = false;
+          this.responseState = 0;
           //this.content = "";
           }, error => {
             console.log(error)
-            this.attachmentList = []
             this.$root.$emit('comment-sent-error', error)
             console.log(this.$awn)
             this.$awn.warning("Cant send comment", {
@@ -434,10 +434,10 @@ export default class PreviewModal extends Vue {
         })
         this.attachmentList = []
         this.active = false;
+        this.responseState = 0;
         //this.content = "";
         }, error => {
           console.log(error)
-          this.attachmentList = []
           this.$root.$emit('post-created-error', error)
           console.log(this.$awn)
           this.$awn.warning("Cant create new thread", {
