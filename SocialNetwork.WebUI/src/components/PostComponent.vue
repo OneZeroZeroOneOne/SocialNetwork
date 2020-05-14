@@ -124,12 +124,12 @@ export default class PostComponent extends Vue {
   mounted() {
     //this.parseMarkdownToTree()
 
-    console.log(this.obj.text)
+    //console.log(this.obj.text)
     this.parsedData = JSON.parse(this.obj.text);
     this.flattenedData = this.flatten(this.parsedData)
-    console.log(this)
-    console.log(this.parsedData)
-    console.log(this.flattenedData)
+    //console.log(this)
+    //console.log(this.parsedData)
+    //console.log(this.flattenedData)
 
     if (this.isModal !== undefined && this.isModal !== false) {
       /*console.log(this.isModal)
@@ -190,7 +190,7 @@ export default class PostComponent extends Vue {
   parseMarkdownToTree() {
     var d: IMarkdownNode = JSON.parse(this.obj.text);
     this.flattenedData = this.flatten(d)
-    console.log(this.flattenedData)
+    //console.log(this.flattenedData)
 
     return d
   }

@@ -51,7 +51,7 @@ export default class App extends Vue {
 
   created() {
     this.$refs.container = this;
-    console.log(this.$refs)
+    console.log(this)
   }
 }
 </script>

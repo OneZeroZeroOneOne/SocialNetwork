@@ -50,7 +50,7 @@ export default class TextComponent extends Vue {
   }
 
   buildElementBlocks(el: IMarkdownNode, createElement, rendered_blocks: number[]): any {
-      console.log(el)
+      //console.log(el)
       let results: any = []
 
       if (el === undefined) return;
@@ -61,13 +61,13 @@ export default class TextComponent extends Vue {
         });
       }
       
-      console.log(JSON.stringify(rendered_blocks))
+      //console.log(JSON.stringify(rendered_blocks))
       if (rendered_blocks.indexOf(el.node_id) === -1)
       {
         if (el.text === undefined)
           el.text = "";
 
-        console.log(results)
+        //console.log(results)
         //{ props: {text: el.text, block_data: this.block_data, block_parent: this.block_parent, all_blocks: this.all_blocks} }
         let tag = el.tag;
         if (tag === undefined || tag === null)
@@ -89,7 +89,7 @@ export default class TextComponent extends Vue {
     }
 
   render(createElement) {
-    console.log('render', this.block_data.tag)
+    //console.log('render', this.block_data.tag)
     let els: IMarkdownNode[] = []
     let rendered_blocks: number[] = []
     let result = null
@@ -159,7 +159,7 @@ export default class TextComponent extends Vue {
     let ent = newTagToEntity[tag]
     if (tag === undefined)
       ent = "span"
-    console.log(ent)
+    //console.log(ent)
     //return "LinkToComponent";
     return ent;
   }

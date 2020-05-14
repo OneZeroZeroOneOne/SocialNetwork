@@ -51,6 +51,7 @@ import { ResponseState } from '../models/enum/ResponseState';
 import { parseNumber } from '@/utilities/parser';
 import { IPostService } from '../services/Abstractions/IPostService';
 import { PostService } from '../services/Implementations/PostService';
+import { IBoard } from '../models/responses/Board';
 
 
 @Component({
@@ -60,6 +61,7 @@ import { PostService } from '../services/Implementations/PostService';
     }
 })
 export default class PreviewModal extends Vue {
+  private responseState: number = 0; //1 if response to comment or thread 2 if new thread
   private submitProgress: ResponseState = ResponseState.success;
 
   public x: number = 0;
@@ -76,8 +78,9 @@ export default class PreviewModal extends Vue {
 
   public hovered: boolean = false;
 
-  public replyToPost!: IPost;
-  public replyToComment!: IComment;
+  public replyToPost!: IPost|null;
+  public replyToComment!: IComment|null;
+  public board!: IBoard|null;
 
   public shake: boolean = false;
 
@@ -91,6 +94,7 @@ export default class PreviewModal extends Vue {
       super();
       this.$root.$on('show-editor-modal-from-post', this.showEditorFromPost)
       this.$root.$on('show-editor-modal-from-comment', this.showEditorFromComment)
+      this.$root.$on('show-editor-modal-new-thread', this.showEditorNewThread)
   }
 
   toggleShakeAnimation(): void {
@@ -103,11 +107,32 @@ export default class PreviewModal extends Vue {
     }
   }
 
+  showEditorNewThread(board: IBoard): void {
+    console.log(board)
+    if (this.responseState === 0)
+    {
+      this.replyToPost = null;
+      this.replyToComment = null;
+      this.responseState = 2;
+      this.board = board;
+    }
+    if (this.active === false)
+    {
+      this.setPositionFromStorage();
+      this.active = true;
+    } else {  //already open
+      this.toggleShakeAnimation()
+    }
+  }
 
   showEditorFromComment(com: IComment, fatherPost: IPost): void {
     this.addTextToEditor(">>" + com.id)
-    this.replyToPost = fatherPost;
-    this.replyToComment = com;
+    if (this.responseState !== 2)
+    {
+      this.replyToPost = fatherPost;
+      this.replyToComment = com;
+      this.responseState = 1
+    }
     if (this.active === false)
     {
       this.setPositionFromStorage();
@@ -119,7 +144,11 @@ export default class PreviewModal extends Vue {
 
   showEditorFromPost(post: IPost): void {
     this.addTextToEditor(">>" + post.id)
-    this.replyToPost = post;
+    if (this.responseState !== 2)
+    {
+      this.replyToPost = post;
+      this.responseState = 1
+    }
     if (this.active === false)
     {
       this.setPositionFromStorage();
@@ -207,7 +236,7 @@ export default class PreviewModal extends Vue {
 
 
 
-  async parseMarkdown(textContent: string): Promise<string> {
+  /*async parseMarkdown(textContent: string): Promise<string> {
     let md = textContent;
 
     console.log(md)
@@ -297,19 +326,87 @@ export default class PreviewModal extends Vue {
     md = md.replace(/(\r\n|\n|\r)/gm, "<br/>");
 
     return md;
-  }
+  }*/
 
   async submit(textContent: string, textTitle: string) {
     console.log(textContent, textTitle)
     console.log('submit', this.replyToPost)
-    if (this.replyToPost !== undefined)
-    {
-      //textContent = await this.parseMarkdown(textContent);
 
-      let commentToSend = {
+    if (textContent === null || textContent === "")
+    {
+      this.$awn.warning("Text can't be empty", {
+        durations: {
+          error: 1500
+        }
+      })
+      return;
+    }
+
+    if (this.responseState === 0)
+    {
+      this.$awn.warning("Logical error with responseState sry", {
+        durations: {
+          error: 1500
+        }
+      })
+      return;
+    }
+
+    if (this.responseState === 1)
+    {
+      if (this.replyToPost !== undefined && this.replyToPost !== null)
+      {
+        //textContent = await this.parseMarkdown(textContent);
+
+        let commentToSend = {
+          title: textTitle,
+          text: textContent,
+          postId: this.replyToPost.id,
+          mentionList: this.mentionList,
+        }
+
+        let attachmentList: number[] = [];
+        this.attachmentList.forEach(x => {
+          attachmentList.push(x.id);
+        })
+
+        this.$awn.async(this._commentService.sendComment(commentToSend, attachmentList), ok => {
+          this.$root.$emit('comment-sent-success', ok)
+          this.$awn.success('Comment sent!', {
+            durations: {
+              success: 1500
+            }
+          })
+          this.attachmentList = []
+          this.active = false;
+          //this.content = "";
+          }, error => {
+            console.log(error)
+            this.attachmentList = []
+            this.$root.$emit('comment-sent-error', error)
+            console.log(this.$awn)
+            this.$awn.warning("Cant send comment", {
+              durations: {
+                error: 1500
+              }
+            })
+          }, 'Sending comment')
+      }
+    } else {
+      if (this.board === undefined || this.board === null)
+      {
+        this.$awn.warning("Logical error with board object sry", {
+          durations: {
+            error: 1500
+          }
+        })
+        return;
+      }
+
+      let newThread = {
         title: textTitle,
         text: textContent,
-        postId: this.replyToPost.id,
+        boardId: this.board.id,
         mentionList: this.mentionList,
       }
 
@@ -318,9 +415,9 @@ export default class PreviewModal extends Vue {
         attachmentList.push(x.id);
       })
 
-      this.$awn.async(this._commentService.sendComment(commentToSend, attachmentList), ok => {
-        this.$root.$emit('comment-sent-success', ok)
-        this.$awn.success('Comment sent!', {
+      this.$awn.async(this._postService.sendNewPost(newThread, attachmentList), ok => {
+        this.$root.$emit('post-created-success', ok)
+        this.$awn.success('New thread created!', {
           durations: {
             success: 1500
           }
@@ -331,14 +428,14 @@ export default class PreviewModal extends Vue {
         }, error => {
           console.log(error)
           this.attachmentList = []
-          this.$root.$emit('comment-sent-error', error)
+          this.$root.$emit('post-created-error', error)
           console.log(this.$awn)
-          this.$awn.warning("Cant send comment", {
+          this.$awn.warning("Cant create new thread", {
             durations: {
               error: 1500
             }
           })
-        }, 'Sending comment')
+        }, 'Creating thread')
     }
   }
 

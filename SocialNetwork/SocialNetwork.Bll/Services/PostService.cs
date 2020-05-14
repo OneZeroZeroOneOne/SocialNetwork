@@ -72,7 +72,6 @@ namespace SocialNetwork.Bll.Services
                     await AttachFileToPost(insertedPost.Entity.Id, attachmentId);
                 }
 
-            await _context.SaveChangesAsync();
 
             /*await _noSqlContext.Collection<PostTop>().InsertOneAsync(new PostTop
             {
@@ -87,6 +86,8 @@ namespace SocialNetwork.Bll.Services
                 Score = 50,
                 BoardId = postModel.BoardId
             });
+			
+            await _context.SaveChangesAsync();
 
             return await GetPost(postModel.BoardId, postModel.Id);
         }
