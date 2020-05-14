@@ -329,6 +329,7 @@ export default class PreviewModal extends Vue {
   }*/
 
   async submit(textContent: string, textTitle: string) {
+    console.log('response state', this.responseState)
     console.log(textContent, textTitle)
     console.log('submit', this.replyToPost)
 
