@@ -41,7 +41,6 @@ export default class BoardNameHeaderComponent extends Vue {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 10px;
     color: white;
     text-align: center;
     font-size: 4em;  

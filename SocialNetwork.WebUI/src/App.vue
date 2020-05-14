@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <nav-bar-component/>
     <new-modal/>
     <router-view>
     </router-view>
@@ -14,6 +15,7 @@ import EditorModal from '@/components/EditorModal.vue'
 import apiClient from '@/services/Implementations/ApiClient';
 import NewModal from "@/components/NewModal.vue";
 import ShowPostCommentContainer from '@/components/ShowPostCommentContainer.vue';
+import NavBarComponent from '@/components/NavBarComponent.vue';
 
 import eventBus from "@/utilities/EventBus";
 
@@ -21,7 +23,8 @@ import eventBus from "@/utilities/EventBus";
   components: {
     EditorModal,
     NewModal,
-    ShowPostCommentContainer
+    ShowPostCommentContainer,
+    NavBarComponent,
   }
 })
 export default class App extends Vue {
