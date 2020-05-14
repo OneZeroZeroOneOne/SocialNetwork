@@ -344,7 +344,7 @@ export default class PreviewModal extends Vue {
 
     if (this.responseState === 0)
     {
-      this.$awn.warning("Logical error with responseState sry", {
+      this.$awn.warning("Logical error with 'responseState' sry", {
         durations: {
           error: 1500
         }
@@ -393,9 +393,19 @@ export default class PreviewModal extends Vue {
           }, 'Sending comment')
       }
     } else {
+      if (textTitle === null || textTitle === "")
+      {
+        this.$awn.warning("Title can't be empty", {
+          durations: {
+            error: 1500
+          }
+        })
+        return;
+      }
+
       if (this.board === undefined || this.board === null)
       {
-        this.$awn.warning("Logical error with board object sry", {
+        this.$awn.warning("Logical error with 'board' object sry", {
           durations: {
             error: 1500
           }
