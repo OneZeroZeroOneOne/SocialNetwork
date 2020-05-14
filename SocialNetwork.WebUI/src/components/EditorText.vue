@@ -2,15 +2,15 @@
     <div class="editor-text">
         <div class="editor-text-header">
             <input v-model="textTitle" placeholder="По существу, кратко">
-            <div class="button" v-on:click.self="submit()">
-                Submit
+            <div :class="'button'" v-on:click.self="submit()" >
+                <font-awesome-icon v-if="isFileUploading === true" icon="spinner" spin/> Submit
             </div>
         </div>
         <textarea 
             id="editorText"
             class="editor-text-area"
             v-model="textContent" 
-            placeholder="Ну давай, давай, нападай">
+            :placeholder="'Ну давай, давай, нападай'">
         </textarea>
         <div class="word-counter">
             {{ wordCount }}
@@ -25,6 +25,8 @@ import { Component, Prop, Vue } from "vue-property-decorator";
   components: {}
 })
 export default class EditorText extends Vue {
+    @Prop() isFileUploading!: boolean;
+
     public textContent: string = "";
     public textTitle: string = "";
 
@@ -52,6 +54,12 @@ export default class EditorText extends Vue {
     }
 
     submit(): void {
+        if (this.isFileUploading === true)
+        {
+            this.$awn.info('Дождись окончания загрузки файлов или отмени его', {})
+            return;
+        }
+
         this.$emit('editor-text-submit', this.textContent, this.textTitle);
     }
 }

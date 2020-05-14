@@ -51,6 +51,7 @@
                 let width, height;
                 let cancel;
                 formData.append(fieldName, file, file.name);
+                this.$emit('start-uploading')
 
                 var reader = new FileReader(); // CREATE AN NEW INSTANCE.
 
@@ -81,6 +82,7 @@
                                 onUploadProgress: (progressEvent) => {
                                     //const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
                                     progress(progressEvent.lengthComputable, progressEvent.loaded, progressEvent.total);
+                                    console.log(progressEvent)
                                     /*if (totalLength !== null) {
                                         this.progressData = Math.round( (progressEvent.loaded * 100) / totalLength );
                                     }*/

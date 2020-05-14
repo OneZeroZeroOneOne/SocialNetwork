@@ -91,15 +91,14 @@ html {
   background-color:#CCCCCC;
   text-align: center;
   position:relative;
-}
-  
-.button:active{
-  background-color:#999999;
-}
-  
-.button:hover{
-  border-color:#7a7a7a;
-  cursor: pointer;
+
+  &:active{
+    background-color:#999999;
+  }
+  &:hover{
+    border-color:#7a7a7a;
+    cursor: pointer;
+  } 
 }
 </style>
 

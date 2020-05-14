@@ -5,7 +5,7 @@ import store from './store'
 import 'nprogress/nprogress.css';
 import checkView from 'vue-check-view'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCheck, faTimes, faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner, faCheck, faTimes, faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import setup from './utilities/math_round_extensions.js'
 import { VueNotification } from '@/types/AwnTypes';
@@ -55,7 +55,7 @@ Vue.use(VueAWN, options)
 
 setup()
 
-library.add({faCheck, faTimes, faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines})
+library.add({faSpinner, faCheck, faTimes, faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines})
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

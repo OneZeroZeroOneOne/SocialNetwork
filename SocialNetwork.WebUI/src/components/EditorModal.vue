@@ -19,6 +19,7 @@
             <div class="editor">
                <editor-text 
                 @editor-text-submit="submit"
+                :isFileUploading="isFileUploading"
                />
             </div>
         </div>
@@ -26,6 +27,7 @@
         class="editor-footer-modal">
           <div class="editor-attachment">
             <attachment-drop-component
+            @start-uploading="startUploading"
             @uploaded-succesfully="uploaded"/>
           </div>
         </div>
@@ -90,11 +92,18 @@ export default class PreviewModal extends Vue {
   private _commentService!: ICommentService;
   private _postService!: IPostService;
 
+  private isFileUploading: boolean = false;
+
   constructor() {
       super();
       this.$root.$on('show-editor-modal-from-post', this.showEditorFromPost)
       this.$root.$on('show-editor-modal-from-comment', this.showEditorFromComment)
       this.$root.$on('show-editor-modal-new-thread', this.showEditorNewThread)
+  }
+
+  startUploading() {
+    console.log('start')
+    this.isFileUploading = true
   }
 
   toggleShakeAnimation(): void {
@@ -468,6 +477,8 @@ export default class PreviewModal extends Vue {
   }
 
   uploaded(attachment) {
+    console.log('uploaded')
+    this.isFileUploading = false;
     let atObj: IAttachment = attachment.data
     this.attachmentList.push(atObj);
   }
