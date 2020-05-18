@@ -177,11 +177,11 @@ namespace SocialNetwork.Bll.Services
         {
             var sanitized = await SanitizeHtml(userInput);
 
-            //sanitized = sanitized.Replace("\n", "<br>");
-
             var markdown = ToMarkdown(sanitized);
 
-            return markdown; //await ParseStructure(markdown);
+            sanitized = markdown.Replace("\n", "");
+
+            return sanitized; //await ParseStructure(markdown);
         }
     }
 }
