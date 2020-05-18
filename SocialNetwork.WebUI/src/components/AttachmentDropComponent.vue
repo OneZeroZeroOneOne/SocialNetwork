@@ -69,7 +69,7 @@
                             console.log(ee)
                             width = ee.path[0].width;
                             height = ee.path[0].height;
-                            let request = axios.post('http://16ch.tk/api/attachment/Attachment', formData, {
+                            let request = axios.post('http://194.99.21.140/api/attachment/Attachment', formData, {
                                 headers: {
                                     'Content-Type': 'multipart/form-data',
                                     'X-Width': width,
@@ -107,7 +107,7 @@
                         srcEl.preload = 'metadata';
                         srcEl.onloadedmetadata = () => {
                             console.log(srcEl.videoWidth, srcEl.videoHeight)
-                            let request = axios.post('http://16ch.tk/api/attachment/Attachment', formData, {
+                            let request = axios.post('http://194.99.21.140/api/attachment/Attachment', formData, {
                                 headers: {
                                     'Content-Type': 'multipart/form-data',
                                     'X-Width': srcEl.videoWidth,
