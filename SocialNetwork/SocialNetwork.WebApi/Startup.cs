@@ -1,4 +1,5 @@
 using AutoMapper;
+using Ganss.XSS;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,9 +14,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Bll.Services;
+using SocialNetwork.ConfigSetting.Bll.Abstractions;
+using SocialNetwork.ConfigSetting.Bll.Services;
+using SocialNetwork.ConfigSetting.Dal.Context;
 using SocialNetwork.ConfigSettingBll.Abstractions;
 using SocialNetwork.Dal;
 using SocialNetwork.Dal.Context;
+using SocialNetwork.RequestLifetimeBll.Abstractions;
+using SocialNetwork.RequestLifetimeBll.Services;
 using SocialNetwork.Security.Extensions;
 using SocialNetwork.Security.Options;
 using SocialNetwork.Utilities;
@@ -23,13 +29,6 @@ using SocialNetwork.Utilities.Controllers;
 using SocialNetwork.Utilities.Middlewares;
 using System.Collections.Generic;
 using System.IO;
-using Ganss.XSS;
-using SocialNetwork.ConfigSetting.Bll.Abstractions;
-using SocialNetwork.ConfigSetting.Bll.Services;
-using SocialNetwork.ConfigSetting.Dal.Context;
-using SocialNetwork.Dal.Models;
-using SocialNetwork.RequestLifetimeBll.Abstractions;
-using SocialNetwork.RequestLifetimeBll.Services;
 
 namespace SocialNetwork.WebApi
 {

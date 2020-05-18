@@ -10,6 +10,7 @@ on:
       - 'SocialNetwork/SocialNetwork.Security/**'
       - 'SocialNetwork/SocialNetwork.Utilities/**'
       - 'SocialNetwork/SocialNetwork.WebApi/**'
+      - 'SocialNetwork/SocialNetwork.Markdown/**'
 
 jobs:
   build:
