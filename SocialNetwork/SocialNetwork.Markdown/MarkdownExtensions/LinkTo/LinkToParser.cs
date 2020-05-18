@@ -19,7 +19,7 @@ namespace SocialNetwork.Markdown.MarkdownExtensions.LinkTo
         {
             var previous = slice.PeekCharExtra(-1);
 
-            if (!previous.IsWhiteSpaceOrZero()) return false;
+            //if (!previous.IsWhiteSpaceOrZero()) return false;
 
             slice.NextChar();
 

@@ -177,7 +177,7 @@ namespace SocialNetwork.Bll.Services
         {
             var sanitized = await SanitizeHtml(userInput);
 
-            sanitized = sanitized.Replace("\n", "<br>");
+            //sanitized = sanitized.Replace("\n", "<br>");
 
             var markdown = ToMarkdown(sanitized);
 
