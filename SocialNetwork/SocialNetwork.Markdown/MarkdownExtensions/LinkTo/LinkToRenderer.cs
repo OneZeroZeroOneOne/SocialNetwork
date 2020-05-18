@@ -32,7 +32,7 @@ namespace SocialNetwork.Markdown.MarkdownExtensions.LinkTo
             var attr = new HtmlAttributes();
 
             attr.AddClass("link-to");
-            if (requestLifetimeService == null) throw ExceptionFactory.SoftException(ExceptionEnum.SomethingWentWrong, $"If you see this message pls contact admin, {obj.Id}"); ;
+            if (requestLifetimeService == null) throw ExceptionFactory.SoftException(ExceptionEnum.SomethingWentWrong, $"If you see this message pls contact admin, {obj.Id}");
 
             attr.AddProperty("href",
                 $"/{requestLifetimeService.Board.Name}/{requestLifetimeService.Post.Id}#{obj.Id}");

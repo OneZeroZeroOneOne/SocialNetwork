@@ -7,7 +7,11 @@ namespace SocialNetwork.Markdown.MarkdownExtensions.GreenText
     {
         protected override void Write(HtmlRenderer renderer, GreenTextParsedModel obj)
         {
-            renderer.Write("<GreenComponent>").Write(obj.Text).Write("</GreenComponent>");
+            var attr = new HtmlAttributes();
+
+            attr.AddClass("green-text");
+
+            renderer.Write("<span").WriteAttributes(attr).Write($">>{obj.Text}</span>");
         }
     }
 }

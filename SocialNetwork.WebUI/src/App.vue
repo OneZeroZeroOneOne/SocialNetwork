@@ -167,3 +167,11 @@ a.link-to {
   }
 }
 </style>
+
+<style lang="scss">
+.green-text {
+  width: fit-content;
+  color: green;
+  font-style: italic;
+}
+</style>
