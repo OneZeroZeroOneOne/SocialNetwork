@@ -9,6 +9,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AngleSharp.Network.Default;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using SocialNetwork.RequestLifetimeBll.Abstractions;
+using SocialNetwork.RequestLifetimeBll.Services;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -17,11 +22,17 @@ namespace SocialNetwork.Bll.Services
     {
         private readonly PublicContext _context;
         private readonly IUserInputService _userInputService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IRequestLifetimeService _requestLifetimeService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public CommentService(PublicContext publicContext, IUserInputService userInputService)
+        public CommentService(PublicContext publicContext, IUserInputService userInputService, IServiceProvider serviceProvider, IRequestLifetimeService requestLifetimeService, IHttpContextAccessor httpContext)
         {
             _context = publicContext;
             _userInputService = userInputService;
+            _serviceProvider = serviceProvider;
+            _requestLifetimeService = requestLifetimeService;
+            _httpContext = httpContext;
         }
 
 
@@ -41,12 +52,19 @@ namespace SocialNetwork.Bll.Services
 
         public async Task<Comment> AddComment(Comment commentModel, Guid authorUser, List<int> attachmentIdList)
         {
-            var post = await _context.Post.FirstOrDefaultAsync(x => x.Id == commentModel.PostId);
+            var post = await _context.Post
+                .Include(x => x.Board)
+                .FirstOrDefaultAsync(x => x.Id == commentModel.PostId);
 
             if (post == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.PostNotFound, $"Post {commentModel.PostId} doesn't exist");
 
             commentModel.UserId = authorUser;
+
+            _requestLifetimeService.SetPost(post);
+            _requestLifetimeService.SetBoard(post.Board);
+
+            _httpContext.HttpContext.Items.Add("RequestLifetime", _requestLifetimeService);
 
             commentModel.Text = await _userInputService.Markdown(commentModel.Text);
 

@@ -1,4 +1,5 @@
-﻿using Markdig;
+﻿using System;
+using Markdig;
 using Markdig.Helpers;
 using Markdig.Parsers;
 using Markdig.Renderers;
@@ -8,6 +9,13 @@ namespace SocialNetwork.Markdown.MarkdownExtensions
 {
     public class LinkToExtension : IMarkdownExtension
     {
+        private readonly IServiceProvider _serviceProvider;
+
+        public LinkToExtension(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
         public void Setup(MarkdownPipelineBuilder pipeline)
         {
             OrderedList<InlineParser> parsers;
@@ -30,7 +38,7 @@ namespace SocialNetwork.Markdown.MarkdownExtensions
 
             if (renderers != null && !renderers.Contains<LinkToRenderer>())
             {
-                renderers.Add(new LinkToRenderer());
+                renderers.Add(new LinkToRenderer(_serviceProvider));
             }
         }
     }

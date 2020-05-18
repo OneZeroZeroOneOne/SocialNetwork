@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Ganss.XSS;
 using Markdig;
 using SocialNetwork.Bll.Abstractions;
@@ -28,7 +29,7 @@ namespace SocialNetwork.Bll.Services
         private readonly MarkdownPipeline _pipeline;
         private readonly JsonSerializer _jsonWriter;
 
-        public UserInputService(PublicContext publicContext, ISettingService settingService, IHtmlSanitizer htmlSanitizer)
+        public UserInputService(PublicContext publicContext, ISettingService settingService, IHtmlSanitizer htmlSanitizer, IServiceProvider serviceProvider)
         {
             _publicContext = publicContext;
             _settingService = settingService;
@@ -53,7 +54,7 @@ namespace SocialNetwork.Bll.Services
                 .UseAutoLinks()
                 .UseGreenText()
                 .UseEmphasisExtras()
-                .UseLinkTo()
+                .UseLinkTo(serviceProvider)
                 .UseMyEmphasis()
                 .UseSoftlineBreakAsHardlineBreak();
                 //.DisableHtml()

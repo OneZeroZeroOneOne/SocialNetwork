@@ -21,11 +21,11 @@
           <attachment-component :attachmentObjs="obj.attachmentPost"/>
         </div>
         <div v-bar>
-          <article class=post-content-body v-html="obj.text">
+          <div class=post-content-body v-html="obj.text">
             <!--<span v-for="block in parsedData.child" :key="block.node_id">
               <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
             </span>-->
-          </article>
+          </div>
         </div>
       </div>
       <div class="post-footer">
@@ -245,7 +245,8 @@ $text-color: #ccc;
   margin-left: 0px;
 
   .post-content-body {
-    margin-top: 10px;
+    //margin-top: 10px;
+    max-height: 60vh;
     padding-left: 5px;
     min-height: 50px;
     word-break: break-all;

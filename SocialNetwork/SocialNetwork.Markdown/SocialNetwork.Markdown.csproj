@@ -7,11 +7,14 @@
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack.NetCore" Version="1.5.0.1" />
     <PackageReference Include="Markdig" Version="0.10.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SocialNetwork.Dal\SocialNetwork.Dal.csproj" />
+    <ProjectReference Include="..\SocialNetwork.RequestLifetimeBll\SocialNetwork.RequestLifetimeBll.csproj" />
+    <ProjectReference Include="..\SocialNetwork.Utilities\SocialNetwork.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

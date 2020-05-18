@@ -63,7 +63,7 @@ namespace SocialNetwork.WebApi.Controllers
             return _mapper.Map<Comment, OutCommentViewModel>(insertedComment);
         }
 
-        [HttpGet, Route("Page/{postId}", Name = "GetPageСomments")]
+        [HttpGet, Route("Page/{postId}", Name = "GetPageComments")]
         public async Task<PagedResult<OutCommentViewModel>> GetPageComments([FromRoute]int postId, [FromQuery]int page, [FromQuery]int quantity)
         {
             return _mapper.Map<PagedResult<Comment>, PagedResult<OutCommentViewModel>>(await _commentService.GetPageComments(postId, page, quantity));

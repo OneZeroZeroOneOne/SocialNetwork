@@ -1,4 +1,5 @@
-﻿using Markdig;
+﻿using System;
+using Markdig;
 using Markdig.Helpers;
 using SocialNetwork.Markdown.MarkdownExtensions;
 
@@ -34,7 +35,7 @@ namespace SocialNetwork.Markdown
             return pipeline;
         }
 
-        public static MarkdownPipelineBuilder UseLinkTo(this MarkdownPipelineBuilder pipeline)
+        public static MarkdownPipelineBuilder UseLinkTo(this MarkdownPipelineBuilder pipeline, IServiceProvider serviceProvider)
         {
             OrderedList<IMarkdownExtension> extensions;
 
@@ -42,7 +43,7 @@ namespace SocialNetwork.Markdown
 
             if (!extensions.Contains<LinkToExtension>())
             {
-                extensions.Add(new LinkToExtension());
+                extensions.Add(new LinkToExtension(serviceProvider));
             }
 
             return pipeline;

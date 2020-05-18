@@ -27,6 +27,9 @@ using Ganss.XSS;
 using SocialNetwork.ConfigSetting.Bll.Abstractions;
 using SocialNetwork.ConfigSetting.Bll.Services;
 using SocialNetwork.ConfigSetting.Dal.Context;
+using SocialNetwork.Dal.Models;
+using SocialNetwork.RequestLifetimeBll.Abstractions;
+using SocialNetwork.RequestLifetimeBll.Services;
 
 namespace SocialNetwork.WebApi
 {
@@ -67,6 +70,8 @@ namespace SocialNetwork.WebApi
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IReactionService, ReactionService>();
+
+            services.AddScoped<IRequestLifetimeService, RequestLifetimeService>();
 
             services.AddTransient(x =>
             {

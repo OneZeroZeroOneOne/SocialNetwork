@@ -40,7 +40,8 @@ namespace SocialNetwork.WebApi
                         // Set properties and call methods on options
                     }).UseStartup<Startup>();
 					
-                });
+                })
+                .UseDefaultServiceProvider(options => options.ValidateScopes = false);
 
         }
     }
