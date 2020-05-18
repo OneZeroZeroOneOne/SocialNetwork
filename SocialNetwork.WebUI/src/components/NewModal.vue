@@ -153,7 +153,7 @@ export default class NewModal extends Vue {
     }
 
     getAttachmentPath(path: string): string {
-        return 'http://16ch.tk/api/attachment/' + path;
+        return 'http://194.99.21.140/api/attachment/' + path;
     }
 
     adjustSize() {
