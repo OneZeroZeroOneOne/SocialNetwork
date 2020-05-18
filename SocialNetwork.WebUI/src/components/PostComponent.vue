@@ -20,10 +20,12 @@
         <div class=post-content-header v-if="obj.attachmentPost.length > 0" :style="stylesContentHeader()">
           <attachment-component :attachmentObjs="obj.attachmentPost"/>
         </div>
-        <div class=post-content-body>
-          <span v-for="block in parsedData.child" :key="block.node_id">
-            <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
-          </span>
+        <div v-bar>
+          <article class=post-content-body v-html="obj.text">
+            <!--<span v-for="block in parsedData.child" :key="block.node_id">
+              <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
+            </span>-->
+          </article>
         </div>
       </div>
       <div class="post-footer">
@@ -125,8 +127,8 @@ export default class PostComponent extends Vue {
     //this.parseMarkdownToTree()
 
     //console.log(this.obj.text)
-    this.parsedData = JSON.parse(this.obj.text);
-    this.flattenedData = this.flatten(this.parsedData)
+    //this.parsedData = JSON.parse(this.obj.text);
+    //this.flattenedData = this.flatten(this.parsedData)
     //console.log(this)
     //console.log(this.parsedData)
     //console.log(this.flattenedData)

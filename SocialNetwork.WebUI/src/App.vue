@@ -154,3 +154,16 @@ html {
   background-color: rgba(48, 121, 244,.5);
 }
 </style>
+
+
+<style lang="scss">
+a.link-to {
+  width: fit-content;
+  color: orange !important;
+  text-decoration: none;
+  &:hover {
+    color: orangered !important;
+    cursor: pointer;
+  }
+}
+</style>

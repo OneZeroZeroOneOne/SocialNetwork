@@ -1,15 +1,15 @@
 <template>
-  <div class="post-view">
+  <div class="post-view" id="thread-view">
     <top-bottom-buttons/>
-    <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
+    <board-name-header-component :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
     
     <post-component :obj="postObj" v-if="requestPostStatus === 1"/>
     <div id="comments">
       <div class="comment-wrapper" v-for="(item, index) in commentObjs" v-bind:key="item.id" style="">
-        <CommentComponent :obj="item" :commentNum="index+1" :fatherPost="postObj"/>
+        <comment-component :obj="item" :commentNum="index+1" :fatherPost="postObj"/>
       </div>
     </div>
-    <FooterComponent/>
+    <footer-component/>
   </div>
 
 </template>
@@ -84,6 +84,22 @@ export default class PostView extends Vue {
     /*this.$root.$on('footerInView', () => {
       this.throttleLoadComments();
     })*/
+  }
+
+  mounted() {
+    let iAm = document.getElementById('thread-view');
+
+    if (iAm === null)
+      return;
+
+    iAm.addEventListener('mouseover', function(e: MouseEvent) {
+      //console.log(e)
+      // @ts-ignore
+      if (e.target && e.target.matches('.link-to')) {
+        // @ts-ignore
+        console.log(e.target.dataset)
+      }
+    })
   }
 
   beforeDestroy() {

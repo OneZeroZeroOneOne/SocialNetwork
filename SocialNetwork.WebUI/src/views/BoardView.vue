@@ -1,17 +1,17 @@
 <template>
   <div class="board-view">
-    <BoardNameHeaderComponent :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
+    <board-name-header-component :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
     <div id="posts" v-if="requestPostsStatus === 1">
       <div v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id">
-        <PostComponent :obj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
+        <post-component :obj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
         <div id="comments">
           <div class="comment-wrapper" v-for="(commentO, indexComment) in getPreloadedCommentForPost.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
-            <CommentComponent :obj="commentO" :commentNum="indexComment+1" :fatherPost="postO"/>
+            <comment-component :obj="commentO" :commentNum="indexComment+1" :fatherPost="postO"/>
           </div>
         </div>
       </div>
     </div>
-    <FooterComponent/>
+    <footer-component/>
   </div>
 </template>
 

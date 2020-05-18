@@ -18,12 +18,12 @@
        <attachment-component :attachmentObjs="obj.attachmentComment"/>
       </div>
       <div v-bar>
-        <div class="comment-content-body">
-          <span v-for="block in parsedData.child" :key="block.node_id" style="cursor: text;">
+        <article class="comment-content-body" v-html="obj.text">
+          <!--<span v-for="block in parsedData.child" :key="block.node_id" style="cursor: text;">
             <component v-if="getEntityDependOnTag(block.tag) !== 'br'" :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
             <component v-else :is="getEntityDependOnTag(block.tag)" :key="block.position"/>
-          </span>
-        </div>
+          </span>-->
+        </article>
       </div>
     </div>
     <div class="comment-footer">
@@ -90,6 +90,11 @@ export default class CommentComponent extends Vue {
     'top':'0px',
     'width':'80%',
   }
+
+  /*public newData = `<b>qweqwe</b>
+  <br>
+  <a href='/b/197' class="link-to" data-thread='197' data-id='197'>>>197</a>
+  qweqweqw`*/
 
   //public newData = '{ "node_id": 1, "parent_id": 0, "node": "Element", "tag": "p", "child": [ { "node_id": 2, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 3, "parent_id": 2, "node": "Text", "text": "there is bold" } ] }, { "node_id": 5, "parent_id": 1, "node": "Element", "tag": "ins", "child": [ { "node_id": 6, "parent_id": 5, "node": "Text", "text": "bol " }, { "node_id": 7, "parent_id": 5, "node": "Element", "tag": "ins", "child": [ { "node_id": 8, "parent_id": 7, "node": "Text", "text": "in  " }, { "node_id": 9, "parent_id": 7, "node": "Element", "tag": "linktocomponent", "attr": { "id": "999" } }, { "node_id": 11, "parent_id": 7, "node": "Element", "tag": "del", "child": [ { "node_id": 12, "parent_id": 11, "node": "Text", "text": "qwe" } ] }, { "node_id": 13, "parent_id": 7, "node": "Text", "text": " side" } ] }, { "node_id": 14, "parent_id": 5, "node": "Text", "text": " d" } ] }, { "node_id": 15, "parent_id": 1, "node": "Text", "text": " inside " }, { "node_id": 16, "parent_id": 1, "node": "Element", "tag": "linktocomponent", "attr": { "id": "34" } }, { "node_id": 17, "parent_id": 1, "node": "Text", "text": " qwe " }, { "node_id": 18, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 19, "parent_id": 18, "node": "Text", "text": "there is bold" } ] } ] }'
 
@@ -161,8 +166,8 @@ export default class CommentComponent extends Vue {
 
 
     //console.log(this.obj.text)
-    this.parsedData = JSON.parse(this.obj.text);
-    this.flattenedData = this.flatten(this.parsedData)
+    //this.parsedData = JSON.parse(this.obj.text);
+    //this.flattenedData = this.flatten(this.parsedData)
     //console.log(this)
     //console.log(this.parsedData)
     //console.log(this.flattenedData)
@@ -289,6 +294,7 @@ $text-color: #ccc;
 
   .comment-content-body {
     word-break: break-word;
+    white-space:pre-line;
     //margin-top: 10px;
     //margin-bottom: 10px;
     //min-height: 50px;

@@ -15,6 +15,7 @@ using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Extensions;
 using SocialNetwork.Markdown.Jsonize;
 using SocialNetwork.Markdown.Jsonize.Models;
+using SocialNetwork.Markdown.MarkdownExtensions;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -42,7 +43,11 @@ namespace SocialNetwork.Bll.Services
             if (blockQuoteParser != null) 
                 pipeline.BlockParsers.Remove(blockQuoteParser);
 
-            _pipeline = pipeline
+            /*var paragraphRenderer = pipeline.BlockParsers.Find<ParagraphBlockParser>();
+            if (paragraphRenderer != null)
+                pipeline.BlockParsers.Remove(paragraphRenderer);*/
+
+            pipeline = pipeline
                 //.UseMediaLinks()
                 .UseEmojiAndSmiley()
                 .UseAutoLinks()
@@ -50,9 +55,13 @@ namespace SocialNetwork.Bll.Services
                 .UseEmphasisExtras()
                 .UseLinkTo()
                 .UseMyEmphasis()
-                .UseSoftlineBreakAsHardlineBreak()
+                .UseSoftlineBreakAsHardlineBreak();
                 //.DisableHtml()
-                .Build();
+
+            pipeline.Extensions.Add(new MyParagraphExtension());
+                
+            _pipeline = pipeline.Build();
+
 
             //pipeline.BlockParsers.Remove(QuoteBlockParser)
             //pipeline.BlockParsers.Tr();
@@ -171,7 +180,7 @@ namespace SocialNetwork.Bll.Services
 
             var markdown = ToMarkdown(sanitized);
 
-            return await ParseStructure(markdown);
+            return markdown; //await ParseStructure(markdown);
         }
     }
 }

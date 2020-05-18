@@ -80,6 +80,8 @@ namespace SocialNetwork.Bll.Services
                 BoardId = postModel.BoardId,
             });*/
 
+            //_context.Database.
+
             await _context.PostTop.AddAsync(new PostTop
             {
                 PostId = postModel.Id,
