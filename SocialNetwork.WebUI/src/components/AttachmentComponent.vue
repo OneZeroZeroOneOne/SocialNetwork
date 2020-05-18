@@ -42,7 +42,7 @@ export default class AttachmentComponent extends Vue {
   }
 
   getAttachmentPath(path: string): string {
-    return 'http://16ch.tk/api/attachment/' + path;
+    return 'http://194.99.21.140/api/attachment/' + path;
   }
 
   videoShow(attachment: IAttachment): void {
