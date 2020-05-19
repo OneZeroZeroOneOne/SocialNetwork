@@ -233,7 +233,7 @@ $text-color: var(--post-text-color);
 
   .post-content-body {
     //margin-top: 10px;
-    max-height: 60vh;
+    max-height: 50vh;
     padding-left: 5px;
     min-height: 50px;
     word-break: break-all;
