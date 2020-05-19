@@ -34,26 +34,32 @@ export default class App extends Vue {
 
   constructor() {
     super();
+    
     let defaultStyle = loadCss('/themes/default.css')
     onloadCSS(defaultStyle, () => {
       console.log('loaded default theme')
     })
+
     apiClient.updateToken()
   }
 
   mounted(): void {
-    //
-    this.$root.$on('new-link-to-component', this.new_link_to)
-    this.$root.$on('destroy-link-to-component', this.destroy_link_to)
-    //
-  }
+    let iAm = document.getElementById('app');
 
-  destroy_link_to(): void {
-    console.log('destroy link to')
-  }
+    if (iAm === null)
+      return;
 
-  new_link_to(): void {
-    //console.log('new link to')
+    iAm.addEventListener('mouseover', (e: Event) => {
+      //console.log(e)
+      // @ts-ignore
+      if (e.target && e.target.matches('.link-to')) {
+        // @ts-ignore
+        //console.log(e.target.dataset)
+        //
+        //console.log(e)
+        eventBus.emit('show-link-component', e)
+      }
+    })
   }
 
   created() {

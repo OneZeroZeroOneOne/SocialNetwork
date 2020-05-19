@@ -19,9 +19,16 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { IPost } from '../models/responses/PostViewModel';
 import { IComment } from '../models/responses/CommentViewModel';
 import CommentComponent from "@/components/CommentComponent.vue";
-import { IPostService } from '../services/Abstractions/IPostService';
 import AttachmentComponent from '@/components/AttachmentComponent.vue';
 import PostComponent from './PostComponent.vue';
+
+import { IBoardService } from '@/services/Abstractions/IBoardService';
+import { ICommentService }from '@/services/Abstractions/ICommentService';
+import { IPostService } from '../services/Abstractions/IPostService';
+
+import { BoardService } from '../services/Implementations/BoardService';
+import { CommentService } from '../services/Implementations/CommentService';
+import { PostService } from '../services/Implementations/PostService';
 
 @Component({
   components: {
@@ -32,59 +39,109 @@ import PostComponent from './PostComponent.vue';
 })
 export default class ShowPostCommentContainer extends Vue {
   public listModal: object[] = [] 
+  public modalDict: Map<number, number> = new Map<number, number>();
   public keyId: number = 0;
+  public modals: number[] = [];
+
+  private _commentService!: ICommentService;
+  private _postService!: IPostService;
+
+  public dissapearTimeout = 3 * 1000; //3 sec
 
   constructor() {
     super();
   }
 
-  showComponent(isComment: boolean, object: IComment|IPost, x: number, y: number, linkToComponentFather: Vue) {
-    /*let ComponentClass;
-
-    if (isComment === true)
+  showComponent(event: MouseEvent) {
+    let ComponentClass;
+    let instance;
+    //console.log(event)
+    // @ts-ignore
+    if (this.modals.indexOf(Number(event.target.dataset['id'])) > -1)//(this.modalDict.has(event.target.dataset['id']))
+    {
+      console.log('this modal already show')
+      return;
+    }
+    // @ts-ignore
+    this._commentService.getCommentById(event.target.dataset['id']).then(x => {
+      //console.log(x)
       ComponentClass = Vue.extend(CommentComponent)
-    else
-      ComponentClass = Vue.extend(PostComponent)
 
-    var instance = new ComponentClass({
-      propsData: {
-        obj: object,
+      instance = new ComponentClass({
+        propsData: {
+          obj: x.data,
+          isModal: true,
+          position: {
+            x: event.pageX,
+            y: event.pageY,
+          }
+        }
+      });
+      
+      instance.$mount() // pass nothing
+      //console.log(instance)
+
+      this.$root.$el.appendChild(instance.$el);
+      this.modals.push(Number(event.target.dataset['id']));
+
+      /*let timer = setTimeout(() => {
+        this.$root.$el.removeChild(instance.$el);
+        this.modalDict.delete(event.target.dataset['id']);
+      }, this.dissapearTimeout)
+
+      this.modalDict.set(event.target.dataset['id'], timer);*/
+
+      /*this.listModal.push({
+        isComment: true,
+        keyId: this.keyId++,
+        obj: x.data,
         isModal: true,
-        linkToFather: linkToComponentFather,
-      }
-    });
+        position: {
+          x: event.pageX,
+          y: event.pageY,
+        }
+      })*/
+    }).catch(err => {
+      ComponentClass = Vue.extend(CommentComponent)
 
-    instance.$mount() // pass nothing
-    console.log(instance)
+      instance = new ComponentClass({
+        propsData: {
+          obj: {
+            id: Number(event.target.dataset['id']),
+            text: "Ошибка",
+            attachmentComment: [],
+          },
+          isModal: true,
+          position: {
+            x: event.pageX,
+            y: event.pageY,
+          }
+        }
+      });
+      
+      instance.$mount() // pass nothing
+      //console.log(instance)
 
-    this.$root.$el.appendChild(instance.$el)
-
-    let el = instance.$el as any;
-    el.attributeStyleMap.set('position', 'absolute')
-    el.attributeStyleMap.set('left', (x - 20) + "px")
-    el.attributeStyleMap.set('top', y + "px")
-    el.attributeStyleMap.set('width', '80%')*/
-    this.listModal.push({
-      isComment: isComment,
-      keyId: this.keyId++,
-      obj: object,
-      isModal: true,
-      linkToFather: linkToComponentFather,
-      position: {
-        x: x,
-        y: y,
-      }
+      this.$root.$el.appendChild(instance.$el);
+      this.modals.push(Number(event.target.dataset['id']));
     })
+    
   }
 
-  hideComponent(component: Vue) {
-    // @ts-ignore
-
+  hideComponent(component: Vue|number) {
+    this.modals = this.modals.filter(x => x !== component[1])
+    this.$root.$el.removeChild(component[0].$el);
     //let comp = this.listModal.find(x => x.keyId == component.modalId)
     // @ts-ignore
-    this.listModal = this.listModal.filter(obj => obj.keyId !== component.modalId);
+    //this.listModal = this.listModal.filter(obj => obj.keyId !== component.modalId);
     /*console.log(component)
     this.$root.$el.removeChild(component.$el)*/
+  }
+
+  beforeCreate() {
+    //this._boardService = new BoardService();
+    this._commentService = new CommentService();
+    this._postService = new PostService();
   }
 
   beforeDestroy() {

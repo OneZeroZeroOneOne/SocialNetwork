@@ -9,6 +9,7 @@ class EventBus {
     public emit(eventName: string, props: any): void {
         if (this.mainApp === undefined || this.mainApp === null)
             this.setupMainApp()
+            
         this.mainApp.$emit(eventName, props)
     }
 }

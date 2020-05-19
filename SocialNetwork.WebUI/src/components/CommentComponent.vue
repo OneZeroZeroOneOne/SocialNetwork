@@ -76,7 +76,6 @@ export default class CommentComponent extends Vue {
     'position': 'absolute',
     'left':'0px',
     'top':'0px',
-    'width':'80%',
   }
 
   /*public newData = `<b>qweqwe</b>
@@ -100,18 +99,21 @@ export default class CommentComponent extends Vue {
 
   @Watch('hovered', {immediate: true})
   change(value) {
-    /*if (this.isModal)
+    if (this.isModal)
     {
-      console.log(value)
+      //console.log('hovered', value)
       if (value === true)
       {
-        if (this.countdown !== undefined)
-          this.countdown.pause()
-      }else {
-        if (this.countdown !== undefined)
-          this.countdown.continue()
+        //console.log('deleting timer', this.timer)
+        if (this.timer !== -1)
+          clearTimeout(this.timer);
+        // @ts-ignore
+        this.timer = null;
+      } else {
+        this.timer = setTimeout(this.end, 3 * 1000);
+        //console.log('new timer', this.timer)
       }
-    }*/
+    }
   } 
 
   end() {
@@ -119,8 +121,8 @@ export default class CommentComponent extends Vue {
     if (data.seconds === 1)
     {*/
       // @ts-ignore
-      this.linkToFather.showing = true;
-      eventBus.emit('hide-link-component', this)
+      //this.linkToFather.showing = true;
+      eventBus.emit('hide-link-component', [this, this.obj.id])
     //}
   }
 
@@ -161,20 +163,11 @@ export default class CommentComponent extends Vue {
     if (this.isModal !== undefined && this.isModal !== false) {
       this.modalStyles.left = this.position.x + 'px';
       this.modalStyles.top = this.position.y + 'px';
-      /*console.log(this.isModal)
-      this.countdown = this.$refs.countdown;
-      this.countdown.start();
-      this.countdown.pause();*/
-      this.counter = 3 * 10;
-      this.timer = setInterval(() => {
-        this.counter = this.counter - 1;
-        //console.log(this.counter)
-        if(this.counter === 0) 
-        {
-          clearInterval(this.timer)
-          this.end()
-        }
-      }, 100);
+
+      this.timer = setTimeout(this.end, 3 * 1000);
+      clearTimeout(this.timer);
+      this.hovered = false;
+
     }else{
       //this is not modal so...
     }

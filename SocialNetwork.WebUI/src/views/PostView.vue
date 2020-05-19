@@ -39,6 +39,8 @@ import { BoardService } from '../services/Implementations/BoardService';
 import { CommentService } from '../services/Implementations/CommentService';
 import { PostService } from '../services/Implementations/PostService';
 
+import eventBus from '@/utilities/EventBus';
+
 import Nprogress from "nprogress"
 import _ from 'lodash'
 
@@ -87,19 +89,7 @@ export default class PostView extends Vue {
   }
 
   mounted() {
-    let iAm = document.getElementById('thread-view');
-
-    if (iAm === null)
-      return;
-
-    iAm.addEventListener('mouseover', function(e: MouseEvent) {
-      //console.log(e)
-      // @ts-ignore
-      if (e.target && e.target.matches('.link-to')) {
-        // @ts-ignore
-        console.log(e.target.dataset)
-      }
-    })
+    
   }
 
   beforeDestroy() {
