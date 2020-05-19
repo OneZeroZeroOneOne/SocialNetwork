@@ -82,6 +82,7 @@ export default class ShowPostCommentContainer extends Vue {
       //console.log(instance)
 
       this.$root.$el.appendChild(instance.$el);
+      // @ts-ignore
       this.modals.push(Number(event.target.dataset['id']));
 
       /*let timer = setTimeout(() => {
@@ -107,6 +108,7 @@ export default class ShowPostCommentContainer extends Vue {
       instance = new ComponentClass({
         propsData: {
           obj: {
+            // @ts-ignore
             id: Number(event.target.dataset['id']),
             text: "Ошибка",
             attachmentComment: [],
@@ -123,6 +125,7 @@ export default class ShowPostCommentContainer extends Vue {
       //console.log(instance)
 
       this.$root.$el.appendChild(instance.$el);
+      // @ts-ignore
       this.modals.push(Number(event.target.dataset['id']));
     })
     
