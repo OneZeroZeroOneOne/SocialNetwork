@@ -15,6 +15,7 @@ import EditorModal from '@/components/EditorModal.vue'
 import apiClient from '@/services/Implementations/ApiClient';
 import NewModal from "@/components/NewModal.vue";
 import ShowPostCommentContainer from '@/components/ShowPostCommentContainer.vue';
+import AttachmentComponent from '@/components/AttachmentComponent.vue';
 import NavBarComponent from '@/components/NavBarComponent.vue';
 
 import { loadCss, onloadCSS } from '@/utilities/loadStyle';
@@ -27,6 +28,7 @@ import eventBus from "@/utilities/EventBus";
     NewModal,
     ShowPostCommentContainer,
     NavBarComponent,
+    AttachmentComponent,
   }
 })
 export default class App extends Vue {
@@ -34,7 +36,7 @@ export default class App extends Vue {
 
   constructor() {
     super();
-    
+
     let defaultStyle = loadCss('/themes/default.css')
     onloadCSS(defaultStyle, () => {
       console.log('loaded default theme')
