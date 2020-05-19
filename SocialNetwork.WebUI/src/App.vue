@@ -17,6 +17,8 @@ import NewModal from "@/components/NewModal.vue";
 import ShowPostCommentContainer from '@/components/ShowPostCommentContainer.vue';
 import NavBarComponent from '@/components/NavBarComponent.vue';
 
+import { loadCss, onloadCSS } from '@/utilities/loadStyle';
+
 import eventBus from "@/utilities/EventBus";
 
 @Component({
@@ -32,6 +34,10 @@ export default class App extends Vue {
 
   constructor() {
     super();
+    let defaultStyle = loadCss('/themes/default.css')
+    onloadCSS(defaultStyle, () => {
+      console.log('loaded default theme')
+    })
     apiClient.updateToken()
   }
 
@@ -39,6 +45,7 @@ export default class App extends Vue {
     //
     this.$root.$on('new-link-to-component', this.new_link_to)
     this.$root.$on('destroy-link-to-component', this.destroy_link_to)
+    //
   }
 
   destroy_link_to(): void {
@@ -59,7 +66,7 @@ export default class App extends Vue {
 <style lang="scss">
 @import '~vue-awesome-notifications/dist/styles/style.css';
 @import './styles/scss/markdown.scss';
-@import './styles/themes/default.scss';
+//@import './styles/themes/default.css';
 
 
 img {

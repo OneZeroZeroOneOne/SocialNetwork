@@ -1,17 +1,17 @@
 .green-text {
     width: fit-content;
-    color: green;
+    color: var(--markdown-green-text-color);
     font-style: italic;
 }
 
 
 a.link-to {
     width: fit-content;
-    color: orange !important;
+    color: var(--markdown-link-to-text-color) !important;
     text-decoration: none;
 
     &:hover {
-        color: orangered !important;
+        color: var(--markdown-link-to-text-hover-color) !important;
         cursor: pointer;
     }
 }
