@@ -15,3 +15,14 @@ a.link-to {
         cursor: pointer;
     }
 }
+
+.spoiler {
+    width: fit-content;
+    color: var(--markdown-spoiler-text-color);
+    background-color: var(--markdown-spoiler-background-color);
+
+    &:hover {
+        color: inherit;
+        background-color: inherit;
+    }
+}

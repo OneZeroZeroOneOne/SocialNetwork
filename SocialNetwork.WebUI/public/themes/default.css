@@ -2,6 +2,8 @@
     --markdown-green-text-color: #89b120;
     --markdown-link-to-text-color: orange;
     --markdown-link-to-text-hover-color: orangered;
+    --markdown-spoiler-text-color: black;
+    --markdown-spoiler-background-color: black;
 
     --attachment-border-color: #7d7d7d;
     --attachment-text-color: #d89315;

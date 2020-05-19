@@ -52,13 +52,7 @@ import { IPost } from "@/models/responses/PostViewModel";
 
 import AttachmentComponent from '../components/AttachmentComponent.vue';
 import CommentComponent from "./CommentComponent.vue";
-import VRuntimeTemplate from "v-runtime-template";
-import LinkToComponent from '@/components/MarkdownComponents/LinkToComponent.vue';
-import GreenComponent from '@/components/MarkdownComponents/GreenComponent.vue';
-import TextComponent from '@/components/MarkdownComponents/TextComponent.vue';
-import SpoilerComponent from '@/components/MarkdownComponents/SpoilerComponent.vue';
 
-import tagToEntity from '@/utilities/MarkdownUtilities';
 
 import Nprogress from "nprogress"
 import _ from 'lodash'
@@ -69,11 +63,6 @@ import eventBus from "@/utilities/EventBus";
 @Component({
   components: {
     AttachmentComponent,
-    VRuntimeTemplate,
-    LinkToComponent,
-    TextComponent, 
-    GreenComponent,
-    SpoilerComponent,
   }
 })
 export default class PostComponent extends Vue {
@@ -198,9 +187,7 @@ export default class PostComponent extends Vue {
   }
 
   getEntityDependOnTag(tag: string): string {
-    if (tag === undefined)
-      return "TextComponent"
-    return tagToEntity[tag];
+    return '';
   }
 
   boardName(): string {

@@ -38,7 +38,6 @@ import { IAttachment } from "@/models/responses/Attachment";
 
 import { ResponseState } from "@/models/enum/ResponseState";
 
-import tagToEntity from "@/utilities/MarkdownUtilities";
 
 import eventBus from "@/utilities/EventBus";
 

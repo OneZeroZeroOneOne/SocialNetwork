@@ -47,24 +47,12 @@ import { ResponseState } from "@/models/enum/ResponseState";
 
 import PreviewModal from '@/components/PreviewModal.vue';
 import AttachmentComponent from '@/components/AttachmentComponent.vue';
-import VRuntimeTemplate from "v-runtime-template";
-import LinkToComponent from '@/components/MarkdownComponents/LinkToComponent.vue';
-import GreenComponent from '@/components/MarkdownComponents/GreenComponent.vue';
-import TextComponent from '@/components/MarkdownComponents/TextComponent.vue';
-import SpoilerComponent from '@/components/MarkdownComponents/SpoilerComponent.vue';
-
-import tagToEntity from '@/utilities/MarkdownUtilities';
 
 import eventBus from "@/utilities/EventBus";
 
 @Component({
   components: {
     AttachmentComponent,
-    VRuntimeTemplate,
-    LinkToComponent,
-    TextComponent, 
-    GreenComponent,
-    SpoilerComponent,
   }
 })
 export default class CommentComponent extends Vue {
@@ -107,9 +95,7 @@ export default class CommentComponent extends Vue {
   }
 
   getEntityDependOnTag(tag: string): string {
-    if (tag === undefined)
-      return "TextComponent"
-    return tagToEntity[tag];
+    return '';
   }
 
   @Watch('hovered', {immediate: true})
