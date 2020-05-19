@@ -238,21 +238,14 @@ $comment-footer-height: 45px;
 $comment-offset-left: 10px;
 $comment-offset-between: 6px;
 
-$comment-body-color: #192734;
-$comment-body-border-color: rgb(56, 68, 77);
-$comment-header-border-color: cornflowerblue;
-$comment-footer-border-color: rgb(76, 96, 116);
-$comment-number-header-color: #cc2c11;
+$comment-body-color: var(--comment-body-background-color);
+$comment-body-border-color: var(--comment-body-border-color);
+$comment-header-border-color: var(--comment-header-border-color);
+$comment-footer-border-color: var(--comment-footer-border-color);
+$comment-number-header-color: var(--comment-header-number-color);
 
-$header-text-color: #6995c5;
-$text-color: #ccc;
-
-.comment-attachment-video {
-  border-color: darkgray;
-  border-style: dashed;
-  border-width: 2px;
-  box-sizing: border-box;
-}
+$header-text-color: var(--comment-header-text-color);
+$text-color: var(--comment-text-color);
 
 .comment {
   color: $text-color;
@@ -271,7 +264,7 @@ $text-color: #ccc;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: flex-start; //flex end for images to bottom
+    align-items: flex-start;
   }
 
   .comment-attachment:not(:first-child) {
@@ -294,11 +287,8 @@ $text-color: #ccc;
 
   .comment-content-body {
     word-break: break-word;
-    white-space:pre-line;
-    //margin-top: 10px;
-    //margin-bottom: 10px;
-    //min-height: 50px;
-    max-height: 60vh;
+    white-space: pre-line;
+    max-height: 50vh;
     overflow: auto;
   }
 
@@ -310,11 +300,10 @@ $text-color: #ccc;
     border-bottom-color: $comment-header-border-color;
     padding-left: 10px;
     padding-top: 5px;
-    color: $comment-number-header-color;
     .comment-header-number {
       padding-right: 10px;
       float: right;
-      color: #789922;
+      color: $comment-number-header-color;
     }
     .comment-header-time {
       color: $text-color;
@@ -325,10 +314,10 @@ $text-color: #ccc;
       color: $text-color;
       float: left;
       //margin-right: 10px;
-      color: orange;
+      color: var(--comment-header-text-link);
       &:hover {
         cursor: pointer;
-        color: orangered;
+        color: var(--comment-header-text-hover-link);
       }
     }
   }

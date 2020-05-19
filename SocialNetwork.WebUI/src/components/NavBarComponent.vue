@@ -65,8 +65,7 @@ export default class NavBarComponent extends Vue {
 </script>
 <style lang="scss" scoped>
 // Variables
-$baseMenuBackground: #192734;         // Base color theme
-$secondaryMenuBackground: #0186ba;  // Secondary color (highlights, triangles...)
+$baseMenuBackground: var(--navbar-background-color);  // Base color theme
 $gutter: 6px;                       // Base gutter
 $fontSize: 12px;
 
@@ -95,7 +94,7 @@ $fontSize: 12px;
   }
 
   a {
-    color: lighten($baseMenuBackground, 60%);
+    color: var(--navbar-link-color);
     text-decoration: none;
   }
 }
@@ -111,7 +110,7 @@ $fontSize: 12px;
 
   > li {
     position: relative;
-    border-right: 1px solid lighten($baseMenuBackground, 20%);
+    border-right: 1px solid var(--navbar-border-color);
 
     > a {
       padding: $gutter 3 * $gutter;
@@ -126,7 +125,7 @@ $fontSize: 12px;
       }
 
       > a {
-        color: #fff;
+        color: var(--navbar-link-focus-color);
       }
     }
 
@@ -140,7 +139,7 @@ $fontSize: 12px;
       }
       
       > a {
-        color: #fff;
+        color: var(--navbar-link-focus-color);
       }
     }    
   }
@@ -167,50 +166,6 @@ $fontSize: 12px;
   .animenu__nav,
   .animenu__nav__dropdown {
     display: none;
-  }
-
-  // First level -> main menu items
-  // <nav class="animenu">
-  //    <ul class="animenu__nav">
-  //    ...
-  //    </ul>
-  //  </nav>    
-  .animenu__nav {
-    margin: $gutter 0;
-
-    > li {
-      width: 100%;
-      border-right: 0;
-      border-bottom: 1px solid lighten($baseMenuBackground, 25%);
-
-      &:last-child {
-        border: 0; 
-      }
-
-      &:first-child > a:after {
-        content: '';
-        position: absolute;
-        height: 0; width: 0;
-        left: 1em;
-        top: -6px;
-        border: 6px solid transparent;
-        border-top: 0;
-        border-bottom-color: inherit;
-      }
-
-      > a {
-        width: 100%;
-        padding: $gutter;
-        border-color: $baseMenuBackground;
-        position: relative; //dropdown caret
-      }
-    }
-
-    a:hover {
-      background-color: $secondaryMenuBackground;
-      border-color: $secondaryMenuBackground;
-      color: #fff;      
-    }
   }
 }
 </style>

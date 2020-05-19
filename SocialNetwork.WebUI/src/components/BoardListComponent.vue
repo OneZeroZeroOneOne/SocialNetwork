@@ -46,8 +46,7 @@ import { IBoardService } from '@/services/Abstractions/IBoardService';
 import { BoardService } from '../services/Implementations/BoardService';
 import Card from '@/components/BoardCardComponent.vue';
 
-import Nprogress from "nprogress"
-import _ from 'lodash'
+import Nprogress from "nprogress";
 
 @Component({
   components: { 
@@ -121,21 +120,16 @@ export default class BoardListComponent extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-$board-name-color: #ba6b57;
-$board-description-color: #ffa41b;
-$board-hover-color: #e7b2a5;
-
 .board-list {
   display: inline-flex;
   flex-direction: column;
 }
 
 .container-wrapper {
-  background-color: #192734;// rgb(56, 67, 78);
+  background-color: var(--main-board-list-background-color);
   display: inline-block;
-  border-color: rgb(56, 67, 78);
+  border-color: var(--main-board-list-border-color);
   border-style: solid;
   border-width: 1px;
   padding: 12px;
@@ -153,7 +147,7 @@ $board-hover-color: #e7b2a5;
     span:hover {
       cursor: pointer;
       .link {
-        color: chocolate;
+        color: var(--main-board-list-text-hover-color);
       }
     }
 
@@ -169,33 +163,14 @@ $board-hover-color: #e7b2a5;
       margin-right:10px;
     }
     .link {
-      color: coral;
+      color: var(--main-board-list-text-color);
     }
   }
 }
 
 .board-list-container {
-  //padding: 40px 80px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-}
-
-.board-link {
-    .board-name {
-        //display: inline;
-        color: $board-name-color;
-        cursor: pointer;
-    }
-
-    .board-name:hover {
-        color: $board-hover-color;
-    }
-
-    .board-description {
-        //display: inline;
-        color: $board-description-color;
-        cursor: pointer;
-    }
 }
 </style>

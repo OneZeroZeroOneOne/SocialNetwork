@@ -219,12 +219,12 @@ $post-header-height: 25px;
 $post-content-height: 100px;
 $post-footer-height: 45px;
 
-$post-body-color: rgb(21, 32, 43);
-$post-body-border-color: rgb(56, 68, 77);
-$post-header-border-color: cornflowerblue;
+$post-body-color: var(--post-body-background-color);
+$post-body-border-color: var(--post-body-border-color);
+$post-header-border-color: var(--post-header-border-color);
 
-$header-text-color: #6995c5;
-$text-color: #ccc;
+$header-text-color: var(--post-header-border-text-color);
+$text-color: var(--post-text-color);
 
 .post-body {
   position: relative;
@@ -263,7 +263,7 @@ $text-color: #ccc;
     .post-header-number {
       padding-right: 10px;
       float: right;
-      color: #789922;
+      color: var(--post-header-number-color);
     }
 
     .post-header-time {
@@ -276,10 +276,10 @@ $text-color: #ccc;
       color: $text-color;
       float: left;
       //margin-right: 10px;
-      color: orange;
+      color: var(--post-header-text-link);
       &:hover {
         cursor: pointer;
-        color: orangered;
+        color: var(--post-header-text-hover-link);
       }
     }
     .post-header-title {
@@ -298,7 +298,7 @@ $text-color: #ccc;
     min-height: $post-footer-height;
     border-top-style: solid;
     border-top-width: 2px;
-    border-top-color: cornflowerblue;
+    border-top-color: var(--post-footer-border-color);
   }
 
   .post-footer-enter {

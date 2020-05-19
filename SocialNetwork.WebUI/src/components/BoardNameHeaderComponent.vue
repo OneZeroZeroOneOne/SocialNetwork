@@ -49,19 +49,17 @@ export default class BoardNameHeaderComponent extends Vue {
     font-size: 1.5em;
     text-align: center;
     cursor: pointer;
-    color: darken($color: orange, $amount: 10);
+    color: var(--board-header-text-color);
 
     &:hover {
-        color: orange;
+        color: var(--board-header-text-hover-color);
     }
 }
-
-
 
 .create-thread:before, .create-thread:after {
     content: "";
     height: 2px;
-    background: linear-gradient(to right,  rgba(0,0,0,0) 0%,rgb(129, 112, 112) 50%,rgba(0,0,0,0) 100%);
+    background: linear-gradient(to right,  var(--board-header-gradient-from) 0%,var(--board-header-gradient-to) 50%,var(--board-header-gradient-from) 100%);
 
     display: block;
     margin-bottom: 5px;
@@ -83,11 +81,11 @@ export default class BoardNameHeaderComponent extends Vue {
     font-size: 4em;  
     .board-description {
         display: inline;
-        color: orange;
+        color: var(--board-header-text-color);
     }
     .board-name {
         display: inline;
-        color: orangered;
+        color: var(--board-header-text-hover-color);
     }
 }
 </style>

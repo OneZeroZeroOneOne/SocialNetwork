@@ -256,7 +256,7 @@ export default class NewModal extends Vue {
 }
 
 .attachment-modal-content {
-    border-color: silver;
+    border-color: var(--attachment-modal-border-color);
     border-style: solid;
     border-width: 5px;
     box-sizing: content-box;
@@ -267,7 +267,7 @@ export default class NewModal extends Vue {
     position: relative !important;
     top: 20px;
     text-align: center;
-    color: indigo;
+    color: var(--attachment-modal-text-color);
 }
 
 .attachment-modal-content:focus {

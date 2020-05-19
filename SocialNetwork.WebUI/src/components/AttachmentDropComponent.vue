@@ -219,24 +219,24 @@
 }
 
 .filepond--drop-label {
-    color: #555;
+    color: var(--attachment-drop-text-color);
 }
 
 [data-filepond-item-state*='error'] .filepond--item-panel,
 [data-filepond-item-state*='invalid'] .filepond--item-panel {
-    background-color: red;
+    background-color: var(--attachment-drop-error);
 }
 
 .filepond--file-action-button:hover,
 .filepond--file-action-button:focus {
-    box-shadow: 0 0 0 0.125em rgba(172, 67, 67, 0.9);
+    box-shadow: 0 0 0 0.125em var(--attachment-drop-action-button-color);
 }
 
 [data-filepond-item-state='processing-complete'] .filepond--item-panel {
-    background-color: green;
+    background-color: var(--attachment-drop-success);
 }
 
 .filepond--panel-root {
-    border: 2px solid #2c3340;
+    border: 2px solid var(--attachment-drop-panel-border-color);
 }
 </style>

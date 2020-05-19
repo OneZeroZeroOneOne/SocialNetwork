@@ -18,7 +18,6 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { ResponseState } from "@/models/enum/ResponseState";
 import {IAttachment} from '../models/responses/Attachment';
-import _ from 'lodash'
 
 @Component({})
 export default class AttachmentComponent extends Vue {
@@ -46,23 +45,10 @@ export default class AttachmentComponent extends Vue {
   }
 
   videoShow(attachment: IAttachment): void {
-    /*this.$modal.show('preview-video-modal', {
-      srcPath: this.getAttachmentPath(attachment.path),
-      posterPath: this.getAttachmentPath(attachment.preview),
-    }, {
-      draggable: true,
-      resizable: true,
-    })*/
     this.$root.$emit('show-attachment-video', attachment)
   }
 
   imgShow(attachment: IAttachment): void {
-    /*this.$modal.show('preview-modal', {
-      srcPath: this.getAttachmentPath(attachment.path)
-    }, {
-      draggable: true,
-      resizable: true,
-    })*/
     this.$root.$emit('show-attachment-image', attachment)
   }
 }
@@ -89,7 +75,7 @@ img[lazy=loaded] {
 }
 
 .attachment-video {
-  border-color: #7d7d7d;
+  border-color: var(--attachment-border-color);
   border-style: dashed;
   border-width: 1px;
   box-sizing: border-box;
@@ -100,9 +86,9 @@ img[lazy=loaded] {
   grid-template-columns: 200px auto;
   align-items: center;
   display: inline;
-  font-size: 0.8em;
+  font-size: var(--attachment-text-size);
   text-align: center;
-  color: #d89315;
+  color: var(--attachment-text-color);
   
   .clickable {
     cursor: pointer;
@@ -113,7 +99,7 @@ img[lazy=loaded] {
   }
 
   &:hover {
-    color: #906310;
+    color: var(--attachment-text-hover-color);
   }
 }
 

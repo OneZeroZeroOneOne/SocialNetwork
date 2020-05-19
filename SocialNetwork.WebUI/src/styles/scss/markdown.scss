@@ -1,0 +1,17 @@
+.green-text {
+    width: fit-content;
+    color: green;
+    font-style: italic;
+}
+
+
+a.link-to {
+    width: fit-content;
+    color: orange !important;
+    text-decoration: none;
+
+    &:hover {
+        color: orangered !important;
+        cursor: pointer;
+    }
+}

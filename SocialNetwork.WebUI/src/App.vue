@@ -58,6 +58,9 @@ export default class App extends Vue {
 
 <style lang="scss">
 @import '~vue-awesome-notifications/dist/styles/style.css';
+@import './styles/scss/markdown.scss';
+@import './styles/themes/default.scss';
+
 
 img {
   width: 100%;
@@ -152,26 +155,5 @@ html {
 
 .vb.vb-dragging-phantom > .vb-dragger > .vb-dragger-styler {
   background-color: rgba(48, 121, 244,.5);
-}
-</style>
-
-
-<style lang="scss">
-a.link-to {
-  width: fit-content;
-  color: orange !important;
-  text-decoration: none;
-  &:hover {
-    color: orangered !important;
-    cursor: pointer;
-  }
-}
-</style>
-
-<style lang="scss">
-.green-text {
-  width: fit-content;
-  color: green;
-  font-style: italic;
 }
 </style>

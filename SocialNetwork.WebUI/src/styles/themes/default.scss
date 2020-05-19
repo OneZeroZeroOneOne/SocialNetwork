@@ -1,0 +1,51 @@
+:root {
+    --attachment-border-color: #7d7d7d;
+    --attachment-text-color: #d89315;
+    --attachment-text-hover-color: #906310;
+    --attachment-text-size: 0.8em;
+
+    --attachment-drop-text-color: #555;
+    --attachment-drop-success: green;
+    --attachment-drop-error: red;
+    --attachment-drop-invalid: red;
+    --attachment-drop-action-button-color: rgba(172, 67, 67, 0.9);
+    --attachment-drop-panel-border-color: #2c3340;
+
+    --attachment-modal-border-color: silver;
+    --attachment-modal-text-color: indigo;
+
+    --main-board-list-text-color: coral;
+    --main-board-list-text-hover-color: chocolate;
+    --main-board-list-border-color: rgb(56, 67, 78);
+    --main-board-list-background-color: #192734;
+
+    --board-header-text-hover-color: orangered;
+    --board-header-text-color: orange;
+    --board-header-gradient-from: rgba(0,0,0,0);
+    --board-header-gradient-to: rgb(129, 112, 112);
+
+    --post-body-background-color: rgb(21, 32, 43);
+    --post-body-border-color: rgb(56, 68, 77);
+    --post-footer-border-color: cornflowerblue;
+    --post-header-border-color: cornflowerblue;
+    --post-header-border-text-color: #6995c5;
+    --post-header-number-color: #789922;
+    --post-header-text-link: orange;
+    --post-header-text-hover-link: orangered;
+    --post-text-color: #ccc;
+
+    --comment-body-background-color: #192734;
+    --comment-body-border-color: rgb(56, 68, 77);
+    --comment-footer-border-color: rgb(76, 96, 116);
+    --comment-header-border-color: cornflowerblue;
+    --comment-header-number-color: #789922;
+    --comment-header-text-color: #6995c5;
+    --comment-header-text-link: orange;
+    --comment-header-text-hover-link: orangered;
+    --comment-text-color: #ccc;
+
+    --navbar-background-color: #192734;
+    --navbar-link-color: #8aa9c6;
+    --navbar-border-color: #35526e;
+    --navbar-link-focus-color: #fff;
+}
