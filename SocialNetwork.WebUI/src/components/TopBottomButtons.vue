@@ -30,13 +30,16 @@ export default class TopBottomButtons extends Vue {
     }
 
     toTop(): void {
-        scrollTo(0, 300)
+        //scrollTo(0, 300)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
     toBottom(): void {
         let body = document.body,
             html = document.documentElement;
-        scrollTo(Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight), 300)
+        //console.log(Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight))
+        //scrollTo(Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight), 300)
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
     }
 
     catchScroll(event: any): void {
@@ -45,6 +48,7 @@ export default class TopBottomButtons extends Vue {
             html = document.documentElement;
 
         let maxHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+        
         this.canDown = window.scrollY + window.innerHeight < maxHeight - 200
     }
 }
