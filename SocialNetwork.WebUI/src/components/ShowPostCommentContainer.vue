@@ -65,6 +65,7 @@ export default class ShowPostCommentContainer extends Vue {
     }).catch(err => {
       // @ts-ignore
       this.createComponent(event, compId, {
+        id: compId,
         text: "Ошибка",
         attachmentComment: [],
       }, true);
