@@ -20,6 +20,8 @@ import NavBarComponent from '@/components/NavBarComponent.vue';
 
 import { loadCss, onloadCSS } from '@/utilities/loadStyle';
 
+import db from '@/services/Implementations/IDBService';
+
 import eventBus from "@/utilities/EventBus";
 
 @Component({
@@ -64,7 +66,7 @@ export default class App extends Vue {
     })
   }
 
-  created() {
+  async created() {
     this.$refs.container = this;
     console.log(this)
   }

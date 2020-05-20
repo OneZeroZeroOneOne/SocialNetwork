@@ -38,6 +38,8 @@ import _ from 'lodash'
 import { CommentService } from '../services/Implementations/CommentService';
 import { BoardService } from '../services/Implementations/BoardService';
 
+import globalStorage from '@/services/Implementations/GlobalStorage';
+
 @Component({
   components: { 
     PostComponent,
@@ -71,6 +73,7 @@ export default class BoardView extends Vue {
         this.$root.$on('footerInView', this.throttleLoadPosts)
       })
   }
+
 
   beforeCreate() {
     this._commentService =  new CommentService();
@@ -112,59 +115,44 @@ export default class BoardView extends Vue {
 
   async loadPagePosts(): Promise<void> {
     Nprogress.start()
-    await this._boardService.getPostsOnBoard(this.boardObj.id, this.currentPage, 10)
-      .then(response => {
-        if (response.status == 200)
-        {
-          if (response.data.currentPage < response.data.pageCount)
-          {
-            this.currentPage += 1;
-          }
+    let posts = await globalStorage.getTopPostsOnBoard(this.boardObj.id, this.currentPage, 10);
+    
+    if (posts.state === ResponseState.fail)
+    {
+      Nprogress.done();
+      return;
+    } 
 
-          let newPostCount: number = 0;
+    let newPostCount: number = 0;
 
-          let newPostIds: number[] = []
-          response.data.results.forEach(x => {
-            if (this.postIds.indexOf(x.id) === -1)
-            {
-              x.boardId = this.boardObj.id;
-              this.postIds.push(x.id);
-              this.postObjs.push(x);
-              newPostIds.push(x.id);
-              newPostCount += 1;
-            }
-          })
-
-          /*
-          preload comments
-          */
-          newPostIds.forEach(x => {
-            let resp = this._commentService.getCommentForPost(x.toString(), 1, 5)
-            .then(resp => {
-              this.preloadedComments.push(...resp.data.results)
-            })
-          })
-          /* 
-          */
-          this.$awn.info(
-            newPostCount === 0 ? 
-            'No new posts' : 
-            'Loaded ' + newPostCount.toString() + " posts", {
-              durations: {
-                info: 1500
-              }
-            })
-
-          this.requestPostsStatus = ResponseState.success
-        } else {
-          this.requestPostsStatus = ResponseState.fail;
-          this.$router.push({name: "notfound"})
+    let newPostIds: number[] = []
+    posts.value.results.forEach(x => {
+      if (this.postIds.indexOf(x.id) === -1)
+      {
+        x.boardId = this.boardObj.id;
+        this.postIds.push(x.id);
+        this.postObjs.push(x);
+        newPostIds.push(x.id);
+        newPostCount += 1;
+        
+        globalStorage.getCommentsForPost(x.id.toString(), 1, 5).then(com => {
+          if (com.state != ResponseState.fail)
+            this.preloadedComments.push(...com.value.results)
+        })
+      }
+    })
+  
+    this.$awn.info(
+      newPostCount === 0 ? 
+      'No new posts' : 
+      `Loaded ${newPostCount.toString()} posts`, {
+        durations: {
+          info: 1500
         }
-      })
-      .catch(error => {
-        this.requestPostsStatus = ResponseState.fail;
-        this.$router.push({name: "notfound"})
-      });
+    })
+
+    this.requestPostsStatus = ResponseState.success
+
     Nprogress.done();
   }
 }

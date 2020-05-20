@@ -150,9 +150,6 @@ export default class CommentComponent extends Vue {
   }
 
   mounted() {
-    console.log('mount')
-
-
     //console.log(this.obj.text)
     //this.parsedData = JSON.parse(this.obj.text);
     //this.flattenedData = this.flatten(this.parsedData)
