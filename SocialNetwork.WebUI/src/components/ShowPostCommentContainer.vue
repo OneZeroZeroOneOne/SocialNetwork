@@ -53,6 +53,19 @@ export default class ShowPostCommentContainer extends Vue {
   }
 
   async showComponent(event: MouseEvent) {
+
+    // @ts-ignore
+    if (event.target.dataset['id'] === undefined)
+    {
+      // @ts-ignore
+      /*this.createComponent(event, 0, {
+        id: 0,
+        text: "Ошибка",
+        attachmentComment: [],
+      }, true);*/
+      return;
+    }
+
     // @ts-ignore
     let compId = Number(event.target.dataset['id'])
     // @ts-ignore
@@ -70,7 +83,7 @@ export default class ShowPostCommentContainer extends Vue {
       this.createComponent(event, compId, comment.value, true);
       return;
     }
-    
+
     // @ts-ignore
     this.createComponent(event, compId, {
       id: compId,
