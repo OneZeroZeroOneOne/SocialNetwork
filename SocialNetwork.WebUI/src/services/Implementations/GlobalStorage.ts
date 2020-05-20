@@ -9,19 +9,82 @@ import { ResponseState } from '@/models/enum/ResponseState';
 import { IComment } from '@/models/responses/CommentViewModel';
 import { ICommentService } from '../Abstractions/ICommentService';
 import { CommentService } from './CommentService';
+import { IPostService } from '../Abstractions/IPostService';
+import { PostService } from './PostService';
 
 class GlobalStorage {
     private boardService: IBoardService;
     private commentService: ICommentService;
+    private postService: IPostService;
+
     private db: IDBSrvice;
 
     constructor() {
         this.boardService = new BoardService();
         this.commentService = new CommentService();
+        this.postService = new PostService();
 
         IDBSrvice.GetDb().then(x => {
             this.db = x;
         })
+    }
+
+    public async getComment(comment_id: string): Promise<ResponseModel<IComment>> {
+        let respModel = new ResponseModel<IComment>();
+
+        let comment = await this.db.getComment(Number(comment_id));
+
+        if (comment !== undefined)
+        {
+            console.log(`from storage comment ${comment_id}`)
+            respModel.state = ResponseState.success;
+            respModel.value = comment;
+            return respModel;
+        }
+
+        await this.commentService.getCommentById(comment_id.toString())
+            .then(resp => {
+                comment = resp.data;
+
+                this.db.addComments([comment])
+
+                respModel.state = ResponseState.success;
+                respModel.value = comment;
+            }).catch(err => {
+                respModel.state = ResponseState.fail;
+            })
+        
+        return respModel;
+    }
+
+    public async getPost(board_id: Guid, post_id: string): Promise<ResponseModel<IPost>> {
+        let respModel = new ResponseModel<IPost>();
+
+        let post = await this.db.getPost(Number(post_id));
+
+        if (post !== undefined)
+        {
+            console.log(`from storage post ${post_id}`)
+            respModel.state = ResponseState.success;
+            respModel.value = post;
+            return respModel;
+        }
+
+        await this.postService.getPost(board_id, post_id.toString())
+            .then(response => {
+                post = response.data;
+                post.boardId = board_id;
+                
+                this.db.addPosts([post])
+
+                respModel.state = ResponseState.success;
+                respModel.value = post;
+            })
+            .catch(error => {
+                respModel.state = ResponseState.fail;
+            });   
+        
+        return respModel;
     }
 
     public async getTopPostsOnBoard(boardId: Guid, page: number, quantity: number): Promise<ResponseModel<IPagedResult<IPost>>> {

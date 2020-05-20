@@ -44,6 +44,7 @@ import eventBus from '@/utilities/EventBus';
 import Nprogress from "nprogress"
 import _ from 'lodash'
 
+import globalStorage from '@/services/Implementations/GlobalStorage';
 
 @Component({
   components: { 
@@ -147,20 +148,17 @@ export default class PostView extends Vue {
   async loadPost(): Promise<void> {
     this.requestPostStatus = ResponseState.loading;
 
-    await this._postService.getPost(this.boardObj.id, this.postId())
-      .then(response => {
-        this.postObj = response.data;
-        this.postObj.boardId = this.boardObj.id;
-        this.requestPostStatus = ResponseState.success;
-      })
-      .catch(error => {
-        this.requestPostStatus = ResponseState.fail;
-        if (error.response.status === 400)
-        {
-          this.requestPostStatus = ResponseState.fail;
-          this.$router.push({name: "notfound", params: {fromBoard: this.boardObj.name} })
-        }
-      });
+    let resp = await globalStorage.getPost(this.boardObj.id, this.postId())
+
+    if (resp.state === ResponseState.fail)
+    {
+      this.requestPostStatus = ResponseState.fail;
+      this.$router.push({name: "notfound", params: {fromBoard: this.boardObj.name} })
+      return;
+    }
+
+    this.postObj = resp.value;
+    this.requestPostStatus = ResponseState.success;
   }
 
   async loadComments()
@@ -168,42 +166,43 @@ export default class PostView extends Vue {
     this.requestCommentsStatus = ResponseState.loading;
     Nprogress.start()
 
-    await this._commentService.getCommentForPost(this.postId(), this.currentPage, 1000)
-      .then(response => {
-        if (response.status === 200)
-        {
+    let comments = await globalStorage.getCommentsForPost(this.postId(), this.currentPage, 1000);
 
-          if (response.data.currentPage < response.data.pageCount)
-          {
-            this.currentPage += 1;
-          }
-          this.requestCommentsStatus = ResponseState.success;
-          let newComCount: number = 0;
-          response.data.results.forEach(x => {
-            if (this.commentIds.indexOf(x.id) === -1)
-            {
-              this.commentIds.push(x.id);
-              this.commentObjs.push(x);
-              newComCount += 1;
-            }
-          })
-          Nprogress.done();
-          this.$awn.info(
-            newComCount === 0 ? 
-            'No new comments' : 
-            'Loaded ' + newComCount.toString() + " comments",
-            {
-              durations: {
-                info: 1500
-              }
-            }
-          )
+    if (comments.state === ResponseState.fail)
+    {
+      this.requestCommentsStatus = ResponseState.fail;
+      Nprogress.done();
+      return;
+    }
+    
+    Nprogress.done();
+    this.requestCommentsStatus = ResponseState.success;
+
+    if (comments.value.currentPage < comments.value.pageCount)
+    {
+      this.currentPage += 1;
+    }
+
+    let newComCount: number = 0;
+    comments.value.results.forEach(x => {
+      if (this.commentIds.indexOf(x.id) === -1)
+      {
+        this.commentIds.push(x.id);
+        this.commentObjs.push(x);
+        newComCount += 1;
+      }
+    })
+
+    this.$awn.info(
+      newComCount === 0 ? 
+      'No new comments' : 
+      'Loaded ' + newComCount.toString() + " comments",
+      {
+        durations: {
+          info: 1500
         }
-      })
-      .catch(error => {
-        this.requestCommentsStatus = ResponseState.fail;
-        Nprogress.done();
-      })
+      }
+    )
   }
 }
 </script>

@@ -30,6 +30,9 @@ import { BoardService } from '../services/Implementations/BoardService';
 import { CommentService } from '../services/Implementations/CommentService';
 import { PostService } from '../services/Implementations/PostService';
 
+import globalStorage from '@/services/Implementations/GlobalStorage';
+import { ResponseState } from '../models/enum/ResponseState';
+
 @Component({
   components: {
     AttachmentComponent,
@@ -49,7 +52,7 @@ export default class ShowPostCommentContainer extends Vue {
     super();
   }
 
-  showComponent(event: MouseEvent) {
+  async showComponent(event: MouseEvent) {
     // @ts-ignore
     let compId = Number(event.target.dataset['id'])
     // @ts-ignore
@@ -59,8 +62,23 @@ export default class ShowPostCommentContainer extends Vue {
       return;
     }
 
+    //@ts-ignore
+    let comment = await globalStorage.getComment(event.target.dataset['id']);
+
+    if (comment.state !== ResponseState.fail)
+    {
+      this.createComponent(event, compId, comment.value, true);
+      return;
+    }
+    
     // @ts-ignore
-    this._commentService.getCommentById(compId).then(x => {
+    this.createComponent(event, compId, {
+      id: compId,
+      text: "Ошибка",
+      attachmentComment: [],
+    }, true);
+
+    /*this._commentService.getCommentById(compId).then(x => {
       this.createComponent(event, compId, x.data, true);
     }).catch(err => {
       // @ts-ignore
@@ -69,7 +87,7 @@ export default class ShowPostCommentContainer extends Vue {
         text: "Ошибка",
         attachmentComment: [],
       }, true);
-    })
+    })*/
     
   }
 

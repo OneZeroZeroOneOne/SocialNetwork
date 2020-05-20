@@ -42,6 +42,14 @@ class IDBSrvice {
         })
     }
 
+    public async getComment(comment_id: number): Promise<IComment|undefined> {
+        return await this.db.get("comments", comment_id);
+    }
+
+    public async getPost(post_id: number): Promise<IPost|undefined> {
+        return await this.db.get("posts", post_id);
+    }
+
     public async addPosts(posts: IPost[]): Promise<void> {
         let promises: any[] = []
         for (let index = 0; index < posts.length; index++) {
