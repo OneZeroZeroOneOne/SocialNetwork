@@ -42,6 +42,17 @@ export default class ShowPostCommentContainer extends Vue {
     super();
   }
 
+  offset(el: HTMLElement) {
+    let rect = el.getBoundingClientRect(),
+        scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+        scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    return { 
+      top: rect.top + scrollTop, 
+      left: rect.left + scrollLeft 
+    }
+}
+
   async showComponent(event: MouseEvent) 
   {
     // @ts-ignore
@@ -60,7 +71,6 @@ export default class ShowPostCommentContainer extends Vue {
 
     elem.classList.add('showing');
 
-
     let compId: string = "1";
 
     // @ts-ignore
@@ -72,7 +82,7 @@ export default class ShowPostCommentContainer extends Vue {
 
       if (comment.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, comment.value, true, elem);
+        this.createComponent(compId, comment.value, true, elem);
         return;
       }
 
@@ -80,7 +90,7 @@ export default class ShowPostCommentContainer extends Vue {
 
       if (post.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, post.value, true, elem);
+        this.createComponent(compId, post.value, true, elem);
         return;
       }
 
@@ -103,7 +113,7 @@ export default class ShowPostCommentContainer extends Vue {
 
       if (comment.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, comment.value, true, elem);
+        this.createComponent(compId, comment.value, true, elem);
         return;
       }
     }
@@ -118,7 +128,7 @@ export default class ShowPostCommentContainer extends Vue {
 
       if (post.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, post.value, false, elem);
+        this.createComponent(compId, post.value, false, elem);
         return;
       }
     }
@@ -131,7 +141,16 @@ export default class ShowPostCommentContainer extends Vue {
     }, true);
   }
 
-  createComponent(event: MouseEvent, id: string, object: IPost|IComment, isComment: boolean, elem: HTMLLinkElement) {
+  createComponent(id: string, object: IPost|IComment, isComment: boolean, elem: HTMLLinkElement) {
+    let coords = this.offset(elem);
+
+    console.log(elem)
+
+    let offsetHeight = 0;
+    if (elem.offsetParent != null)
+      //@ts-ignore
+      offsetHeight = elem.offsetParent.offsetHeight;
+
     this.listModal.push({
       isComment: isComment,
       keyId: this.keyId++,
@@ -139,8 +158,8 @@ export default class ShowPostCommentContainer extends Vue {
       isModal: true,
       elem: elem,
       position: {
-        x: event.pageX,
-        y: event.pageY,
+        x: coords.left + elem.offsetWidth / 2,
+        y: coords.top + elem.offsetHeight,
       }
     })
   }

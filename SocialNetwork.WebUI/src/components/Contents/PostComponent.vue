@@ -174,9 +174,7 @@ $text-color: var(--post-text-color);
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
   float: left;
-  margin-top: 20px;
   margin-right: 20px;
-  margin-bottom: 20px;
   margin-left: 0px;
 
   .post-content-body {

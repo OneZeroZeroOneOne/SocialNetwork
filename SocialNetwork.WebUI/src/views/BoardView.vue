@@ -156,6 +156,7 @@ export default class BoardView extends Vue {
   flex-direction: column;
   //width: 80%;
   float: left;
+  margin-top: 20px;
   //margin-left: 40px;
   padding-bottom: 2.5rem;
 }

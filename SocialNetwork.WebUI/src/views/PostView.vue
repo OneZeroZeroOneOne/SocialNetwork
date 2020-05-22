@@ -211,6 +211,7 @@ export default class PostView extends Vue {
 #comments {
   display: inline-flex;
   flex-direction: column;
+  margin-top: 20px;
   //width: 80%;
   float: left;
   //margin-left: 40px;
