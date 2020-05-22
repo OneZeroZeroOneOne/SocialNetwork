@@ -19,10 +19,6 @@
       </div>
       <div v-bar>
         <article class="comment-content-body" v-html="obj.text">
-          <!--<span v-for="block in parsedData.child" :key="block.node_id" style="cursor: text;">
-            <component v-if="getEntityDependOnTag(block.tag) !== 'br'" :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
-            <component v-else :is="getEntityDependOnTag(block.tag)" :key="block.position"/>
-          </span>-->
         </article>
       </div>
     </div>
@@ -78,23 +74,8 @@ export default class CommentComponent extends Vue {
     'top':'0px',
   }
 
-  /*public newData = `<b>qweqwe</b>
-  <br>
-  <a href='/b/197' class="link-to" data-thread='197' data-id='197'>>>197</a>
-  qweqweqw`*/
-
-  //public newData = '{ "node_id": 1, "parent_id": 0, "node": "Element", "tag": "p", "child": [ { "node_id": 2, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 3, "parent_id": 2, "node": "Text", "text": "there is bold" } ] }, { "node_id": 5, "parent_id": 1, "node": "Element", "tag": "ins", "child": [ { "node_id": 6, "parent_id": 5, "node": "Text", "text": "bol " }, { "node_id": 7, "parent_id": 5, "node": "Element", "tag": "ins", "child": [ { "node_id": 8, "parent_id": 7, "node": "Text", "text": "in  " }, { "node_id": 9, "parent_id": 7, "node": "Element", "tag": "linktocomponent", "attr": { "id": "999" } }, { "node_id": 11, "parent_id": 7, "node": "Element", "tag": "del", "child": [ { "node_id": 12, "parent_id": 11, "node": "Text", "text": "qwe" } ] }, { "node_id": 13, "parent_id": 7, "node": "Text", "text": " side" } ] }, { "node_id": 14, "parent_id": 5, "node": "Text", "text": " d" } ] }, { "node_id": 15, "parent_id": 1, "node": "Text", "text": " inside " }, { "node_id": 16, "parent_id": 1, "node": "Element", "tag": "linktocomponent", "attr": { "id": "34" } }, { "node_id": 17, "parent_id": 1, "node": "Text", "text": " qwe " }, { "node_id": 18, "parent_id": 1, "node": "Element", "tag": "b", "child": [ { "node_id": 19, "parent_id": 18, "node": "Text", "text": "there is bold" } ] } ] }'
-
-  public flattenedData: IMarkdownNode[] = []
-  // @ts-ignore
-  public parsedData: IMarkdownNode = {child: []};
-
   constructor() {
     super();
-  }
-
-  getEntityDependOnTag(tag: string): string {
-    return '';
   }
 
   @Watch('hovered', {immediate: true})
@@ -117,29 +98,7 @@ export default class CommentComponent extends Vue {
   } 
 
   end() {
-    /*console.log(data.seconds);
-    if (data.seconds === 1)
-    {*/
-      // @ts-ignore
-      //this.linkToFather.showing = true;
-      eventBus.emit('hide-link-component', [this, this.obj.id])
-    //}
-  }
-
-  flatten(input: IMarkdownNode) {
-    const stack = [...input.child];
-    const res: IMarkdownNode[] = [];
-    res.push(input);
-    while(stack.length) {
-      const next: IMarkdownNode|undefined = stack.pop();
-        if (next !== undefined)
-        {
-          stack.push(...next.child);
-          res.push(next);
-        }
-    }
-
-    return res;
+    eventBus.emit('hide-link-component', [this, this.obj.id])
   }
 
   modalStylesCalc() {
@@ -150,13 +109,6 @@ export default class CommentComponent extends Vue {
   }
 
   mounted() {
-    //console.log(this.obj.text)
-    //this.parsedData = JSON.parse(this.obj.text);
-    //this.flattenedData = this.flatten(this.parsedData)
-    //console.log(this)
-    //console.log(this.parsedData)
-    //console.log(this.flattenedData)
-
     if (this.isModal !== undefined && this.isModal !== false) {
       this.modalStyles.left = this.position.x + 'px';
       this.modalStyles.top = this.position.y + 'px';
@@ -168,10 +120,6 @@ export default class CommentComponent extends Vue {
     }else{
       //this is not modal so...
     }
-  }
-
-  wrap(text: string): string {
-    return text.replace(/(\r\n|\n|\r)/gm, "<br/>");
   }
 
   openEditor(): void {

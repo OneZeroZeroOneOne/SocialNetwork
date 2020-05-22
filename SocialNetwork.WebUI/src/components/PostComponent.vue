@@ -1,5 +1,5 @@
 <template>
-  <div class="post" v-bind:style="modalStylesCalc()">
+  <div class="post" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
     <div class="post-body">
       <div class="post-header">
         <div class="post-header-title">
@@ -21,11 +21,8 @@
           <attachment-component :attachmentObjs="obj.attachmentPost"/>
         </div>
         <div v-bar>
-          <div class=post-content-body v-html="obj.text">
-            <!--<span v-for="block in parsedData.child" :key="block.node_id">
-              <component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
-            </span>-->
-          </div>
+          <article class=post-content-body v-html="obj.text">
+          </article>
         </div>
       </div>
       <div class="post-footer">
@@ -41,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Guid } from "@/utilities/guid";
 
 import { ResponseState } from "@/models/enum/ResponseState";
@@ -87,22 +84,29 @@ export default class PostComponent extends Vue {
   public hovered: boolean = true;
   public countdown!: any; 
 
-  public flattenedData: IMarkdownNode[] = []
-  // @ts-ignore
-  public parsedData: IMarkdownNode = {child: []};
-  
   constructor() {
     super();
   }
 
+  @Watch('hovered', {immediate: true})
+  change(value) {
+    if (this.isModal)
+    {
+      if (value === true)
+      {
+        if (this.timer !== -1)
+          clearTimeout(this.timer);
+        // @ts-ignore
+        this.timer = null;
+      } else {
+        this.timer = setTimeout(this.end, 3 * 1000);
+        //console.log('new timer', this.timer)
+      }
+    }
+  } 
+
   end() {
-    /*console.log(data.seconds);
-    if (data.seconds === 1)
-    {*/
-      // @ts-ignore
-      this.linkToFather.showing = true;
-      eventBus.emit('hide-link-component', this)
-    //}
+    eventBus.emit('hide-link-component', [this, this.obj.id])
   }
 
   modalStylesCalc() {
@@ -113,32 +117,13 @@ export default class PostComponent extends Vue {
   }
 
   mounted() {
-    //this.parseMarkdownToTree()
-
-    //console.log(this.obj.text)
-    //this.parsedData = JSON.parse(this.obj.text);
-    //this.flattenedData = this.flatten(this.parsedData)
-    //console.log(this)
-    //console.log(this.parsedData)
-    //console.log(this.flattenedData)
-
     if (this.isModal !== undefined && this.isModal !== false) {
-      /*console.log(this.isModal)
-      this.countdown = this.$refs.countdown;
-      this.countdown.start();
-      this.countdown.pause();*/
       this.modalStyles.left = this.position.x + 'px';
       this.modalStyles.top = this.position.y + 'px';
-      this.counter = 6 * 10;
-      this.timer = setInterval(() => {
-        this.counter = this.counter - 1;
-        //console.log(this.counter)
-        if(this.counter === 0) 
-        {
-          clearInterval(this.timer)
-          this.end()
-        }
-      }, 100);
+
+      this.timer = setTimeout(this.end, 3 * 1000);
+      clearTimeout(this.timer);
+      this.hovered = false;
     }else{
       //this is not modal so...
     }
@@ -160,34 +145,6 @@ export default class PostComponent extends Vue {
       return "padding-right: 10px;align-items: center;"
     
     return ""
-  }
-
-  flatten(input: IMarkdownNode) {
-    const stack = [...input.child];
-    const res: IMarkdownNode[] = [];
-    res.push(input);
-    while(stack.length) {
-      const next: IMarkdownNode|undefined = stack.pop();
-        if (next !== undefined)
-        {
-          stack.push(...next.child);
-          res.push(next);
-        }
-    }
-
-    return res;
-  }
-
-  parseMarkdownToTree() {
-    var d: IMarkdownNode = JSON.parse(this.obj.text);
-    this.flattenedData = this.flatten(d)
-    //console.log(this.flattenedData)
-
-    return d
-  }
-
-  getEntityDependOnTag(tag: string): string {
-    return '';
   }
 
   boardName(): string {

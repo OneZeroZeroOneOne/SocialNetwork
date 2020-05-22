@@ -14,7 +14,6 @@
 
 
 <script lang="ts">
-//<component :is="getEntityDependOnTag(block.tag)" :key="block.position" :block_data="block" :all_blocks="flattenedData"/>
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { IPost } from '../models/responses/PostViewModel';
 import { IComment } from '../models/responses/CommentViewModel';
@@ -52,62 +51,98 @@ export default class ShowPostCommentContainer extends Vue {
     super();
   }
 
-  async showComponent(event: MouseEvent) {
+  async showComponent(event: MouseEvent) 
+  {
+    // @ts-ignore
+    console.log(event.target.dataset);
+
+    let compId: string = "1";
 
     // @ts-ignore
-    if (event.target.dataset['id'] === undefined)
+    if (event.target.dataset['comment'] !== undefined && event.target.dataset['post'] !== undefined)
     {
       // @ts-ignore
-      /*this.createComponent(event, 0, {
-        id: 0,
-        text: "Ошибка",
-        attachmentComment: [],
-      }, true);*/
-      return;
-    }
+      compId = event.target.dataset['comment']
+      let comment = await globalStorage.getComment(compId);
 
-    // @ts-ignore
-    let compId = Number(event.target.dataset['id'])
-    // @ts-ignore
-    if (this.listModal.find(x => x.keyId === compId))
-    {
-      console.log('this modal already show')
-      return;
-    }
+      if (comment.state !== ResponseState.fail)
+      {
+        this.createComponent(event, compId, comment.value, true);
+        return;
+      }
 
-    //@ts-ignore
-    let comment = await globalStorage.getComment(event.target.dataset['id']);
+      let post = await globalStorage.getPost(globalStorage.currentBoard.id, compId);
 
-    if (comment.state !== ResponseState.fail)
-    {
-      this.createComponent(event, compId, comment.value, true);
-      return;
-    }
+      if (post.state !== ResponseState.fail)
+      {
+        this.createComponent(event, compId, post.value, true);
+        return;
+      }
 
-    // @ts-ignore
-    this.createComponent(event, compId, {
-      id: compId,
-      text: "Ошибка",
-      attachmentComment: [],
-    }, true);
-
-    /*this._commentService.getCommentById(compId).then(x => {
-      this.createComponent(event, compId, x.data, true);
-    }).catch(err => {
       // @ts-ignore
       this.createComponent(event, compId, {
-        id: compId,
+        id: Number(compId),
         text: "Ошибка",
         attachmentComment: [],
       }, true);
-    })*/
-    
+      return;
+    }
+
+    // @ts-ignore
+    if (event.target.dataset['comment'] !== undefined)
+    {
+      // @ts-ignore
+      compId = event.target.dataset['comment']
+      // @ts-ignore
+      if (this.listModal.find(x => x.keyId === compId))
+      {
+        console.log('this modal already show')
+        return;
+      }
+
+      let comment = await globalStorage.getComment(compId);
+
+      if (comment.state !== ResponseState.fail)
+      {
+        this.createComponent(event, compId, comment.value, true);
+        return;
+      }
+    }
+
+    // @ts-ignore
+    if (event.target.dataset['post'] !== undefined)
+    {
+      // @ts-ignore
+      compId = event.target.dataset['post']
+      // @ts-ignore
+      if (this.listModal.find(x => x.keyId === compId))
+      {
+        console.log('this modal already show')
+        return;
+      }
+
+      let post = await globalStorage.getPost(globalStorage.currentBoard.id, compId);
+
+      if (post.state !== ResponseState.fail)
+      {
+        this.createComponent(event, compId, post.value, false);
+        return;
+      }
+    }
+
+
+    // @ts-ignore
+    this.createComponent(event, compId, {
+      id: Number(compId),
+      text: "Ошибка",
+      attachmentComment: [],
+    }, true);
   }
 
-  createComponent(event: MouseEvent, id: number, object: IPost|IComment, isComment: boolean) {
+  createComponent(event: MouseEvent, id: string, object: IPost|IComment, isComment: boolean) {
     this.listModal.push({
       isComment: isComment,
-      keyId: id,
+      keyId: Number(id),
       obj: object,
       isModal: true,
       position: {

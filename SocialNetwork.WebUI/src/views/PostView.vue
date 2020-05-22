@@ -128,21 +128,18 @@ export default class PostView extends Vue {
 
   async loadBoardByName(name: string): Promise<void> {
     this.requestBoardStatus = ResponseState.loading;
-    await this._boardService.getBoardByName(name)
-      .then(response => {
-          if (response.status == 200)
-          {
-            this.boardObj = response.data;
-            this.requestBoardStatus = ResponseState.success;
-          } else {
-            this.requestBoardStatus = ResponseState.fail;
-            this.$router.push({name: "notfound"})
-          }
-      })
-      .catch(error => {
-        this.requestBoardStatus = ResponseState.fail;
-        this.$router.push({name: "notfound"})
-      });
+
+    let board = await globalStorage.getBoardByName(name);
+
+    this.requestBoardStatus = board.state;
+
+    if (board.state === ResponseState.fail)
+    {
+      this.$router.push({name: "notfound"})
+      return;
+    }
+
+    this.boardObj = board.value;
   }
 
   async loadPost(): Promise<void> {

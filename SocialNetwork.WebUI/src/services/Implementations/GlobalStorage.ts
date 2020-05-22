@@ -11,11 +11,14 @@ import { ICommentService } from '../Abstractions/ICommentService';
 import { CommentService } from './CommentService';
 import { IPostService } from '../Abstractions/IPostService';
 import { PostService } from './PostService';
+import { IBoard } from '@/models/responses/Board';
 
 class GlobalStorage {
     private boardService: IBoardService;
     private commentService: ICommentService;
     private postService: IPostService;
+
+    public currentBoard: IBoard;
 
     private db: IDBSrvice;
 
@@ -27,6 +30,34 @@ class GlobalStorage {
         IDBSrvice.GetDb().then(x => {
             this.db = x;
         })
+    }
+
+    public async getBoardByName(name: string): Promise<ResponseModel<IBoard>> {
+        let respModel = new ResponseModel<IBoard>();
+
+        if (this.currentBoard !== undefined && this.currentBoard !== null)
+            if (this.currentBoard.name === name)
+            {
+                respModel.state = ResponseState.success;
+                respModel.value = this.currentBoard;
+            }
+
+        await this.boardService.getBoardByName(name)
+            .then(response => {
+                if (response.status == 200)
+                {
+                    respModel.state = ResponseState.success;
+                    respModel.value = response.data;
+                    this.currentBoard = response.data;
+                } else {
+                    respModel.state = ResponseState.success;
+                }
+            })
+            .catch(error => {
+                respModel.state = ResponseState.fail;
+            });
+
+        return respModel;
     }
 
     public async getComment(comment_id: string): Promise<ResponseModel<IComment>> {
@@ -112,7 +143,7 @@ class GlobalStorage {
     public async getCommentsForPost(link_to_post: string, page: number, quantity: number): Promise<ResponseModel<IPagedResult<IComment>>> {
         let respModel = new ResponseModel<IPagedResult<IComment>>();
 
-        await this.commentService.getCommentForPost(link_to_post, 1, 5)
+        await this.commentService.getCommentForPost(link_to_post, page, quantity)
             .then(async resp => {
                 if (resp.status == 200)
                 {
