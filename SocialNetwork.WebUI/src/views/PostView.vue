@@ -25,11 +25,11 @@ import { IPagedResult } from '@/models/responses/PagedResult';
 import { IComment } from '@/models/responses/CommentViewModel';
 import { IPost } from "@/models/responses/PostViewModel";
 
-import BoardNameHeaderComponent from '@/components/BoardNameHeaderComponent.vue';
-import PostComponent from '@/components/PostComponent.vue'
-import CommentComponent from "@/components/CommentComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
-import TopBottomButtons from "@/components/TopBottomButtons.vue";
+import BoardNameHeaderComponent from '@/components/Navigations/BoardNameHeaderComponent.vue';
+import PostComponent from '@/components/Contents/PostComponent.vue'
+import CommentComponent from "@/components/Contents/CommentComponent.vue";
+import FooterComponent from "@/components/Navigations/FooterComponent.vue";
+import TopBottomButtons from "@/components/Navigations/TopBottomButtons.vue";
 
 import { IBoardService } from '@/services/Abstractions/IBoardService';
 import { ICommentService }from '@/services/Abstractions/ICommentService';

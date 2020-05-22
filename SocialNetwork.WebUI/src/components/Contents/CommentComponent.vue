@@ -37,7 +37,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { IPost } from "@/models/responses/PostViewModel";
 import { IComment } from '@/models/responses/CommentViewModel';
 
-import AttachmentComponent from '@/components/AttachmentComponent.vue';
+import AttachmentComponent from '@/components/Other/AttachmentComponent.vue';
 
 import eventBus from "@/utilities/EventBus";
 

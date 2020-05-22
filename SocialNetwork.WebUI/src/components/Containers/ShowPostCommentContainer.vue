@@ -16,14 +16,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { IPost } from '../models/responses/PostViewModel';
-import { IComment } from '../models/responses/CommentViewModel';
-import CommentComponent from "@/components/CommentComponent.vue";
-import AttachmentComponent from '@/components/AttachmentComponent.vue';
-import PostComponent from './PostComponent.vue';
+import { IPost } from '@/models/responses/PostViewModel';
+import { IComment } from '@/models/responses/CommentViewModel';
+import CommentComponent from "@/components/Contents/CommentComponent.vue";
+import AttachmentComponent from '@/components/Other/AttachmentComponent.vue';
+import PostComponent from '@/components/Contents/PostComponent.vue';
 
 import globalStorage from '@/services/Implementations/GlobalStorage';
-import { ResponseState } from '../models/enum/ResponseState';
+import { ResponseState } from '@/models/enum/ResponseState';
 
 @Component({
   components: {

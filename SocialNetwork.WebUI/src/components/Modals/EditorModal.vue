@@ -39,20 +39,20 @@
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import VueDraggableResizable from 'vue-draggable-resizable'
 
-import { IAttachment } from '../models/responses/Attachment';
-import { IPost } from '../models/responses/PostViewModel';
-import { IComment } from '../models/responses/CommentViewModel';
-import EditorText from '@/components/EditorText.vue';
+import { IAttachment } from '@/models/responses/Attachment';
+import { IPost } from '@/models/responses/PostViewModel';
+import { IComment } from '@/models/responses/CommentViewModel';
+import EditorText from '@/components/Other/EditorText.vue';
 
-import AttachmentDropComponent from '../components/AttachmentDropComponent.vue';
+import AttachmentDropComponent from '@/components/Other/AttachmentDropComponent.vue';
 
 import { ICommentService }from '@/services/Abstractions/ICommentService';
-import { CommentService } from '../services/Implementations/CommentService';
-import { ResponseState } from '../models/enum/ResponseState';
+import { CommentService } from '@/services/Implementations/CommentService';
+import { ResponseState } from '@/models/enum/ResponseState';
 import { parseNumber } from '@/utilities/parser';
-import { IPostService } from '../services/Abstractions/IPostService';
-import { PostService } from '../services/Implementations/PostService';
-import { IBoard } from '../models/responses/Board';
+import { IPostService } from '@/services/Abstractions/IPostService';
+import { PostService } from '@/services/Implementations/PostService';
+import { IBoard } from '@/models/responses/Board';
 
 
 @Component({

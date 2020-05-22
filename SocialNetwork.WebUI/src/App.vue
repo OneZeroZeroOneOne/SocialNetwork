@@ -11,12 +11,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import EditorModal from '@/components/EditorModal.vue'
+import EditorModal from '@/components/Modals/EditorModal.vue'
 import apiClient from '@/services/Implementations/ApiClient';
-import AttachmentModal from "@/components/AttachmentModal.vue";
-import ShowPostCommentContainer from '@/components/ShowPostCommentContainer.vue';
-import AttachmentComponent from '@/components/AttachmentComponent.vue';
-import NavBarComponent from '@/components/NavBarComponent.vue';
+import AttachmentModal from "@/components/Modals/AttachmentModal.vue";
+import ShowPostCommentContainer from '@/components/Containers/ShowPostCommentContainer.vue';
+import AttachmentComponent from '@/components/Other/AttachmentComponent.vue';
+import NavBarComponent from '@/components/Navigations/NavBarComponent.vue';
 
 import { loadCss, onloadCSS } from '@/utilities/loadStyle';
 

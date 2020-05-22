@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import BoardListComponent from '@/components/BoardListComponent.vue';
+import BoardListComponent from '@/components/Other/BoardListComponent.vue';
 
 @Component({
   components: { 

@@ -36,7 +36,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import VueDraggableResizable from 'vue-draggable-resizable'
-import { IAttachment } from '../models/responses/Attachment';
+import { IAttachment } from '@/models/responses/Attachment';
 import { parseNumber } from '@/utilities/parser';
 
 enum ShowType {

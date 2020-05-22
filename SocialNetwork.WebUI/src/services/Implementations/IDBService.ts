@@ -1,5 +1,5 @@
 import { openDB, deleteDB, wrap, unwrap, IDBPDatabase, DBSchema, IDBPTransaction, IDBPObjectStore } from 'idb';
-import { MyDB } from './IDBServiceSchema';
+import { MyDB } from '../../types/IDBServiceSchema';
 import { IPost } from '@/models/responses/PostViewModel';
 import { IComment } from '@/models/responses/CommentViewModel';
 import { IIDBService } from '../Abstractions/IIDBService';

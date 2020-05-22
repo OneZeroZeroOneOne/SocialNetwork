@@ -42,8 +42,8 @@ import { IBoard, IBoards } from "@/models/responses/Board";
 
 import { IBoardService } from '@/services/Abstractions/IBoardService';
 
-import { BoardService } from '../services/Implementations/BoardService';
-import Card from '@/components/BoardCardComponent.vue';
+import { BoardService } from '@/services/Implementations/BoardService';
+import Card from '@/components/Other/BoardCardComponent.vue';
 
 import Nprogress from "nprogress";
 

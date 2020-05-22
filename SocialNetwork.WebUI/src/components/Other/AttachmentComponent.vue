@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { IAttachment } from '../models/responses/Attachment';
+import { IAttachment } from '@/models/responses/Attachment';
 
 @Component({})
 export default class AttachmentComponent extends Vue {
@@ -55,7 +55,7 @@ export default class AttachmentComponent extends Vue {
 
 <style lang="scss" scoped>
 img[lazy=loading] {
-  background: url('../assets/Ripple-1s-200px.svg');
+  background: url('../../assets/Ripple-1s-200px.svg');
 }
 img[lazy=error] {
   /*your style here*/

@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { IBoard } from '../models/responses/Board';
+import { IBoard } from '@/models/responses/Board';
 
 @Component({})
 export default class BoardNameHeaderComponent extends Vue {

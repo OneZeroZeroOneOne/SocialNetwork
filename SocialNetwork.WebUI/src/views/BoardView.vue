@@ -25,10 +25,10 @@ import { IPost } from '@/models/responses/PostViewModel';
 import { Guid } from '@/utilities/guid';
 import { ResponseState } from "@/models/enum/ResponseState";
 
-import PostComponent from '@/components/PostComponent.vue'
-import FooterComponent from "@/components/FooterComponent.vue";
-import CommentComponent from '@/components/CommentComponent.vue'
-import BoardNameHeaderComponent from '@/components/BoardNameHeaderComponent.vue';
+import PostComponent from '@/components/Contents/PostComponent.vue'
+import FooterComponent from "@/components/Navigations/FooterComponent.vue";
+import CommentComponent from '@/components/Contents/CommentComponent.vue'
+import BoardNameHeaderComponent from '@/components/Navigations/BoardNameHeaderComponent.vue';
 
 import Nprogress from "nprogress"
 import _ from 'lodash'

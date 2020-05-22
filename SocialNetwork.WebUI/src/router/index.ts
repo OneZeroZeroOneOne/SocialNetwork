@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/poll',
     name: 'poll',
-    component: () => import('../components/PollComponent.vue'),
+    component: () => import('../components/Contents/PollComponent.vue'),
   },
   {
     path: '/:boardname',
@@ -29,14 +29,6 @@ const routes = [
     path: '/:boardname/:postid',
     name: 'post',
     component: PostView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
     path: '/',
