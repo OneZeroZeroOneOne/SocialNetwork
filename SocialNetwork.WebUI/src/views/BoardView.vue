@@ -58,9 +58,12 @@ export default class BoardView extends Vue {
     super();
 
     this.currentBoardName = this.boardName();
+    Nprogress.set(0.3)
     this.loadBoardByName(this.currentBoardName)
       .then(x => {
+        Nprogress.set(0.6)
         this.loadPagePosts()
+        Nprogress.done()
         this.$root.$on('footerInView', this.throttleLoadPosts)
       })
   }
@@ -98,12 +101,10 @@ export default class BoardView extends Vue {
   }
 
   async loadPagePosts(): Promise<void> {
-    Nprogress.start()
     let posts = await globalStorage.getTopPostsOnBoard(this.boardObj.id, this.currentPage, 10);
     
     if (posts.state === ResponseState.fail)
     {
-      Nprogress.done();
       return;
     } 
 
@@ -137,7 +138,6 @@ export default class BoardView extends Vue {
 
     this.requestPostsStatus = ResponseState.success
 
-    Nprogress.done();
   }
 }
 </script>

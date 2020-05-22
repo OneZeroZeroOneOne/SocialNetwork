@@ -19,11 +19,9 @@ Vue.component('vue-draggable-resizable', VueDraggableResizable)
 // require styles
 import moment from 'moment'
 import VueLazyload from 'vue-lazyload'
-import VueCountdown from '@chenfengyuan/vue-countdown';
 import eventBus from "@/utilities/EventBus";
 
 
-Vue.component(VueCountdown.name, VueCountdown);
 Vue.use(VueLazyload)
 
 import Vuebar from 'vuebar';

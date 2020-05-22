@@ -79,10 +79,14 @@ export default class PostView extends Vue {
     //this.refreshInterval = setInterval(() => this.loadComments(), 1000 * 30); //every 30 sec update
     this.$root.$on('comment-sent-success', this.commentSentSuccess);
 
+    Nprogress.set(0.2)
     this.loadBoardByName(this.boardName())
     .then(x => {
+      Nprogress.set(0.5)
       this.loadPost()
+      Nprogress.set(0.7)
       this.loadComments()
+      Nprogress.done()
     });
     /*this.$root.$on('footerInView', () => {
       this.throttleLoadComments();
@@ -161,18 +165,15 @@ export default class PostView extends Vue {
   async loadComments()
   {
     this.requestCommentsStatus = ResponseState.loading;
-    Nprogress.start()
 
     let comments = await globalStorage.getCommentsForPost(this.postId(), this.currentPage, 1000);
 
     if (comments.state === ResponseState.fail)
     {
       this.requestCommentsStatus = ResponseState.fail;
-      Nprogress.done();
       return;
     }
     
-    Nprogress.done();
     this.requestCommentsStatus = ResponseState.success;
 
     if (comments.value.currentPage < comments.value.pageCount)

@@ -67,7 +67,9 @@ export default class BoardListComponent extends Vue {
 
   constructor() {
     super();
+    Nprogress.set(0.5)
     this.loadBoards();
+    Nprogress.done();
   }
 
   getBoardPreview(board: IBoard) {
@@ -79,19 +81,16 @@ export default class BoardListComponent extends Vue {
   }
 
   async loadBoards(): Promise<void> {
-    Nprogress.start();
     this.boardRequestStatus = ResponseState.loading;
 
     this._boardService.getBoards()
       .then(response => {
         this.boards = response.data;
         this.boardRequestStatus = ResponseState.success;
-        Nprogress.done();
         this.sortBoards()
       })
       .catch(error => {
         this.boardRequestStatus = ResponseState.fail;
-        Nprogress.done()
       });
   }
 

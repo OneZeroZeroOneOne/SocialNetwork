@@ -9,7 +9,6 @@
     "build-report": "vue-cli-service build --report"
   },
   "dependencies": {
-    "@chenfengyuan/vue-countdown": "^1.1.5",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
@@ -25,7 +24,6 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "nprogress": "^0.2.0",
-    "v-runtime-template": "^1.10.0",
     "vue": "^2.6.11",
     "vue-awesome-notifications": "^3.1.0",
     "vue-check-view": "^0.3.0",

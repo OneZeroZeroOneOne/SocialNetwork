@@ -4,6 +4,8 @@ import PostView from '../views/PostView.vue'
 import MainView from '../views/MainView.vue'
 import BoardView from '../views/BoardView.vue'
 
+import Nprogress from "nprogress"
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -52,6 +54,11 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  Nprogress.start()
+  next()
 })
 
 export default router
