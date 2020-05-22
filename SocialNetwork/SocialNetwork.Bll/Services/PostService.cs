@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
+using SocialNetwork.RequestLifetimeBll.Abstractions;
 using SocialNetwork.Utilities.Exceptions;
 
 namespace SocialNetwork.Bll.Services
@@ -15,12 +17,16 @@ namespace SocialNetwork.Bll.Services
     {
         private readonly PublicContext _context;
         private readonly IUserInputService _userInputService;
+        private readonly IRequestLifetimeService _requestLifetimeService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public PostService(PublicContext publicContext, IUserInputService userInputSanitizeService)
+        public PostService(PublicContext publicContext, IUserInputService userInputSanitizeService, IRequestLifetimeService requestLifetimeService, IHttpContextAccessor httpContext)
         {
             _context = publicContext;
 
             _userInputService = userInputSanitizeService;
+            _requestLifetimeService = requestLifetimeService;
+            _httpContext = httpContext;
         }
 
         public async Task<Post> EditPost(Post postModel, Guid editorUser)
@@ -53,13 +59,13 @@ namespace SocialNetwork.Bll.Services
         }
 
         public async Task<Post> CreateNewPost(Post postModel, Guid authorUser, List<int> attachmentPostList)
-        { 
-            if (!_context.Board.Any(x => x.Id == postModel.BoardId))
+        {
+            var board = await _context.Board.FirstOrDefaultAsync(x => x.Id == postModel.BoardId);
+
+            if (board == null)
                 throw ExceptionFactory.SoftException(ExceptionEnum.BoardNotFound, $"Board {postModel.BoardId} not found");
 
             postModel.UserId = authorUser;
-
-            postModel.Text = await _userInputService.Markdown(postModel.Text);
 
             postModel.Title = await _userInputService.SanitizeHtml(postModel.Title);
 
@@ -72,17 +78,6 @@ namespace SocialNetwork.Bll.Services
                     await AttachFileToPost(insertedPost.Entity.Id, attachmentId);
                 }
 
-
-
-            /*await _noSqlContext.Collection<PostTop>().InsertOneAsync(new PostTop
-            {
-                PostId = postModel.Id,
-                Score = 50,
-                BoardId = postModel.BoardId,
-            });*/
-
-            //_context.Database.
-
             await _context.PostTop.AddAsync(new PostTop
             {
                 PostId = postModel.Id,
@@ -92,7 +87,18 @@ namespace SocialNetwork.Bll.Services
 			
             await _context.SaveChangesAsync();
 
-            return await GetPost(postModel.BoardId, postModel.Id);
+            var createdPost = await GetPost(postModel.BoardId, postModel.Id);
+
+            _requestLifetimeService.SetPost(createdPost);
+            _requestLifetimeService.SetBoard(board);
+
+            _httpContext.HttpContext.Items.Add("RequestLifetime", _requestLifetimeService);
+
+            createdPost.Text = await _userInputService.Markdown(postModel.Text);
+
+            await _context.SaveChangesAsync();
+
+            return createdPost;
         }
 
         public async Task<Post> GetPostGlobal(int postId)

@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using SocialNetwork.RequestLifetimeBll.Services;
 using SocialNetwork.Utilities.Exceptions;
 using System;
+using SocialNetwork.Dal.Context;
+using SocialNetwork.Dal.Dapper;
 
 namespace SocialNetwork.Markdown.MarkdownExtensions.LinkTo
 {
@@ -27,25 +29,36 @@ namespace SocialNetwork.Markdown.MarkdownExtensions.LinkTo
                 requestLifetimeService = (RequestLifetimeService)lifetimeService;
             }
 
-            //var comment = context.Comment.FirstOrDefault(x => x.Id == obj.Id);
+            if (requestLifetimeService == null) throw ExceptionFactory.SoftException(ExceptionEnum.SomethingWentWrong, $"If you see this message pls contact admin, {obj.Id}");
+
+            var publicContext = (PublicContext)_serviceProvider.GetService(typeof(PublicContext));
+
+            var isPostOrComment = publicContext.IsPostOrComment(obj.Id);
 
             var attr = new HtmlAttributes();
 
             attr.AddClass("link-to");
-            if (requestLifetimeService == null) throw ExceptionFactory.SoftException(ExceptionEnum.SomethingWentWrong, $"If you see this message pls contact admin, {obj.Id}");
 
-            attr.AddProperty("href",
-                $"/{requestLifetimeService.Board.Name}/{requestLifetimeService.Post.Id}#{obj.Id}");
+            attr.AddProperty("target", "_blank");
+            attr.AddProperty("rel", "noopener noreferrer");
+
+            attr.AddProperty("href", $"/{requestLifetimeService.Board.Name}/{requestLifetimeService.Post.Id}#{obj.Id}");
             attr.AddProperty("data-thread", requestLifetimeService.Post.Id.ToString());
 
-            //if (comment != null)
-            //{
-            attr.AddProperty("data-id", obj.Id.ToString());
-            //}
-
             var innerText = ">>" + obj.Id;
-            if (requestLifetimeService.Post.Id == obj.Id)
+
+            if (isPostOrComment == 0)
+            {
+                attr.AddProperty("data-post", obj.Id.ToString());
                 innerText += " (OP)";
+            }
+            else if (isPostOrComment == 1)
+                attr.AddProperty("data-comment", obj.Id.ToString());
+            else
+            {
+                attr.AddProperty("data-post", obj.Id.ToString());
+                attr.AddProperty("data-comment", obj.Id.ToString());
+            }
 
             renderer.Write("<a").WriteAttributes(attr).Write($">{innerText}</a>");
         }

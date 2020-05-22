@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ValueGenerators;
 
@@ -18,6 +20,8 @@ namespace SocialNetwork.Dal.Context
         {
             _connectionString = connectionString;
         }
+
+        internal IDbConnection Connection => new NpgsqlConnection(_connectionString);
 
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Post> Post { get; set; }
@@ -58,6 +62,8 @@ namespace SocialNetwork.Dal.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasSequence("post_comment_id_seq");
+
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
             modelBuilder.Entity<PostTop>(entity => { entity.HasKey(x => x.PostId); });
