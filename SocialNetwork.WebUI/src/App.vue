@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nav-bar-component/>
-    <new-modal/>
+    <attachment-modal/>
     <router-view>
     </router-view>
     <show-post-comment-container/>
