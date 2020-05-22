@@ -30,13 +30,8 @@ import FooterComponent from "@/components/FooterComponent.vue";
 import CommentComponent from '@/components/CommentComponent.vue'
 import BoardNameHeaderComponent from '@/components/BoardNameHeaderComponent.vue';
 
-import { IBoardService } from '@/services/Abstractions/IBoardService';
-import { ICommentService }from '@/services/Abstractions/ICommentService';
-
 import Nprogress from "nprogress"
 import _ from 'lodash'
-import { CommentService } from '../services/Implementations/CommentService';
-import { BoardService } from '../services/Implementations/BoardService';
 
 import globalStorage from '@/services/Implementations/GlobalStorage';
 
@@ -59,10 +54,6 @@ export default class BoardView extends Vue {
   private currentPage: number = 1;
 
   private preloadedComments: IComment[] = [];
-
-  private _commentService!: ICommentService
-  private _boardService!: IBoardService
-
   constructor() {
     super();
 
@@ -74,10 +65,8 @@ export default class BoardView extends Vue {
       })
   }
 
-
   beforeCreate() {
-    this._commentService =  new CommentService();
-    this._boardService = new BoardService();
+    //
   }
 
   beforeDestroy() {
@@ -96,21 +85,16 @@ export default class BoardView extends Vue {
   }
 
   async loadBoardByName(name: string): Promise<void> {
-    return this._boardService.getBoardByName(name)
-      .then(response => {
-        if (response.status == 200)
-        {
-          this.boardObj = response.data;
-          this.requestBoardStatus = ResponseState.success;
-        } else {
-          this.requestBoardStatus = ResponseState.fail;
-          this.$router.push({name: "notfound"})
-        }
-      })
-      .catch(error => {
-        this.requestBoardStatus = ResponseState.fail;
-        this.$router.push({name: "notfound"})
-      });
+    let board = await globalStorage.getBoardByName(name)
+    
+    this.requestBoardStatus = board.state;
+    if (this.requestBoardStatus === ResponseState.fail)
+    {
+      this.$router.push({name: "notfound"});
+      return;
+    }
+    
+    this.boardObj = board.value;
   }
 
   async loadPagePosts(): Promise<void> {

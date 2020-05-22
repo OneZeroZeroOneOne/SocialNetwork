@@ -13,7 +13,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import EditorModal from '@/components/EditorModal.vue'
 import apiClient from '@/services/Implementations/ApiClient';
-import NewModal from "@/components/NewModal.vue";
+import AttachmentModal from "@/components/AttachmentModal.vue";
 import ShowPostCommentContainer from '@/components/ShowPostCommentContainer.vue';
 import AttachmentComponent from '@/components/AttachmentComponent.vue';
 import NavBarComponent from '@/components/NavBarComponent.vue';
@@ -27,7 +27,7 @@ import eventBus from "@/utilities/EventBus";
 @Component({
   components: {
     EditorModal,
-    NewModal,
+    AttachmentModal,
     ShowPostCommentContainer,
     NavBarComponent,
     AttachmentComponent,
@@ -58,8 +58,7 @@ export default class App extends Vue {
       // @ts-ignore
       if (e.target && e.target.matches('.link-to')) {
         // @ts-ignore
-        //console.log(e.target.dataset)
-        //
+        //console.log(e.target)
         //console.log(e)
         eventBus.emit('show-link-component', e)
       }

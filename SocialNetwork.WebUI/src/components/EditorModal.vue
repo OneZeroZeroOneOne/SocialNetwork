@@ -46,7 +46,6 @@ import EditorText from '@/components/EditorText.vue';
 
 import AttachmentDropComponent from '../components/AttachmentDropComponent.vue';
 
-import { IBoardService } from '@/services/Abstractions/IBoardService';
 import { ICommentService }from '@/services/Abstractions/ICommentService';
 import { CommentService } from '../services/Implementations/CommentService';
 import { ResponseState } from '../models/enum/ResponseState';
@@ -224,11 +223,6 @@ export default class PreviewModal extends Vue {
   }
 
   addTextToEditor(text: string): void {
-    //this.$modal.show('editor-modal')
-    /*this.$nextTick().then(x => {
-      let selection = this.quill.getSelection(true);
-      this.quill.insertText(selection.index, text + '\n');
-    })*/
     this.$root.$emit('add-text-to-editor', text + '\n');
   }
 
@@ -242,100 +236,6 @@ export default class PreviewModal extends Vue {
       return 'header-loading'
     return ''
   }
-
-
-
-  /*async parseMarkdown(textContent: string): Promise<string> {
-    let md = textContent;
-
-    console.log(md)
-
-    this.mentionList = [];
-
-    //green text
-    //need to be first because of '>'
-    Array.from(md['matchAll'](/(>>{1}(\d+))/g), (x: any) => {
-      let mention: string = x[2]
-      if (this.mentionList.indexOf(mention) === -1)
-      {
-        this.mentionList.push(mention)
-      }
-    })
-
-    let commentList: string[] = []
-    let postList: string[] = []
-    let unresolvedList: string[] = []
-
-    for (let index = 0; index < this.mentionList.length; index++) {
-      await this._commentService.getCommentById(this.mentionList[index])
-        .then(ok => {
-          console.log(ok)
-          commentList.push(this.mentionList[index])
-        }).catch(async x => {
-          await this._postService.getPost(this.replyToPost.boardId, this.mentionList[index])
-            .then(ok => {
-              postList.push(this.mentionList[index])
-            }).catch(x => {
-              unresolvedList.push(this.mentionList[index])
-            })
-        })
-    }
-    
-    let realMention: string[] = [...postList, ...commentList]
-    console.log(realMention)
-    this.mentionList = realMention;
-    //link to post/comment
-    //need to be first because of '>>'
-    md = md.replace(/(>>{1}(\d+))/g, '<link-to comment={{_comment_link_$2_}} post={{_post_link_$2_}}[sign-bigger]$2</link-to[sign-bigger]');
-     
-    console.log(commentList, postList, unresolvedList, md)
-
-    commentList.forEach(element => {
-      let toReplaceCom = `{{_comment_link_${element}_}}`
-      md = md.split(toReplaceCom).join(element)//md.replace(toReplaceCom, element)
-      let toReplacePost = `{{_post_link_${element}_}}`
-      md = md.split(toReplacePost).join('0')//.replace(toReplacePost, '0')
-    });
-
-    postList.forEach(element => {
-      let toReplacePost = `{{_post_link_${element}_}}`
-      md = md.split(toReplacePost).join(element)//.replace(toReplacePost, element)
-      let toReplaceCom = `{{_comment_link_${element}_}}`
-      md = md.split(toReplaceCom).join("0")//.replace(toReplaceCom, "0")
-    });
-
-    unresolvedList.forEach(element => {
-      let toReplacePost = `{{_post_link_${element}_}}`
-      md = md.replace(toReplacePost, "0")
-      let toReplaceCom = `{{_comment_link_${element}_}}`
-      console.log(toReplaceCom)
-      md = md.replace(toReplaceCom, "0")
-    });
-
-    //green text
-    //need to be first because of '>'
-    md = md.replace(/(>)(.*)/g, '<green>$2</green>');
-    
-    //preformatted text
-    md = md.replace(/(```\n)(.*\n)(```)/g, '<code>\n$2</code>');
-    //b
-    md = md.replace(/(\[b\])(.*)(\[\/b\])/g, '<b>$2</b>');
-    //i
-    md = md.replace(/(\[i\])(.*)(\[\/i\])/g, '<i>$2</i>');
-    //strike
-    md = md.replace(/(\[s\])(.*)(\[\/s\])/g, '<strike>$2</strike>');
-    //spoiler
-    md = md.replace(/(\[sp\])(.*)(\[\/sp\])/g, '<sp>$2</sp>');
-    
-    md = md.replace(/\[sign-bigger\]/g, '>');
-
-    console.log(md)
-  
-    //replacing 'return character = ↵' with newline
-    md = md.replace(/(\r\n|\n|\r)/gm, "<br/>");
-
-    return md;
-  }*/
 
   async submit(textContent: string, textTitle: string) {
     console.log('response state', this.responseState)

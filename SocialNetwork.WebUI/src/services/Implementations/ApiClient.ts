@@ -13,7 +13,10 @@ class ApiClient {
 
     private authTokenExpiredInterceptor(response: AxiosResponse<any>): AxiosResponse<any> {
         if (response.status === 401)
+        {
             console.log('unathorized')
+            this.fetchToken();
+        }
 
         return response;
     }

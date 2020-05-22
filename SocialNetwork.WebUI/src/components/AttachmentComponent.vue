@@ -16,8 +16,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { ResponseState } from "@/models/enum/ResponseState";
-import {IAttachment} from '../models/responses/Attachment';
+import { IAttachment } from '../models/responses/Attachment';
 
 @Component({})
 export default class AttachmentComponent extends Vue {

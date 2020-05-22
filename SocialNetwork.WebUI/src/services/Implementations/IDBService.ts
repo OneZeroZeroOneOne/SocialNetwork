@@ -2,26 +2,18 @@ import { openDB, deleteDB, wrap, unwrap, IDBPDatabase, DBSchema, IDBPTransaction
 import { MyDB } from './IDBServiceSchema';
 import { IPost } from '@/models/responses/PostViewModel';
 import { IComment } from '@/models/responses/CommentViewModel';
+import { IIDBService } from '../Abstractions/IIDBService';
 
 let dbName = 'CommentsPosts';
 let dbVersion = 1;
 
-class IDBSrvice {
-    private static dbInstance: IDBSrvice;
-
+class IDBService implements IIDBService {
     public db: IDBPDatabase<MyDB>;
 
-    private static async New(): Promise<IDBSrvice> {
-        let db = new IDBSrvice()
+    private static async New(): Promise<IIDBService> {
+        let db = new IDBService()
         await db.Connect()
         return db;
-    }
-
-    public static async GetDb(): Promise<IDBSrvice> {
-        if (IDBSrvice.dbInstance === undefined)
-            IDBSrvice.dbInstance = await IDBSrvice.New();
-        
-        return IDBSrvice.dbInstance;
     }
 
     public async Connect(): Promise<void> {
@@ -90,4 +82,4 @@ class IDBSrvice {
     }
 }
 
-export default IDBSrvice;
+export default new IDBService();

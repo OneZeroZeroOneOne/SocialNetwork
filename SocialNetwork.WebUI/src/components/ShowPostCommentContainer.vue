@@ -3,6 +3,7 @@
     <div v-for="ins in listModal" :key="ins.keyId">
       <component 
       :is="ins.isComment == true ? 'CommentComponent': 'PostComponent'" 
+      :keyId="ins.keyId"
       :obj="ins.obj" 
       :isModal="true" 
       :linkToFather="ins.linkToFather"
@@ -21,14 +22,6 @@ import CommentComponent from "@/components/CommentComponent.vue";
 import AttachmentComponent from '@/components/AttachmentComponent.vue';
 import PostComponent from './PostComponent.vue';
 
-import { IBoardService } from '@/services/Abstractions/IBoardService';
-import { ICommentService }from '@/services/Abstractions/ICommentService';
-import { IPostService } from '../services/Abstractions/IPostService';
-
-import { BoardService } from '../services/Implementations/BoardService';
-import { CommentService } from '../services/Implementations/CommentService';
-import { PostService } from '../services/Implementations/PostService';
-
 import globalStorage from '@/services/Implementations/GlobalStorage';
 import { ResponseState } from '../models/enum/ResponseState';
 
@@ -41,9 +34,7 @@ import { ResponseState } from '../models/enum/ResponseState';
 })
 export default class ShowPostCommentContainer extends Vue {
   public listModal: object[] = [] 
-
-  private _commentService!: ICommentService;
-  private _postService!: IPostService;
+  private keyId: number = 0;
 
   public dissapearTimeout = 3 * 1000; //3 sec
 
@@ -54,7 +45,21 @@ export default class ShowPostCommentContainer extends Vue {
   async showComponent(event: MouseEvent) 
   {
     // @ts-ignore
-    console.log(event.target.dataset);
+    //console.log(event.target);
+
+    if (event.target == null)
+      return;
+
+    let elem: HTMLLinkElement = event.target as HTMLLinkElement;
+
+    if (elem.classList.contains('showing'))
+    {
+      console.log('this modal already show')
+      return;
+    }
+
+    elem.classList.add('showing');
+
 
     let compId: string = "1";
 
@@ -67,7 +72,7 @@ export default class ShowPostCommentContainer extends Vue {
 
       if (comment.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, comment.value, true);
+        this.createComponent(event, compId, comment.value, true, elem);
         return;
       }
 
@@ -75,7 +80,7 @@ export default class ShowPostCommentContainer extends Vue {
 
       if (post.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, post.value, true);
+        this.createComponent(event, compId, post.value, true, elem);
         return;
       }
 
@@ -93,18 +98,12 @@ export default class ShowPostCommentContainer extends Vue {
     {
       // @ts-ignore
       compId = event.target.dataset['comment']
-      // @ts-ignore
-      if (this.listModal.find(x => x.keyId === compId))
-      {
-        console.log('this modal already show')
-        return;
-      }
 
       let comment = await globalStorage.getComment(compId);
 
       if (comment.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, comment.value, true);
+        this.createComponent(event, compId, comment.value, true, elem);
         return;
       }
     }
@@ -114,22 +113,15 @@ export default class ShowPostCommentContainer extends Vue {
     {
       // @ts-ignore
       compId = event.target.dataset['post']
-      // @ts-ignore
-      if (this.listModal.find(x => x.keyId === compId))
-      {
-        console.log('this modal already show')
-        return;
-      }
 
       let post = await globalStorage.getPost(globalStorage.currentBoard.id, compId);
 
       if (post.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, post.value, false);
+        this.createComponent(event, compId, post.value, false, elem);
         return;
       }
     }
-
 
     // @ts-ignore
     this.createComponent(event, compId, {
@@ -139,12 +131,13 @@ export default class ShowPostCommentContainer extends Vue {
     }, true);
   }
 
-  createComponent(event: MouseEvent, id: string, object: IPost|IComment, isComment: boolean) {
+  createComponent(event: MouseEvent, id: string, object: IPost|IComment, isComment: boolean, elem: HTMLLinkElement) {
     this.listModal.push({
       isComment: isComment,
-      keyId: Number(id),
+      keyId: this.keyId++,
       obj: object,
       isModal: true,
+      elem: elem,
       position: {
         x: event.pageX,
         y: event.pageY,
@@ -154,13 +147,16 @@ export default class ShowPostCommentContainer extends Vue {
 
   hideComponent(component: Vue|number) {
     // @ts-ignore
+    let obj = this.listModal.find(obj => obj.keyId === component[1])
+    // @ts-ignore
+    obj.elem.classList.remove('showing');
+
+    // @ts-ignore
     this.listModal = this.listModal.filter(obj => obj.keyId !== component[1]);
   }
 
   beforeCreate() {
-    //this._boardService = new BoardService();
-    this._commentService = new CommentService();
-    this._postService = new PostService();
+    //
   }
 
   beforeDestroy() {

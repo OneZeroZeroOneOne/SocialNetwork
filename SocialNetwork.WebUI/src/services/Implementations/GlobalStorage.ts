@@ -2,7 +2,7 @@ import { IBoardService } from "../Abstractions/IBoardService";
 import { BoardService } from './BoardService';
 import { IPost } from '@/models/responses/PostViewModel';
 import { Guid } from '@/utilities/guid';
-import IDBSrvice from './IDBService';
+import IDBService from './IDBService';
 import { IPagedResult } from '@/models/responses/PagedResult';
 import { ResponseModel } from '@/models/responses/ResponseModel';
 import { ResponseState } from '@/models/enum/ResponseState';
@@ -12,6 +12,7 @@ import { CommentService } from './CommentService';
 import { IPostService } from '../Abstractions/IPostService';
 import { PostService } from './PostService';
 import { IBoard } from '@/models/responses/Board';
+import { IIDBService } from '../Abstractions/IIDBService';
 
 class GlobalStorage {
     private boardService: IBoardService;
@@ -20,16 +21,16 @@ class GlobalStorage {
 
     public currentBoard: IBoard;
 
-    private db: IDBSrvice;
+    private db: IIDBService;
 
     constructor() {
         this.boardService = new BoardService();
         this.commentService = new CommentService();
         this.postService = new PostService();
 
-        IDBSrvice.GetDb().then(x => {
-            this.db = x;
-        })
+        IDBService.Connect().then()
+
+        this.db = IDBService;
     }
 
     public async getBoardByName(name: string): Promise<ResponseModel<IBoard>> {
@@ -75,12 +76,17 @@ class GlobalStorage {
 
         await this.commentService.getCommentById(comment_id.toString())
             .then(resp => {
-                comment = resp.data;
+                if (resp.status === 200)
+                {
+                    comment = resp.data;
 
-                this.db.addComments([comment])
+                    this.db.addComments([comment])
 
-                respModel.state = ResponseState.success;
-                respModel.value = comment;
+                    respModel.state = ResponseState.success;
+                    respModel.value = comment;
+                } else {
+                    respModel.state = ResponseState.success;
+                }
             }).catch(err => {
                 respModel.state = ResponseState.fail;
             })
@@ -103,13 +109,18 @@ class GlobalStorage {
 
         await this.postService.getPost(board_id, post_id.toString())
             .then(response => {
-                post = response.data;
-                post.boardId = board_id;
-                
-                this.db.addPosts([post])
+                if (response.status === 200)
+                {
+                    post = response.data;
+                    post.boardId = board_id;
+                    
+                    this.db.addPosts([post])
 
-                respModel.state = ResponseState.success;
-                respModel.value = post;
+                    respModel.state = ResponseState.success;
+                    respModel.value = post;
+                } else {
+                    respModel.state = ResponseState.success;
+                }
             })
             .catch(error => {
                 respModel.state = ResponseState.fail;

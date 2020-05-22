@@ -36,12 +36,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 import { IPost } from "@/models/responses/PostViewModel";
 import { IComment } from '@/models/responses/CommentViewModel';
-import { IAttachment } from '@/models/responses/Attachment';
-import { IMarkdownNode } from '@/models/responses/MarkdownNode';
 
-import { ResponseState } from "@/models/enum/ResponseState";
-
-import PreviewModal from '@/components/PreviewModal.vue';
 import AttachmentComponent from '@/components/AttachmentComponent.vue';
 
 import eventBus from "@/utilities/EventBus";
@@ -60,6 +55,8 @@ export default class CommentComponent extends Vue {
   @Prop() public linkToFather!: Vue;
   @Prop() public modalId!: number;
   @Prop() public position!: any;
+  
+  @Prop() public keyId!: number;
 
   public timer: number = -1;
   public counter: number = 5;
@@ -98,7 +95,7 @@ export default class CommentComponent extends Vue {
   } 
 
   end() {
-    eventBus.emit('hide-link-component', [this, this.obj.id])
+    eventBus.emit('hide-link-component', [this, this.keyId])
   }
 
   modalStylesCalc() {

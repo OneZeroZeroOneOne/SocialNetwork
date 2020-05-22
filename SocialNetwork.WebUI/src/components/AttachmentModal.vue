@@ -47,7 +47,7 @@ enum ShowType {
 @Component({
   components: {}
 })
-export default class NewModal extends Vue {
+export default class AttachmentModal extends Vue {
     private attachment!: IAttachment;
 
     public width: number = 200;

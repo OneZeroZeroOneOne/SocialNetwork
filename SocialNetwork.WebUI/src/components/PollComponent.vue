@@ -32,15 +32,6 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
-import { IPost } from "@/models/responses/PostViewModel";
-import { IComment } from "@/models/responses/CommentViewModel";
-import { IAttachment } from "@/models/responses/Attachment";
-
-import { ResponseState } from "@/models/enum/ResponseState";
-
-
-import eventBus from "@/utilities/EventBus";
-
 @Component({
   components: {}
 })

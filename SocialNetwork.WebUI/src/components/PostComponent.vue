@@ -39,21 +39,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Guid } from "@/utilities/guid";
 
-import { ResponseState } from "@/models/enum/ResponseState";
-import { IPagedResult } from '../models/responses/PagedResult';
-import { IComment } from '../models/responses/CommentViewModel';
-import { IAttachment } from '../models/responses/Attachment';
 import { IPost } from "@/models/responses/PostViewModel";
 
 import AttachmentComponent from '../components/AttachmentComponent.vue';
-import CommentComponent from "./CommentComponent.vue";
-
-
-import Nprogress from "nprogress"
-import _ from 'lodash'
-import { IMarkdownNode } from '../models/responses/MarkdownNode';
 
 import eventBus from "@/utilities/EventBus";
 
@@ -71,6 +60,8 @@ export default class PostComponent extends Vue {
   @Prop() public linkToFather!: Vue;
   @Prop() public modalId!: number;
   @Prop() public position!: any;
+
+  @Prop() public keyId!: number;
 
   public modalStyles = {
     'position': 'absolute',
@@ -106,7 +97,7 @@ export default class PostComponent extends Vue {
   } 
 
   end() {
-    eventBus.emit('hide-link-component', [this, this.obj.id])
+    eventBus.emit('hide-link-component', [this, this.keyId])
   }
 
   modalStylesCalc() {
