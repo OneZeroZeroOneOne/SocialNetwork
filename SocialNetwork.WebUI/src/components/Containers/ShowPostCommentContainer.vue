@@ -24,6 +24,7 @@ import PostComponent from '@/components/Contents/PostComponent.vue';
 
 import globalStorage from '@/services/Implementations/GlobalStorage';
 import { ResponseState } from '@/models/enum/ResponseState';
+import EventBus from '../../utilities/EventBus';
 
 @Component({
   components: {
@@ -179,13 +180,13 @@ export default class ShowPostCommentContainer extends Vue {
   }
 
   beforeDestroy() {
-    this.$root.$off('show-link-component', this.showComponent)
-    this.$root.$off('hide-link-component', this.hideComponent)
+    EventBus.unsubscribe('show-link-component', this.showComponent)
+    EventBus.unsubscribe('hide-link-component', this.hideComponent)
   }
 
   mounted(): void {
-    this.$root.$on('show-link-component', this.showComponent)
-    this.$root.$on('hide-link-component', this.hideComponent)
+    EventBus.subscribe('show-link-component', this.showComponent)
+    EventBus.subscribe('hide-link-component', this.hideComponent)
   }
 
   created() {

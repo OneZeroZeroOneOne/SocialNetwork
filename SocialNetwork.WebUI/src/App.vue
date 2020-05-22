@@ -48,12 +48,12 @@ export default class App extends Vue {
   }
 
   mounted(): void {
-    let iAm = document.getElementById('app');
+    /*let iAm = document.getElementById('app');
 
     if (iAm === null)
       return;
-
-    iAm.addEventListener('mouseover', (e: Event) => {
+    */
+    document.addEventListener('mouseover', (e: Event) => {
       //console.log(e)
       // @ts-ignore
       if (e.target && e.target.matches('.link-to')) {

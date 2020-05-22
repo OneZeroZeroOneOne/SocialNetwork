@@ -12,6 +12,20 @@ class EventBus {
             
         this.mainApp.$emit(eventName, props)
     }
+
+    public subscribe(eventName: string, callback: any): Vue {
+        if (this.mainApp === undefined || this.mainApp === null)
+            this.setupMainApp()
+        
+        return this.mainApp.$on(eventName, callback);
+    }
+
+    public unsubscribe(eventName: string, callback: any): Vue {
+        if (this.mainApp === undefined || this.mainApp === null)
+            this.setupMainApp()
+        
+        return this.mainApp.$off(eventName, callback);
+    }
 }
 
 export default new EventBus();
