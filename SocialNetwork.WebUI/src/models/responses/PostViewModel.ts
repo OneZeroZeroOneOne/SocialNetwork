@@ -1,5 +1,6 @@
 import { Guid } from "@/utilities/guid";
 import { IAttachment } from './Attachment';
+import { IMention } from './MentionViewModel';
 
 export interface IPost {
     id:	number
@@ -8,6 +9,7 @@ export interface IPost {
     nullable: boolean
     date: string
     userId: string
+    mention: IMention[]
     attachmentPost: IAttachment[]
     boardId: Guid
 }

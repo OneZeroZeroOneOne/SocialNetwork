@@ -24,7 +24,7 @@
     </div>
     <div class="comment-footer">
       <div class="comment-footer-mentions">
-        <a v-for="(mention, index) in mentions" v-bind:key="index"
+        <a v-for="(mention, index) in obj.mention" v-bind:key="index"
           target="_blank" 
           class="link-to" 
           rel="noopener noreferrer"
@@ -120,6 +120,7 @@ export default class CommentComponent extends Vue {
     }else{
       //this is not modal so...
     }
+    console.log()
   }
 
   openEditor(): void {
