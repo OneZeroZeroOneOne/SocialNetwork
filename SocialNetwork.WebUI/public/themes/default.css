@@ -1,4 +1,6 @@
 :root {
+    --progress-bar-top-color: #29d;
+
     --markdown-green-text-color: #89b120;
     --markdown-link-to-text-color: orange;
     --markdown-link-to-text-hover-color: orangered;

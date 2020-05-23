@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import 'nprogress/nprogress.css';
+import '@/styles/nprogress.css';
 import checkView from 'vue-check-view'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSpinner, faCheck, faTimes, faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines } from '@fortawesome/free-solid-svg-icons'
@@ -11,6 +11,10 @@ import setup from './utilities/math_round_extensions.js'
 import { VueNotification } from '@/types/AwnTypes';
 import VueDraggableResizable from 'vue-draggable-resizable'
 import VueAWN from "vue-awesome-notifications"
+
+import Nprogress from "nprogress"
+
+Nprogress.configure({ showSpinner: false });
 
 // optionally import default styles
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
