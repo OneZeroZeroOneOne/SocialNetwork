@@ -57,18 +57,10 @@ export default class PostComponent extends Vue {
   @Prop() public showEnterButton!: boolean;
   
   @Prop() public isModal!: boolean;
-  @Prop() public linkToFather!: Vue;
-  @Prop() public modalId!: number;
-  @Prop() public position!: any;
 
   @Prop() public keyId!: number;
 
-  public modalStyles = {
-    'position': 'absolute',
-    'left':'0px',
-    'top':'0px',
-    'width':'80%',
-  }
+  @Prop() public modalStyles!: any;
 
   public timer: number = -1;
   public counter: number = 5;
@@ -109,8 +101,8 @@ export default class PostComponent extends Vue {
 
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
-      this.modalStyles.left = this.position.x + 'px';
-      this.modalStyles.top = this.position.y + 'px';
+      /*this.modalStyles.left = this.position.x + 'px';
+      this.modalStyles.top = this.position.y + 'px';*/
 
       this.timer = setTimeout(this.end, 3 * 1000);
       clearTimeout(this.timer);

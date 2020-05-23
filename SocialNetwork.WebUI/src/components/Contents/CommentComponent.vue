@@ -52,9 +52,6 @@ export default class CommentComponent extends Vue {
   @Prop() public commentNum!: number;
 
   @Prop() public isModal!: boolean;
-  @Prop() public linkToFather!: Vue;
-  @Prop() public modalId!: number;
-  @Prop() public position!: any;
   
   @Prop() public keyId!: number;
 
@@ -62,14 +59,8 @@ export default class CommentComponent extends Vue {
   public counter: number = 5;
   public hovered: boolean = true;
   public countdown!: any; 
-  
-  public LinkToComponent: string = "LinkToComponent";
 
-  public modalStyles = {
-    'position': 'absolute',
-    'left':'0px',
-    'top':'0px',
-  }
+  @Prop() public modalStyles!: any;
 
   constructor() {
     super();
@@ -107,8 +98,8 @@ export default class CommentComponent extends Vue {
 
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
-      this.modalStyles.left = this.position.x + 'px';
-      this.modalStyles.top = this.position.y + 'px';
+      /*this.modalStyles.left = this.position.x + 'px';
+      this.modalStyles.top = this.position.y + 'px';*/
 
       this.timer = setTimeout(this.end, 3 * 1000);
       clearTimeout(this.timer);
