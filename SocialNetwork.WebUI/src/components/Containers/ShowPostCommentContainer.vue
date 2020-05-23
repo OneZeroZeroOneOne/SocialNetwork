@@ -170,7 +170,7 @@ export default class ShowPostCommentContainer extends Vue {
     /*
       'left': x + 'px',
       'top': y +'px', 
-      */
+    */
     console.log(xx, yy)
     let modalStyles = 'position: absolute; width: 80%; '+ xx + yy;
 
