@@ -27,6 +27,8 @@ namespace SocialNetwork.Dal
             CreateMap<PagedResult<Comment>, PagedResult<OutCommentViewModel>>();
             CreateMap<PagedResult<Post>, PagedResult<OutPostViewModel>>();
 
+            CreateMap<Mention, OutMentionViewModel>();
+
             CreateMap<List<AttachmentComment>, List<OutAttachmentViewModel>>();
             CreateMap<List<AttachmentPost>, List<OutAttachmentViewModel>>();
 

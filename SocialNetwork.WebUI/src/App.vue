@@ -58,7 +58,7 @@ export default class App extends Vue {
       // @ts-ignore
       if (e.target && e.target.matches('.link-to')) {
         // @ts-ignore
-        //console.log(e.target)
+        console.log(e.target.dataset)
         //console.log(e)
         eventBus.emit('show-link-component', e)
       }

@@ -25,6 +25,7 @@ namespace SocialNetwork.Dal.Context
 
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Post> Post { get; set; }
+        public virtual DbSet<Mention> Mention { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<PostTop> PostTop { get; set; }
@@ -65,6 +66,8 @@ namespace SocialNetwork.Dal.Context
             modelBuilder.HasSequence("post_comment_id_seq");
 
             modelBuilder.HasPostgresExtension("uuid-ossp");
+
+            modelBuilder.Entity<Mention>(x => { x.HasKey(x => new {x.MentionId, x.MentionerId}); });
 
             modelBuilder.Entity<PostTop>(entity => { entity.HasKey(x => x.PostId); });
 
@@ -135,6 +138,10 @@ namespace SocialNetwork.Dal.Context
 
                 entity.Property(e => e.Text).IsRequired();
 
+                entity.HasMany(x => x.Mention)
+                    .WithOne(x => x.Comment)
+                    .HasForeignKey(x => x.MentionId);
+
                 entity.HasOne(d => d.Post)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.PostId)
@@ -153,6 +160,10 @@ namespace SocialNetwork.Dal.Context
                 entity.HasKey(x => x.Id);
 
                 entity.Property(x => x.Date).HasValueGenerator<CurrentDateTimeGenerator>();
+
+                entity.HasMany(x => x.Mention)
+                    .WithOne(x => x.Post)
+                    .HasForeignKey(x => x.MentionId);
 
                 entity.HasOne(x => x.Board);
 

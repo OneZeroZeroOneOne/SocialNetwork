@@ -1,4 +1,5 @@
-﻿using SocialNetwork.Dal.Models;
+﻿using System.Collections.Generic;
+using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.RequestLifetimeBll.Abstractions
 {
@@ -6,5 +7,8 @@ namespace SocialNetwork.RequestLifetimeBll.Abstractions
     {
         void SetBoard(Board board);
         void SetPost(Post post);
+        void AddMention(Mention mention);
+        void SetMyId(int id, bool isComment);
+        List<Mention> GetMentions();
     }
 }

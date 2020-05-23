@@ -12,5 +12,6 @@ namespace SocialNetwork.Dal.ViewModels.Out
         public string Title { get; set; }
         public Guid UserId { get; set; }
         public List<OutAttachmentViewModel> AttachmentPost { get; set; }
+        public List<OutMentionViewModel> Mention { get; set; }
     }
 }

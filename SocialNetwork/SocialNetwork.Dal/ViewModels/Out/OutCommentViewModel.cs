@@ -11,5 +11,6 @@ namespace SocialNetwork.Dal.ViewModels.Out
         public int SeqId { get; set; }
 
         public List<OutAttachmentViewModel> AttachmentComment { get; set; }
+        public List<OutMentionViewModel> Mention { get; set; }
     }
 }

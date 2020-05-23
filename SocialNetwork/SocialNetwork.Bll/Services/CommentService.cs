@@ -59,12 +59,8 @@ namespace SocialNetwork.Bll.Services
 
             commentModel.UserId = authorUser;
 
-            _requestLifetimeService.SetPost(post);
-            _requestLifetimeService.SetBoard(post.Board);
-
-            _httpContext.HttpContext.Items.Add("RequestLifetime", _requestLifetimeService);
             commentModel.PostId = post.Id;
-            commentModel.Text = await _userInputService.Markdown(commentModel.Text);
+            //commentModel.Text = await _userInputService.Markdown(commentModel.Text);
 
             /*post.Comments.Add(commentModel);
 
@@ -82,7 +78,21 @@ namespace SocialNetwork.Bll.Services
 
             await _context.SaveChangesAsync();
 
-            return await GetComment(insertedComment.Id);
+            var createdComment = await GetComment(insertedComment.Id);
+
+            _requestLifetimeService.SetMyId(createdComment.Id, true);
+            _requestLifetimeService.SetPost(post);
+            _requestLifetimeService.SetBoard(post.Board);
+
+            _httpContext.HttpContext.Items.Add("RequestLifetime", _requestLifetimeService);
+
+            createdComment.Text = await _userInputService.Markdown(commentModel.Text);
+
+            await _context.Mention.AddRangeAsync(_requestLifetimeService.GetMentions());
+
+            await _context.SaveChangesAsync();
+
+            return createdComment;
         }
 
         public async Task<Comment> EditComment(Comment commentModel, Guid editorUser)
@@ -105,6 +115,7 @@ namespace SocialNetwork.Bll.Services
             var comment = await _context.Comment
                 .Include(x => x.AttachmentComment)
                     .ThenInclude(x => x.Attachment)
+                .Include(x => x.Mention)
                 .FirstOrDefaultAsync(x => x.Id == commentId && x.IsArchived == false);
 
             if (comment == null)
@@ -121,6 +132,7 @@ namespace SocialNetwork.Bll.Services
             return await _context.Comment.Where(x => x.PostId == postId && x.IsArchived == false)
                 .Include(x => x.AttachmentComment)
                     .ThenInclude(x => x.Attachment)
+                .Include(x => x.Mention)
                 .AsQueryable().GetPaged(page, quantity, sortOrder);
         }
         public async Task DeleteComment(int commentId, Guid currentUserId)

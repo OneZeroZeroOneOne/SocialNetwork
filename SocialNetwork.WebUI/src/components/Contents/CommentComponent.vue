@@ -23,8 +23,14 @@
       </div>
     </div>
     <div class="comment-footer">
-      <div v-on:click="openEditor" class="comment-footer-reply button noselect">
-        Reply
+      <div class="comment-footer-mentions">
+        <a v-for="(mention, index) in mentions" v-bind:key="index"
+          target="_blank" 
+          class="link-to" 
+          rel="noopener noreferrer"
+          :data-thread="obj.postId" 
+          :data-comment="mention.isComment ? mention.mentionerId : undefined"
+          :data-post="!mention.isComment ? mention.mentionerId : undefined">>>{{mention.mentionerId}}</a>
       </div>
     </div>
   </div>
@@ -58,6 +64,16 @@ export default class CommentComponent extends Vue {
   public counter: number = 5;
   public hovered: boolean = true;
   public countdown!: any; 
+  public mentions: any = [
+    {
+      mentionerId: 334,
+      isComment: true
+    },
+    {
+      mentionerId: 293,
+      isComment: false
+    }
+  ]
 
   @Prop() public modalStyles!: any;
 
@@ -97,9 +113,6 @@ export default class CommentComponent extends Vue {
 
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
-      /*this.modalStyles.left = this.position.x + 'px';
-      this.modalStyles.top = this.position.y + 'px';*/
-
       this.timer = setTimeout(this.end, 3 * 1000);
       clearTimeout(this.timer);
       this.hovered = false;
@@ -240,17 +253,26 @@ $text-color: var(--comment-text-color);
     padding-bottom: 10px;
   }
   .comment-footer {
-    padding-left: 10px;
-    min-height: $comment-footer-height;
+    padding-left: 7px;
     border-top-style: solid;
     border-top-width: 2px;
     border-top-color: $comment-footer-border-color;
     
-    .comment-footer-reply {
+    &-mentions {
+      padding-top: 3px;
+      padding-bottom: 3px;
+      font-size: small;
+
+      .link-to {
+        padding-left: 3px;
+      }
+    }
+
+    /*.comment-footer-reply {
       float: right;
       margin: 6px;
       margin-right: 10px;
-    }
+    }*/
   }
 
 }

@@ -10,6 +10,7 @@ namespace SocialNetwork.Dal.Models
             Comments = new HashSet<Comment>();
             ReactionPost = new HashSet<ReactionPost>();
             AttachmentPost = new HashSet<AttachmentPost>();
+            Mention = new HashSet<Mention>();
         }
 
         public int Id { get; set; }
@@ -25,5 +26,6 @@ namespace SocialNetwork.Dal.Models
         public virtual ICollection<AttachmentPost> AttachmentPost { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ReactionPost> ReactionPost { get; set; }
+        public virtual ICollection<Mention> Mention { get; set; }
     }
 }

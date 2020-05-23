@@ -7,6 +7,7 @@ using SocialNetwork.Utilities.Exceptions;
 using System;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Dapper;
+using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.Markdown.MarkdownExtensions.LinkTo
 {
@@ -46,6 +47,15 @@ namespace SocialNetwork.Markdown.MarkdownExtensions.LinkTo
             attr.AddProperty("data-thread", requestLifetimeService.Post.Id.ToString());
 
             var innerText = ">>" + obj.Id;
+
+            var mention = new Mention
+            {
+                MentionId = obj.Id,
+                MentionerId = requestLifetimeService.MyId,
+                IsComment = requestLifetimeService.IsComment,
+            };
+
+            requestLifetimeService.AddMention(mention);
 
             if (isPostOrComment == 0)
             {

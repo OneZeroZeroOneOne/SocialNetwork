@@ -89,12 +89,15 @@ namespace SocialNetwork.Bll.Services
 
             var createdPost = await GetPost(postModel.BoardId, postModel.Id);
 
+            _requestLifetimeService.SetMyId(createdPost.Id, false);
             _requestLifetimeService.SetPost(createdPost);
             _requestLifetimeService.SetBoard(board);
 
             _httpContext.HttpContext.Items.Add("RequestLifetime", _requestLifetimeService);
 
             createdPost.Text = await _userInputService.Markdown(postModel.Text);
+
+            await _context.Mention.AddRangeAsync(_requestLifetimeService.GetMentions());
 
             await _context.SaveChangesAsync();
 
@@ -105,7 +108,8 @@ namespace SocialNetwork.Bll.Services
         {
             var post = await _context.Post
                 .Include(x => x.AttachmentPost)
-                .ThenInclude(x => x.Attachment)
+                    .ThenInclude(x => x.Attachment)
+                .Include(x => x.Mention)
                 .FirstOrDefaultAsync(x => x.Id == postId && x.IsArchived == false);
 
             if (post == null)
@@ -119,6 +123,7 @@ namespace SocialNetwork.Bll.Services
             var post = await _context.Post
                 .Include(x => x.AttachmentPost)
                     .ThenInclude(x => x.Attachment)
+                .Include(x => x.Mention)
                 .FirstOrDefaultAsync(x => x.Id == postId && x.IsArchived == false && x.BoardId == boardId);
 
             if (post == null)
@@ -151,6 +156,7 @@ namespace SocialNetwork.Bll.Services
             var query = _context.Post
                 .Include(x => x.AttachmentPost)
                     .ThenInclude(x => x.Attachment)
+                .Include(x => x.Mention)
                 .Join(_context.PostTop, post => post.Id, top => top.PostId, (post, top) =>
                     new
                     {
@@ -162,6 +168,7 @@ namespace SocialNetwork.Bll.Services
                         post.BoardId,
                         post.IsArchived,
                         post.AttachmentPost,
+                        post.Mention,
                         top.Score,
                     })
                 .Where(x => x.BoardId == boardId)
@@ -176,6 +183,7 @@ namespace SocialNetwork.Bll.Services
                     IsArchived = x.IsArchived,
                     UserId = x.UserId,
                     AttachmentPost = x.AttachmentPost,
+                    Mention = x.Mention,
                 });
 
             var postCount = await query.CountAsync();
