@@ -2,7 +2,6 @@
 using SocialNetwork.Dal.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Threading.Tasks;
 
 namespace SocialNetwork.Bll.Abstractions
@@ -15,7 +14,7 @@ namespace SocialNetwork.Bll.Abstractions
 
         Task<Comment> EditComment(Comment commentModel, Guid editorUser);
 
-        Task<PagedResult<Comment>> GetPageComments(int postId, int page, int quantity);
+        Task<PagedResult<Comment>> GetPageComments(int postId, int page, int quantity, bool sortOrder = false);
 
         Task DeleteComment(int commentId, Guid userId);
     }

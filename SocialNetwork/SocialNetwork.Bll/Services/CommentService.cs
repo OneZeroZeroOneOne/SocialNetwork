@@ -1,19 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Extensions;
 using SocialNetwork.Dal.Models;
 using SocialNetwork.Dal.ViewModels;
+using SocialNetwork.RequestLifetimeBll.Abstractions;
 using SocialNetwork.Utilities.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AngleSharp.Network.Default;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using SocialNetwork.RequestLifetimeBll.Abstractions;
-using SocialNetwork.RequestLifetimeBll.Services;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -112,16 +109,16 @@ namespace SocialNetwork.Bll.Services
 
             return comment;
         }
-        public async Task<PagedResult<Comment>> GetPageComments(int postId, int page, int quantity)
+        public async Task<PagedResult<Comment>> GetPageComments(int postId, int page, int quantity, bool sortOrder = false)
         {
             if (page <= 0 || quantity <= 0)
                 throw ExceptionFactory.SoftException(ExceptionEnum.InappropriatParameters,
-                    "inappropriate parameters page or quantity");
+                    "Page and quantity must be real number");
 
             return await _context.Comment.Where(x => x.PostId == postId && x.IsArchived == false)
                 .Include(x => x.AttachmentComment)
                     .ThenInclude(x => x.Attachment)
-                .AsQueryable().GetPaged(page, quantity);
+                .AsQueryable().GetPaged(page, quantity, sortOrder);
         }
         public async Task DeleteComment(int commentId, Guid currentUserId)
         {
