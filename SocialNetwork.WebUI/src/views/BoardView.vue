@@ -5,7 +5,7 @@
       <div v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id">
         <post-component :obj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
         <div id="comments">
-          <div class="comment-wrapper" v-for="(commentO, indexComment) in getPreloadedCommentForPost.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
+          <div class="comment-wrapper" v-for="(commentO, indexComment) in allComments.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
             <comment-component :obj="commentO" :commentNum="indexComment+1" :fatherPost="postO"/>
           </div>
         </div>
@@ -24,6 +24,8 @@ import { IPost } from '@/models/responses/PostViewModel';
 
 import { Guid } from '@/utilities/guid';
 import { ResponseState } from "@/models/enum/ResponseState";
+import { IPagedResult } from "@/models/responses/PagedResult";
+
 
 import PostComponent from '@/components/Contents/PostComponent.vue'
 import FooterComponent from "@/components/Navigations/FooterComponent.vue";
@@ -53,7 +55,13 @@ export default class BoardView extends Vue {
   private postIds: number[] = [];
   private currentPage: number = 1;
 
-  private preloadedComments: IComment[] = [];
+  private perPage: number = 3;
+
+  private preloadedComments: Map<number, IPagedResult<IComment>> = new Map<number, IPagedResult<IComment>>();
+
+  private allComments: IComment[] = []
+  private commentCountPerPost: number[][] = []
+
   constructor() {
     super();
 
@@ -65,6 +73,8 @@ export default class BoardView extends Vue {
         this.loadPagePosts()
         Nprogress.done()
         this.$root.$on('footerInView', this.throttleLoadPosts)
+        console.log(this.preloadedComments)
+        console.log(this.commentCountPerPost)
       })
   }
 
@@ -78,10 +88,17 @@ export default class BoardView extends Vue {
 
   throttleLoadPosts = _.throttle(() => this.loadPagePosts(), 2000);
 
-  get getPreloadedCommentForPost(): IComment[] {
-    //let comments = this.preloadedComments.get(postId)
-    return this.preloadedComments === undefined ? [] : this.preloadedComments;
-  }
+  /*getPreloadedCommentForPost(id: number): IComment[] {
+    console.log(id)
+    let a = this.preloadedComments.get(Number(id));
+    console.log(a)
+    if (a !== undefined)
+    {
+      return a;
+    }
+
+    return [];
+  }*/
 
   boardName(): string {
     return this.$route.params.boardname;
@@ -105,6 +122,7 @@ export default class BoardView extends Vue {
     
     if (posts.state === ResponseState.fail)
     {
+      this.requestPostsStatus = ResponseState.fail;
       return;
     } 
 
@@ -120,10 +138,16 @@ export default class BoardView extends Vue {
         newPostIds.push(x.id);
         newPostCount += 1;
         
-        globalStorage.getCommentsForPost(x.id.toString(), 1, 5).then(com => {
-          if (com.state != ResponseState.fail)
-            this.preloadedComments.push(...com.value.results)
-        })
+        globalStorage.getCommentsForPost(x.id.toString(), 1, this.perPage, true)
+          .then(com => {
+            if (com.state != ResponseState.fail)
+            {
+              this.preloadedComments.set(x.id, com.value)//.push(com.value)
+              this.allComments.push(...com.value.results);
+              //this.commentCountPerPost.push([x.id, [com.value.rowCount]])
+              this.requestPostsStatus = ResponseState.success
+            }
+          })
       }
     })
   
@@ -135,8 +159,6 @@ export default class BoardView extends Vue {
           info: 1500
         }
     })
-
-    this.requestPostsStatus = ResponseState.success
 
   }
 }

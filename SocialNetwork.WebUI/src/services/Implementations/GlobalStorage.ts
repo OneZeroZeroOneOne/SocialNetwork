@@ -151,10 +151,10 @@ class GlobalStorage {
         return respModel;
     }
 
-    public async getCommentsForPost(link_to_post: string, page: number, quantity: number): Promise<ResponseModel<IPagedResult<IComment>>> {
+    public async getCommentsForPost(link_to_post: string, page: number, quantity: number, sortOrder: boolean): Promise<ResponseModel<IPagedResult<IComment>>> {
         let respModel = new ResponseModel<IPagedResult<IComment>>();
 
-        await this.commentService.getCommentForPost(link_to_post, page, quantity)
+        await this.commentService.getCommentForPost(link_to_post, page, quantity, sortOrder)
             .then(async resp => {
                 if (resp.status == 200)
                 {

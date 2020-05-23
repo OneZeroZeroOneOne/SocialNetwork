@@ -190,6 +190,7 @@ CREATE TABLE public."Comment" (
 	"Text" text NOT NULL,
 	"Date" timestamp NOT NULL,
 	"IsArchived" bool NOT NULL DEFAULT false,
+	"SeqId" int8 NULL,
 	CONSTRAINT "Comment_pkey" PRIMARY KEY ("Id"),
 	CONSTRAINT "Comment_PostId_fkey" FOREIGN KEY ("PostId") REFERENCES "Post"("Id"),
 	CONSTRAINT "Comment_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "User"("Id")

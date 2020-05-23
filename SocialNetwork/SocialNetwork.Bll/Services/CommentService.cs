@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SocialNetwork.Dal.Dapper;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -62,24 +63,26 @@ namespace SocialNetwork.Bll.Services
             _requestLifetimeService.SetBoard(post.Board);
 
             _httpContext.HttpContext.Items.Add("RequestLifetime", _requestLifetimeService);
-
+            commentModel.PostId = post.Id;
             commentModel.Text = await _userInputService.Markdown(commentModel.Text);
 
-            post.Comments.Add(commentModel);
+            /*post.Comments.Add(commentModel);
 
             var insertedPost = _context.Update(post);
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();*/
+
+            var insertedComment = _context.AddComment(commentModel);
 
             if (attachmentIdList != null)
                 foreach (var attachmentId in attachmentIdList)
                 {
-                    await AttachFileToComment(insertedPost.Entity.Comments.Last().Id, attachmentId);
+                    await AttachFileToComment(insertedComment.Id, attachmentId);
                 }
 
             await _context.SaveChangesAsync();
 
-            return await GetComment(insertedPost.Entity.Comments.Last().Id);
+            return await GetComment(insertedComment.Id);
         }
 
         public async Task<Comment> EditComment(Comment commentModel, Guid editorUser)

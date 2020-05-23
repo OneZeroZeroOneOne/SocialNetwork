@@ -2,6 +2,7 @@
 using SocialNetwork.Dal.Context;
 using System.Data;
 using System.Linq;
+using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.Dal.Dapper
 {
@@ -12,6 +13,14 @@ namespace SocialNetwork.Dal.Dapper
             using (IDbConnection db = context.Connection)
             {
                 return db.Query<int>("SELECT ispostorcomment(@id)", new { id }).FirstOrDefault();
+            }
+        }
+
+        public static Comment AddComment(this PublicContext context, Comment comment)
+        {
+            using (IDbConnection db = context.Connection)
+            {
+                return db.Query<Comment>("SELECT * from public.createcomment(@postId, @text, @userId)", new { comment.PostId, comment.Text, comment.UserId }).FirstOrDefault();
             }
         }
     }

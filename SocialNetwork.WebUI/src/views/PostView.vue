@@ -166,7 +166,7 @@ export default class PostView extends Vue {
   {
     this.requestCommentsStatus = ResponseState.loading;
 
-    let comments = await globalStorage.getCommentsForPost(this.postId(), this.currentPage, 1000);
+    let comments = await globalStorage.getCommentsForPost(this.postId(), this.currentPage, 1000, false);
 
     if (comments.state === ResponseState.fail)
     {

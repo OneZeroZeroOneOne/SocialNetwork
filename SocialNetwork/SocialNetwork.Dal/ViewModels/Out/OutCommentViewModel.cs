@@ -1,7 +1,5 @@
-﻿using System;
+﻿using SocialNetwork.Dal.Models;
 using System.Collections.Generic;
-using System.Numerics;
-using SocialNetwork.Dal.Models;
 
 namespace SocialNetwork.Dal.ViewModels.Out
 {
@@ -10,6 +8,7 @@ namespace SocialNetwork.Dal.ViewModels.Out
         public int Id { get; set; }
         public string Text { get; set; }
         public int PostId { get; set; }
+        public int SeqId { get; set; }
 
         public List<OutAttachmentViewModel> AttachmentComment { get; set; }
     }

@@ -16,6 +16,7 @@ namespace SocialNetwork.Dal.Models
         public Guid UserId { get; set; }
         public int PostId { get; set; }
         public bool IsArchived { get; set; }
+        public int SeqId { get; set; }
 
         public virtual Post Post { get; set; }
         public virtual User User { get; set; }
