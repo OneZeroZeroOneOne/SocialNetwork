@@ -5,8 +5,8 @@
       <div v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id">
         <post-component :obj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
         <div id="comments">
-          <div class="comment-wrapper" v-for="(commentO, indexComment) in allComments.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
-            <comment-component :obj="commentO" :commentNum="indexComment+1" :fatherPost="postO"/>
+          <div class="comment-wrapper" v-for="commentO in allComments.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
+            <comment-component :obj="commentO" :fatherPost="postO"/>
           </div>
         </div>
       </div>
@@ -57,10 +57,7 @@ export default class BoardView extends Vue {
 
   private perPage: number = 3;
 
-  private preloadedComments: Map<number, IPagedResult<IComment>> = new Map<number, IPagedResult<IComment>>();
-
   private allComments: IComment[] = []
-  private commentCountPerPost: number[][] = []
 
   constructor() {
     super();
@@ -73,8 +70,6 @@ export default class BoardView extends Vue {
         this.loadPagePosts()
         Nprogress.done()
         this.$root.$on('footerInView', this.throttleLoadPosts)
-        console.log(this.preloadedComments)
-        console.log(this.commentCountPerPost)
       })
   }
 
@@ -87,18 +82,6 @@ export default class BoardView extends Vue {
   }
 
   throttleLoadPosts = _.throttle(() => this.loadPagePosts(), 2000);
-
-  /*getPreloadedCommentForPost(id: number): IComment[] {
-    console.log(id)
-    let a = this.preloadedComments.get(Number(id));
-    console.log(a)
-    if (a !== undefined)
-    {
-      return a;
-    }
-
-    return [];
-  }*/
 
   boardName(): string {
     return this.$route.params.boardname;
@@ -142,9 +125,7 @@ export default class BoardView extends Vue {
           .then(com => {
             if (com.state != ResponseState.fail)
             {
-              this.preloadedComments.set(x.id, com.value)//.push(com.value)
               this.allComments.push(...com.value.results);
-              //this.commentCountPerPost.push([x.id, [com.value.rowCount]])
               this.requestPostsStatus = ResponseState.success
             }
           })

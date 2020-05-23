@@ -10,7 +10,7 @@
         #{{obj.id}}
       </div>
       <div class="comment-header-number">
-        {{commentNum + 1}}
+        {{obj.seqId + 2}}
       </div>
     </div>
     <div class="comment-content" :style="stylesContent()">
@@ -49,7 +49,6 @@ import eventBus from "@/utilities/EventBus";
 export default class CommentComponent extends Vue {
   @Prop() public obj!: IComment;
   @Prop() public fatherPost!: IPost;
-  @Prop() public commentNum!: number;
 
   @Prop() public isModal!: boolean;
   

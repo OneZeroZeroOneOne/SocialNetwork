@@ -7,6 +7,7 @@ export interface IComment {
     userId: Guid
     text: string
     postId: number
+    seqId: number
     attachmentComment: IAttachment[]
 }
 
