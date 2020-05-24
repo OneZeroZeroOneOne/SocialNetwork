@@ -1,5 +1,5 @@
 <template>
-<div class="comment" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
+<div class="comment" :id="obj.id" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
   <div class="comment-body">
     <div class="comment-header">
       <div class="comment-header-time">

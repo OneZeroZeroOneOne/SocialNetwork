@@ -93,7 +93,12 @@ export default class PostView extends Vue {
   }
 
   mounted() {
-    
+    /*this.$nextTick(() => {
+      let scrollTo = document.getElementById('345');
+      console.log(scrollTo)
+      if (scrollTo !== null)
+        scrollTo.scrollIntoView(true);
+    })*/
   }
 
   beforeDestroy() {

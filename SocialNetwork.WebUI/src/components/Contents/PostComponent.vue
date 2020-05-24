@@ -1,5 +1,5 @@
 <template>
-  <div class="post" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
+  <div class="post" :id="obj.id" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
     <div class="post-body">
       <div class="post-header">
         <div class="post-header-title">
