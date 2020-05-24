@@ -11,15 +11,15 @@ import { ICommentService } from '../Abstractions/ICommentService';
 import { CommentService } from './CommentService';
 import { IPostService } from '../Abstractions/IPostService';
 import { PostService } from './PostService';
-import { IBoard } from '@/models/responses/Board';
+import { IBoard, IBoards } from '@/models/responses/Board';
 import { IIDBService } from '../Abstractions/IIDBService';
 
 class GlobalStorage {
     private boardService: IBoardService;
     private commentService: ICommentService;
     private postService: IPostService;
-
-    public currentBoard: IBoard;
+    
+    public knownBoards: IBoard[] = [];
 
     private db: IIDBService;
 
@@ -33,15 +33,44 @@ class GlobalStorage {
         this.db = IDBService;
     }
 
+    public async getBoards(): Promise<ResponseModel<IBoard[]>> {
+        let respModel = new ResponseModel<IBoard[]>();
+
+        await this.boardService.getBoards()
+            .then(response => {
+                if (response.status === 200)
+                {
+                    this.knownBoards = response.data;
+                    respModel.value = response.data;
+                    respModel.state = ResponseState.success;
+                } else {
+                    respModel.state = ResponseState.fail;
+                }
+            })
+            .catch(error => {
+                respModel.state = ResponseState.fail;
+            });
+            
+        return respModel;
+    }
+
+    public getBoardById(id: Guid): IBoard|undefined {
+        let storedBoard = this.knownBoards.find(x => x.id === id);
+        if (storedBoard !== undefined)
+            return storedBoard;
+    }
+
     public async getBoardByName(name: string): Promise<ResponseModel<IBoard>> {
         let respModel = new ResponseModel<IBoard>();
 
-        if (this.currentBoard !== undefined && this.currentBoard !== null)
-            if (this.currentBoard.name === name)
-            {
-                respModel.state = ResponseState.success;
-                respModel.value = this.currentBoard;
-            }
+        let storedBoard = this.knownBoards.find(x => x.name === name);
+
+        if (storedBoard != undefined)
+        {
+            respModel.state = ResponseState.success;
+            respModel.value = storedBoard;
+            return respModel;
+        }
 
         await this.boardService.getBoardByName(name)
             .then(response => {
@@ -49,7 +78,6 @@ class GlobalStorage {
                 {
                     respModel.state = ResponseState.success;
                     respModel.value = response.data;
-                    this.currentBoard = response.data;
                 } else {
                     respModel.state = ResponseState.success;
                 }
@@ -94,6 +122,40 @@ class GlobalStorage {
         return respModel;
     }
 
+    public async getPostGlobally(post_id: string): Promise<ResponseModel<IPost>> {
+        let respModel = new ResponseModel<IPost>();
+
+        let post = await this.db.getPost(Number(post_id));
+
+        if (post !== undefined)
+        {
+            console.log(`from storage post ${post_id}`)
+            respModel.state = ResponseState.success;
+            respModel.value = post;
+            return respModel;
+        }
+
+        await this.postService.getPostGlobal(post_id.toString())
+            .then(response => {
+                if (response.status === 200)
+                {
+                    post = response.data;
+                    
+                    this.db.addPosts([post])
+
+                    respModel.state = ResponseState.success;
+                    respModel.value = post;
+                } else {
+                    respModel.state = ResponseState.success;
+                }
+            })
+            .catch(error => {
+                respModel.state = ResponseState.fail;
+            });   
+        
+        return respModel;
+    }
+
     public async getPost(board_id: Guid, post_id: string): Promise<ResponseModel<IPost>> {
         let respModel = new ResponseModel<IPost>();
 
@@ -112,7 +174,6 @@ class GlobalStorage {
                 if (response.status === 200)
                 {
                     post = response.data;
-                    post.boardId = board_id;
                     
                     this.db.addPosts([post])
 

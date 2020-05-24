@@ -5,10 +5,13 @@
       <div class="comment-header-time">
         {{obj.date | formatDate}}
       </div>
-      <div class="comment-header-link"
-          @click.self="openEditor()">
+      <a class="comment-header-link"
+          :href="'/'+boardName()+'/'+obj.postId+'#'+obj.id"
+          target="_blank"
+          rel="noopener noreferrer"
+          @click.self="openEditor">
         #{{obj.id}}
-      </div>
+      </a>
       <div class="comment-header-number">
         {{obj.seqId + 2}}
       </div>
@@ -46,6 +49,7 @@ import { IComment } from '@/models/responses/CommentViewModel';
 import AttachmentComponent from '@/components/Other/AttachmentComponent.vue';
 
 import eventBus from "@/utilities/EventBus";
+import GlobalStorage from '../../services/Implementations/GlobalStorage';
 
 @Component({
   components: {
@@ -79,6 +83,14 @@ export default class CommentComponent extends Vue {
 
   constructor() {
     super();
+  }
+
+  boardName(): string {
+    let board = GlobalStorage.getBoardById(this.fatherPost.boardId);
+    if (board !== undefined)
+      return board.name;
+    
+    return '';
   }
 
   @Watch('hovered', {immediate: true})
@@ -123,7 +135,8 @@ export default class CommentComponent extends Vue {
     console.log()
   }
 
-  openEditor(): void {
+  openEditor(event: MouseEvent): void {
+    event.preventDefault();
     this.$root.$emit('show-editor-modal-from-comment', this.obj, this.fatherPost)
   }
 
@@ -142,17 +155,6 @@ export default class CommentComponent extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-/*
-.comment {
-  transition: border-left 300ms ease-in-out, padding-left 300ms ease-in-out;
-  &:hover {
-    padding-left: 0.5rem;
-    border-left: 0.5rem solid #00ff99;
-  }
-}*/
-</style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
@@ -237,6 +239,7 @@ $text-color: var(--comment-text-color);
     .comment-header-link {
       color: $text-color;
       float: left;
+      text-decoration: none;
       //margin-right: 10px;
       color: var(--comment-header-text-link);
       &:hover {
