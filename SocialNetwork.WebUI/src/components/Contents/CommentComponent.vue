@@ -22,7 +22,7 @@
         </article>
       </div>
     </div>
-    <div class="comment-footer">
+    <div class="comment-footer" v-if="obj.mention.length > 0">
       <div class="comment-footer-mentions">
         <a v-for="(mention, index) in obj.mention" v-bind:key="index"
           target="_blank" 
@@ -177,7 +177,6 @@ $text-color: var(--comment-text-color);
   margin: 0 0px $comment-offset-between $comment-offset-left;
   background-color: $comment-body-color;
   width: 100%;
-  min-height: 100px;
   border: 2px solid;
   border-left-width: 4px;
   border-color: $comment-body-border-color;

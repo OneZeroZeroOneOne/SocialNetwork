@@ -8,10 +8,13 @@
         <div class="post-header-time">
           {{obj.date | formatDate}}
         </div>
-        <div class="post-header-link"
-          @click.self="openEditor()">
+        <a class="post-header-link"
+          :href="'/'+boardName()+'/'+obj.id"
+          target="_blank"
+          rel="noopener noreferrer"
+          @click.self="openEditor">
         #{{obj.id}}
-        </div>
+        </a>
         <div class="post-header-number">
           1
         </div>
@@ -25,12 +28,15 @@
           </article>
         </div>
       </div>
-      <div class="post-footer">
-        <div v-on:click="goToPost" class="post-footer-enter button noselect" v-if="showEnterButton === true">
-          To thread
-        </div>
-        <div v-on:click="openEditor" class="post-footer-reply button noselect">
-          Reply
+      <div class="post-footer" v-if="obj.mention.length > 0">
+        <div class="post-footer-mentions">
+          <a v-for="(mention, index) in obj.mention" v-bind:key="index"
+            target="_blank" 
+            class="link-to" 
+            rel="noopener noreferrer"
+            :data-thread="obj.postId" 
+            :data-comment="mention.isComment ? mention.mentionerId : undefined"
+            :data-post="!mention.isComment ? mention.mentionerId : undefined">>>{{mention.mentionerId}}</a>
         </div>
       </div>
     </div>
@@ -112,7 +118,8 @@ export default class PostComponent extends Vue {
     }
   }
 
-  openEditor(): void {
+  openEditor(event: MouseEvent): void {
+    event.preventDefault();
     this.$root.$emit('show-editor-modal-from-post', this.obj)
   }
 
@@ -158,7 +165,6 @@ $text-color: var(--post-text-color);
   color: $text-color;
   background-color: $post-body-color;
   width: 90%;
-  min-height: 150px;
   height: auto;
   border: 2px solid;
   border-color: $post-body-border-color;
@@ -202,6 +208,7 @@ $text-color: var(--post-text-color);
       float: left;
       //margin-right: 10px;
       color: var(--post-header-text-link);
+      text-decoration: none;
       &:hover {
         cursor: pointer;
         color: var(--post-header-text-hover-link);
@@ -220,10 +227,19 @@ $text-color: var(--post-text-color);
   }
   .post-footer {
     padding-left: 10px;
-    min-height: $post-footer-height;
     border-top-style: solid;
     border-top-width: 2px;
     border-top-color: var(--post-footer-border-color);
+
+    &-mentions {
+      padding-top: 3px;
+      padding-bottom: 3px;
+      font-size: small;
+
+      .link-to {
+        padding-left: 3px;
+      }
+    }
   }
 
   .post-footer-enter {
