@@ -51,6 +51,7 @@ import { IPost } from "@/models/responses/PostViewModel";
 import AttachmentComponent from '@/components/Other/AttachmentComponent.vue';
 
 import eventBus from "@/utilities/EventBus";
+import GlobalStorage from '../../services/Implementations/GlobalStorage';
 
 @Component({
   components: {
@@ -137,8 +138,10 @@ export default class PostComponent extends Vue {
     return ""
   }
 
-  boardName(): string {
-    return this.$route.params.boardname;
+  boardName(): any {
+    let b = GlobalStorage.getBoardById(this.obj.boardId)
+    if (b !== undefined)
+      return b.name
   }
 
   goToPost(): void {

@@ -46,6 +46,7 @@ import { BoardService } from '@/services/Implementations/BoardService';
 import Card from '@/components/Other/BoardCardComponent.vue';
 
 import Nprogress from "nprogress";
+import GlobalStorage from '../../services/Implementations/GlobalStorage';
 
 @Component({
   components: { 
@@ -83,15 +84,18 @@ export default class BoardListComponent extends Vue {
   async loadBoards(): Promise<void> {
     this.boardRequestStatus = ResponseState.loading;
 
-    this._boardService.getBoards()
-      .then(response => {
-        this.boards = response.data;
-        this.boardRequestStatus = ResponseState.success;
-        this.sortBoards()
-      })
-      .catch(error => {
-        this.boardRequestStatus = ResponseState.fail;
-      });
+    let boards = await GlobalStorage.getBoards();
+    
+    if (boards.state === ResponseState.fail)
+    {
+      this.boardRequestStatus = ResponseState.fail;
+      return;
+    }
+
+    this.boardRequestStatus = ResponseState.success;
+    this.boards = boards.value;
+
+    this.sortBoards();
   }
 
   sortBoards() {
@@ -99,6 +103,7 @@ export default class BoardListComponent extends Vue {
     this.thematicsBoards = []
     this.politiciansBoards = []
     this.otherBoards = []
+    console.log(this.boards)
 
     this.boards.forEach(board => {
       let popSetting = board.settings.filter(x => x.name === 'Popular')

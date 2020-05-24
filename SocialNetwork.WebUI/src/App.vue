@@ -23,6 +23,7 @@ import { loadCss, onloadCSS } from '@/utilities/loadStyle';
 import db from '@/services/Implementations/IDBService';
 
 import eventBus from "@/utilities/EventBus";
+import GlobalStorage from './services/Implementations/GlobalStorage';
 
 @Component({
   components: {
@@ -68,6 +69,7 @@ export default class App extends Vue {
   async created() {
     this.$refs.container = this;
     console.log(this)
+    await GlobalStorage.getBoards()
   }
 }
 </script>

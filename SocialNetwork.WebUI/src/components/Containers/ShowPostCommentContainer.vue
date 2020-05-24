@@ -4,7 +4,8 @@
       <component 
       :is="ins.isComment == true ? 'CommentComponent': 'PostComponent'" 
       :keyId="ins.keyId"
-      :obj="ins.obj" 
+      :obj="ins.obj"
+      :fatherPost="ins.fatherPost"
       :isModal="true"
       :modalStyles="ins.modalStyles"/>
     </div>
@@ -82,15 +83,19 @@ export default class ShowPostCommentContainer extends Vue {
 
       if (comment.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, comment.value, true);
-        return;
+        let post = await globalStorage.getPostGlobally(comment.value.postId.toString())
+        if (post.state !== ResponseState.fail)
+        {
+          this.createComponent(event, compId, comment.value, post.value, true);
+          return;
+        }
       }
 
-      let post = await globalStorage.getPost(globalStorage.currentBoard.id, compId);
+      let post = await globalStorage.getPostGlobally(compId);
 
       if (post.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, post.value, true);
+        this.createComponent(event, compId, post.value, post.value, true);
         return;
       }
 
@@ -113,8 +118,12 @@ export default class ShowPostCommentContainer extends Vue {
 
       if (comment.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, comment.value, true);
-        return;
+        let post = await globalStorage.getPostGlobally(comment.value.postId.toString())
+        if (post.state !== ResponseState.fail)
+        {
+          this.createComponent(event, compId, comment.value, post.value, true);
+          return;
+        }
       }
     }
 
@@ -124,11 +133,11 @@ export default class ShowPostCommentContainer extends Vue {
       // @ts-ignore
       compId = event.target.dataset['post']
 
-      let post = await globalStorage.getPost(globalStorage.currentBoard.id, compId);
+      let post = await globalStorage.getPostGlobally(compId);
 
       if (post.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, post.value, false);
+        this.createComponent(event, compId, post.value, post.value, false);
         return;
       }
     }
@@ -150,7 +159,7 @@ export default class ShowPostCommentContainer extends Vue {
     return c;
   }
 
-  createComponent(event: MouseEvent, id: string, object: IPost|IComment, isComment: boolean) {
+  createComponent(event: MouseEvent, id: string, object: IPost|IComment, fatherPost: IPost, isComment: boolean) {
     let elem: HTMLLinkElement = event.target as HTMLLinkElement;
 
     let coords = this.offset(elem);
@@ -178,6 +187,7 @@ export default class ShowPostCommentContainer extends Vue {
       isComment: isComment,
       keyId: this.keyId++,
       obj: object,
+      fatherPost: fatherPost,
       modalStyles: modalStyles,
       elem: elem
     })
