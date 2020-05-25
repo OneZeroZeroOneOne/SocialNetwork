@@ -1,7 +1,7 @@
 <template>
   <div class="show-post-comment-container">
     <div v-for="ins in listModal" :key="ins.keyId">
-      <component 
+      <component class="animate__animated animate__fadeInUp"
       :is="ins.isComment == true ? 'CommentComponent': 'PostComponent'" 
       :keyId="ins.keyId"
       :obj="ins.obj"

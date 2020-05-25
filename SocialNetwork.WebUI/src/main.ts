@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import '@/styles/nprogress.css';
+import '@/styles/scss/animation.scss';
 import checkView from 'vue-check-view'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSpinner, faCheck, faTimes, faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines } from '@fortawesome/free-solid-svg-icons'
