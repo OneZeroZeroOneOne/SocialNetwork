@@ -2,6 +2,9 @@
   <div class="post" :id="obj.id" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
     <div class="post-body">
       <div class="post-header">
+        <div class="post-header-number">
+          1
+        </div>
         <div class="post-header-title">
           {{obj.title}}
         </div>
@@ -15,9 +18,6 @@
           @click.self="openEditor">
         #{{obj.id}}
         </a>
-        <div class="post-header-number">
-          1
-        </div>
       </div>
       <div class="post-content" :style="stylesContent()">
         <div class=post-content-header v-if="obj.attachmentPost.length > 0" :style="stylesContentHeader()">
@@ -90,7 +90,7 @@ export default class PostComponent extends Vue {
         // @ts-ignore
         this.timer = null;
       } else {
-        this.timer = setTimeout(this.end, 3 * 1000);
+        this.timer = setTimeout(this.end, 33333 * 1000);
         //console.log('new timer', this.timer)
       }
     }
@@ -112,7 +112,7 @@ export default class PostComponent extends Vue {
       /*this.modalStyles.left = this.position.x + 'px';
       this.modalStyles.top = this.position.y + 'px';*/
 
-      this.timer = setTimeout(this.end, 3 * 1000);
+      this.timer = setTimeout(this.end, 3333 * 1000);
       clearTimeout(this.timer);
       this.hovered = false;
     }else{
@@ -168,6 +168,7 @@ $text-color: var(--post-text-color);
   position: relative;
   color: $text-color;
   background-color: $post-body-color;
+  min-width: 25vw;
   width: 90%;
   height: auto;
   border: 2px solid;
@@ -176,8 +177,6 @@ $text-color: var(--post-text-color);
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
   float: left;
-  margin-right: 20px;
-  margin-left: 0px;
 
   .post-content-body {
     //margin-top: 10px;
@@ -188,28 +187,28 @@ $text-color: var(--post-text-color);
   }
 
   .post-header {
-    min-height: $post-header-height;
+    display: flow-root;
     color: $header-text-color;
     border-bottom-style: solid;
     border-bottom-width: 2px;
     border-bottom-color: $post-header-border-color;
-    padding-left: 10px;
-    padding-top: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     .post-header-number {
-      padding-right: 10px;
-      float: right;
+      padding-left: 5px;
+      float: left;
       color: var(--post-header-number-color);
     }
 
     .post-header-time {
       color: $text-color;
-      float: left;
-      margin-left: 10px;
-      margin-right: 10px;
+      float: right;
+      margin-left: 5px;
+      margin-right: 5px;
     }
     .post-header-link {
       color: $text-color;
-      float: left;
+      float: right;
       //margin-right: 10px;
       color: var(--post-header-text-link);
       text-decoration: none;
@@ -220,11 +219,11 @@ $text-color: var(--post-text-color);
     }
     .post-header-title {
       float: left;
+      padding-left: 5px;
     }
   }
   .post-content {
     max-width: calc(100% - 10px);
-    min-height: $post-content-height;
     padding-left: 5px;
     padding-top: 5px;
     padding-bottom: 5px;

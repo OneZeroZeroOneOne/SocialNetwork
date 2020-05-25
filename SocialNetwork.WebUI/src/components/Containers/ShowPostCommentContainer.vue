@@ -181,7 +181,7 @@ export default class ShowPostCommentContainer extends Vue {
       'top': y +'px', 
     */
     console.log(xx, yy)
-    let modalStyles = 'position: absolute; width: 80%; '+ xx + yy;
+    let modalStyles = 'position: absolute;'+ xx + yy;
 
     this.listModal.push({
       isComment: isComment,

@@ -5,6 +5,9 @@
       <div class="comment-header-time">
         {{obj.date | formatDate}}
       </div>
+      <div class="comment-header-number">
+        {{obj.seqId + 2}}
+      </div>
       <a class="comment-header-link"
           :href="'/'+boardName()+'/'+obj.postId+'#'+obj.id"
           target="_blank"
@@ -12,9 +15,6 @@
           @click.self="openEditor">
         #{{obj.id}}
       </a>
-      <div class="comment-header-number">
-        {{obj.seqId + 2}}
-      </div>
     </div>
     <div class="comment-content" :style="stylesContent()">
       <div class=comment-content-header v-if="obj.attachmentComment.length > 0" :style="stylesContentHeader()">
@@ -179,13 +179,13 @@ $text-color: var(--comment-text-color);
   color: $text-color;
   margin: 0 0px $comment-offset-between $comment-offset-left;
   background-color: $comment-body-color;
-  width: 100%;
   border: 2px solid;
   border-left-width: 4px;
   border-color: $comment-body-border-color;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
   max-width: 70vw;
+  min-width: 25vw;
 
   .comment-content-header {
     display: flex;
@@ -220,26 +220,27 @@ $text-color: var(--comment-text-color);
   }
 
   .comment-header {
+    display: flow-root;
     max-width: 100%;
-    min-height: $comment-header-height;
+    padding-top: 2px;
+    padding-bottom: 2px;
     border-bottom-style: solid;
     border-bottom-width: 2px;
     border-bottom-color: $comment-header-border-color;
-    padding-left: 10px;
-    padding-top: 5px;
     .comment-header-number {
-      padding-right: 10px;
-      float: right;
+      padding-left: 5px;
+      float: left;
       color: $comment-number-header-color;
     }
     .comment-header-time {
       color: $text-color;
-      float: left;
-      margin-right: 10px;
+      float: right;
+      margin-right: 5px;
     }
     .comment-header-link {
+      padding-right: 5px;
       color: $text-color;
-      float: left;
+      float: right;
       text-decoration: none;
       //margin-right: 10px;
       color: var(--comment-header-text-link);
@@ -253,11 +254,11 @@ $text-color: var(--comment-text-color);
   .comment-content {
     max-width: calc(100% - 10px);
     padding-right: 10px;
-    padding-left: 10px;
+    padding-left: 5px;
     padding-bottom: 10px;
   }
   .comment-footer {
-    padding-left: 7px;
+    padding-left: 5px;
     border-top-style: solid;
     border-top-width: 2px;
     border-top-color: $comment-footer-border-color;
@@ -266,10 +267,6 @@ $text-color: var(--comment-text-color);
       padding-top: 3px;
       padding-bottom: 3px;
       font-size: small;
-
-      .link-to {
-        padding-left: 3px;
-      }
     }
 
     /*.comment-footer-reply {
