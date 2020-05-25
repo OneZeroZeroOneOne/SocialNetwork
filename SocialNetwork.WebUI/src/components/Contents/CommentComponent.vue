@@ -31,6 +31,7 @@
           target="_blank" 
           class="link-to" 
           rel="noopener noreferrer"
+          :href="'/'+boardName()+'/'+obj.id"
           :data-thread="obj.postId" 
           :data-comment="mention.isComment ? mention.mentionerId : undefined"
           :data-post="!mention.isComment ? mention.mentionerId : undefined">>>{{mention.mentionerId}}</a>

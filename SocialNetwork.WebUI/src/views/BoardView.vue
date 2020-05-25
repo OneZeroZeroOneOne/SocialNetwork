@@ -2,7 +2,7 @@
   <div class="board-view">
     <board-name-header-component :boardObj="boardObj" v-if="requestBoardStatus === 1"/>
     <div id="posts" v-if="requestPostsStatus === 1">
-      <div v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id">
+      <div v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id" class="post-wrapper">
         <post-component :obj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
         <div id="comments">
           <div class="comment-wrapper" v-for="commentO in allComments.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
@@ -61,13 +61,15 @@ export default class BoardView extends Vue {
 
   constructor() {
     super();
+  }
 
+  async created() {
     this.currentBoardName = this.boardName();
     Nprogress.set(0.3)
     this.loadBoardByName(this.currentBoardName)
-      .then(x => {
+      .then(async x => {
         Nprogress.set(0.6)
-        this.loadPagePosts()
+        await this.loadPagePosts()
         Nprogress.done()
         this.$root.$on('footerInView', this.throttleLoadPosts)
       })
@@ -145,13 +147,16 @@ export default class BoardView extends Vue {
 }
 </script>
 
+
 <style lang="scss" scoped>
-.foo {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	height: 80px;
+
+#posts {
+  display: flex;
+  flex-direction: column;
+
+  .post-wrapper {
+    margin-bottom: 2.0em;
+  }
 }
 
 #comments {
@@ -161,8 +166,8 @@ export default class BoardView extends Vue {
   float: left;
   margin-top: 20px;
   //margin-left: 40px;
-  padding-bottom: 2.5rem;
 }
+
 
 .comment-wrapper {
   display: inline-flex;
