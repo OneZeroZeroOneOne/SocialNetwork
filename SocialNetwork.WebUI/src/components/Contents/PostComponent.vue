@@ -90,7 +90,7 @@ export default class PostComponent extends Vue {
         // @ts-ignore
         this.timer = null;
       } else {
-        this.timer = setTimeout(this.end, 33333 * 1000);
+        this.timer = setTimeout(this.end, 3 * 1000);
         //console.log('new timer', this.timer)
       }
     }
@@ -112,7 +112,7 @@ export default class PostComponent extends Vue {
       /*this.modalStyles.left = this.position.x + 'px';
       this.modalStyles.top = this.position.y + 'px';*/
 
-      this.timer = setTimeout(this.end, 3333 * 1000);
+      this.timer = setTimeout(this.end, 3 * 1000);
       clearTimeout(this.timer);
       this.hovered = false;
     }else{
