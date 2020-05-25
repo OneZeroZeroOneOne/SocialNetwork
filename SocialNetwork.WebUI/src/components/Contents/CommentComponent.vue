@@ -1,13 +1,7 @@
 <template>
-<div class="comment" :id="obj.id" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
+<div :class="classNames" :id="obj.id" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
   <div class="comment-body">
     <div class="comment-header">
-      <div class="comment-header-time">
-        {{obj.date | formatDate}}
-      </div>
-      <div class="comment-header-number">
-        {{obj.seqId + 2}}
-      </div>
       <a class="comment-header-link"
           :href="'/'+boardName()+'/'+obj.postId+'#'+obj.id"
           target="_blank"
@@ -15,6 +9,12 @@
           @click.self="openEditor">
         #{{obj.id}}
       </a>
+      <div class="comment-header-time">
+        {{obj.date | formatDate}}
+      </div>
+      <div class="comment-header-number">
+        {{obj.seqId + 2}}
+      </div>
     </div>
     <div class="comment-content" :style="stylesContent()">
       <div class=comment-content-header v-if="obj.attachmentComment.length > 0" :style="stylesContentHeader()">
@@ -52,6 +52,8 @@ import AttachmentComponent from '@/components/Other/AttachmentComponent.vue';
 import eventBus from "@/utilities/EventBus";
 import GlobalStorage from '../../services/Implementations/GlobalStorage';
 
+import animateCSS from "@/utilities/AnimateCSS";
+
 @Component({
   components: {
     AttachmentComponent,
@@ -68,23 +70,33 @@ export default class CommentComponent extends Vue {
   public timer: number = -1;
   public counter: number = 5;
   public hovered: boolean = true;
-  public countdown!: any; 
-  public mentions: any = [
-    {
-      mentionerId: 334,
-      isComment: true
-    },
-    {
-      mentionerId: 293,
-      isComment: false
-    }
-  ]
+  public countdown!: any;
+
+  public classNames: any = {
+    "comment": true
+  }
 
   @Prop() public modalStyles!: any;
 
   constructor() {
     super();
   }
+
+  /*classNames(): any {
+    console.log(this)
+    let c = {
+      "comment": true
+    }
+
+    if (this.isModal)
+    {
+      //c["animate__animated"] = true;
+      //c["animate__fadeInUp"] = true;
+      //animateCSS(this.$el)
+    }
+
+    return c;
+  }*/
 
   boardName(): string {
     let board = GlobalStorage.getBoardById(this.fatherPost.boardId);
@@ -114,7 +126,7 @@ export default class CommentComponent extends Vue {
   } 
 
   end() {
-    eventBus.emit('hide-link-component', [this, this.keyId])
+    eventBus.emit('hide-link-component', this, this.keyId)
   }
 
   modalStylesCalc() {
@@ -126,6 +138,7 @@ export default class CommentComponent extends Vue {
 
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
+      animateCSS(this.$el, 'fadeInUp')
       this.timer = setTimeout(this.end, 3 * 1000);
       clearTimeout(this.timer);
       this.hovered = false;

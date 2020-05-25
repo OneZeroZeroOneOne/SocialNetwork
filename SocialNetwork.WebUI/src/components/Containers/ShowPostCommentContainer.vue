@@ -1,7 +1,7 @@
 <template>
   <div class="show-post-comment-container">
     <div v-for="ins in listModal" :key="ins.keyId">
-      <component class="animate__animated animate__fadeInUp"
+      <component 
       :is="ins.isComment == true ? 'CommentComponent': 'PostComponent'" 
       :keyId="ins.keyId"
       :obj="ins.obj"
@@ -14,6 +14,7 @@
 
 
 <script lang="ts">
+//class="animate__animated animate__fadeInUp"
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { IPost } from '@/models/responses/PostViewModel';
 import { IComment } from '@/models/responses/CommentViewModel';
@@ -24,6 +25,7 @@ import PostComponent from '@/components/Contents/PostComponent.vue';
 import globalStorage from '@/services/Implementations/GlobalStorage';
 import { ResponseState } from '@/models/enum/ResponseState';
 import EventBus from '../../utilities/EventBus';
+import { animateCSSCallback } from '../../utilities/AnimateCSS';
 
 @Component({
   components: {
@@ -168,7 +170,7 @@ export default class ShowPostCommentContainer extends Vue {
     let scrW = document.body.clientWidth || document.documentElement.clientWidth;
     let scrH = window.innerHeight || document.documentElement.clientHeight;
 
-    console.log(event.clientY, Math.floor(scrH * 0.75))
+    //console.log(event.clientY, Math.floor(scrH * 0.75))
 
     let x = coords.left + elem.offsetWidth / 2;
     let y = coords.top + elem.offsetHeight;
@@ -193,14 +195,16 @@ export default class ShowPostCommentContainer extends Vue {
     })
   }
 
-  hideComponent(component: Vue|number) {
-    // @ts-ignore
-    let obj = this.listModal.find(obj => obj.keyId === component[1])
-    // @ts-ignore
-    obj.elem.classList.remove('showing');
+  hideComponent(component: Vue, id: number) {
+    animateCSSCallback(component.$el, 'fadeOutUp', () => {
+      // @ts-ignore
+      let obj = this.listModal.find(obj => obj.keyId === id)
+      // @ts-ignore
+      obj.elem.classList.remove('showing');
 
-    // @ts-ignore
-    this.listModal = this.listModal.filter(obj => obj.keyId !== component[1]);
+      // @ts-ignore
+      this.listModal = this.listModal.filter(obj => obj.keyId !== id);
+    })
   }
 
   beforeCreate() {

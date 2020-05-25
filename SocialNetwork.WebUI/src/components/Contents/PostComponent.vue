@@ -3,13 +3,10 @@
     <div class="post-body">
       <div class="post-header">
         <div class="post-header-number">
-          1
+          OP
         </div>
         <div class="post-header-title">
           {{obj.title}}
-        </div>
-        <div class="post-header-time">
-          {{obj.date | formatDate}}
         </div>
         <a class="post-header-link"
           :href="'/'+boardName()+'/'+obj.id"
@@ -18,6 +15,9 @@
           @click.self="openEditor">
         #{{obj.id}}
         </a>
+        <div class="post-header-time">
+          {{obj.date | formatDate}}
+        </div>
       </div>
       <div class="post-content" :style="stylesContent()">
         <div class=post-content-header v-if="obj.attachmentPost.length > 0" :style="stylesContentHeader()">
@@ -53,6 +53,7 @@ import AttachmentComponent from '@/components/Other/AttachmentComponent.vue';
 
 import eventBus from "@/utilities/EventBus";
 import GlobalStorage from '../../services/Implementations/GlobalStorage';
+import animateCSS from '@/utilities/AnimateCSS';
 
 @Component({
   components: {
@@ -97,7 +98,7 @@ export default class PostComponent extends Vue {
   } 
 
   end() {
-    eventBus.emit('hide-link-component', [this, this.keyId])
+    eventBus.emit('hide-link-component', this, this.keyId)
   }
 
   modalStylesCalc() {
@@ -109,8 +110,7 @@ export default class PostComponent extends Vue {
 
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
-      /*this.modalStyles.left = this.position.x + 'px';
-      this.modalStyles.top = this.position.y + 'px';*/
+      animateCSS(this.$el, 'fadeInUp')
 
       this.timer = setTimeout(this.end, 3 * 1000);
       clearTimeout(this.timer);
@@ -203,13 +203,12 @@ $text-color: var(--post-text-color);
     .post-header-time {
       color: $text-color;
       float: right;
-      margin-left: 5px;
-      margin-right: 5px;
     }
     .post-header-link {
       color: $text-color;
       float: right;
-      //margin-right: 10px;
+      margin-right: 5px;
+      margin-left: 5px;
       color: var(--post-header-text-link);
       text-decoration: none;
       &:hover {
