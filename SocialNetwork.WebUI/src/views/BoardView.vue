@@ -5,7 +5,7 @@
       <div v-for="(postO, indexPost) in postObjs" v-bind:key="postO.id" class="post-wrapper">
         <post-component :obj="postO" :postNum="indexPost+1" :showEnterButton="true"/>
         <div id="comments">
-          <div class="comment-wrapper" v-for="commentO in allComments.filter(x => x.postId === postO.id)" v-bind:key="commentO.id">
+          <div class="comment-wrapper" v-for="commentO in allComments.filter(x => x.postId === postO.id).reverse()" v-bind:key="commentO.id">
             <comment-component :obj="commentO" :fatherPost="postO"/>
           </div>
         </div>
