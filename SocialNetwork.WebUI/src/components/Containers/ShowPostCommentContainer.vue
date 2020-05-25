@@ -25,7 +25,7 @@ import PostComponent from '@/components/Contents/PostComponent.vue';
 import globalStorage from '@/services/Implementations/GlobalStorage';
 import { ResponseState } from '@/models/enum/ResponseState';
 import EventBus from '../../utilities/EventBus';
-import { animateCSSCallback } from '../../utilities/AnimateCSS';
+import animateCSS  from '../../utilities/AnimateCSS';
 
 @Component({
   components: {
@@ -196,7 +196,7 @@ export default class ShowPostCommentContainer extends Vue {
   }
 
   hideComponent(component: Vue, id: number) {
-    animateCSSCallback(component.$el, 'fadeOutUp', () => {
+    animateCSS(component.$el, 'fadeOutUp', () => {
       // @ts-ignore
       let obj = this.listModal.find(obj => obj.keyId === id)
       // @ts-ignore
