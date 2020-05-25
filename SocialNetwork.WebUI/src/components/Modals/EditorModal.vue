@@ -546,7 +546,6 @@ $header-height: 30px;
 
 .editor-modal {
   z-index: 999 !important;
-  position: fixed !important;
 }
 
 .editor {

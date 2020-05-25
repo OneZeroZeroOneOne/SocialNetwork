@@ -89,7 +89,7 @@ img {
 <style lang="scss">
 html {
   background: url('assets/background-tiled-memphis.png');
-  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  overflow-x: hidden;
 }
 
 .noselect {
