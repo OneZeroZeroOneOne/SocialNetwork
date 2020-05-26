@@ -198,15 +198,13 @@ export default class ShowPostCommentContainer extends Vue {
   }
 
   hideComponent(component: Vue, id: number) {
-    animateCSS(component.$el, 'close_bl', () => {
-      // @ts-ignore
-      let obj = this.listModal.find(obj => obj.keyId === id)
-      // @ts-ignore
-      obj.elem.classList.remove('showing');
+    // @ts-ignore
+    let obj = this.listModal.find(obj => obj.keyId === id)
+    // @ts-ignore
+    obj.elem.classList.remove('showing');
 
-      // @ts-ignore
-      this.listModal = this.listModal.filter(obj => obj.keyId !== id);
-    }, "animation__", 'close')
+    // @ts-ignore
+    this.listModal = this.listModal.filter(obj => obj.keyId !== id);
   }
 
   beforeCreate() {

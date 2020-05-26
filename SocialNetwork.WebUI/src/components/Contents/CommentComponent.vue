@@ -74,6 +74,8 @@ export default class CommentComponent extends Vue {
   public counter: number = 5;
   public hovered: boolean = true;
   public countdown!: any;
+  public corner: string;
+  public side: string;
 
   public classNames: any = {
     "comment": true,
@@ -113,7 +115,9 @@ export default class CommentComponent extends Vue {
   } 
 
   end() {
-    eventBus.emit('hide-link-component', this, this.keyId)
+    animateCSS(this.$el, `close_${this.corner}${this.side}`, () => {
+      eventBus.emit('hide-link-component', this, this.keyId)
+    }, "animation__", "close")
   }
 
   modalStylesCalc() {
@@ -193,7 +197,8 @@ export default class CommentComponent extends Vue {
       //console.log('left')
     }
 
-    //console.log(this.modalStyles)
+    this.side = side;
+    this.corner = corner;
 
     animateCSS(this.$el, `open_${corner}${side}`, () => {}, "animation__", "open")
   }
