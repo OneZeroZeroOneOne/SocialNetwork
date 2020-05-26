@@ -2,9 +2,10 @@
   <div v-if="active" :class="{shakeit: shake, 'editor-modal': true}">
     <vue-draggable-resizable
             :w="width + 10" 
-            :h="height" 
+            :h="'auto'"
             :x="x"
             :y="y"
+            ref="container"
             @dragging="onDrag" 
             @resizing="onResize"
             @dragstop="dragstop"
@@ -53,6 +54,7 @@ import { parseNumber } from '@/utilities/parser';
 import { IPostService } from '@/services/Abstractions/IPostService';
 import { PostService } from '@/services/Implementations/PostService';
 import { IBoard } from '@/models/responses/Board';
+import animateCSS from '../../utilities/AnimateCSS';
 
 
 @Component({
@@ -106,13 +108,8 @@ export default class PreviewModal extends Vue {
   }
 
   toggleShakeAnimation(): void {
-    if (this.shake === false)
-    {
-      this.shake = true;
-      setTimeout(x => { 
-        this.shake = false;
-      }, 1000)
-    }
+    // @ts-ignore
+    animateCSS(this.$refs.container.$el, 'headShake')
   }
 
   showEditorNewThread(board: IBoard): void {
@@ -408,30 +405,6 @@ export default class PreviewModal extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@keyframes shake {
-  10%, 90% {
-    transform: translate3d(-1px, 0, 0);
-  }
-  
-  20%, 80% {
-    transform: translate3d(2px, 0, 0);
-  }
-
-  30%, 50%, 70% {
-    transform: translate3d(-4px, 0, 0);
-  }
-
-  40%, 60% {
-    transform: translate3d(4px, 0, 0);
-  }
-}
-
-.shakeit {
-  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
-}
-</style>
 
 <style lang="scss" scoped>
 $blue: #1ebcc5;
