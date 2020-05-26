@@ -1,11 +1,12 @@
 <template>
   <div class="show-post-comment-container">
     <div v-for="ins in listModal" :key="ins.keyId">
-      <component 
+      <component class="abs-pos"
       :is="ins.isComment == true ? 'CommentComponent': 'PostComponent'" 
       :keyId="ins.keyId"
       :obj="ins.obj"
       :fatherPost="ins.fatherPost"
+      :event="ins.event"
       :isModal="true"
       :modalStyles="ins.modalStyles"/>
     </div>
@@ -68,7 +69,7 @@ export default class ShowPostCommentContainer extends Vue {
 
     if (elem.classList.contains('showing'))
     {
-      console.log('this modal already show')
+      //console.log('this modal already show')
       return;
     }
 
@@ -164,7 +165,7 @@ export default class ShowPostCommentContainer extends Vue {
   createComponent(event: MouseEvent, id: string, object: IPost|IComment, fatherPost: IPost, isComment: boolean) {
     let elem: HTMLLinkElement = event.target as HTMLLinkElement;
 
-    let coords = this.offset(elem);
+    /*let coords = this.offset(elem);
 
 
     let scrW = document.body.clientWidth || document.documentElement.clientWidth;
@@ -177,26 +178,27 @@ export default class ShowPostCommentContainer extends Vue {
 
     let xx = (x < scrW / 2 ? 'left:' + x : 'right:' + (scrW - x + 2)) + 'px;';
     let yy = (event.clientY < Math.floor(scrH * 0.75) ? 'top:' + y : 'bottom:' + (scrH - y - 4)) + 'px;';
-
+    */
     /*
       'left': x + 'px',
       'top': y +'px', 
     */
-    console.log(xx, yy)
-    let modalStyles = 'position: absolute;'+ xx + yy;
+    /*console.log(xx, yy)
+    let modalStyles = 'position: absolute;'+ xx + yy;*/
 
     this.listModal.push({
       isComment: isComment,
       keyId: this.keyId++,
       obj: object,
       fatherPost: fatherPost,
-      modalStyles: modalStyles,
+      event: event,
+      //modalStyles: modalStyles,
       elem: elem
     })
   }
 
   hideComponent(component: Vue, id: number) {
-    animateCSS(component.$el, 'fadeOutUp', () => {
+    animateCSS(component.$el, 'close_bl', () => {
       // @ts-ignore
       let obj = this.listModal.find(obj => obj.keyId === id)
       // @ts-ignore
@@ -204,7 +206,7 @@ export default class ShowPostCommentContainer extends Vue {
 
       // @ts-ignore
       this.listModal = this.listModal.filter(obj => obj.keyId !== id);
-    })
+    }, "animation__", 'close')
   }
 
   beforeCreate() {
@@ -228,5 +230,8 @@ export default class ShowPostCommentContainer extends Vue {
 </script>
 
 <style lang="scss">
-
+.abs-pos {
+  position: absolute;
+  z-index: 9999;
+}
 </style>

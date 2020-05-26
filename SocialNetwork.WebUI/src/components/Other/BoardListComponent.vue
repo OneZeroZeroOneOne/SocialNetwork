@@ -103,7 +103,6 @@ export default class BoardListComponent extends Vue {
     this.thematicsBoards = []
     this.politiciansBoards = []
     this.otherBoards = []
-    console.log(this.boards)
 
     this.boards.forEach(board => {
       let popSetting = board.settings.filter(x => x.name === 'Popular')

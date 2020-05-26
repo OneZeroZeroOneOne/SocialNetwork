@@ -30,14 +30,15 @@
       </div>
       <div class="post-footer" v-if="obj.mention.length > 0">
         <div class="post-footer-mentions">
+          Ответы: 
           <a v-for="(mention, index) in obj.mention" v-bind:key="index"
-            target="_blank" 
-            class="link-to" 
+            target="_blank"
+            class="link-to"
             rel="noopener noreferrer"
             :href="'/'+boardName()+'/'+obj.id"
-            :data-thread="obj.postId" 
+            :data-thread="obj.postId"
             :data-comment="mention.isComment ? mention.mentionerId : undefined"
-            :data-post="!mention.isComment ? mention.mentionerId : undefined">>>{{mention.mentionerId}}</a>
+            :data-post="!mention.isComment ? mention.mentionerId : undefined">>>{{mention.mentionerId}} </a>
         </div>
       </div>
     </div>
@@ -69,7 +70,8 @@ export default class PostComponent extends Vue {
 
   @Prop() public keyId!: number;
 
-  @Prop() public modalStyles!: any;
+  public modalStyles: string = "";
+  @Prop() public event!: MouseEvent;
 
   public timer: number = -1;
   public counter: number = 5;
@@ -110,7 +112,7 @@ export default class PostComponent extends Vue {
 
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
-      animateCSS(this.$el, 'fadeInUp')
+      this.calculatePosition();
 
       this.timer = setTimeout(this.end, 3 * 1000);
       clearTimeout(this.timer);
@@ -118,6 +120,69 @@ export default class PostComponent extends Vue {
     }else{
       //this is not modal so...
     }
+  }
+
+  calculatePosition() {
+    if (this.event.target === null)
+        return;
+      
+    //@ts-ignore
+    let coordsF: DOMRect = this.event.target.getBoundingClientRect();
+
+    let scrW = document.body.clientWidth || document.documentElement.clientWidth;
+    let scrH = window.innerHeight || document.documentElement.clientHeight;
+
+    let coords = this.$el.getBoundingClientRect();
+    //@ts-ignore
+    //console.log(coords,coordsF , scrW, scrH)
+
+    let corner = "b",
+        side = "l";
+    
+    let scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+        scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    //console.log(scrollLeft, scrollTop);
+    //console.log(coordsF.x, coordsF.y);
+    
+    let linkElementX = coordsF.x// + scrollLeft;
+    let linkElementY = coordsF.y// + scrollTop;
+
+    //console.log(linkElementX, linkElementY);
+
+    let relY = linkElementY + coords.height + (this.obj.attachmentPost.length > 0 ? 250 : 20 );
+    let relX = linkElementX + coords.width  + (this.obj.attachmentPost.length > 0 ? 200 : 20 );
+
+    //console.log(relY, scrH);
+
+    //@ts-ignore
+    let xOffset = coordsF.x + this.event.target.offsetWidth / 2;
+
+    if (relY > scrH)
+    {
+      corner = "b";
+      this.modalStyles += `bottom: ${scrH - linkElementY - scrollTop}px;`;
+      //console.log("bigger")
+    }else{
+      corner = "t";
+      this.modalStyles += `top: ${linkElementY + scrollTop + coordsF.height}px;`;
+      //console.log("smaller")
+    }
+
+    if (relX > scrW)
+    {
+      side = "r";
+      this.modalStyles += `right: ${scrW - xOffset}px;`
+      //console.log('right')
+    }else{
+      side = 'l';
+      this.modalStyles += `left: ${xOffset}px;`
+      //console.log('left')
+    }
+
+    //console.log(this.modalStyles)
+
+    animateCSS(this.$el, `open_${corner}${side}`, () => {}, "animation__", "open")
   }
 
   openEditor(event: MouseEvent): void {

@@ -1,10 +1,150 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.0/animate.min.css');
 
+:root {
+    --animation-duration: 1s;
+}
+
 .animate__animated {
     &.animate__fadeInUp {
         --animate-duration: 0.2s;
     }
+
     &.animate__fadeOutUp {
         --animate-duration: 0.2s;
+    }
+}
+
+.animation__open {
+    --animation-duration: .2s;
+    animation-duration: var(--animation-duration);
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+
+    &.animation__open_tl {
+        animation-name: modal-open-tl;
+    }
+
+    &.animation__open_bl {
+        animation-name: modal-open-bl;
+    }
+
+    &.animation__open_br {
+        animation-name: modal-open-br;
+    }
+
+    &.animation__open_tr {
+        animation-name: modal-open-tr;
+    }
+}
+
+
+
+.animation__close {
+    --animation-duration: .15s;
+    animation-duration: var(--animation-duration);
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+
+    &.animation__close_tl {
+        animation-name: modal-close-tl;
+    }
+
+    &.animation__close_tr {
+        animation-name: modal-close-tr;
+    }
+
+    &.animation__close_bl {
+        animation-name: modal-close-bl;
+    }
+
+    &.animation__close_br {
+        animation-name: modal-close-br;
+    }
+}
+
+
+@keyframes modal-open {
+    0% {
+        transform: translateY(-100%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes modal-open-tl {
+    from {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(0%, 0%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes modal-open-bl {
+    from {
+        transform: translate(-50%, 50%) scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(0%, 0%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes modal-open-tr {
+    from {
+        transform: translate(50%, -50%) scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(0%, 0%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes modal-open-br {
+    from {
+        transform: translate(50%, 50%) scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(0%, 0%) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes modal-close-tl {
+    to {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes modal-close-bl {
+    to {
+        transform: translate(-50%, 50%) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes modal-close-tr {
+    to {
+        transform: translate(50%, -50%) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes modal-close-br {
+    to {
+        transform: translate(50%, 50%) scale(0);
+        opacity: 0;
     }
 }

@@ -96,7 +96,7 @@ class GlobalStorage {
 
         if (comment !== undefined)
         {
-            console.log(`from storage comment ${comment_id}`)
+            //console.log(`from storage comment ${comment_id}`)
             respModel.state = ResponseState.success;
             respModel.value = comment;
             return respModel;
@@ -129,7 +129,7 @@ class GlobalStorage {
 
         if (post !== undefined)
         {
-            console.log(`from storage post ${post_id}`)
+            //console.log(`from storage post ${post_id}`)
             respModel.state = ResponseState.success;
             respModel.value = post;
             return respModel;
@@ -163,7 +163,7 @@ class GlobalStorage {
 
         if (post !== undefined)
         {
-            console.log(`from storage post ${post_id}`)
+            //console.log(`from storage post ${post_id}`)
             respModel.state = ResponseState.success;
             respModel.value = post;
             return respModel;
