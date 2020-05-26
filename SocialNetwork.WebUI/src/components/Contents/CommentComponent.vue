@@ -136,6 +136,7 @@ export default class CommentComponent extends Vue {
       this.hovered = false;
     }else{
       //this is not modal so...
+      //animateCSS(this.$el, 'fadeInLeft')
     }
   }
 
