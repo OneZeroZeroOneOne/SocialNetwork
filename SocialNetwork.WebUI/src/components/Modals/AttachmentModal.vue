@@ -261,6 +261,7 @@ export default class AttachmentModal extends Vue {
     border-width: 5px;
     box-sizing: content-box;
     border-top-width: 20px;
+    background-color: var(--attachment-modal-border-color);
 }
 
 .attachment-modal-description {

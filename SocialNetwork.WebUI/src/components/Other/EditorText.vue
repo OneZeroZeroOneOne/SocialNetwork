@@ -76,7 +76,7 @@ export default class EditorText extends Vue {
     }
     .editor-text-area {
         width: auto;
-        resize: vertical;
+        resize: both;
         min-height: 250px;
     }
     .word-counter {

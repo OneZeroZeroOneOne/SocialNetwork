@@ -1,10 +1,11 @@
 <template>
   <div v-if="active" :class="{shakeit: shake, 'editor-modal': true}">
     <vue-draggable-resizable
-            :w="width + 10" 
-            :h="'auto'"
+            w="auto" 
+            h='auto'
             :x="x"
             :y="y"
+            :parent="true"
             ref="container"
             @dragging="onDrag" 
             @resizing="onResize"
@@ -477,6 +478,13 @@ $blue: #1ebcc5;
 
 </style>
 
+<style lang="scss">
+.draggable.vdr {
+  position: fixed !important;
+  z-index: 999 !important;
+}
+</style>
+
 <style lang="scss" scoped>
 @-webkit-keyframes MOVE-BG {
 	from {
@@ -516,10 +524,6 @@ $blue: #1ebcc5;
 
 <style lang="scss">
 $header-height: 30px;
-
-.editor-modal {
-  z-index: 999 !important;
-}
 
 .editor {
   display: flow-root !important;

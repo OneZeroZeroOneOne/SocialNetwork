@@ -96,10 +96,6 @@ img[lazy=loaded] {
   .attachment-name {
     margin-bottom: 2px;
   }
-
-  &:hover {
-    color: var(--attachment-text-hover-color);
-  }
 }
 
 .attachment img {
