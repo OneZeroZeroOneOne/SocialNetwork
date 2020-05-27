@@ -91,6 +91,7 @@ export default class PostView extends Vue {
       Nprogress.set(0.7)
       await this.loadComments()
       Nprogress.done()
+      document.title = `/${this.boardName()}/ - ${this.postObj.title}`
     });
   }
 

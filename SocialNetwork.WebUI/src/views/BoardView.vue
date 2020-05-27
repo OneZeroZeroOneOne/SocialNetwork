@@ -72,6 +72,7 @@ export default class BoardView extends Vue {
         await this.loadPagePosts()
         Nprogress.done()
         this.$root.$on('footerInView', this.throttleLoadPosts)
+        document.title = `/${this.currentBoardName}/ - ${this.boardObj.description}`
       })
   }
 
