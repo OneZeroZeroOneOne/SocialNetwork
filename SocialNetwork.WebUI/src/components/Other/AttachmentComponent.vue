@@ -67,9 +67,6 @@ export default class AttachmentComponent extends Vue {
 </script>
 
 <style lang="scss" scoped>
-</style>
-
-<style lang="scss" scoped>
 .attachment-content {
   display: flex;
   flex-direction: row;
@@ -100,12 +97,6 @@ export default class AttachmentComponent extends Vue {
   .attachment-name {
     margin-bottom: 2px;
   }
-}
-
-.attachment img {
-  width: 200px;
-  height: auto;
-  vertical-align: middle;
 }
 
 .attachment:not(:first-child) {

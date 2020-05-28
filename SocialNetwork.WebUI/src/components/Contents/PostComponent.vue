@@ -234,6 +234,10 @@ $post-header-border-color: var(--post-header-border-color);
 $header-text-color: var(--post-header-border-text-color);
 $text-color: var(--post-text-color);
 
+.post {
+  display: flow-root;
+}
+
 .post-body {
   position: relative;
   color: $text-color;

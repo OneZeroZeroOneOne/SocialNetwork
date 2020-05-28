@@ -215,6 +215,10 @@ export default class PostView extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.post-view {
+  display: flow-root;
+}
+
 #comments {
   display: inline-flex;
   flex-direction: column;

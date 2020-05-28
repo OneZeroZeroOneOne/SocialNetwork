@@ -42,17 +42,11 @@ $text-color: #ccc;
 $post-body-border-color: rgb(56, 68, 77);
 
 .footer {
-  left: 8px;
-  float: right;
   text-align: center;
   clear: both;
   position: relative;
-  width: 100vw;
   height: 5em;
   color: $text-color;
   background-color: $post-body-color;
-  //position: fixed;
-  //bottom: 0px;
-  //left: 0px;
 }
 </style>
