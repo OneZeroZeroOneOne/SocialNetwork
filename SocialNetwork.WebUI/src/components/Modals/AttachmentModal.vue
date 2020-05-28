@@ -48,7 +48,7 @@ enum ShowType {
   components: {}
 })
 export default class AttachmentModal extends Vue {
-    private attachment!: IAttachment;
+    private attachment: IAttachment|undefined;
 
     public width: number = 200;
     public height: number = 200;
@@ -136,7 +136,7 @@ export default class AttachmentModal extends Vue {
     }
 
     eventClick(event: any): void {
-        //console.log(event, this.hovered)
+        console.log(event, this.hovered)
         if (this.hovered) {
             this.active = true;
             event.preventDefault()
@@ -173,6 +173,12 @@ export default class AttachmentModal extends Vue {
     }
 
     showVideo(attachment: IAttachment) {
+        if (this.attachment != undefined && this.attachment.id === attachment.id)
+        {
+            this.active = false;
+            this.attachment = undefined;
+            return;
+        }
         this.attachment = attachment;
 
         this.showType = ShowType.video;
@@ -201,6 +207,12 @@ export default class AttachmentModal extends Vue {
     }
 
     showImage(attachment: IAttachment) {
+        if (this.attachment != undefined && this.attachment.id === attachment.id)
+        {
+            this.active = false;
+            this.attachment = undefined;
+            return;
+        }
         this.attachment = attachment;
 
         this.showType = ShowType.img;
