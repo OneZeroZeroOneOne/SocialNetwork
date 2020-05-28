@@ -80,10 +80,10 @@ export default class App extends Vue {
 //@import './styles/themes/default.css';
 
 
-img {
+/*img {
   width: 100%;
   height: 100%;
-}
+}*/
 </style>
 
 <style lang="scss">

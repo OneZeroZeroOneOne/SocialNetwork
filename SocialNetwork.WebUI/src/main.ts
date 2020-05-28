@@ -17,6 +17,9 @@ import Nprogress from "nprogress"
 
 Nprogress.configure({ showSpinner: false });
 
+import { VLazyImagePlugin } from "@/utilities/LazyImage";
+Vue.use(VLazyImagePlugin);
+
 // optionally import default styles
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 

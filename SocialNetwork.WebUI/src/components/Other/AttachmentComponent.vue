@@ -2,14 +2,18 @@
     <div class="attachment-content">
     <div class="attachment" v-for="attachment in attachmentObjs" v-bind:key="attachment.id">
         <div class="attachment-name">{{getName(attachment)}}</div>
-        <img v-if="attachment.preview === null"
+        <filter-image v-if="attachment.preview === null"
             class="clickable"
-            v-on:click="imgShow(attachment)" 
-            v-lazy="getAttachmentPath(attachment.path)" />
-        <img v-else
+            v-on:click.native="imgShow(attachment)" 
+            :src="getAttachmentPath(attachment.path)"
+            :src-placeholder="getPreloadPath(attachment.preload)"
+            :intersectionOptions="intersectionOption" />
+        <filter-image v-else
             class="clickable attachment-video gradient-border" 
-            v-on:click="videoShow(attachment)" 
-            v-lazy="getAttachmentPath(attachment.preview)" />
+            v-on:click.native="videoShow(attachment)" 
+            :src="getAttachmentPath(attachment.preview)"
+            :src-placeholder="getPreloadPath(attachment.preload)"
+            :intersectionOptions="intersectionOption" />
     </div>
     </div>
 </template>
@@ -17,30 +21,39 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { IAttachment } from '@/models/responses/Attachment';
+import FilterImage from "@/components/Other/FilterImage.vue";
 
-@Component({})
+
+@Component({
+  components: {
+    FilterImage,
+  }
+})
 export default class AttachmentComponent extends Vue {
   @Prop() public attachmentObjs!: IAttachment[]; 
+
+  public intersectionOption: any = {
+    rootMargin: '200px 0px 200px 0px'
+  }
   
   constructor() {
     super();
   }
 
   getName(att: IAttachment): string {
-      if (att.displayName === undefined || att.displayName === null)
-        return att.path;
-
-      if (att.displayName.length - 20 >= 20)
-      {
-        let ext = att.displayName.slice(att.displayName.length - 7, att.displayName.length)//splitted[splitted.length - 1]
-        return att.displayName.slice(0, att.displayName.length - 20) + "[...]" + ext;
-      }
-
-      return att.displayName;
+    let ext = "." + att.displayName.split(".").pop();
+    if (ext === undefined)
+      ext = "";
+    return (att.displayName.length > 15) ? att.displayName.substr(0, 15-1) + '[...]' + ext : att.displayName;
   }
 
   getAttachmentPath(path: string): string {
     return 'http://194.99.21.140/api/attachment/' + path;
+  }
+
+  getPreloadPath(path: string): string {
+    let s = 'http://194.99.21.140/api/attachment/' + path;
+    return s;
   }
 
   videoShow(attachment: IAttachment): void {
@@ -54,15 +67,6 @@ export default class AttachmentComponent extends Vue {
 </script>
 
 <style lang="scss" scoped>
-img[lazy=loading] {
-  background: url('../../assets/Ripple-1s-200px.svg');
-}
-img[lazy=error] {
-  /*your style here*/
-}
-img[lazy=loaded] {
-  /*your style here*/
-}
 </style>
 
 <style lang="scss" scoped>
