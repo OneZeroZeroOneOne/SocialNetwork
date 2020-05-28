@@ -4,6 +4,7 @@ namespace SocialNetwork.Bll.Abstractions
 {
     public interface IPreviewGeneratorService
     {
-        Task GeneratePreview(string videoDirectory, string videoName, string extension);
+        Task GeneratePreviewVideo(string videoDirectory, string videoName, string extension);
+        void GeneratePreviewPreload(string previewDirectory, string imageName, string extension);
     }
 }

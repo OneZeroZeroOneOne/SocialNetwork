@@ -16,6 +16,7 @@ CREATE TABLE public."Attachment" (
 	"Width" int8 NULL,
 	"Height" int8 NULL,
 	"DisplayName" text NULL,
+	"PreviewPreload" text NULL,
 	CONSTRAINT "Attachment_pkey" PRIMARY KEY ("Id")
 );
 

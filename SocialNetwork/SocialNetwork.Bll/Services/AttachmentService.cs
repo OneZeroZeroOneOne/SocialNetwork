@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Bll.Abstractions;
 using SocialNetwork.Dal.Context;
 using SocialNetwork.Dal.Models;
@@ -6,14 +7,8 @@ using SocialNetwork.Dal.ViewModels.In;
 using SocialNetwork.Utilities.Exceptions;
 using System;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using AngleSharp.Network.Default;
-using Microsoft.AspNetCore.Http;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace SocialNetwork.Bll.Services
 {
@@ -66,9 +61,16 @@ namespace SocialNetwork.Bll.Services
             if (attachment.UploadFile.ContentType.Contains("video"))
             {
                 havePreview = true;
-                await _previewGeneratorService.GeneratePreview(Path.Combine(_attachmentPathProvider.GetPath(), "Files"),
+                await _previewGeneratorService.GeneratePreviewVideo(Path.Combine(_attachmentPathProvider.GetPath(), "Files"),
                     fileName.ToString(), ext);
+
+                _previewGeneratorService.GeneratePreviewPreload(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), fileName + "_preview", ".png");
             }
+            else
+            {
+                _previewGeneratorService.GeneratePreviewPreload(Path.Combine(_attachmentPathProvider.GetPath(), "Files"), fileName.ToString(), ext);
+            }
+
 
             var attachmentDb = new Attachment
             {
@@ -77,6 +79,7 @@ namespace SocialNetwork.Bll.Services
                 Preview = havePreview ? "Files/" + fileName + "_preview.png" : null,
                 Hash = hash,
                 DisplayName = attachment.UploadFile.FileName,
+                PreviewPreload = havePreview ? "Files/" + fileName + "_preview_preload.png"  : "Files/" + fileName + "_preload" + ext,
                 Width = widthVal,
                 Height = heightVal,
             };

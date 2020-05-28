@@ -15,5 +15,6 @@ namespace SocialNetwork.Dal.Models
         public int Width { get; set; }
         public int Height { get; set; }
         public string DisplayName { get; set; }
+        public string PreviewPreload { get; set; }
     }
 }
