@@ -136,7 +136,6 @@ export default class AttachmentModal extends Vue {
     }
 
     eventClick(event: any): void {
-        console.log(event, this.hovered)
         if (this.hovered) {
             this.active = true;
             event.preventDefault()
