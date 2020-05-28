@@ -26,23 +26,10 @@ import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 // require styles
 import moment from 'moment'
-import VueLazyload from 'vue-lazyload'
 import eventBus from "@/utilities/EventBus";
-
-
-Vue.use(VueLazyload)
 
 import Vuebar from 'vuebar';
 Vue.use(Vuebar);
-
-// or with options
-Vue.use(VueLazyload, {
-  preLoad: 2.5,
-  error: 'dist/error.png',
-  loading: 'dist/loading.gif',
-  attempt: 1,
-  silent: false,
-})
 
 Vue.filter('formatDate', function(value) {
   if (value) {
