@@ -10,7 +10,6 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { Guid } from "@/utilities/guid";
 import { ResponseState } from "@/models/enum/ResponseState";
-import Nprogress from "nprogress"
 import _ from 'lodash'
 
 @Component({})
