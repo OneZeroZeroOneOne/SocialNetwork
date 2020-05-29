@@ -41,6 +41,7 @@
     --post-header-text-link: orange;
     --post-header-text-hover-link: orangered;
     --post-text-color: #ccc;
+    --post-header-font-size: 10pt;
 
     --comment-body-background-color: #192734;
     --comment-body-border-color: rgb(56, 68, 77);
@@ -51,6 +52,7 @@
     --comment-header-text-link: orange;
     --comment-header-text-hover-link: orangered;
     --comment-text-color: #ccc;
+    --comment-header-font-size: 10pt;
 
     --navbar-background-color: #192734;
     --navbar-link-color: #8aa9c6;

@@ -268,6 +268,7 @@ $text-color: var(--post-text-color);
     border-bottom-color: $post-header-border-color;
     padding-top: 2px;
     padding-bottom: 2px;
+    font-size: var(--comment-header-font-size);
     .post-header-number {
       padding-left: 5px;
       float: left;

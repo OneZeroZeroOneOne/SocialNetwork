@@ -295,6 +295,7 @@ $text-color: var(--comment-text-color);
     border-bottom-style: solid;
     border-bottom-width: 2px;
     border-bottom-color: $comment-header-border-color;
+    font-size: var(--comment-header-font-size);
     .comment-header-number {
       padding-left: 5px;
       float: left;
