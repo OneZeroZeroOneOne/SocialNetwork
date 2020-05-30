@@ -22,7 +22,6 @@
     "filepond-plugin-image-preview": "^4.6.1",
     "idb": "^5.0.3",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
     "nprogress": "^0.2.0",
     "vue": "^2.6.11",
     "vue-awesome-notifications": "^3.1.0",

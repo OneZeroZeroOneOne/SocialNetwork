@@ -108,26 +108,15 @@ export default class CommentComponent extends Vue {
       //console.log('hovered', value)
       if (value === true)
       {
-        //_.delay(() => {
-          this.$emit('hovered', this.keyId);
-        //}, 300);
-        //console.log('deleting timer', this.timer)
-        //if (this.timer !== -1)
-        //  clearTimeout(this.timer);
-        // @ts-ignore
-        this.timer = null;
+        this.$emit('hovered', this.keyId);
       } else {
         this.$emit('unhovered', this.keyId)
-        //this.timer = setTimeout(this.end, 33333 * 1000);
-        //console.log('new timer', this.timer)
       }
     }
   } 
 
   end() {
-    animateCSS(this.$el, `close_${this.corner}${this.side}`, () => {
-      eventBus.emit('hide-link-component', this, this.keyId)
-    }, "animation__", "close")
+    eventBus.unsubscribe('hide-component', this.animationEnd)
   }
 
   modalStylesCalc() {
@@ -137,18 +126,22 @@ export default class CommentComponent extends Vue {
     return {};
   }
 
+  animationEnd(keyId: number) 
+  {
+    if (this.keyId === keyId)
+    {
+      animateCSS(this.$el, `close_${this.corner}${this.side}`, () => {
+        this.$emit('hided', this.keyId);
+      }, "animation__", "close")
+    }
+  }
+
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
       this.calculatePosition()
-        
-      //this.timer = setTimeout(this.end, 33333 * 1000);
-      //clearTimeout(this.timer);
-      //this.hovered = false;
-
-
+      eventBus.subscribe('hide-component', this.animationEnd)
     }else{
-      //this is not modal so...
-      //animateCSS(this.$el, 'fadeInLeft')
+      //
     }
   }
 

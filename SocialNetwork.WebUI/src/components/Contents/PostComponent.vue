@@ -91,22 +91,24 @@ export default class PostComponent extends Vue {
       if (value === true)
       {
         this.$emit('hovered', this.keyId);
-        //if (this.timer !== -1)
-        //  clearTimeout(this.timer);
-        // @ts-ignore
-        this.timer = null;
       } else {
         this.$emit('unhovered', this.keyId);
-        //this.timer = setTimeout(this.end, 33333 * 1000);
-        //console.log('new timer', this.timer)
       }
     }
   } 
 
+  animationEnd(keyId: number) 
+  {
+    if (this.keyId === keyId)
+    {
+      animateCSS(this.$el, `close_${this.corner}${this.side}`, () => {
+        this.$emit('hided', this.keyId);
+      }, "animation__", "close")
+    }
+  }
+
   end() {
-    animateCSS(this.$el, `close_${this.corner}${this.side}`, () => {
-      eventBus.emit('hide-link-component', this, this.keyId)
-    }, "animation__", "close")
+    eventBus.unsubscribe('hide-component', this.animationEnd)
   }
 
   modalStylesCalc() {
@@ -119,10 +121,7 @@ export default class PostComponent extends Vue {
   mounted() {
     if (this.isModal !== undefined && this.isModal !== false) {
       this.calculatePosition();
-
-      //this.timer = setTimeout(this.end, 33333 * 1000);
-      //clearTimeout(this.timer);
-      //this.hovered = false;
+      eventBus.subscribe('hide-component', this.animationEnd)
     }else{
       //this is not modal so...
     }

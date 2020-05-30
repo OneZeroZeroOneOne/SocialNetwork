@@ -4,6 +4,8 @@
       <component class="abs-pos"
       @unhovered="unhovered"
       @hovered="hovered"
+      @hided="hidedComponent"
+      :ref="'modal'+ins.keyId"
       :is="ins.isComment == true ? 'CommentComponent': 'PostComponent'" 
       :keyId="ins.keyId"
       :obj="ins.obj"
@@ -30,14 +32,25 @@ import { ResponseState } from '@/models/enum/ResponseState';
 import EventBus from '../../utilities/EventBus';
 import animateCSS  from '../../utilities/AnimateCSS';
 
+class ModalEntity {
+  public isComment: boolean
+  public keyId: number
+  public obj: IPost|IComment
+  public fatherPost: IPost
+  public event: MouseEvent
+  public elem: Element
+}
+
 class ThreadLink {
   public id: number;
   public linkTo: number;
   public linkFrom: number;
 
-  public isMain: boolean;
   public dissapearTimer: number;
+
   public isHovered: boolean;
+  public isMain: boolean;
+  public isHided: boolean;
 
   public childrens: ThreadLink[];
 }
@@ -50,7 +63,7 @@ class ThreadLink {
   }
 })
 export default class ShowPostCommentContainer extends Vue {
-  public listModal: object[] = [] 
+  public listModal: ModalEntity[] = [] 
   private keyId: number = 0;
 
   public threadLinks: ThreadLink[] = [];
@@ -109,7 +122,11 @@ export default class ShowPostCommentContainer extends Vue {
       }
 
       // @ts-ignore
-      this.createComponent(event, compId, {
+      this.createComponent(event, {
+        id: Number(compId),
+        text: "Ошибка",
+        attachmentComment: [],
+      },{
         id: Number(compId),
         text: "Ошибка",
         attachmentComment: [],
@@ -152,7 +169,11 @@ export default class ShowPostCommentContainer extends Vue {
     }
 
     // @ts-ignore
-    this.createComponent(event, compId, {
+    this.createComponent(event, {
+      id: Number(compId),
+      text: "Ошибка",
+      attachmentComment: [],
+    }, {
       id: Number(compId),
       text: "Ошибка",
       attachmentComment: [],
@@ -233,14 +254,12 @@ export default class ShowPostCommentContainer extends Vue {
     let curKeyId = this.keyId++;
 
     // @ts-ignore
-    //console.log({a: elem.parentNode});
-
-    // @ts-ignore
     let check = elem.parentNode.dataset;
 
     //console.log(check)
 
     let threadLink = new ThreadLink()
+    threadLink.isHided = false;
     threadLink.id = object.id
     threadLink.linkTo = curKeyId;
 
@@ -263,17 +282,47 @@ export default class ShowPostCommentContainer extends Vue {
     this.threadLinks.push(threadLink);
     //console.log(threadLink);
 
-    this.listModal.push({
-      isComment: isComment,
-      keyId: curKeyId,
-      obj: object,
-      fatherPost: fatherPost,
-      event: event,
-      //modalStyles: modalStyles,
-      elem: elem
-    })
+    let ent = new ModalEntity();
+    ent.isComment = isComment;
+    ent.keyId = curKeyId;
+    ent.obj = object;
+    ent.fatherPost = fatherPost;
+    ent.elem = elem;
+    ent.event = event;
+
+    this.listModal.push(ent);
   }
 
+  hidedComponent(keyId: number) {
+    console.log('hided', keyId)
+
+    let thisModal = this.threadLinks.find(x => x.linkTo === keyId)
+
+    if (thisModal !== undefined)
+    {
+      thisModal.isHided = true;
+    }
+
+    let allThreadFather = this.findLinkedFather(keyId);
+
+    if (allThreadFather !== undefined 
+      && allThreadFather.childrens.every(x => x.isHided === true)
+      && allThreadFather.isHided === true)
+    {
+      let allThread = allThreadFather.childrens.map(x => x.linkTo);
+      allThread.push(allThreadFather.linkTo);
+
+      allThread.forEach(element => {
+        let domObj = this.listModal.find(x => x.keyId === element)
+        if (domObj !== undefined)
+        {
+          domObj.elem.classList.remove('showing')
+        }
+      });
+
+      this.listModal = this.listModal.filter(obj => allThread.lastIndexOf(obj.keyId) === -1)//obj.keyId !== curKeyId);
+    }
+  }
 
   hideThread(curKeyId: number) {
     let allThreadFather = this.findLinkedFather(curKeyId);
@@ -283,16 +332,28 @@ export default class ShowPostCommentContainer extends Vue {
 
     let allThread = allThreadFather.childrens.map(x => x.linkTo);
     allThread.push(curKeyId);
-    // @ts-ignore
-    let obj = this.listModal.find(obj => obj.keyId === curKeyId)
-    // @ts-ignore
-    obj.elem.classList.remove('showing');
 
-    // @ts-ignore
-    this.listModal = this.listModal.filter(obj => allThread.lastIndexOf(obj.keyId) === -1)//obj.keyId !== curKeyId);
+    let obj = this.threadLinks.find(obj => obj.linkTo === (allThreadFather as ThreadLink).linkTo)
+
+    if (obj !== undefined)
+    {
+      //obj.elem.classList.remove('showing');
+      
+      let toHide = this.listModal.filter(obj => allThread.lastIndexOf(obj.keyId) !== -1)
+
+      toHide.forEach(element => {
+        EventBus.emit('hide-component', element.keyId)
+      });
+
+      //this.listModal = this.listModal.filter(obj => allThread.lastIndexOf(obj.keyId) === -1)//obj.keyId !== curKeyId);
+    } else {
+      console.warn('obj is undefined', curKeyId, allThreadFather)
+      console.log(this.threadLinks)
+      console.log(this.listModal)
+    }
   }
 
-  hideComponent(component: Vue, id: number) {
+  /*hideComponent(component: Vue, id: number) {
     // @ts-ignore
     let obj = this.listModal.find(obj => obj.keyId === id)
     // @ts-ignore
@@ -300,7 +361,7 @@ export default class ShowPostCommentContainer extends Vue {
 
     // @ts-ignore
     this.listModal = this.listModal.filter(obj => obj.keyId !== id);
-  }
+  }*/
 
   beforeCreate() {
     //
@@ -308,12 +369,12 @@ export default class ShowPostCommentContainer extends Vue {
 
   beforeDestroy() {
     EventBus.unsubscribe('show-link-component', this.showComponent)
-    EventBus.unsubscribe('hide-link-component', this.hideComponent)
+    //EventBus.unsubscribe('hide-link-component', this.hideComponent)
   }
 
   mounted(): void {
     EventBus.subscribe('show-link-component', this.showComponent)
-    EventBus.subscribe('hide-link-component', this.hideComponent)
+    //EventBus.subscribe('hide-link-component', this.hideComponent)
   }
 
   created() {
