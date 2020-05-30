@@ -78,7 +78,7 @@ export default class CommentComponent extends Vue {
 
   public timer: number = -1;
   public counter: number = 5;
-  public hovered: boolean = true;
+  public hovered: boolean = false;
   public countdown!: any;
   public corner: string;
   public side: string;
