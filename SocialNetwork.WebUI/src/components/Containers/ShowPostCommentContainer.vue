@@ -2,6 +2,8 @@
   <div class="show-post-comment-container">
     <div v-for="ins in listModal" :key="ins.keyId">
       <component class="abs-pos"
+      @unhovered="unhovered"
+      @hovered="hovered"
       :is="ins.isComment == true ? 'CommentComponent': 'PostComponent'" 
       :keyId="ins.keyId"
       :obj="ins.obj"
@@ -28,6 +30,18 @@ import { ResponseState } from '@/models/enum/ResponseState';
 import EventBus from '../../utilities/EventBus';
 import animateCSS  from '../../utilities/AnimateCSS';
 
+class ThreadLink {
+  public id: number;
+  public linkTo: number;
+  public linkFrom: number;
+
+  public isMain: boolean;
+  public dissapearTimer: number;
+  public isHovered: boolean;
+
+  public childrens: ThreadLink[];
+}
+
 @Component({
   components: {
     AttachmentComponent,
@@ -39,29 +53,21 @@ export default class ShowPostCommentContainer extends Vue {
   public listModal: object[] = [] 
   private keyId: number = 0;
 
+  public threadLinks: ThreadLink[] = [];
+  public lastUnhovered: number = 0;
+  public lastHovered: number = 0;
+
+  //public threadMaster: Map<number, number> = new Map<number, number>();
+  //public threadLinks: 
+
   public dissapearTimeout = 3 * 1000; //3 sec
 
   constructor() {
     super();
   }
 
-  offset(el: HTMLElement) 
-  {
-    let rect = el.getBoundingClientRect(),
-        scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-        scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    return { 
-      top: rect.top + scrollTop, 
-      left: rect.left + scrollLeft 
-    }
-  }
-
   async showComponent(event: MouseEvent) 
   {
-    // @ts-ignore
-    //console.log(event.target);
-
     if (event.target == null)
       return;
 
@@ -89,7 +95,7 @@ export default class ShowPostCommentContainer extends Vue {
         let post = await globalStorage.getPostGlobally(comment.value.postId.toString())
         if (post.state !== ResponseState.fail)
         {
-          this.createComponent(event, compId, comment.value, post.value, true);
+          this.createComponent(event, comment.value, post.value, true);
           return;
         }
       }
@@ -98,7 +104,7 @@ export default class ShowPostCommentContainer extends Vue {
 
       if (post.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, post.value, post.value, true);
+        this.createComponent(event, post.value, post.value, true);
         return;
       }
 
@@ -124,7 +130,7 @@ export default class ShowPostCommentContainer extends Vue {
         let post = await globalStorage.getPostGlobally(comment.value.postId.toString())
         if (post.state !== ResponseState.fail)
         {
-          this.createComponent(event, compId, comment.value, post.value, true);
+          this.createComponent(event, comment.value, post.value, true);
           return;
         }
       }
@@ -140,7 +146,7 @@ export default class ShowPostCommentContainer extends Vue {
 
       if (post.state !== ResponseState.fail)
       {
-        this.createComponent(event, compId, post.value, post.value, false);
+        this.createComponent(event, post.value, post.value, false);
         return;
       }
     }
@@ -153,48 +159,137 @@ export default class ShowPostCommentContainer extends Vue {
     }, true);
   }
 
-  newOffset(el: HTMLElement, xy: string) {
-    let c = 0;
-    while (el) {
-        c += el[xy];
-        el = el.offsetParent as HTMLElement;
+  hovered(keyId: number) {
+    console.log('hovered', keyId);
+    let father = this.findLinkedFather(keyId);
+
+    let currentLink = this.threadLinks.filter(x => x.linkTo === keyId)
+    if (currentLink[0] !== undefined)
+    {
+      currentLink[0].isHovered = true;
     }
-    return c;
+
+    if (father !== undefined)
+    {
+      if (father.dissapearTimer !== undefined || father.dissapearTimer != null)
+      {
+        clearTimeout(father.dissapearTimer)
+      }
+    }
+
+  }
+  
+  unhovered(keyId: number) {
+    console.log('unhovered', keyId);
+    let father = this.findLinkedFather(keyId);
+
+    let currentLink = this.threadLinks.filter(x => x.linkTo === keyId)
+    if (currentLink[0] !== undefined)
+    {
+      currentLink[0].isHovered = false;
+    }
+
+    if (father !== undefined)
+    {
+
+      if (father.dissapearTimer !== undefined || father.dissapearTimer != null)
+      {
+        clearTimeout(father.dissapearTimer)
+      }
+
+      if (father.childrens.filter(x => x.isHovered === true).length === 0)
+      {
+        father.dissapearTimer = setTimeout(() => {
+          this.hideThread((father as ThreadLink).linkTo);
+        }, this.dissapearTimeout)
+      }
+      //console.log('last unhovered', this.lastUnhovered);
+    }
   }
 
-  createComponent(event: MouseEvent, id: string, object: IPost|IComment, fatherPost: IPost, isComment: boolean) {
+  findLinkedFather(keyId: number): ThreadLink|undefined {
+    let linkObj = this.threadLinks.find(x => x.linkTo === keyId);
+
+    let found = false;
+    let father: ThreadLink;
+
+    while(found === false)
+    {
+      // @ts-ignore
+      if (linkObj.isMain === true)
+        return linkObj;
+      // @ts-ignore
+      linkObj = this.threadLinks.find(x => x.linkTo === linkObj.linkFrom)
+    }
+  }
+
+  findAllFather(): ThreadLink[] {
+    return this.threadLinks.filter(x => x.isMain === true);
+  }
+
+  createComponent(event: MouseEvent, object: IPost|IComment, fatherPost: IPost, isComment: boolean) {
     let elem: HTMLLinkElement = event.target as HTMLLinkElement;
 
-    /*let coords = this.offset(elem);
+    let curKeyId = this.keyId++;
 
+    // @ts-ignore
+    //console.log({a: elem.parentNode});
 
-    let scrW = document.body.clientWidth || document.documentElement.clientWidth;
-    let scrH = window.innerHeight || document.documentElement.clientHeight;
+    // @ts-ignore
+    let check = elem.parentNode.dataset;
 
-    //console.log(event.clientY, Math.floor(scrH * 0.75))
+    //console.log(check)
 
-    let x = coords.left + elem.offsetWidth / 2;
-    let y = coords.top + elem.offsetHeight;
+    let threadLink = new ThreadLink()
+    threadLink.id = object.id
+    threadLink.linkTo = curKeyId;
 
-    let xx = (x < scrW / 2 ? 'left:' + x : 'right:' + (scrW - x + 2)) + 'px;';
-    let yy = (event.clientY < Math.floor(scrH * 0.75) ? 'top:' + y : 'bottom:' + (scrH - y - 4)) + 'px;';
-    */
-    /*
-      'left': x + 'px',
-      'top': y +'px', 
-    */
-    /*console.log(xx, yy)
-    let modalStyles = 'position: absolute;'+ xx + yy;*/
+    if (check['fatherKeyid'] === undefined || check['fatherKeyid'] === null)
+    {
+      console.log('first', check['fatherKeyid'])
+      //this.threadMaster.set(curKeyId, object.id)
+      threadLink.isMain = true;
+      threadLink.dissapearTimer = setTimeout(() => {
+        this.hideThread(curKeyId);
+      }, this.dissapearTimeout)
+      threadLink.childrens = [];
+    } else {
+      threadLink.linkFrom = Number(check['fatherKeyid'])
+      let parent = this.findLinkedFather(threadLink.linkFrom)
+      if (parent !== undefined)
+        parent.childrens.push(threadLink);
+    }
+
+    this.threadLinks.push(threadLink);
+    //console.log(threadLink);
 
     this.listModal.push({
       isComment: isComment,
-      keyId: this.keyId++,
+      keyId: curKeyId,
       obj: object,
       fatherPost: fatherPost,
       event: event,
       //modalStyles: modalStyles,
       elem: elem
     })
+  }
+
+
+  hideThread(curKeyId: number) {
+    let allThreadFather = this.findLinkedFather(curKeyId);
+
+    if (allThreadFather === undefined)
+      return;
+
+    let allThread = allThreadFather.childrens.map(x => x.linkTo);
+    allThread.push(curKeyId);
+    // @ts-ignore
+    let obj = this.listModal.find(obj => obj.keyId === curKeyId)
+    // @ts-ignore
+    obj.elem.classList.remove('showing');
+
+    // @ts-ignore
+    this.listModal = this.listModal.filter(obj => allThread.lastIndexOf(obj.keyId) === -1)//obj.keyId !== curKeyId);
   }
 
   hideComponent(component: Vue, id: number) {

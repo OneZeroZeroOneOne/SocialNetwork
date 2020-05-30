@@ -67,7 +67,7 @@ export default {
 }
 
 .v-lazy-image {
-  width: 200px;
+  width: 150px;
   filter: url("#blur");
   height: auto;
   vertical-align: middle;

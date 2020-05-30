@@ -83,7 +83,7 @@ export default class AttachmentComponent extends Vue {
 
 .attachment {
   margin: 5px;
-  grid-template-columns: 200px auto;
+  grid-template-columns: 100px auto;
   align-items: center;
   display: inline;
   font-size: var(--attachment-text-size);

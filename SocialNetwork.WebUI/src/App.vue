@@ -68,7 +68,6 @@ export default class App extends Vue {
 
   async created() {
     this.$refs.container = this;
-    console.log(this)
     await GlobalStorage.getBoards()
   }
 }

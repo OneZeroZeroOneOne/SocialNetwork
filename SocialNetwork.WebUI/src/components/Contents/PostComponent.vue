@@ -24,12 +24,12 @@
           <attachment-component :attachmentObjs="obj.attachmentPost"/>
         </div>
         <div v-bar>
-          <article class=post-content-body v-html="obj.text">
+          <article class="post-content-body" :data-father-keyid="keyId" v-html="obj.text">
           </article>
         </div>
       </div>
       <div class="post-footer" v-if="obj.mention.length > 0">
-        <div class="post-footer-mentions">
+        <div class="post-footer-mentions" :data-father-keyid="keyId">
           Ответы: 
           <a v-for="(mention, index) in obj.mention" v-bind:key="index"
             target="_blank"
@@ -90,12 +90,14 @@ export default class PostComponent extends Vue {
     {
       if (value === true)
       {
-        if (this.timer !== -1)
-          clearTimeout(this.timer);
+        this.$emit('hovered', this.keyId);
+        //if (this.timer !== -1)
+        //  clearTimeout(this.timer);
         // @ts-ignore
         this.timer = null;
       } else {
-        this.timer = setTimeout(this.end, 3 * 1000);
+        this.$emit('unhovered', this.keyId);
+        //this.timer = setTimeout(this.end, 33333 * 1000);
         //console.log('new timer', this.timer)
       }
     }
@@ -118,9 +120,9 @@ export default class PostComponent extends Vue {
     if (this.isModal !== undefined && this.isModal !== false) {
       this.calculatePosition();
 
-      this.timer = setTimeout(this.end, 3 * 1000);
-      clearTimeout(this.timer);
-      this.hovered = false;
+      //this.timer = setTimeout(this.end, 33333 * 1000);
+      //clearTimeout(this.timer);
+      //this.hovered = false;
     }else{
       //this is not modal so...
     }

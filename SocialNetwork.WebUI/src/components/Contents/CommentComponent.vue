@@ -1,5 +1,10 @@
 <template>
-<div :class="classNames" :id="obj.id" @mouseover="hovered = true" @mouseleave="hovered = false" v-bind:style="modalStylesCalc()">
+<div 
+  :class="classNames" 
+  :id="obj.id" 
+  @mouseover="hovered = true" 
+  @mouseleave="hovered = false" 
+  v-bind:style="modalStylesCalc()">
   <div class="comment-body">
     <div class="comment-header">
       <a class="comment-header-link"
@@ -13,7 +18,7 @@
         {{obj.date | formatDate}}
       </div>
       <div class="comment-header-number">
-        {{obj.seqId + 2}}
+        {{obj.seqId + 2}} {{keyId}}
       </div>
     </div>
     <div class="comment-content" :style="stylesContent()">
@@ -21,12 +26,12 @@
        <attachment-component :attachmentObjs="obj.attachmentComment"/>
       </div>
       <div v-bar>
-        <article class="comment-content-body" v-html="obj.text">
+        <article class="comment-content-body" :data-father-keyid="keyId" v-html="obj.text">
         </article>
       </div>
     </div>
     <div class="comment-footer" v-if="obj.mention.length > 0">
-      <div class="comment-footer-mentions">
+      <div class="comment-footer-mentions" :data-father-keyid="keyId">
         Ответы: 
         <a v-for="(mention, index) in obj.mention" v-bind:key="index"
           target="_blank"
@@ -54,6 +59,7 @@ import eventBus from "@/utilities/EventBus";
 import GlobalStorage from '../../services/Implementations/GlobalStorage';
 
 import animateCSS from "@/utilities/AnimateCSS";
+import _ from 'lodash'
 
 @Component({
   components: {
@@ -102,13 +108,17 @@ export default class CommentComponent extends Vue {
       //console.log('hovered', value)
       if (value === true)
       {
+        //_.delay(() => {
+          this.$emit('hovered', this.keyId);
+        //}, 300);
         //console.log('deleting timer', this.timer)
-        if (this.timer !== -1)
-          clearTimeout(this.timer);
+        //if (this.timer !== -1)
+        //  clearTimeout(this.timer);
         // @ts-ignore
         this.timer = null;
       } else {
-        this.timer = setTimeout(this.end, 3 * 1000);
+        this.$emit('unhovered', this.keyId)
+        //this.timer = setTimeout(this.end, 33333 * 1000);
         //console.log('new timer', this.timer)
       }
     }
@@ -131,9 +141,11 @@ export default class CommentComponent extends Vue {
     if (this.isModal !== undefined && this.isModal !== false) {
       this.calculatePosition()
         
-      this.timer = setTimeout(this.end, 3 * 1000);
-      clearTimeout(this.timer);
-      this.hovered = false;
+      //this.timer = setTimeout(this.end, 33333 * 1000);
+      //clearTimeout(this.timer);
+      //this.hovered = false;
+
+
     }else{
       //this is not modal so...
       //animateCSS(this.$el, 'fadeInLeft')
