@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <nav-bar-component/>
-    <attachment-modal/>
     <router-view>
     </router-view>
+    <show-attachment-container/>
     <show-post-comment-container/>
     <editor-modal/>
   </div>
@@ -16,6 +16,7 @@ import apiClient from '@/services/Implementations/ApiClient';
 import AttachmentModal from "@/components/Modals/AttachmentModal.vue";
 import ShowPostCommentContainer from '@/components/Containers/ShowPostCommentContainer.vue';
 import AttachmentComponent from '@/components/Other/AttachmentComponent.vue';
+import ShowAttachmentContainer from '@/components/Containers/ShowAttachmentContainer.vue';
 import NavBarComponent from '@/components/Navigations/NavBarComponent.vue';
 
 import { loadCss, onloadCSS } from '@/utilities/loadStyle';
@@ -32,6 +33,7 @@ import GlobalStorage from './services/Implementations/GlobalStorage';
     ShowPostCommentContainer,
     NavBarComponent,
     AttachmentComponent,
+    ShowAttachmentContainer,
   }
 })
 export default class App extends Vue {

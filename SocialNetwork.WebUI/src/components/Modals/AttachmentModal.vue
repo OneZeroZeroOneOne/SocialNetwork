@@ -16,16 +16,20 @@
                 <div class="attachment-modal-description noselect">
                     {{attachment.displayName}} ({{attachment.width}}×{{attachment.height}})
                 </div>
-                <img class="attachment-modal-content" :src="srcPath" v-if="loaded === true && showType === 0">
+                <img class="attachment-modal-content" 
+                    :src="srcPath" 
+                    :width="width"
+                    :height="height"
+                    v-if="loaded === true && showType === 0">
                 <video class="attachment-modal-content dont-pause"
-                id="attachment-player"
-                :width="width"
-                :height="height"
-                @volumechange.self="volumeChange"
-                controls 
-                autoplay 
-                loop 
-                v-if="loaded === true && showType === 1">
+                    id="attachment-player"
+                    :width="width"
+                    :height="height"
+                    @volumechange.self="volumeChange"
+                    controls 
+                    autoplay 
+                    loop 
+                    v-if="loaded === true && showType === 1">
                     <source :poster="posterPath" :src="srcPath">
                 </video>
             </div>
@@ -48,7 +52,7 @@ enum ShowType {
   components: {}
 })
 export default class AttachmentModal extends Vue {
-    private attachment: IAttachment|undefined;
+    @Prop() attachment: IAttachment;
 
     public width: number = 200;
     public height: number = 200;
@@ -74,12 +78,16 @@ export default class AttachmentModal extends Vue {
 
     constructor() {
         super();
-        this.$root.$on('show-attachment-image', this.showImage)
-        this.$root.$on('show-attachment-video', this.showVideo)
+
         document.addEventListener('mousedown', this.eventClick, {passive: false});
-        //window.onclick = this.mouseUp;
         document.addEventListener('click', this.mouseUp, {passive:false});
         document.addEventListener("wheel", this.handleWheel, {passive: false})
+    }
+
+    destroyed() {
+        document.removeEventListener('mousedown', this.eventClick);
+        document.removeEventListener('click', this.mouseUp);
+        document.removeEventListener("wheel", this.handleWheel)
     }
 
     handleWheel(event: any): void {
@@ -110,16 +118,6 @@ export default class AttachmentModal extends Vue {
         }
     }
 
-    @Watch('active',{ immediate: true}) 
-    onRouteChange(obj): void {
-        //console.log('active', obj)
-    }
-
-    @Watch('hovered',{ immediate: true}) 
-    onhoveredChange(obj): void {
-        //console.log('hovered', obj)
-    }
-
     volumeChange(event: any) {
         var video: any = document.getElementById('attachment-player');
         if (video !== null)
@@ -142,6 +140,7 @@ export default class AttachmentModal extends Vue {
             return;
         }else {
             this.active = false;
+            this.$emit('close', this.attachment)
         } /*else
             if (event.toElement.className.indexOf('clickable') === -1)
             {
@@ -171,21 +170,22 @@ export default class AttachmentModal extends Vue {
         }
     }
 
-    showVideo(attachment: IAttachment) {
-        if (this.attachment != undefined && this.attachment.id === attachment.id)
-        {
-            this.active = false;
-            this.attachment = undefined;
-            return;
-        }
-        this.attachment = attachment;
+    mounted() {
+        this.showAttachment();
+    }
 
-        this.showType = ShowType.video;
+    showAttachment() {
+        console.log(this.attachment)
+        if (this.attachment.preview !== null)
+            this.showType = ShowType.video;
+        else
+            this.showType = ShowType.img;
+        
         this.active = true;
-        this.posterPath = attachment.preview;
+        this.posterPath = this.attachment.preview;
 
-        this.initialWidth = attachment.width
-        this.initialHeight = attachment.height
+        this.initialWidth = this.attachment.width
+        this.initialHeight = this.attachment.height
         this.width = this.initialWidth 
         this.height = this.initialHeight
 
@@ -194,42 +194,18 @@ export default class AttachmentModal extends Vue {
         this.x = window.innerWidth / 2 - this.width / 2; //localStorage.getItem('modal-image-x') === undefined ? 500 : parseNumber(localStorage.getItem('modal-image-x')).value
         this.y = window.innerHeight / 2 - this.height / 2;//localStorage.getItem('modal-image-y') === undefined ? 500 : parseNumber(localStorage.getItem('modal-image-y')).value
 
-        this.srcPath = this.getAttachmentPath(attachment.path);
+        this.srcPath = this.getAttachmentPath(this.attachment.path);
         
         this.adjustSize()
 
-        this.$nextTick().then(x => {
-            var video: any = document.getElementById('attachment-player');
-            let vol = localStorage.getItem('attachment-player-volume')
-            video.volume = vol !== null ? parseFloat(vol) : 0.5
-        })
-    }
-
-    showImage(attachment: IAttachment) {
-        if (this.attachment != undefined && this.attachment.id === attachment.id)
+        if (this.showType === ShowType.video)
         {
-            this.active = false;
-            this.attachment = undefined;
-            return;
+            this.$nextTick().then(x => {
+                var video: any = document.getElementById('attachment-player');
+                let vol = localStorage.getItem('attachment-player-volume')
+                video.volume = vol !== null ? parseFloat(vol) : 0.5
+            })
         }
-        this.attachment = attachment;
-
-        this.showType = ShowType.img;
-        this.active = true;
-
-        this.initialWidth = attachment.width
-        this.initialHeight = attachment.height
-        this.width = this.initialWidth 
-        this.height = this.initialHeight
-
-        this.ratio = this.width / this.height
-
-        this.x = window.innerWidth / 2 - this.width / 2; //localStorage.getItem('modal-image-x') === undefined ? 500 : parseNumber(localStorage.getItem('modal-image-x')).value
-        this.y = window.innerHeight / 2 - this.height / 2;//localStorage.getItem('modal-image-y') === undefined ? 500 : parseNumber(localStorage.getItem('modal-image-y')).value
-
-        this.srcPath = this.getAttachmentPath(attachment.path);
-
-        this.adjustSize()
     }
 
     onResize(x, y, width, height) {
