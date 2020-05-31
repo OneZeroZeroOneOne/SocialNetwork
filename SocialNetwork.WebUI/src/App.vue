@@ -37,7 +37,10 @@ import GlobalStorage from './services/Implementations/GlobalStorage';
   }
 })
 export default class App extends Vue {
-  public listModal: Vue[] = [] 
+  public hoverId: number = 0;
+  public hoverTimeout: Map<number, number> = new Map<number, number>();
+
+  public timeToShow = 1 * 100; //ms
 
   constructor() {
     super();
@@ -51,19 +54,27 @@ export default class App extends Vue {
   }
 
   mounted(): void {
-    /*let iAm = document.getElementById('app');
-
-    if (iAm === null)
-      return;
-    */
+    
     document.addEventListener('mouseover', (e: Event) => {
-      //console.log(e)
       // @ts-ignore
       if (e.target && e.target.matches('.link-to')) {
-        // @ts-ignore
-        //console.log(e.target.dataset)
-        //console.log(e)
-        eventBus.emit('show-link-component', e)
+        let curHoverId = this.hoverId++;
+        (e.target as HTMLLinkElement).dataset['hoverid'] = curHoverId.toString();
+        this.hoverTimeout.set(curHoverId, setTimeout(() => {
+          eventBus.emit('show-link-component', e)
+        }, this.timeToShow))
+      }
+    })
+
+    document.addEventListener('mouseout', (e: Event) => {
+      // @ts-ignore
+      if (e.target && e.target.matches('.link-to')) {
+        let hoverId = (e.target as HTMLLinkElement).dataset['hoverid']
+        if (hoverId !== undefined && hoverId !== null && hoverId !== '')
+        {
+          let hoverIdN = Number(hoverId);
+          clearTimeout(this.hoverTimeout.get(hoverIdN));
+        }
       }
     })
   }
