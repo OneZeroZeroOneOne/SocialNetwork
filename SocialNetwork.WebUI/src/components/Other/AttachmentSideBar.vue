@@ -4,7 +4,7 @@
             <div class="attachment-side-bar-preview" 
                 v-for="att in attachmentList" 
                 :key="att.id" 
-                @click="showAttachment(att, $event)">
+                v-on:mouseup="showAttachment(att, $event)">
                 <img class="image-preview"
                     :src="getAttachmentPreview(att)">
                 <div class="play-button" v-if="att.preview !== null">
@@ -33,14 +33,12 @@ export default class AttachmentSideBar extends Vue {
     }
 
     mounted() {
-
         EventBus.subscribe("new-attachments", this.newAttachments);
         EventBus.subscribe("clear-attachments", this.clearAttachment);
     }
 
     showAttachment(att: IAttachment, event: MouseEvent) {
-        console.log('show att', att)
-        event.preventDefault();
+        console.log('show att', att, event)
         this.$root.$emit('show-attachment-image', att)
     }
 

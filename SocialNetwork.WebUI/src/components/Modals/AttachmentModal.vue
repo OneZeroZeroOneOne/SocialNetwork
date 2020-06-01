@@ -78,16 +78,11 @@ export default class AttachmentModal extends Vue {
 
     constructor() {
         super();
-
-        document.addEventListener('mousedown', this.eventClick, {passive: false});
-        document.addEventListener('click', this.mouseUp, {passive:false});
-        document.addEventListener("wheel", this.handleWheel, {passive: false})
     }
 
     destroyed() {
-        document.removeEventListener('mousedown', this.eventClick);
-        document.removeEventListener('click', this.mouseUp);
-        document.removeEventListener("wheel", this.handleWheel)
+        //document.removeEventListener('mouseup', this.eventClick);
+        //document.removeEventListener("wheel", this.handleWheel)
     }
 
     handleWheel(event: any): void {
@@ -118,36 +113,35 @@ export default class AttachmentModal extends Vue {
         }
     }
 
+    @Watch('hovered', {immediate: true})
+    change(value) {
+        if (value === true)
+        {
+            this.$emit('hovered', this.attachment);
+        } else {
+            this.$emit('unhovered', this.attachment)
+        }
+    } 
+
     volumeChange(event: any) {
         var video: any = document.getElementById('attachment-player');
         if (video !== null)
             localStorage.setItem('attachment-player-volume', video.volume)
     }
 
-    mouseUp(event: any): boolean {
-        if (this.hovered)
+    eventClick(event: MouseEvent): void {
+        console.log(event)
+        if (event.button === 0)
         {
-            event.preventDefault();
-            return false;
-        }
-        return true;
-    }
-
-    eventClick(event: any): void {
-        if (this.hovered) {
-            this.active = true;
-            event.preventDefault()
-            return;
-        }else {
-            this.active = false;
-            this.$emit('close', this.attachment)
-        } /*else
-            if (event.toElement.className.indexOf('clickable') === -1)
-            {
-                //console.log('not clickable')
+            if (this.hovered) {
+                this.active = true;
+                event.preventDefault()
+                return;
+            }else {
                 this.active = false;
-                //console.log(this.active)
-            } */
+                this.$emit('close', this.attachment)
+            } 
+        }
     }
 
     getAttachmentPath(path: string): string {
@@ -171,11 +165,12 @@ export default class AttachmentModal extends Vue {
     }
 
     mounted() {
+        //document.addEventListener('mouseup', this.eventClick, {passive: false});
+        //document.addEventListener("wheel", this.handleWheel, {passive: false})
         this.showAttachment();
     }
 
     showAttachment() {
-        console.log(this.attachment)
         if (this.attachment.preview !== null)
             this.showType = ShowType.video;
         else

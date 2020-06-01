@@ -4,7 +4,9 @@
         v-for="att in attachments" 
         :key="att.id"
         :attachment="att"
-        @close="closeModal"/>
+        @close="closeModal"
+        @hovered="hovered"
+        @unhovered="unhovered"/>
     <attachment-side-bar :class="{'active': sideBarActive, 'sidebar': true}"/>
   </div>
 </template>
@@ -16,6 +18,11 @@ import AttachmentModal from "@/components/Modals/AttachmentModal.vue";
 import AttachmentSideBar from '@/components/Other/AttachmentSideBar.vue';
 import EventBus from '@/utilities/EventBus';
 
+class AttachmentModalModel {
+  public id: number;
+  public isHovered: boolean;
+}
+
 @Component({
   components: {
     AttachmentModal,
@@ -23,6 +30,8 @@ import EventBus from '@/utilities/EventBus';
   }
 })
 export default class ShowAttachmentContainer extends Vue {
+    public modals: Map<number, AttachmentModalModel> = new Map<number, AttachmentModalModel>();
+
     public sideBarActive: boolean = false;
 
     public attachments: IAttachment[] = [];
@@ -47,6 +56,22 @@ export default class ShowAttachmentContainer extends Vue {
         this.sideBarActive = false;
     }
 
+    hovered(att: IAttachment) {
+      let modal = this.modals.get(att.id)
+      if (modal !== undefined)
+      {
+        modal.isHovered = true;
+      }
+    }
+
+    unhovered(att: IAttachment) {
+      let modal = this.modals.get(att.id)
+      if (modal !== undefined)
+      {
+        modal.isHovered = false;
+      }
+    }
+
     closeModal(attachment: IAttachment) {
       this.hideSideBar()
       this.attachments = this.attachments.filter(x => x.id !== attachment.id);
@@ -57,6 +82,11 @@ export default class ShowAttachmentContainer extends Vue {
       if (this.attachments.find(x => x.id === attachment.id) === undefined)
       {
           this.attachments.push(attachment)
+
+          let modal = new AttachmentModalModel()
+          modal.id = attachment.id;
+          modal.isHovered = false;
+          this.modals.set(modal.id, modal)
       }
     }
 }
