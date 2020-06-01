@@ -36,6 +36,7 @@ import Nprogress from "nprogress"
 import _ from 'lodash'
 
 import globalStorage from '@/services/Implementations/GlobalStorage';
+import EventBus from '../utilities/EventBus';
 
 @Component({
   components: { 
@@ -116,6 +117,9 @@ export default class BoardView extends Vue {
 
     let newPostIds: number[] = []
     posts.value.results.forEach(x => {
+      if (x.attachmentPost.length > 0)
+        EventBus.emit("new-attachments", x.attachmentPost)
+
       if (this.postIds.indexOf(x.id) === -1)
       {
         this.postIds.push(x.id);
@@ -127,6 +131,10 @@ export default class BoardView extends Vue {
           .then(com => {
             if (com.state != ResponseState.fail)
             {
+              let atts = com.value.results.map(x => x.attachmentComment).flat()
+              if (atts.length > 0)
+                EventBus.emit("new-attachments", atts)
+
               this.allComments.push(...com.value.results);
               this.requestPostsStatus = ResponseState.success
             }

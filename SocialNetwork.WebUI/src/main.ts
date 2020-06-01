@@ -6,7 +6,7 @@ import '@/styles/nprogress.css';
 import '@/styles/scss/animation.scss';
 import checkView from 'vue-check-view'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSpinner, faCheck, faTimes, faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faSpinner, faCheck, faTimes, faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { VueNotification } from '@/types/AwnTypes';
 import dateTimeFilter from "@/utilities/filters/DateTime";
@@ -38,7 +38,7 @@ let options = {}
 
 Vue.use(VueAWN, options)
 
-library.add({faSpinner, faCheck, faTimes, faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines})
+library.add({faPlay, faSpinner, faCheck, faTimes, faAngleDoubleUp, faAngleDoubleDown, faUndo, faRedo, faParagraph, faListOl, faListUl, faCode, faUnderline, faStrikethrough, faItalic, faBold, faQuoteLeft, faGripLines})
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

@@ -5,6 +5,7 @@
         :key="att.id"
         :attachment="att"
         @close="closeModal"/>
+    <AttachmentSideBar/>
   </div>
 </template>
 
@@ -12,13 +13,18 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { IAttachment } from "@/models/responses/Attachment";
 import AttachmentModal from "@/components/Modals/AttachmentModal.vue";
+import AttachmentSideBar from '@/components/Other/AttachmentSideBar.vue';
+import EventBus from '@/utilities/EventBus';
 
 @Component({
   components: {
-    AttachmentModal
+    AttachmentModal,
+    AttachmentSideBar,
   }
 })
 export default class ShowAttachmentContainer extends Vue {
+    public sideBarActive: boolean = false;
+
     public attachments: IAttachment[] = [];
 
     constructor() {
@@ -26,19 +32,32 @@ export default class ShowAttachmentContainer extends Vue {
     }
 
     mounted() {
+        EventBus.subscribe("show-side-bar", this.showSideBar);
+        EventBus.subscribe("hide-side-bar", this.hideSideBar);
+        
         this.$root.$on('show-attachment-image', this.showAttachment)
         this.$root.$on('show-attachment-video', this.showAttachment)
     }
 
+    showSideBar() {
+        this.sideBarActive = true;
+    }
+
+    hideSideBar() {
+        this.sideBarActive = false;
+    }
+
     closeModal(attachment: IAttachment) {
-        this.attachments = this.attachments.filter(x => x.id !== attachment.id);
+      this.hideSideBar()
+      this.attachments = this.attachments.filter(x => x.id !== attachment.id);
     }
 
     showAttachment(attachment: IAttachment) {
-        if (this.attachments.find(x => x.id === attachment.id) === undefined)
-        {
-            this.attachments.push(attachment)
-        }
+      this.showSideBar()
+      if (this.attachments.find(x => x.id === attachment.id) === undefined)
+      {
+          this.attachments.push(attachment)
+      }
     }
 }
 </script>
