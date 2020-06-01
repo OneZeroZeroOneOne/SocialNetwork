@@ -5,7 +5,7 @@
         :key="att.id"
         :attachment="att"
         @close="closeModal"/>
-    <AttachmentSideBar/>
+    <attachment-side-bar :class="{'active': sideBarActive, 'sidebar': true}"/>
   </div>
 </template>
 
@@ -62,4 +62,19 @@ export default class ShowAttachmentContainer extends Vue {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.sidebar {
+  position: fixed;
+  transition: .5s ease;
+  top: 0px;
+  right: -190px;
+
+  &.active{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+  }
+}
+
+
+</style>

@@ -1,9 +1,11 @@
 <template>
     <div class="attachment-side-bar-overlay">
         <div class="attachment-side-bar">
-            <div class="attachment-side-bar-preview" v-for="att in attachmentList" :key="att.id">
+            <div class="attachment-side-bar-preview" 
+                v-for="att in attachmentList" 
+                :key="att.id" 
+                @click="showAttachment(att, $event)">
                 <img class="image-preview"
-                    @click="showAttachment(att)"
                     :src="getAttachmentPreview(att)">
                 <div class="play-button" v-if="att.preview !== null">
                     <font-awesome-icon class="icon" icon="play"/>
@@ -35,8 +37,10 @@ export default class AttachmentSideBar extends Vue {
         EventBus.subscribe("new-attachments", this.newAttachments);
         EventBus.subscribe("clear-attachments", this.clearAttachment);
     }
-    showAttachment(att: IAttachment) {
+
+    showAttachment(att: IAttachment, event: MouseEvent) {
         console.log('show att', att)
+        event.preventDefault();
         this.$root.$emit('show-attachment-image', att)
     }
 
@@ -67,9 +71,6 @@ export default class AttachmentSideBar extends Vue {
 <style scoped lang="scss">
 
 .attachment-side-bar-overlay {
-    position: fixed;
-    top: 0px;
-    right: 0px;
     background-color: rgba($color: #232355, $alpha: 0.5);
     max-height: 100%; 
     overflow-y: scroll;
