@@ -1,16 +1,17 @@
 <template>
     <div class="attachment-content">
-    <div class="attachment" v-for="attachment in attachmentObjs" v-bind:key="attachment.id">
+    <div class="attachment" 
+      v-for="attachment in attachmentObjs" 
+      v-bind:key="attachment.id"
+      @click="imgShow(attachment)">
       <div class="attachment-name">{{getName(attachment)}}</div>
       <filter-image v-if="attachment.preview === null"
         class="clickable"
-        v-on:click.native="imgShow(attachment)" 
         :src="getAttachmentPath(attachment.path)"
         :src-placeholder="getPreloadPath(attachment.preload)"
         :intersectionOptions="intersectionOption" />
       <filter-image v-else
         class="clickable attachment-video gradient-border" 
-        v-on:click.native="videoShow(attachment)" 
         :src="getAttachmentPath(attachment.preview)"
         :src-placeholder="getPreloadPath(attachment.preload)"
         :intersectionOptions="intersectionOption" />
@@ -61,6 +62,7 @@ export default class AttachmentComponent extends Vue {
   }
 
   imgShow(attachment: IAttachment): void {
+    console.log('show attachment from component')
     this.$root.$emit('show-attachment-image', attachment)
   }
 }

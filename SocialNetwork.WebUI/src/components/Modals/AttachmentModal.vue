@@ -79,14 +79,14 @@ export default class AttachmentModal extends Vue {
     constructor() {
         super();
 
-        document.addEventListener('mousedown', this.eventClick, {passive: false});
-        document.addEventListener('click', this.mouseUp, {passive:false});
+        document.addEventListener('mouseup', this.eventClick, {passive: false});
+        //document.addEventListener('click', this.mouseUp, {passive:false});
         document.addEventListener("wheel", this.handleWheel, {passive: false})
     }
 
     destroyed() {
-        document.removeEventListener('mousedown', this.eventClick);
-        document.removeEventListener('click', this.mouseUp);
+        document.removeEventListener('mouseup', this.eventClick);
+        //document.removeEventListener('click', this.mouseUp);
         document.removeEventListener("wheel", this.handleWheel)
     }
 
@@ -175,7 +175,7 @@ export default class AttachmentModal extends Vue {
     }
 
     showAttachment() {
-        console.log(this.attachment)
+        //console.log(this.attachment)
         if (this.attachment.preview !== null)
             this.showType = ShowType.video;
         else
