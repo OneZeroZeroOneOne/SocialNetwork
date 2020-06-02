@@ -86,9 +86,11 @@ export default class AttachmentModal extends Vue {
         if (this.appNode !== null)
         {
             this.appNode.removeEventListener('mouseup', this.eventClick);
+            this.appNode.removeEventListener("click", this.mouseUp)
             this.appNode.removeEventListener("wheel", this.handleWheel)
         } else {
             document.removeEventListener('mouseup', this.eventClick);
+            document.removeEventListener("click", this.mouseUp)
             document.removeEventListener('wheel', this.handleWheel);
         }
     }
@@ -181,9 +183,11 @@ export default class AttachmentModal extends Vue {
         if (this.appNode !== null)
         {
             this.appNode.addEventListener('mouseup', this.eventClick, {passive: false});
+            this.appNode.addEventListener("click", this.mouseUp, {passive: false})
             this.appNode.addEventListener("wheel", this.handleWheel, {passive: false})
         } else {
             document.addEventListener('mouseup', this.eventClick, {passive: false});
+            document.addEventListener("click", this.mouseUp, {passive: false})
             document.addEventListener("wheel", this.handleWheel, {passive: false})
         }
 
