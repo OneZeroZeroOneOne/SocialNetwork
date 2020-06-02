@@ -54,6 +54,8 @@ enum ShowType {
 export default class AttachmentModal extends Vue {
     @Prop() attachment: IAttachment;
 
+    public appNode: HTMLElement|null;
+
     public width: number = 200;
     public height: number = 200;
     public initialWidth: number = 200;
@@ -78,16 +80,17 @@ export default class AttachmentModal extends Vue {
 
     constructor() {
         super();
-
-        document.addEventListener('mouseup', this.eventClick, {passive: false});
-        //document.addEventListener('click', this.mouseUp, {passive:false});
-        document.addEventListener("wheel", this.handleWheel, {passive: false})
     }
 
     destroyed() {
-        document.removeEventListener('mouseup', this.eventClick);
-        //document.removeEventListener('click', this.mouseUp);
-        document.removeEventListener("wheel", this.handleWheel)
+        if (this.appNode !== null)
+        {
+            this.appNode.removeEventListener('mouseup', this.eventClick);
+            this.appNode.removeEventListener("wheel", this.handleWheel)
+        } else {
+            document.removeEventListener('mouseup', this.eventClick);
+            document.removeEventListener('wheel', this.handleWheel);
+        }
     }
 
     handleWheel(event: any): void {
@@ -174,6 +177,16 @@ export default class AttachmentModal extends Vue {
     }
 
     mounted() {
+        this.appNode = document.getElementById('app');
+        if (this.appNode !== null)
+        {
+            this.appNode.addEventListener('mouseup', this.eventClick, {passive: false});
+            this.appNode.addEventListener("wheel", this.handleWheel, {passive: false})
+        } else {
+            document.addEventListener('mouseup', this.eventClick, {passive: false});
+            document.addEventListener("wheel", this.handleWheel, {passive: false})
+        }
+
         this.showAttachment();
     }
 
