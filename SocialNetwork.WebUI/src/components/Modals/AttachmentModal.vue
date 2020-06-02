@@ -164,17 +164,16 @@ export default class AttachmentModal extends Vue {
 
     adjustSize() {
         while(this.width >= window.innerWidth - 100 
-            || this.height >= window.innerHeight - 30) {
+            || this.height >= window.innerHeight - 100) {
             let newW = Math.round((this.initialWidth / this.ratio) / 10)
             let newH = Math.round((this.initialHeight / this.ratio) / 10)
 
-            if (this.width - newW > this.minWidth || this.height - newH > this.minHeight) {
-                this.x += Math.round(newW / 2);
-                this.y += Math.round(newH / 2);
+            this.width -= newW;
+            this.height -= newH;
 
-                this.width -= newW;
-                this.height -= newH;
-            }
+            this.x += newW/2;
+            this.y += newH/2;
+
         }
     }
 
