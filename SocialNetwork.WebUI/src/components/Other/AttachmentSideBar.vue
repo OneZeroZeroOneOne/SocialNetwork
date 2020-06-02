@@ -1,7 +1,7 @@
 <template>
     <div class="attachment-side-bar-overlay">
         <div class="attachment-side-bar">
-            <div class="attachment-side-bar-preview" 
+            <div :class="{'attachment-side-bar-preview': true, current: current.id === att.id}"
                 v-for="att in attachmentList" 
                 :key="att.id" 
                 @click="showAttachment(att, $event)">
@@ -26,6 +26,7 @@ import EventBus from '../../utilities/EventBus';
   },
 })
 export default class AttachmentSideBar extends Vue {
+    @Prop() current!: IAttachment;
     public attachmentList: IAttachment[] = []
 
     constructor() {

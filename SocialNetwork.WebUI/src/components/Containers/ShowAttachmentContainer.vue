@@ -5,7 +5,9 @@
         :key="att.id"
         :attachment="att"
         @close="closeModal"/>
-    <attachment-side-bar :class="{'active': sideBarActive, 'sidebar': true}"/>
+    <attachment-side-bar 
+      :class="{'active': sideBarActive, 'sidebar': true}"
+      :current="currentAttachment"/>
   </div>
 </template>
 
@@ -24,6 +26,9 @@ import EventBus from '@/utilities/EventBus';
 })
 export default class ShowAttachmentContainer extends Vue {
     public sideBarActive: boolean = false;
+    public currentAttachment: IAttachment|any = {
+      id: 0,
+    };
 
     public attachments: IAttachment[] = [];
 
@@ -48,16 +53,21 @@ export default class ShowAttachmentContainer extends Vue {
     }
 
     closeModal(attachment: IAttachment) {
+      console.log('close modal')
       this.hideSideBar()
       this.attachments = this.attachments.filter(x => x.id !== attachment.id);
     }
 
     showAttachment(attachment: IAttachment) {
+      console.log('open modal')
       this.showSideBar()
       if (this.attachments.find(x => x.id === attachment.id) === undefined)
       {
-          this.attachments.push(attachment)
-      }
+        this.currentAttachment = attachment;
+        this.attachments.push(attachment)
+      }/*else{
+        this.closeModal(attachment);
+      }*/
     }
 }
 </script>

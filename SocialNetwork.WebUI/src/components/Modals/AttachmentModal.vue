@@ -133,14 +133,17 @@ export default class AttachmentModal extends Vue {
         return true;
     }
 
-    eventClick(event: any): void {
-        if (this.hovered) {
-            this.active = true;
-            event.preventDefault()
-            return;
-        }else {
-            this.active = false;
-            this.$emit('close', this.attachment)
+    eventClick(event: MouseEvent): void {
+        if (event.button === 0)
+        {
+            if (this.hovered) {
+                this.active = true;
+                event.preventDefault()
+                return;
+            } else {
+                this.active = false;
+                this.$emit('close', this.attachment)
+            }
         } /*else
             if (event.toElement.className.indexOf('clickable') === -1)
             {

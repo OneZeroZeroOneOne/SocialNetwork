@@ -62,7 +62,6 @@ export default class AttachmentComponent extends Vue {
   }
 
   imgShow(attachment: IAttachment): void {
-    console.log('show attachment from component')
     this.$root.$emit('show-attachment-image', attachment)
   }
 }
