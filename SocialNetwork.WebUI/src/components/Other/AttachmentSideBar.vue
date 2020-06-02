@@ -77,31 +77,6 @@ export default class AttachmentSideBar extends Vue {
 .attachment-side-bar-overlay {
     position: relative;
     z-index: 100;
-    width: 10%;
-
-    &:before {
-        content: "";
-        position: fixed;
-        z-index: 99999;
-        top: 0;
-        right: 0;
-        width: inherit;
-        height: 45px;
-        //box-shadow: inset 0px 35px 35px -20px red;
-        background-image: linear-gradient(to bottom, black, transparent);
-    }
-
-    &:after {
-        content: "";
-        position: fixed;
-        z-index: 99999;
-        bottom: 0;
-        right: 0;
-        width: inherit;
-        height: 45px;
-        //box-shadow: inset 0px 35px 35px -20px red;
-        background-image: linear-gradient(to top, black, transparent);
-    }
     
 
     background-color: rgb(48, 29, 17);

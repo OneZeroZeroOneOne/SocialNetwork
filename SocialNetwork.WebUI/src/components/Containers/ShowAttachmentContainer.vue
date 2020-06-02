@@ -79,6 +79,7 @@ export default class ShowAttachmentContainer extends Vue {
   top: 0px;
   right: -190px;
   opacity: .7;
+  width: 10%;
 
   &.active {
     position: fixed;
@@ -88,6 +89,30 @@ export default class ShowAttachmentContainer extends Vue {
 
   &:hover {
     opacity: 1;
+  }
+
+  &:before {
+    content: "";
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    right: inherit;
+    width: inherit;
+    height: 45px;
+    //box-shadow: inset 0px 35px 35px -20px red;
+    background-image: linear-gradient(to bottom, black, transparent);
+  }
+
+  &:after {
+    content: "";
+    position: fixed;
+    z-index: 99999;
+    bottom: 0;
+    right: inherit;
+    width: inherit;
+    height: 45px;
+    //box-shadow: inset 0px 35px 35px -20px red;
+    background-image: linear-gradient(to top, black, transparent);
   }
 }
 
