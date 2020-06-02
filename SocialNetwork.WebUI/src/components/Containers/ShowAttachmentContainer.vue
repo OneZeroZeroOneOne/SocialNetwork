@@ -78,11 +78,16 @@ export default class ShowAttachmentContainer extends Vue {
   transition: .5s ease;
   top: 0px;
   right: -190px;
+  opacity: .7;
 
-  &.active{
+  &.active {
     position: fixed;
     top: 0px;
     right: 0px;
+  }
+
+  &:hover {
+    opacity: 1;
   }
 }
 

@@ -76,7 +76,6 @@ export default class AttachmentSideBar extends Vue {
 
 .attachment-side-bar-overlay {
     position: relative;
-    //box-shadow: 0px 9px 16px 0px #000000 inset, 0px -9px 16px 0px #000000 inset;
     z-index: 100;
     &:before {
         content: "";
