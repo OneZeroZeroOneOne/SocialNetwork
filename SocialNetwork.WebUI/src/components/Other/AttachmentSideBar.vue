@@ -5,11 +5,14 @@
                 v-for="att in attachmentList" 
                 :key="att.id" 
                 @click="showAttachment(att, $event)">
-                <img class="image-preview"
-                    :src="getAttachmentPreview(att)">
-                <div class="play-button" v-if="att.preview !== null">
-                    <font-awesome-icon class="icon" icon="play"/>
+                <div class="container">
+                    <img class="image-preview"
+                        :src="getAttachmentPreview(att)">
+                    <div class="play-button" v-if="att.preview !== null">
+                        <font-awesome-icon class="icon" icon="play"/>
+                    </div>
                 </div>
+                <hr/>
             </div>
         </div>
     </div>
@@ -72,7 +75,12 @@ export default class AttachmentSideBar extends Vue {
 <style scoped lang="scss">
 
 .attachment-side-bar-overlay {
-    background-color: rgba($color: #232355, $alpha: 0.5);
+    position: relative;
+    //box-shadow: 0px 9px 16px 0px #000000 inset, 0px -9px 16px 0px #000000 inset;
+    z-index: 100;
+    
+
+    background-color: rgb(48, 29, 17);
     max-height: 100%; 
     overflow-y: scroll;
     -ms-overflow-style: none;
@@ -80,14 +88,49 @@ export default class AttachmentSideBar extends Vue {
     &::-webkit-scrollbar {
         display: none;
     }
+
+    .attachment-side-bar {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .attachment-side-bar {
-    margin: 20px;
+    //margin: 20px;
 
     .attachment-side-bar-preview {
-        cursor: pointer;
+        display: flex;
+        flex-direction: column;
         position: relative;
+
+        transition-duration: 300ms;
+        transition-timing-function: ease-out;
+        transition-property: background-color;
+        
+        &:hover {
+            background-color: #ddd;
+        }
+
+        .container {
+            margin: 10px 20px;
+            cursor: pointer;
+        }
+
+        img {
+            border: 1px solid #ddd;
+        }
+
+        &.current {
+            background-color: #3f7cac;
+            
+        }
+
+        hr {
+            display: none;
+            border: 1px solid red;
+            width: 100%;
+            margin: 0;
+        }
 
         .play-button {
             position: absolute;
@@ -117,7 +160,6 @@ export default class AttachmentSideBar extends Vue {
         }
 
         .image-preview {
-            margin-bottom: 5px;
             max-width: 150px;
         }
     }
