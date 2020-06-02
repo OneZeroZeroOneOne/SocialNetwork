@@ -5,6 +5,7 @@ import MainView from '../views/MainView.vue'
 import BoardView from '../views/BoardView.vue'
 
 import Nprogress from "nprogress"
+import EventBus from '@/utilities/EventBus'
 
 Vue.use(VueRouter)
 
@@ -50,6 +51,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   Nprogress.start()
+  EventBus.emit("clear-attachments");
   next()
 })
 

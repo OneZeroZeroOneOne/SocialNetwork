@@ -7,10 +7,11 @@ class EventBus {
     }
 
     public emit(eventName: string, ...props: any[]): void {
-        if (this.mainApp === undefined || this.mainApp === null)
+        if (this.mainApp === undefined)
             this.setupMainApp()
-            
-        this.mainApp.$emit(eventName, ...props)
+        
+        if (this.mainApp !== undefined)
+            this.mainApp.$emit(eventName, ...props)
     }
 
     public subscribe(eventName: string, callback: any): Vue {

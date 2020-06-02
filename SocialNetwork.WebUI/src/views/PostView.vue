@@ -92,6 +92,9 @@ export default class PostView extends Vue {
       await this.loadComments()
       Nprogress.done()
       document.title = `/${this.boardName()}/ - ${this.postObj.title}`
+
+      eventBus.emit("new-attachments", this.postObj.attachmentPost);
+      eventBus.emit("new-attachments", this.commentObjs.map(x => x.attachmentComment).flat());
     });
   }
 
