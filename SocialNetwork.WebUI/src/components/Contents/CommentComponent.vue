@@ -258,7 +258,6 @@ $text-color: var(--comment-text-color);
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
   max-width: 70vw;
-  min-width: 25vw;
 
   .comment-content-header {
     display: flex;
@@ -302,6 +301,7 @@ $text-color: var(--comment-text-color);
     border-bottom-color: $comment-header-border-color;
     font-size: var(--comment-header-font-size);
     .comment-header-number {
+      padding-right: 5px;
       padding-left: 5px;
       float: left;
       color: $comment-number-header-color;
