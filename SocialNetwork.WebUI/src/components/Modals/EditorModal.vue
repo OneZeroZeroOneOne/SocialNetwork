@@ -58,6 +58,7 @@ import { IBoard } from '@/models/responses/Board';
 import animateCSS from '../../utilities/AnimateCSS';
 
 import { AxiosResponse } from 'axios';
+import EventBus from '../../utilities/EventBus';
 
 @Component({
     components: {
@@ -280,7 +281,7 @@ export default class PreviewModal extends Vue {
           attachmentList.push(x.id);
         })
 
-        this.$awn.async(this._commentService.sendComment(commentToSend, attachmentList), ok => {
+        this.$awn.async(this._commentService.sendComment(commentToSend, attachmentList), (ok: AxiosResponse<IComment>) => {
           this.$root.$emit('comment-sent-success', ok)
           this.$awn.success('Comment sent!', {
             durations: {
@@ -290,7 +291,9 @@ export default class PreviewModal extends Vue {
           this.attachmentList = []
           this.active = false;
           this.responseState = 0;
-          //this.content = "";
+          
+          if (ok.data.attachmentComment.length > 0)
+            EventBus.emit("new-attachments", ok.data.attachmentComment)
           }, error => {
             console.log(error)
             this.$root.$emit('comment-sent-error', error)
@@ -336,7 +339,6 @@ export default class PreviewModal extends Vue {
       })
 
       this.$awn.async(this._postService.sendNewPost(newThread, attachmentList), (ok: AxiosResponse<IPost>) => {
-        console.log(ok)
         this.$root.$emit('post-created-success', ok)
         this.$awn.success('New thread created!', {
           durations: {
