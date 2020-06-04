@@ -53,7 +53,6 @@ export default class AttachmentSideBar extends Vue {
             {
                 scroller.addEventListener("mousedown", (event: Event) => {
                     EventBus.emit("dont-close-attachment-modal");
-                    console.log('emit')
                 })
             }
         }

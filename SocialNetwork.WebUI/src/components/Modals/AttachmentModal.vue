@@ -143,7 +143,6 @@ export default class AttachmentModal extends Vue {
     }
 
     eventClick(event: MouseEvent): void {
-        console.log(this.dontClose)
         if (event.button === 0)
         {
             if (event.target !== null && (event.srcElement as HTMLElement).classList.contains('os-scrollbar-handle'))
@@ -208,7 +207,6 @@ export default class AttachmentModal extends Vue {
     }
 
     dontCloseCallback() {
-        console.log('callback')
         this.dontClose = true;
     }
 

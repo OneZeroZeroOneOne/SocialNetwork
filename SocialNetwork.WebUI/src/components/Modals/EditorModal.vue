@@ -57,6 +57,7 @@ import { PostService } from '@/services/Implementations/PostService';
 import { IBoard } from '@/models/responses/Board';
 import animateCSS from '../../utilities/AnimateCSS';
 
+import { AxiosResponse } from 'axios';
 
 @Component({
     components: {
@@ -218,6 +219,7 @@ export default class PreviewModal extends Vue {
 
   hide(): void {
     this.active = !this.active
+    this.responseState = 0;
   }
 
   addTextToEditor(text: string): void {
@@ -333,7 +335,8 @@ export default class PreviewModal extends Vue {
         attachmentList.push(x.id);
       })
 
-      this.$awn.async(this._postService.sendNewPost(newThread, attachmentList), ok => {
+      this.$awn.async(this._postService.sendNewPost(newThread, attachmentList), (ok: AxiosResponse<IPost>) => {
+        console.log(ok)
         this.$root.$emit('post-created-success', ok)
         this.$awn.success('New thread created!', {
           durations: {
@@ -343,6 +346,9 @@ export default class PreviewModal extends Vue {
         this.attachmentList = []
         this.active = false;
         this.responseState = 0;
+        if (this.board !== null)
+          this.$router.push({path: `${this.board.name}/${ok.data.id}`})
+
         //this.content = "";
         }, error => {
           console.log(error)
