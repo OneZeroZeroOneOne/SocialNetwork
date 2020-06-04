@@ -45,10 +45,21 @@ export default class AttachmentSideBar extends Vue {
     mounted() {
         EventBus.subscribe("new-attachments", this.newAttachments);
         EventBus.subscribe("clear-attachments", this.clearAttachment);
+
+        let scrollers = document.getElementsByClassName('os-scrollbar-handle')
+        for (let index = 0; index < scrollers.length; index++) {
+            const scroller = scrollers[index];
+            if (scroller !== null)
+            {
+                scroller.addEventListener("mousedown", (event: Event) => {
+                    EventBus.emit("dont-close-attachment-modal");
+                    console.log('emit')
+                })
+            }
+        }
     }
 
     showAttachment(att: IAttachment, event: MouseEvent) {
-        console.log('show att', att)
         event.preventDefault();
         this.$root.$emit('show-attachment-image', att)
     }
@@ -71,7 +82,6 @@ export default class AttachmentSideBar extends Vue {
                 this.attachmentList.push(x);
             }
         })
-        console.log(this.attachmentList);
     }
 
 }

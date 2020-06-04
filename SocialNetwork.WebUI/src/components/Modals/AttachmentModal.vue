@@ -42,6 +42,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import VueDraggableResizable from 'vue-draggable-resizable'
 import { IAttachment } from '@/models/responses/Attachment';
 import { parseNumber } from '@/utilities/parser';
+import EventBus from '../../utilities/EventBus';
 
 enum ShowType {
     img,
@@ -76,6 +77,7 @@ export default class AttachmentModal extends Vue {
     public minHeight: number = 200;
 
     public showType: ShowType = ShowType.img;
+    public dontClose: boolean = false;
     
 
     constructor() {
@@ -93,6 +95,8 @@ export default class AttachmentModal extends Vue {
             document.removeEventListener("click", this.mouseUp)
             document.removeEventListener('wheel', this.handleWheel);
         }
+
+        EventBus.unsubscribe("dont-close-attachment-modal", this.dontCloseCallback)
     }
 
     handleWheel(event: any): void {
@@ -139,7 +143,7 @@ export default class AttachmentModal extends Vue {
     }
 
     eventClick(event: MouseEvent): void {
-        console.log(event)
+        console.log(this.dontClose)
         if (event.button === 0)
         {
             if (event.target !== null && (event.srcElement as HTMLElement).classList.contains('os-scrollbar-handle'))
@@ -148,8 +152,9 @@ export default class AttachmentModal extends Vue {
                 event.preventDefault()
                 return;
             }
-            if (this.hovered) {
+            if (this.hovered || this.dontClose) {
                 this.active = true;
+                this.dontClose = false;
                 event.preventDefault()
                 return;
             } else {
@@ -197,7 +202,14 @@ export default class AttachmentModal extends Vue {
             document.addEventListener("wheel", this.handleWheel, {passive: false})
         }
 
+        EventBus.subscribe("dont-close-attachment-modal", this.dontCloseCallback)
+
         this.showAttachment();
+    }
+
+    dontCloseCallback() {
+        console.log('callback')
+        this.dontClose = true;
     }
 
     showAttachment() {
