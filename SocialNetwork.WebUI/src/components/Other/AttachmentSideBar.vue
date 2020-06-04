@@ -1,5 +1,11 @@
 <template>
-    <div class="attachment-side-bar-overlay">
+    <overlay-scrollbars
+        :options="{ className : 'os-theme-block-dark',
+        overflowBehavior : {
+            x : 'hidden',
+            y : 'scroll'
+        } }"
+        class="attachment-side-bar-overlay">
         <div class="attachment-side-bar">
             <div :class="{'attachment-side-bar-preview': true, current: current.id === att.id}"
                 v-for="att in attachmentList" 
@@ -15,7 +21,7 @@
                 <hr/>
             </div>
         </div>
-    </div>
+    </overlay-scrollbars>
 </template>
 
 <script lang="ts">
@@ -37,7 +43,6 @@ export default class AttachmentSideBar extends Vue {
     }
 
     mounted() {
-
         EventBus.subscribe("new-attachments", this.newAttachments);
         EventBus.subscribe("clear-attachments", this.clearAttachment);
     }
@@ -112,12 +117,12 @@ export default class AttachmentSideBar extends Vue {
         }
 
         .container {
-            margin: 10px 20px;
-            cursor: pointer;
         }
 
         img {
+            margin: 10px 20px;
             border: 1px solid #ddd;
+            cursor: pointer;
         }
 
         &.current {
@@ -133,15 +138,15 @@ export default class AttachmentSideBar extends Vue {
         }
 
         .play-button {
+            cursor: pointer;
             position: absolute;
-            top: 0;
+            top: 50%;
             bottom: 0;
-            left: 0;
+            left: 50%;
             right: 0;
-            height: 100%;
-            width: 100%;
             opacity: .8;
             transition: opacity .3s ease;
+            transform: translate(-50%, -50%);
             
             &:hover {
                 opacity: 0;

@@ -258,7 +258,7 @@ $text-color: var(--post-text-color);
     max-height: 50vh;
     padding-left: 5px;
     min-height: 50px;
-    word-break: break-all;
+    word-break: break-word;
   }
 
   .post-header {

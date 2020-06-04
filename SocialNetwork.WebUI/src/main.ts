@@ -21,6 +21,12 @@ import Vuebar from 'vuebar';
 
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 import { VLazyImagePlugin } from "@/utilities/LazyImage";
+import 'overlayscrollbars/css/OverlayScrollbars.css';
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue';
+import '@/styles/oScrollbar.css';
+ 
+// global registration
+Vue.component('overlay-scrollbars', OverlayScrollbarsComponent);
 
 
 dateTimeFilter(Vue);

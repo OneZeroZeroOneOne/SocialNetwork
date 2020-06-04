@@ -129,7 +129,7 @@ export default class AttachmentModal extends Vue {
             localStorage.setItem('attachment-player-volume', video.volume)
     }
 
-    mouseUp(event: any): boolean {
+    mouseUp(event: MouseEvent): boolean {
         if (this.hovered)
         {
             event.preventDefault();
@@ -139,8 +139,15 @@ export default class AttachmentModal extends Vue {
     }
 
     eventClick(event: MouseEvent): void {
+        console.log(event)
         if (event.button === 0)
         {
+            if (event.target !== null && (event.srcElement as HTMLElement).classList.contains('os-scrollbar-handle'))
+            {
+                this.active = true;
+                event.preventDefault()
+                return;
+            }
             if (this.hovered) {
                 this.active = true;
                 event.preventDefault()
