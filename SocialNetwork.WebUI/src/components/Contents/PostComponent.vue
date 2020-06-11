@@ -8,13 +8,7 @@
         <div class="post-header-title">
           {{obj.title}}
         </div>
-        <a class="post-header-link"
-          :href="'/'+boardName()+'/'+obj.id"
-          target="_blank"
-          rel="noopener noreferrer"
-          @click.self="openEditor">
-        #{{obj.id}}
-        </a>
+        <comment-post-id-menu class="post-header-link" :boardName="boardName()" :post="obj" :isPost="true"/>
         <div class="post-header-time">
           {{obj.date | formatDate}}
         </div>
@@ -51,6 +45,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { IPost } from "@/models/responses/PostViewModel";
 
 import AttachmentComponent from '@/components/Other/AttachmentComponent.vue';
+import CommentPostIdMenu from '@/components/Other/CommentPostIdMenu.vue';
 
 import eventBus from "@/utilities/EventBus";
 import GlobalStorage from '../../services/Implementations/GlobalStorage';
@@ -59,6 +54,7 @@ import animateCSS from '@/utilities/AnimateCSS';
 @Component({
   components: {
     AttachmentComponent,
+    CommentPostIdMenu,
   }
 })
 export default class PostComponent extends Vue {

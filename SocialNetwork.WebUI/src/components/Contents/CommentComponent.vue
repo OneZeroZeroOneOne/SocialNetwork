@@ -7,13 +7,7 @@
   v-bind:style="modalStylesCalc()">
   <div class="comment-body">
     <div class="comment-header">
-      <a class="comment-header-link"
-          :href="'/'+boardName()+'/'+obj.postId+'#'+obj.id"
-          target="_blank"
-          rel="noopener noreferrer"
-          @click.self="openEditor">
-        #{{obj.id}}
-      </a>
+      <comment-post-id-menu class="comment-header-link" :boardName="boardName()" :comment="obj" :post="fatherPost" :isPost="false"/>
       <div class="comment-header-time">
         {{obj.date | formatDate}}
       </div>
@@ -54,6 +48,7 @@ import { IPost } from "@/models/responses/PostViewModel";
 import { IComment } from '@/models/responses/CommentViewModel';
 
 import AttachmentComponent from '@/components/Other/AttachmentComponent.vue';
+import CommentPostIdMenu from '@/components/Other/CommentPostIdMenu.vue';
 
 import eventBus from "@/utilities/EventBus";
 import GlobalStorage from '../../services/Implementations/GlobalStorage';
@@ -64,6 +59,7 @@ import _ from 'lodash'
 @Component({
   components: {
     AttachmentComponent,
+    CommentPostIdMenu,
   }
 })
 export default class CommentComponent extends Vue {
