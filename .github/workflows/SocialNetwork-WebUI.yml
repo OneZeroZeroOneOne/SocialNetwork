@@ -3,9 +3,7 @@ name: WebUI build and deploy
 on: 
   push:
     branches: 
-      - master
-    paths:
-      - 'SocialNetwork.WebUI/**'
+      - main
 
 jobs:
   build:
