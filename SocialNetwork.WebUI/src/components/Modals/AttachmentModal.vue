@@ -170,7 +170,7 @@ export default class AttachmentModal extends Vue {
     }
 
     getAttachmentPath(path: string): string {
-        return 'http://194.99.21.140/api/attachment/' + path;
+        return 'https://16ch.ml/api/attachment/' + path;
     }
 
     adjustSize() {
