@@ -92,7 +92,7 @@ export default class App extends Vue {
 @import './styles/dragger.css';
 
 html {
-  background: url('assets/background-tiled-memphis.png');
+  background: url('https://i.ibb.co/F0LLrLf/background-tiled-memphis.png');
   overflow-x: hidden;
 }
 
