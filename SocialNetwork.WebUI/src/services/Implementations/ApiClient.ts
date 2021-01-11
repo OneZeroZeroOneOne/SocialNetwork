@@ -6,7 +6,7 @@ class ApiClient {
 
     constructor() {
         this._axiosClient = axios.create({
-            baseURL: 'http://194.99.21.140/api/'
+            baseURL: 'https://194.99.21.140/api/'
         })
         this._axiosClient.interceptors.response.use((response) => this.authTokenExpiredInterceptor(response))
     }
