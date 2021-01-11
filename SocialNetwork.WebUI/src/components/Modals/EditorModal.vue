@@ -1,8 +1,8 @@
 <template>
   <div v-if="active" :class="{shakeit: shake, 'editor-modal': true}">
     <vue-draggable-resizable
-            w="auto" 
-            h='auto'
+            w="450" 
+            h='300'
             :x="x"
             :y="y"
             :parent="true"
