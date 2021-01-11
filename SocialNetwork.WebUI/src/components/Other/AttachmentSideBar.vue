@@ -65,9 +65,9 @@ export default class AttachmentSideBar extends Vue {
 
     getAttachmentPreview(att: IAttachment) {
         if (att.preview === null)
-            return 'http://194.99.21.140/api/attachment/' + att.path;
+            return 'https://16ch.ml/api/attachment/' + att.path;
         
-        return 'http://194.99.21.140/api/attachment/' + att.preview;
+        return 'https://16ch.ml/api/attachment/' + att.preview;
     }
 
     clearAttachment() {
