@@ -1,19 +1,5 @@
 <template>
-  <div v-if="active" :class="{shakeit: shake, 'editor-modal': true}">
-    <vue-draggable-resizable
-            w="300" 
-            h='450'
-            :x="x"
-            :y="y"
-            :parent="true"
-            ref="container"
-            @dragging="onDrag" 
-            @resizing="onResize"
-            @dragstop="dragstop"
-            :disable-user-select="false"
-            :resizable="false"
-            :drag-handle="'.header-draggable'"
-            :drag-cancel="'.cant-drag'">
+  <div v-if="active" style="height: 100%; width: 100%; position: relative;">
         <div :class="'header-draggable '+isLoading()">
           <span class="cant-drag close-button" v-on:click="hide"></span>
         </div>
@@ -33,7 +19,6 @@
             @uploaded-succesfully="uploaded"/>
           </div>
         </div>
-    </vue-draggable-resizable>
   </div>
 </template>
 
@@ -66,7 +51,7 @@ import EventBus from '../../utilities/EventBus';
         EditorText,
     }
 })
-export default class PreviewModal extends Vue {
+export default class EditorModal extends Vue {
   private responseState: number = 0; //1 if response to comment or thread 2 if new thread
   private submitProgress: ResponseState = ResponseState.success;
 
@@ -112,7 +97,7 @@ export default class PreviewModal extends Vue {
 
   toggleShakeAnimation(): void {
     // @ts-ignore
-    animateCSS(this.$refs.container.$el, 'headShake')
+    //animateCSS(this.$refs.container.$el, 'headShake')
   }
 
   showEditorNewThread(board: IBoard): void {

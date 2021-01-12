@@ -28,7 +28,7 @@ import GlobalStorage from './services/Implementations/GlobalStorage';
 
 @Component({
   components: {
-    EditorModal,
+    'EditorModal': EditorModal,
     AttachmentModal,
     ShowPostCommentContainer,
     NavBarComponent,
