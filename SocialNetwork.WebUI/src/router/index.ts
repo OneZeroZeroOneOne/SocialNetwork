@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 import PostView from '../views/PostView.vue'
 import MainView from '../views/MainView.vue'
 import BoardView from '../views/BoardView.vue'
+import GalleryView from '../views/GalleryView.vue'
+import InfoView from '../views/InfoView.vue'
+import ContactsView from '../views/ContactsView.vue'
 
 import Nprogress from "nprogress"
 import EventBus from '@/utilities/EventBus'
@@ -20,6 +23,21 @@ const routes = [
     path: '/poll',
     name: 'poll',
     component: () => import('../components/Contents/PollComponent.vue'),
+  },
+  {
+    path: '/contacts',
+    name: 'contacts',
+    component: ContactsView
+  },
+  {
+    path: '/info',
+    name: 'info',
+    component: InfoView
+  },
+  {
+    path: '/gallery',
+    name: 'gallery',
+    component: GalleryView
   },
   {
     path: '/:boardname',

@@ -10,6 +10,9 @@
             <li>
                 <router-link to="/contacts">Контакты</router-link>
             </li>
+            <li>
+                <router-link to="/gallery">Галерея</router-link>
+            </li>
         </ul>
     </nav>
 </template>
